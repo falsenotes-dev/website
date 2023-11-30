@@ -10,11 +10,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
 import 'swiper/css';
-import 'swiper/css/pagination';
 
 
 // import required modules
-import { Navigation, Pagination } from 'swiper/modules';
+import { HashNavigation, Navigation, Pagination } from 'swiper/modules';
 
 export default function TagFollowers({ followers: initialFollowers, tag, session }: { followers: any, tag: any, session: any }) {
      const [followers, setFollowers] = useState<Array<any>>(initialFollowers);
