@@ -25,8 +25,6 @@ export const metadata: Metadata = {
     images: [
       {
         url: 'https://falsenotescontent.blob.core.windows.net/openpraph-image/og.png',
-        width: 1200,
-        height: 630,
         alt: 'FalseNotes',
       },
     ],
@@ -39,8 +37,6 @@ export const metadata: Metadata = {
     images: [
       {
         url: 'https://falsenotescontent.blob.core.windows.net/openpraph-image/og.png',
-        width: 1200,
-        height: 630,
         alt: 'FalseNotes',
       },
     ],
