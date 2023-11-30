@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import postgres from '@/lib/postgres';
 import { getForYou } from '@/lib/prisma/feed';
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation';
 
 type Props = {
      params: { username: string, url: string }
@@ -164,6 +165,9 @@ export default async function PostLayout(
                _count: { select: { savedUsers: true, likes: true, comments: true } }
           }
      });
+
+     if (!post) return (<div className='md:container mx-auto px-4 pt-5'>{children}</div>)
+
      const relatedPosts = await postgres.post.findMany({
           where: {
                tags: {
@@ -198,7 +202,7 @@ export default async function PostLayout(
      const data = await getForYou({ limit: 6 });
      const forYou = data?.feed || [];
      const sessionUser = await getSessionUser();
-     const posts = relatedPosts.length > 0 ? relatedPosts : forYou;
+     const posts = relatedPosts.length > 0 ? relatedPosts : forYou.map((p: any) => p.id !== post.id);
      posts.length % 2 !== 0 && posts.pop();
      return (
           <>
