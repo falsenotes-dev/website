@@ -15,29 +15,48 @@ import useWindowDimensions from "../window-dimensions";
 import { SiteFooter } from "../footer";
 import { dateFormat } from "@/lib/format-date";
 import Balancer from 'react-wrap-balancer'
+import { Badge } from "../ui/badge";
+import { ArrowRight } from "lucide-react";
 
 export default function Landing({ latest, tags, popular }: { latest: any, tags: any, popular: any }) {
   const { width, height } = useWindowDimensions();
   return (
     <>
       <main className="landing mx-auto w-full overflow-hidden mb-4">
-        <div className="landing__hero px-6 xl:px-36 2xl:px-64 border-b">
-          <div className="landing__hero_content flex flex-col md:my-24 my-8 space-y-8 md:space-y-24 items-center justify-center">
-            <div className="landing_hero-image w-[120vw] md:w-full">
-              <Image loading="eager" src="https://falsenotescontent.blob.core.windows.net/header/header-img.webp" sizes="100vw" width={1200} height={283} layout="responsive"
+        <div className="landing__hero px-6 xl:px-36 2xl:px-64">
+          <div className="landing__hero_content flex flex-col md:mt-28 mt-20 space-y-8 items-center justify-center">
+            <div className="flex flex-col justify-center gap-8">
+              <div className="flex flex-col justify-center gap-2">
+              <Link href="/@falsetech/introducing-the-falsenotes-editor-where-your-ideas-come-to-life" className="mx-auto">
+              <Badge variant={'secondary'} className="text-sm font-normal py-1.5 my-5 px-3 w-fit space-x-2 rounded-sm">🚀       Introducing the FalseNotes Editor <ArrowRight className="ml-1 h-3.5 w-3.5" /></Badge>
+              </Link>
+              <h1 className="landing__hero_title max-w-[1200px] font-black leading-snug text-3xl lg:text-5xl xl:text-6xl text-center"><Balancer>Where Creativity Takes Flight:
+Unleash Your Ideas</Balancer></h1>
+              <p className="landing__hero_description mt-6 mx-auto max-w-[960px] font-medium text-xl leading-relaxed text-center"><Balancer>Code, Create, Connect: Elevate Your Dev Journey with FalseNotes!</Balancer></p>
+              </div>
+              <Button size={"lg"} className="mx-auto py-3" asChild>
+              <Link href="/signin">
+                Join Now
+              </Link>
+            </Button>
+            </div>
+            <div className="landing_hero-image w-[167vw] xl:w-screen">
+              <Image loading="eager" className="dark:hidden block" src="https://falsenotescontent.blob.core.windows.net/header/header-img.webp" sizes="100vw" width={2849} height={1000} layout="responsive"
+                // Make the image display full width
+                style={{
+                  width: '120vw',
+                  height: 'auto',
+                }} alt="" />
+              <Image loading="eager" className="hidden dark:block" src="https://falsenotescontent.blob.core.windows.net/header/header-img dark.webp" sizes="100vw" width={2849} height={1000} layout="responsive"
                 // Make the image display full width
                 style={{
                   width: '120vw',
                   height: 'auto',
                 }} alt="" />
             </div>
-            <div>
-              <h1 className="landing__hero_title max-w-[1200px] font-black leading-snug text-3xl md:text-7xl text-center"><Balancer>Start Your Journey with FalseNotes!</Balancer></h1>
-              <p className="landing__hero_description mt-6 mx-auto max-w-[960px] font-medium text-sm md:text-2xl leading-relaxed text-center"><Balancer>🚀 FalseNotes — a platform for Developers to Spark Discussions, Share Expertise, and Shape Coding Journeys.</Balancer></p>
-            </div>
           </div>
         </div>
-        <div className="bg-third dark:bg-popover px-3.5 xl:px-36 2xl:px-64 divide-y">
+        <div className="bg-third dark:bg-popover px-3.5 xl:px-36 2xl:px-64 divide-y border-t">
           <div className="pt-10 pb-4">
             <div className="flex flex-row items-center">
               <h2 className="font-medium mb-4">Trending on FalseNotes</h2>
