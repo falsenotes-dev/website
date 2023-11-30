@@ -162,7 +162,7 @@ export default async function PostLayout(
                     }
                },
                savedUsers: true,
-               _count: { select: { savedUsers: true, likes: true, comments: true } }
+               _count: { select: { savedUsers: true, likes: true, comments: true, shares: true } }
           }
      });
 
@@ -202,7 +202,7 @@ export default async function PostLayout(
      const data = await getForYou({ limit: 6 });
      const forYou = data?.feed || [];
      const sessionUser = await getSessionUser();
-     const posts = relatedPosts.length > 0 ? relatedPosts : forYou.map((p: any) => p.id !== post.id);
+     const posts = relatedPosts.length > 0 ? relatedPosts : forYou.filter((p: any) => p.id !== post.id);
      posts.length % 2 !== 0 && posts.pop();
      return (
           <>
