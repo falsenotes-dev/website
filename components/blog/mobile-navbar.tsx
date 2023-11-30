@@ -47,19 +47,19 @@ export default function MobilePostTabs({ post: initialPost, className, session, 
      const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false)
      return (
           <>
-               <div className={cn("p-2 border rounded-full shadow-xl flex md:hidden mx-auto w-max sticky bottom-5 bg-background/60 backdrop-blur-md", className)}>
-                    <div className="flex items-center justify-between w-full gap-6 px-6">
+               <div className={cn("py-2 border rounded-full shadow-xl flex md:hidden mx-auto w-max sticky bottom-5 bg-background/60 backdrop-blur-md", className)}>
+                    <div className="flex items-center justify-between w-full gap-4 px-4">
                          <div className="flex items-center justify-center flex-1">
                               {
                                    session ? (
                                         <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} onClick={() => like(post.id)} disabled={session.id == post.authorId} >
-                                             <Icons.like className={`w-6 h-6 ${isLiked && 'fill-current'}`} />
+                                             <Icons.like className={`w-5 h-5 ${isLiked && 'fill-current'}`} />
                                              <span className="sr-only">Like</span>
                                         </Button>
                                    ) : (
                                         <LoginDialog>
                                              <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} >
-                                                  <Icons.like className="w-6 h-6" />
+                                                  <Icons.like className="w-5 h-5" />
                                                   <span className="sr-only">Like</span>
                                              </Button>
                                         </LoginDialog>
@@ -70,7 +70,7 @@ export default function MobilePostTabs({ post: initialPost, className, session, 
                          <Separator orientation="vertical" />
                          <div className="flex items-center justify-center flex-1">
                               <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} onClick={onClicked}>
-                                   <Icons.commentBubble className="w-6 h-6" />
+                                   <Icons.commentBubble className="w-5 h-5" />
                                    <span className="sr-only">Comment</span>
                               </Button>
                               <span className="text-sm">{post?._count.comments}</span>
@@ -80,13 +80,13 @@ export default function MobilePostTabs({ post: initialPost, className, session, 
                               {
                                    session ? (
                                         <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} onClick={() => save(post.id)} >
-                                             <Icons.bookmark className={`w-6 h-6 ${isSaved && 'fill-current'}`} />
+                                             <Icons.bookmark className={`w-5 h-5 ${isSaved && 'fill-current'}`} />
                                              <span className="sr-only">Save</span>
                                         </Button>
                                    ) : (
                                         <LoginDialog>
                                              <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} >
-                                                  <Icons.bookmark className="w-6 h-6" />
+                                                  <Icons.bookmark className="w-5 h-5" />
                                                   <span className="sr-only">Save</span>
                                              </Button>
                                         </LoginDialog>

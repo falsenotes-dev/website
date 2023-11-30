@@ -78,7 +78,6 @@ const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
 }
 const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
   const { followings: sessionFollowingsArray } = await getFollowings({ id });
-  console.log(sessionFollowingsArray);
   const sessionFollowings = sessionFollowingsArray?.followings?.map((following: any) => following.following);
 
   const followings = await postgres.tagFollow.findMany({
