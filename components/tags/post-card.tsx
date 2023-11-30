@@ -129,7 +129,7 @@ export default function TagPostCard(
                                              <div className="flex items-center space-x-1 text-muted-foreground">
                                                   {
                                                        props.session ? (
-                                                            <Button variant="ghost" size={"icon"} className="hover:text-primary h-8 w-8 text-muted-foreground" onClick={() => like(props.post.id)} disabled={props.session.id === props.post.authorId}>
+                                                            <Button variant="ghost" size={"icon"} className="hover:text-primary h-8 w-8 text-muted-foreground" onClick={() => like(props.post.id)} disabled={props.session.id === props.post.author.id}>
                                                                  <Icons.like className={`w-6 h-6 ${isLiked && 'fill-current'}`} />
                                                                  <span className="sr-only">Like</span>
                                                             </Button>
