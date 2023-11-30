@@ -5,6 +5,6 @@ export const siteConfig = {
   links: {
      authorTwitter: "https://twitter.com/yusupovbg",
     twitter: "https://twitter.com/falsenotesteam",
-    github: "hhttps://github.com/falsenotes-dev/website",
+    github: "https://github.com/falsenotes-dev/website",
   },
 };
