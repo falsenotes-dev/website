@@ -14,12 +14,12 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.DOMAIN!),
-  title: '🚀 FalseNotes - Start Your Journey',
+  title: 'FalseNotes - Where Creativity Takes Flight',
   description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
   keywords: ['FalseNotes', 'False Notes', 'FalseNotes Blog', 'FalseNotes Blogging', 'FalseNotes Blogging Platform', 'FalseNotes Platform', 'FalseNotes Blogging Platform', 'FalseNotes Blogging Platform'],
   robots: 'follow, index',
   openGraph: {
-    title: 'FalseNotes',
+    title: 'FalseNotes - Where Creativity Takes Flight',
     description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
     url: process.env.DOMAIN!,
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FalseNotes',
+    title: 'FalseNotes - Where Creativity Takes Flight',
     description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
     images: [
       {

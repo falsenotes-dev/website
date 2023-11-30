@@ -570,14 +570,10 @@
     min-height: calc(100vh - 44rem);
   }
 } */
-.swiper {
-  width: 100%;
-  height: 100%;
+.swiper-wrapper {
+  @apply !h-auto
 }
 
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.swiper-slide {
+  @apply self-stretch !h-auto
 }

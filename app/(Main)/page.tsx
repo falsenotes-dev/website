@@ -54,6 +54,7 @@ const [latestPosts, tags, popularPosts] = await Promise.all([
           falsemember: true,
           Followers: true,
           Followings: true,
+          createdAt: true,
         }
       },
       tags: {

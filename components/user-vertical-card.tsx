@@ -31,7 +31,7 @@ export default function UserVerticalCard({ user, className, session, ...props }:
           }
      }
      return (
-          <Card className={cn("rounded-lg feedArticleCard !bg-background max-h-72 flex-[1_1_20%] self-stretch", className)} {...props}>
+          <Card className={cn("rounded-lg feedArticleCard !bg-background h-full flex-[1_1_20%] self-stretch", className)} {...props}>
                <CardContent className="flex flex-col w-full justify-between p-4 gap-6 h-full">
                     <div className="block">
                          <Link href={`/@${user.username}`}>
