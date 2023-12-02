@@ -41,13 +41,13 @@ Unleash Your Ideas</Balancer></h1>
             </Button>
             </div>
             <div className="landing_hero-image w-[167vw] xl:w-screen">
-              <Image loading="eager" className="dark:hidden block" src="https://falsenotescontent.blob.core.windows.net/header/falsenotes-hero light.webp" sizes="100vw" width={2849} height={1000} layout="responsive"
+              <Image loading="eager" className="dark:hidden block" src="https://falsenotescontent.blob.core.windows.net/header/falsenotes-hero light.webp" sizes="100vw" width={1920} height={711} layout="responsive"
                 // Make the image display full width
                 style={{
                   width: '120vw',
                   height: 'auto',
                 }} alt="" />
-              <Image loading="eager" className="hidden dark:block" src="https://falsenotescontent.blob.core.windows.net/header/falsenotes-hero dark.webp" sizes="100vw" width={2849} height={1000} layout="responsive"
+              <Image loading="eager" className="hidden dark:block" src="https://falsenotescontent.blob.core.windows.net/header/falsenotes-hero dark.webp" sizes="100vw" width={1920} height={711} layout="responsive"
                 // Make the image display full width
                 style={{
                   width: '120vw',
