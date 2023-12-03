@@ -168,7 +168,7 @@ export default function TagPostCard(
                                                   {
                                                        props.session ? (
                                                             <Button variant="ghost" size={"icon"} className="hover:text-primary h-8 w-8 text-muted-foreground">
-                                                                 <Icons.bookmark className={`h-5 w-5 ${isSaved && 'fill-current'}`} onClick={() => save(props.post.id)} />
+                                                                 { isSaved ? <Icons.bookmarkFill className="h-5 w-5" onClick={() => save(props.post.id)} /> : <Icons.bookmark className="h-5 w-5" onClick={() => save(props.post.id)} /> }
                                                                  <span className="sr-only">Save</span>
                                                             </Button>
                                                        ) : (

@@ -59,6 +59,7 @@ import MarkdownCard from "../markdown-card"
 import { validate } from "@/lib/revalidate"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { set } from "lodash"
 
 async function fetchSuggestions(query: string) {
   const tagResponse = await fetch(`/api/tags/search?search=${encodeURIComponent(query)}&limit=5`);
@@ -252,6 +253,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
           })
         } catch (error) {
           console.error(error)
+          setIsSaving(false);
         }
       }
       if (!form.getValues('published') && previousStatus == false) {
@@ -267,6 +269,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
       }
       setIsSaving(false);
     }
+    setIsSaving(false);
   }
 
   // when value changes, wait 750ms than save it as a draft
@@ -481,7 +484,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                     setCover('');
                                     setFile(undefined);
                                   }}>
-                                    <Trash2 className="h-4 w-4 mr-2 ml-auto" />
+                                    <Icons.delete className="h-4 w-4 mr-2 ml-auto" />
                                     Remove
                                   </Button>
                                 </div>
@@ -656,7 +659,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
           </DialogContent>
         </Dialog>
 
-        <Button size={"icon"} variant={"outline"} disabled={isSaving} onClick={() => setShowDeleteAlert(true)}>{isSaving ? <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" /> : <Trash2 className="h-[1.2rem] w-[1.2rem]" />}</Button>
+        <Button size={"icon"} variant={"outline"} disabled={isSaving} onClick={() => setShowDeleteAlert(true)}>{isSaving ? <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" /> : <Icons.delete className="h-[1.2rem] w-[1.2rem]" />}</Button>
         <PostDeleteDialog post={props.post} user={props.user} open={showDeleteAlert} onOpenChange={setShowDeleteAlert} />
 
 
