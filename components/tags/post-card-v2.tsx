@@ -203,8 +203,8 @@ export default function PostCard(
                                    <div className="flex items-center space-x-1 text-muted-foreground text-sm">
                                         {
                                              props.session ? (
-                                                  <Button variant="ghost" size={"icon"} className="hover:text-primary">
-                                                       { isSaved ? <Icons.bookmarkFill className="h-5 w-5" onClick={() => save(props.post.id)} /> : <Icons.bookmark className="h-5 w-5" onClick={() => save(props.post.id)} /> }
+                                                  <Button variant="ghost" size={"icon"} className="hover:text-primary" onClick={() => save(props.post.id)}>
+                                                       { isSaved ? <Icons.bookmarkFill className="h-5 w-5" /> : <Icons.bookmark className="h-5 w-5" /> }
                                                   </Button>
                                              ) : (
                                                   <LoginDialog>
