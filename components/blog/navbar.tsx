@@ -83,7 +83,7 @@ export default function PostTabs({ post: initialPost, className, session, author
                          {
                               session ? (
                                    <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} onClick={() => save(post.id)} >
-                                        <Icons.bookmark className={`w-6 h-6 ${isSaved && 'fill-current'}`} />
+                                         { isSaved ? <Icons.bookmarkFill className="h-5 w-5" /> : <Icons.bookmark className="h-5 w-5" /> }
                                         <span className="sr-only">Save</span>
                                    </Button>
                               ) : (
