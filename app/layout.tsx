@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'bkhtdev', url: siteConfig.links.authorTwitter }],
   creator: 'bkhtdev',
   verification: {google: 'A9rA7yXdPFGwGxzMtOJ1tXoD0d5NBfJX7nEWrU37iJg', me: '@me', yandex: '37a0482b63273551'},
+  manifest: `${process.env.DOMAIN}/manifest.json`,
   title: 'FalseNotes - Where Creativity Takes Flight',
   description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
   keywords: ['FalseNotes', 'False Notes', 'FalseNotes Blog', 'FalseNotes Blogging', 'FalseNotes Blogging Platform', 'FalseNotes Platform', 'FalseNotes Blogging Platform', 'FalseNotes Blogging Platform'],
