@@ -12,6 +12,26 @@ export default async function Sitemap() {
       url: domain,
       lastModified: new Date(),
     },
+    {
+      url: `${domain}/explore`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${domain}/signin`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${domain}/signup`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${domain}/forgot-password`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${domain}/reset-password`,
+      lastModified: new Date(),
+    },
     ...posts.map(({ url, author, updated, updatedAt, publishedAt }) => ({
       url: `${domain}/@${author.username}/${url}`,
       lastModified: updatedAt || publishedAt || new Date(),
