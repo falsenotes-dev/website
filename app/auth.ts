@@ -28,13 +28,13 @@ export const config = {
       
       if (user) {
         if (account?.provider === 'github') {
-          const { login: username, name, email, bio, html_url: githubProfileURL, avatar_url, location, id: githubId } = profile as any;
-          if (!username) {
+          const { login, name, email, bio, html_url: githubProfileURL, avatar_url, location, id: githubId } = profile as any;
+          if (!login) {
               
             return false; // Do not continue with the sign-in process
           }
           console.log("GitHub Profile:", profile);
-    
+          
           // Check if the user exists in your database based on their email
           const userExists = await postgres.user.findFirst({
             where: {
@@ -42,9 +42,17 @@ export const config = {
               email: email
             }
           })
-    
+          
           if (!userExists) {
-            
+            let username = login
+            let usernameExists = await postgres.user.findUnique({
+              where: {
+                username: username
+              }
+            })
+            if (usernameExists) {
+              username = username + Math.floor(Math.random() * 10000);
+            }
             // User doesn't exist, add them to the Users table
             try {
               const sessionUser = await postgres.user.create({
