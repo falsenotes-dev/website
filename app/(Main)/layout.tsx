@@ -3,6 +3,11 @@ import { getSessionUser } from '@/components/get-session-user';
 import Navbar from '@/components/navbar/navbar';
 import postgres from '@/lib/postgres';
 import { getNotifications } from '@/lib/prisma/session';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'FalseNotes - Where Creativity Takes Flight',
+}
 
 export default async function MainLayout({
   children,
