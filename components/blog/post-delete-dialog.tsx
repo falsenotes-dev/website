@@ -32,9 +32,11 @@ export default function PostDeleteDialog({ post, user, ...props }: React.Compone
               </AlertDialogCancel>
               <AlertDialogAction onClick={
                 async () => {
-                  handleDelete(post?.id, user)
+                  const res = await handleDelete(post?.id, user)
                   await validate(`/@${user?.username}`)
-                  router.push(`/@${user?.username}`)
+                  if (res.status === 204) {
+                    router.push(`/`)
+                  }
                 }
               } className="bg-red-600 focus:ring-red-600">Delete</AlertDialogAction>
             </AlertDialogFooter>
