@@ -24,5 +24,13 @@ export default async function Sitemap() {
       url: `${domain}/tags/${name}`,
       lastModified: new Date(),
     })),
+    ...users.map(({ username }) => ({
+      url: `${domain}/@${username}`,
+      lastModified: new Date(),
+    })),
+    ...tags.map(({ name }) => ({
+      url: `${domain}/tags/${name}`,
+      lastModified: new Date(),
+    })),
   ];
 }
