@@ -36,6 +36,18 @@ export async function generateMetadata(
         title: `${user.username} ${user?.name ? `(` + user?.name + `)` : ``} | FalseNotes`,
         description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${user?.postsnum} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
       },
+      robots: {
+        index: true,
+        follow: true,
+        nocache: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-snippet": 50,
+          "max-image-preview": 'standard',
+          "max-video-preview": -1,
+        },
+      }
     }
   } catch (error) {
     console.error('Error:', error);
