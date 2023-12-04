@@ -1,6 +1,7 @@
 import { getSessionUser } from "@/components/get-session-user";
 import { insertTag } from "@/lib/insert-tag";
 import postgres from "@/lib/postgres";
+import { Post } from "@prisma/client";
 import readingTime from "reading-time";
 import { z } from "zod";
 
@@ -62,9 +63,9 @@ export async function PATCH(
         subtitle: subtitle || null,
         readingTime: readTime,
         ...(oldData?.published === false &&
-        published === true && { publishedAt: new Date() }),
-      ...(oldData?.published === true &&
-        published === true && { updatedAt: new Date(), updated: true }),
+          published === true && { publishedAt: new Date() }),
+        ...(oldData?.published === true &&
+          published === true && { updatedAt: new Date(), updated: true }),
       },
     });
 
@@ -90,89 +91,113 @@ export async function DELETE(
   req: Request,
   { params }: { params: { postid: string } }
 ) {
-  try {
+  if (params.postid === "undefined") {
+      return new Response("No postid provided", { status: 400 });
+    }
     const { postid } = params;
+
+    if (!postid) {
+      return new Response("No postid provided", { status: 400 });
+    }
+
+  try {
     
+
     const post = await postgres.post.findUnique({
       where: {
         id: postid,
       },
     });
-    
-    if (!post) {
-      throw new Error('Post not found');
-    }
 
-    const authorId = post.authorId;
+    if (!post) {
+      throw new Error("Post not found");
+    }
 
     if (!(await verifyCurrentUserHasAccessToPost(post.id))) {
       return new Response(null, { status: 403 });
     }
 
-    
-
-    // Disconnect all connections of the post
-    await postgres.postTag.deleteMany({
-      where: {
-        postId: post.id,
-      },
-    })
-
-    await postgres.comment.deleteMany({
-      where: {
-        postId: post.id,
-      },
-    })
-
-    await postgres.like.deleteMany({
-      where: {
-        postId: post.id,
-      },
-    })
-
-    await postgres.bookmark.deleteMany({
-      where: {
-        postId: post.id,
-      },
-    })
-    await postgres.readingHistory.deleteMany({
-      where: {
-        postId: postid,
-        userId: authorId,
-      },
+    const postWithRelations = await postgres.post.findUnique({
+      where: { id: post.id },
+      include: { comments: true, likes: true, drafts: true, tags: true, readedUsers: true, savedUsers: true, shares: true },
     });
 
-    await postgres.readingHistory.deleteMany({
-      where: {
-        postId: post.id,
-      },
-    })
+    // Disconnect all connections of the post
+    if (postWithRelations) {
+      await postgres.post.update({
+        where: { id: post.id },
+        data: {
+          comments: {
+            disconnect: postWithRelations.comments,
+          },
+          likes: {
+            disconnect: postWithRelations.likes,
+          },
+          drafts: {
+            disconnect: postWithRelations.drafts,
+          },
+          tags: {
+            disconnect: postWithRelations.tags,
+          },
+          readedUsers: {
+            disconnect: postWithRelations.readedUsers,
+          },
+          savedUsers: {
+            disconnect: postWithRelations.savedUsers,
+          },
+          shares: {
+            disconnect: postWithRelations.shares,
+          },
+        },
+      });
 
-    await postgres.postShare.deleteMany({
-      where: {
-        postId: post.id,
-      },
-    })
+      await 
+      await postgres.like.deleteMany({
+        where: {
+          postId: post.id,
+        },
+      });
+      await postgres.draftPost.deleteMany({
+        where: {
+          postId: post.id,
+        },
+      });
+      await postgres.postTag.deleteMany({
+        where: {
+          postId: post.id,
+        },
+      });
+      await postgres.readingHistory.deleteMany({
+        where: {
+          postId: post.id,
+        },
+      });
+      await postgres.bookmark.deleteMany({
+        where: {
+          postId: post.id,
+        },
+      });
+      await postgres.postShare.deleteMany({
+        where: {
+          postId: post.id,
+        },
+      });
+    }
 
-    await postgres.draftPost.deleteMany({
-      where: {
-        postId: post.id,
-      },
-    })
     // Delete the post.
     await postgres.post.delete({
       where: {
         id: post.id,
       },
-    })
+    });
 
-    return new Response(null, { status: 204 })
+    return new Response(null, { status: 204 });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new Response(JSON.stringify(error.issues), { status: 422 })
+      return new Response(JSON.stringify(error.issues), { status: 422 });
     }
-    console.error(error)
-    return new Response(null, { status: 500 })
+    console.error(error);
+    return new Response(null, { status: 500 });
   }
 }
 
