@@ -14,12 +14,13 @@ export async function getPostsForSite() {
           url: true,
           cover: true,
           publishedAt: true,
+          updatedAt: true,
+          updated: true,
           author: {
             select: {
               username: true,
             },
           },
-          updatedAt: true,
         },
         orderBy: [
           {

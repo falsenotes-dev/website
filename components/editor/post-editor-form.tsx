@@ -232,7 +232,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
       if (coverUrl) {
         form.setValue('coverImage', coverUrl);
       }
-      if (form.getValues('title') && form.getValues('content')) {
+      if (form.getValues('title') && form.getValues('content') !== props.post?.content) {
         try {
           // Submit the form
           const result = await fetch(`/api/post/${props.post?.id}/drafts`, {

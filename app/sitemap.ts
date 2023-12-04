@@ -12,8 +12,16 @@ export default async function Sitemap() {
       url: domain,
       lastModified: new Date(),
     },
-    ...posts.map(({ url, author }) => ({
+    ...posts.map(({ url, author, updated, updatedAt, publishedAt }) => ({
       url: `${domain}/@${author.username}/${url}`,
+      lastModified: updated ? new Date(updatedAt!) : new Date(publishedAt!),
+    })),
+    ...users.map(({ username }) => ({
+      url: `${domain}/@${username}`,
+      lastModified: new Date(),
+    })),
+    ...tags.map(({ name }) => ({
+      url: `${domain}/tags/${name}`,
       lastModified: new Date(),
     })),
     ...users.map(({ username }) => ({

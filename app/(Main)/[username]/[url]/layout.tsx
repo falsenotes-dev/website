@@ -16,80 +16,92 @@ type Props = {
 async function getPostData(username: string, url: string) {
      const decodedUsername = decodeURIComponent(username);
      const post = await postgres.post.findFirst({
-       where: {
-         url: url,
-         author: {
-           username: decodedUsername.substring(1)
-         },
-           published: true,
-       },
-       include: {
-         tags: {
-           include: {
-             tag: true
-           }
-         },
-         author: true,
-       }
+          where: {
+               url: url,
+               author: {
+                    username: decodedUsername.substring(1)
+               },
+               published: true,
+          },
+          include: {
+               tags: {
+                    include: {
+                         tag: true
+                    }
+               },
+               author: true,
+          }
      });
      return post;
-   }
+}
 
-   //markdown to text
-   function markdownToText(markdown: string) {
-     return markdown.replace(/!\[(.*?)\]\((.*?)\)/g, '$1') .replace(/\[(.*?)\]\((.*?)\)/g, '$1').replace(/<\/?[^>]+(>|$)/g, '');
-   }
-   
-   export async function generateMetadata(
+//markdown to text
+function markdownToText(markdown: string) {
+     return markdown.replace(/!\[(.*?)\]\((.*?)\)/g, '$1').replace(/\[(.*?)\]\((.*?)\)/g, '$1').replace(/<\/?[^>]+(>|$)/g, '');
+}
+
+export async function generateMetadata(
      { params }: Props
-   ): Promise<Metadata> {
+): Promise<Metadata> {
      try {
-       const post = await getPostData(params.username, params.url);
-       if (!post) {
-         throw new Error('Post not found');
-       }
-       return {
-         metadataBase: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}`),
-         title: `${post.title} - FalseNotes`,
-         description: post.subtitle || markdownToText(post.content?.slice(0, 100) || ''),
-         keywords: post.tags.map((tag: any) => tag.tag.name).join(', '),
-         openGraph: {
-           title: `${post.title} - FalseNotes`,
-           description: post.subtitle || markdownToText(post.content?.slice(0, 100) || ''),
-           url: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}`),
-           images: [
-             {
-               url: `${process.env.DOMAIN}/api/posts/${post.author.username}/opengraph-image?url=${post.url}`,
-               width: 1200,
-               height: 630,
-               alt: `${post.title} - FalseNotes`,
-             }
-           ],
-         },
-         twitter: {
-           card: 'summary_large_image',
-           title: `${post.title} - FalseNotes`,
-           description: post.subtitle || markdownToText(post.content?.slice(0, 100) || ''),
-         },
-       }
+          const post = await getPostData(params.username, params.url);
+          if (!post) {
+               throw new Error('Post not found');
+          }
+          return {
+               metadataBase: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}`),
+               title: `${post.title} - FalseNotes`,
+               description: post.subtitle || markdownToText(post.content?.slice(0, 100) || ''),
+               keywords: post.tags.map((tag: any) => tag.tag.name).join(', '),
+               openGraph: {
+                    title: `${post.title} - FalseNotes`,
+                    description: post.subtitle || markdownToText(post.content?.slice(0, 100) || ''),
+                    url: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}`),
+                    images: [
+                         {
+                              url: `${process.env.DOMAIN}/api/posts/${post.author.username}/opengraph-image?url=${post.url}`,
+                              width: 1200,
+                              height: 630,
+                              alt: `${post.title} - FalseNotes`,
+                         }
+                    ],
+               },
+               twitter: {
+                    card: 'summary_large_image',
+                    title: `${post.title} - FalseNotes`,
+                    description: post.subtitle || markdownToText(post.content?.slice(0, 100) || ''),
+               },
+          }
      } catch (error) {
-       console.error('Error:', error);
-       return {
-         title: `Not Found - FalseNotes`,
-         description: `The page you were looking for doesn't exist.`,
-         openGraph: {
-           title: `Not Found - FalseNotes`,
-           description: `The page you were looking for doesn't exist.`,
-   
-         },
-         twitter: {
-           card: 'summary_large_image',
-           title: `Not Found - FalseNotes`,
-           description: `The page you were looking for doesn't exist.`,
-         },
-       }
+          console.error('Error:', error);
+          return {
+               title: `Not Found - FalseNotes`,
+               description: `The page you were looking for doesn't exist.`,
+               openGraph: {
+                    title: `Not Found - FalseNotes`,
+                    description: `The page you were looking for doesn't exist.`,
+
+               },
+               twitter: {
+                    card: 'summary_large_image',
+                    title: `Not Found - FalseNotes`,
+                    description: `The page you were looking for doesn't exist.`,
+               },
+               robots: {
+                    index: true,
+                    follow: true,
+                    nocache: true,
+                    googleBot: {
+                         index: true,
+                         follow: true,
+                         "max-snippet": 50,
+                         "max-image-preview": 'large',
+                         "max-video-preview": -1,
+                    },
+               }
+          }
      }
-   }
+}
 
 export default async function PostLayout(
      { children, params }: Props
@@ -212,21 +224,21 @@ export default async function PostLayout(
 
                {post && (
                     <div className="bg-popover space-y-16 pt-16 mt-4 border-t">
-                    <div className=' md:container mx-auto px-4'>
-                         <MoreFromAuthor post={authorPosts} author={author} sessionUser={sessionUser} />
-                         {
-                              posts?.length > 0 &&
-                              (
-                                   <>
-                                        <Separator className="mt-14 mb-8" />
-                                        <RelatedPosts posts={posts} post={post} session={sessionUser} />
-                                   </>
-                              )
+                         <div className=' md:container mx-auto px-4'>
+                              <MoreFromAuthor post={authorPosts} author={author} sessionUser={sessionUser} />
+                              {
+                                   posts?.length > 0 &&
+                                   (
+                                        <>
+                                             <Separator className="mt-14 mb-8" />
+                                             <RelatedPosts posts={posts} post={post} session={sessionUser} />
+                                        </>
+                                   )
 
-                         }
+                              }
+                         </div>
+                         <SiteFooter />
                     </div>
-                    <SiteFooter />
-               </div>
                )}
           </>
      )

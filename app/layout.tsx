@@ -9,22 +9,40 @@ import { Toaster } from '@/components/ui/toaster'
 import { getSessionUser } from '@/components/get-session-user'
 import { getSettings } from '@/lib/prisma/session'
 import { GeistSans } from "geist/font";
+import { siteConfig } from '@/config/site'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.DOMAIN!),
-  title: 'FalseNotes - Where Creativity Takes Flight',
+  appleWebApp: true,
+  applicationName: 'FalseNotes',
+  authors: [{ name: 'bkhtdev', url: siteConfig.links.authorTwitter }],
+  creator: 'bkhtdev',
+  verification: {google: 'A9rA7yXdPFGwGxzMtOJ1tXoD0d5NBfJX7nEWrU37iJg', me: '@me', yandex: '37a0482b63273551'},
+  manifest: `${process.env.DOMAIN}/manifest.json`,
+  title: 'FalseNotes',
   description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
   keywords: ['FalseNotes', 'False Notes', 'FalseNotes Blog', 'FalseNotes Blogging', 'FalseNotes Blogging Platform', 'FalseNotes Platform', 'FalseNotes Blogging Platform', 'FalseNotes Blogging Platform'],
-  robots: 'follow, index',
+  robots: {
+    index: true,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": 50,
+      "max-image-preview": 'large',
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: 'FalseNotes - Where Creativity Takes Flight',
+    title: 'FalseNotes',
     description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
     url: process.env.DOMAIN!,
     images: [
       {
-        url: 'https://falsenotescontent.blob.core.windows.net/openpraph-image/og.png',
+        url: '/og.png',
         alt: 'FalseNotes',
       },
     ],
@@ -32,11 +50,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FalseNotes - Where Creativity Takes Flight',
+    title: 'FalseNotes',
     description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
     images: [
       {
-        url: 'https://falsenotescontent.blob.core.windows.net/openpraph-image/og.png',
+        url: '/og.png',
         alt: 'FalseNotes',
       },
     ],
