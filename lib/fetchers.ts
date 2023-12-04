@@ -13,7 +13,7 @@ export async function getPostsForSite() {
           subtitle: true,
           url: true,
           cover: true,
-          createdAt: true,
+          publishedAt: true,
           author: {
             select: {
               username: true,
@@ -32,6 +32,38 @@ export async function getPostsForSite() {
     {
       revalidate: 900,
       tags: [`$posts`],
+    }
+  )();
+}
+
+export async function getUsersForSite() {
+  return await unstable_cache(
+    async () => {
+      return postgres.user.findMany({});
+    },
+    [`$users`],
+    {
+      revalidate: 900,
+      tags: [`$users`],
+    }
+  )();
+}
+
+export async function getTagsForSite() {
+  return await unstable_cache(
+    async () => {
+      return postgres.tag.findMany({
+        where: {
+          posts: {
+            some: {},
+          },
+        },
+      });
+    },
+    [`$tags`],
+    {
+      revalidate: 900,
+      tags: [`$tags`],
     }
   )();
 }
