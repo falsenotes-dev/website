@@ -12,20 +12,21 @@ datasource db {
 
 model User {
   id             String           @id @default(cuid()) @map("_id")
-  email          String?          
-  username       String          @unique
+  email          String?
+  username       String           @unique
   name           String?
   bio            String?
   password       String?
   emailVerified  DateTime?        @map("email_verified")
   image          String?
-  githubprofile  String
+  githubprofile  String?
   location       String?
   verified       Boolean          @default(false)
   falsemember    Boolean          @default(false)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   githubId       String?
+  googleId       String?          @map("google_id")
   settings       UserSettings?
   notifications  Notification[]
   posts          Post[]
@@ -139,7 +140,7 @@ model CommentLike {
 }
 
 model Tag {
-  id        String   @id @default(uuid()) @map("_id")
+  id           String      @id @default(uuid()) @map("_id")
   name         String      @unique
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
@@ -162,7 +163,7 @@ model PostTag {
 }
 
 model Follow {
-  id        String   @id @default(uuid()) @map("_id")
+  id          String   @id @default(uuid()) @map("_id")
   follower    User     @relation("Follower", fields: [followerId], references: [id])
   followerId  String
   following   User     @relation("Following", fields: [followingId], references: [id])
@@ -174,7 +175,7 @@ model Follow {
 }
 
 model TagFollow {
-  id        String   @id @default(uuid()) @map("_id")
+  id         String   @id @default(uuid()) @map("_id")
   follower   User     @relation("TagFollower", fields: [followerId], references: [id])
   followerId String
   tag        Tag      @relation("FollowingTag", fields: [tagId], references: [id])
@@ -186,7 +187,7 @@ model TagFollow {
 }
 
 model Notification {
-  id        String   @id @default(uuid()) @map("_id")
+  id         String   @id @default(uuid()) @map("_id")
   content    String
   read       Boolean  @default(false)
   receiver   User     @relation(fields: [receiverId], references: [id])

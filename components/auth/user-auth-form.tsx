@@ -27,6 +27,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
+      <Button variant="outline" type="button" disabled={isLoading} size={'lg'} onClick={() => signin("google")}>
+        {isLoading ? (
+          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Icons.google className="mr-2 h-4 w-4" />
+        )}{" "}
+        Google
+      </Button>
       <Button variant="outline" type="button" disabled={isLoading} size={'lg'} onClick={() => signin("github")}>
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
