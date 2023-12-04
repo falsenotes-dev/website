@@ -148,6 +148,12 @@ export async function DELETE(
       },
     })
 
+    await postgres.postShare.deleteMany({
+      where: {
+        postId: post.id,
+      },
+    })
+
     await postgres.draftPost.deleteMany({
       where: {
         postId: post.id,
