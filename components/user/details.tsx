@@ -277,7 +277,7 @@ export default function UserDetails({ className, children, user, followers, foll
                 </Link>
               </Button>
             </li>}
-            <li>
+            {user?.githubprofile && (<li>
               <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground" >
                 <Link href={user?.githubprofile} target="_blank" className="flex items-center font-light !text-sm">
                   <Github className="mr-2 h-5 w-5 text-muted-foreground" />
@@ -285,6 +285,8 @@ export default function UserDetails({ className, children, user, followers, foll
                 </Link>
               </Button>
             </li>
+            )
+            }
             <li>
               <Button variant={"link"} size={"sm"} asChild className="p-0 !text-sm hover:!no-underline text-foreground" >
                 <span>
