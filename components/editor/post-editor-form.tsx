@@ -514,7 +514,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Social media preview</FormLabel>
-                        <FormDescription>A high quality image makes your post more appealing for readers and on social networks.</FormDescription>
+                        <FormDescription>An image of superior quality enhances the attractiveness of your post for readers, especially on social networks.</FormDescription>
                         <FormControl>
                           <>
                             
