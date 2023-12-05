@@ -45,7 +45,7 @@ export default function PostAnalyticsDialog({ post, className, ...props }: { pos
                                                   <CardTitle className="!text-base md:text-xl font-bold text-ellipsis overflow-hidden line-clamp-2">
                                                        {post.title}
                                                   </CardTitle>
-                                                  <CardDescription className="text-ellipsis overflow-hidden line-clamp-2 text-muted-foreground">
+                                                  <CardDescription className="text-ellipsis overflow-hidden line-clamp-3 text-muted-foreground">
                                                        {post.subtitle}
                                                   </CardDescription>
                                              </CardHeader>

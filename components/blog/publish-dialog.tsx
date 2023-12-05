@@ -49,7 +49,7 @@ export default function PublishDialog({ post, user, session, ...props }: { post:
                                                   <CardTitle className="!text-base md:text-xl font-bold text-ellipsis overflow-hidden line-clamp-2">
                                                        {post.title}
                                                   </CardTitle>
-                                                  <CardDescription className="text-ellipsis overflow-hidden line-clamp-2 text-muted-foreground">
+                                                  <CardDescription className="text-ellipsis overflow-hidden line-clamp-3 text-muted-foreground">
                                                        {post.subtitle}
                                                   </CardDescription>
                                              </CardHeader>
@@ -71,20 +71,6 @@ export default function PublishDialog({ post, user, session, ...props }: { post:
                                         <div className="flex justify-between items-center mt-4">
                                              <div className="flex flex-1 items-center space-x-2.5">
                                                   <p className="card-text mb-0 py-0.5 text-muted-foreground text-xs">{post.readingTime}</p>
-                                             </div>
-                                             <div className="stats flex items-center justify-around gap-1">
-                                                  <div className="flex items-center space-x-1 text-muted-foreground text-sm feedpost__action-btn">
-                                                       <Button variant="ghost" size={"icon"} className=" text-muted-foreground">
-                                                            <Icons.bookmark className={`h-6 w-6`} />
-                                                            <span className="sr-only">Save</span>
-                                                       </Button>
-                                                  </div>
-                                                  <div className="flex items-center space-x-1 text-muted-foreground text-sm feedpost__action-btn">
-                                                       <Button variant="ghost" size={"icon"} className=" text-muted-foreground">
-                                                            <MoreHorizontal className="h-5 w-5" />
-                                                            <span className="sr-only">More</span>
-                                                       </Button>
-                                                  </div>
                                              </div>
                                         </div>
                                    </CardContent>
