@@ -6,8 +6,10 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { dateFormat } from "@/lib/format-date";
 import { notificationRead } from "./update";
+import { useRouter } from "next/navigation";
 
 export default function NotificationList({ notifications, ...props }: { notifications: any } & React.ComponentPropsWithoutRef<typeof Card>) {
+     const router = useRouter()
      return (
           <Card className="rounded-lg bg-background border-none shadow-none">
                     <CardHeader className="py-4 px-0">
@@ -31,8 +33,9 @@ export default function NotificationList({ notifications, ...props }: { notifica
                                                        <AvatarFallback>{notification?.sender?.name?.charAt(0) || notification?.sender?.username?.charAt(0)}</AvatarFallback>
                                                   </Avatar>
                                              </Link>
-                                             <Link href={notification.url}>
-                                                  <div className="flex flex-col items-start gap-1">
+                                             <div className="flex flex-col items-start gap-1" onClick={ () =>
+                                                       router.push(notification.url)
+                                                  }>
                                                        <p className="text-sm font-normal leading-none">{
                                                             //make bold sender username and if type comment make bold post title from content
                                                             <span className="font-bold">{notification?.sender?.name || notification?.sender?.username}</span>
@@ -71,7 +74,6 @@ export default function NotificationList({ notifications, ...props }: { notifica
                                                             {dateFormat(notification?.createdAt)}
                                                        </p>
                                                   </div>
-                                             </Link>
                                         </div>
                                    </div>
                                    </div>
