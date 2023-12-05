@@ -42,10 +42,10 @@ export default function PostAnalyticsDialog({ post, className, ...props }: { pos
                                    <CardContent className="flex flex-col">
                                         <div className="flex justify-between items-start">
                                              <CardHeader className={cn("px-0 pb-3")}>
-                                                  <CardTitle className="!text-base md:text-xl font-bold text-ellipsis overflow-hidden line-clamp-2">
+                                                  <CardTitle className="!text-base md:text-xl font-bold text-ellipsis overflow-hidden md:line-clamp-2 line-clamp-1">
                                                        {post.title}
                                                   </CardTitle>
-                                                  <CardDescription className="text-ellipsis overflow-hidden line-clamp-2 text-muted-foreground">
+                                                  <CardDescription className="text-ellipsis overflow-hidden md:line-clamp-3 line-clamp-2 text-muted-foreground">
                                                        {post.subtitle}
                                                   </CardDescription>
                                              </CardHeader>
