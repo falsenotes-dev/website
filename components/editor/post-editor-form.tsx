@@ -436,7 +436,85 @@ export function PostEditorForm(props: { post: any, user: any }) {
                     name="coverImage"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Post Preview</FormLabel>
+                        <FormLabel>FalseNotes Preview</FormLabel>
+                        <FormDescription>Manage the image and short description for the post.</FormDescription>
+                        <FormControl>
+                          <>
+                            
+                            <div className="flex items-center justify-center w-full">
+                              <label className="flex flex-col items-center relative justify-center w-full h-64 border border-dashed rounded-md cursor-pointer bg-popover/50">
+                              {
+                              cover ? (
+                                <AspectRatio ratio={16 / 9} className="bg-muted rounded-md">
+                                  <div
+                                    className="object-cover rounded-md w-full h-full bg-cover bg-center"
+                                    style={{ backgroundImage: `url(${file ? URL.createObjectURL(file) as string : field.value as string})` }}
+                                  />
+                                </AspectRatio>
+                              ) : (
+                            
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                  <svg className="w-9 h-9 mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                  </svg>
+                                  <p className="mb-2 text-sm text-secondary-foreground font-medium">Click to upload</p>
+                                  <p className="text-xs text-secondary-foreground">PNG, JPG (MAX. 2MB)</p>
+                                </div> )
+                                }
+                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png" onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    if (file.size > 2 * 1024 * 1024) {
+                                      toast({ description: "File size should not exceed 2MB.", variant: "destructive" });
+                                    } else if (!['image/png', 'image/jpeg'].includes(file.type)) {
+                                      toast({ description: "File type must be PNG or JPEG.", variant: "destructive" });
+                                    } else {
+                                      setFile(file);
+                                    }
+                                  }
+                                }} className="hidden" />
+                                {
+                              (cover || file) && (
+                                <div className="flex items-center justify-center">
+                                  <Button variant="secondary" size={'icon'} className="absolute top-2 right-2 z-50 bg-secondary/75 backdrop-blur-md hover:bg-secondary" onClick={() => {
+                                    form.setValue('coverImage', '');
+                                    setCover('');
+                                    setFile(undefined);
+                                  }}>
+                                    <Icons.delete className="h-4 w-4" />
+                                    <span className="sr-only">Remove</span>
+                                  </Button>
+                                </div>
+                              )
+                            }
+                              </label>
+                            </div>
+                          </>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="subtitle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <TextareaAutosize {...field} className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]" rows={1}
+                            onChange={handleDescriptionChange} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="coverImage"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Social media preview</FormLabel>
+                        <FormDescription>A high quality image makes your post more appealing for readers and on social networks.</FormDescription>
                         <FormControl>
                           <>
                             
@@ -491,21 +569,6 @@ export function PostEditorForm(props: { post: any, user: any }) {
                               )
                             }
                           </>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="subtitle"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Subtitle</FormLabel>
-                        <FormControl>
-                          <TextareaAutosize {...field} className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]" rows={1}
-                            onChange={handleDescriptionChange} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -590,7 +653,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                     className="ml-auto w-full"
                     size={"lg"}
                     form="PostForm"
-                    disabled={isPublishing}
+                    disabled={isPublishing || !isValidUrl}
                     onClick={() => {
                       form.setValue('published', true);
                     }
