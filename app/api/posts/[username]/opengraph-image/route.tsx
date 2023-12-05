@@ -73,7 +73,7 @@ export async function GET(req: NextRequest, { params }: { params: { username: st
                           </g>
                         </svg>
                       )}</div>
-                    <div tw="text-sm text-mute-foreground">{post.readingTime + " · " + formatDate(post.createdAt)}</div>
+                    <div tw="text-sm text-mute-foreground">{post.readingTime + " · " + formatDate(post.publishedAt)}</div>
                   </div>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 466.45 466" height="48">
@@ -116,7 +116,7 @@ export async function GET(req: NextRequest, { params }: { params: { username: st
                           </g>
                         </svg>
                       )}</div>
-                    <div tw="text-sm text-muted-foreground space-x-1.5">{post.readingTime + " · " + formatDate(post.createdAt)}</div>
+                    <div tw="text-sm text-muted-foreground space-x-1.5">{post.readingTime + " · " + formatDate(post.publishedAt)}</div>
                   </div>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 466.45 466" height="48">

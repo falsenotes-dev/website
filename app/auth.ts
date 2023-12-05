@@ -200,7 +200,6 @@ export const config = {
         if (user) {
           token.id = user?.id
         }
-        console.log("JWT Token:", token);
         return token
       }
 
