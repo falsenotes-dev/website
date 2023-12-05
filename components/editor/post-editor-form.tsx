@@ -59,7 +59,7 @@ import MarkdownCard from "../markdown-card"
 import { validate } from "@/lib/revalidate"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { set } from "lodash"
+import readingTime from "reading-time"
 
 async function fetchSuggestions(query: string) {
   const tagResponse = await fetch(`/api/tags/search?search=${encodeURIComponent(query)}&limit=5`);
@@ -154,10 +154,6 @@ export function PostEditorForm(props: { post: any, user: any }) {
       setIsPublishing(true);
 
       form.setValue('published', true);
-      const coverUrl = await uploadCover();
-      if (coverUrl) {
-        form.setValue('coverImage', coverUrl);
-      }
 
       const result = await fetch(`/api/post/${props.post?.id}`, {
         method: "PATCH",
@@ -228,10 +224,6 @@ export function PostEditorForm(props: { post: any, user: any }) {
   const saveDraft = async () => {
     if (!isPublishing) {
       setIsSaving(true);
-      const coverUrl = await uploadCover();
-      if (coverUrl) {
-        form.setValue('coverImage', coverUrl);
-      }
       if (form.getValues('title') && form.getValues('content') !== props.post?.content) {
         try {
           // Submit the form
@@ -261,11 +253,11 @@ export function PostEditorForm(props: { post: any, user: any }) {
           method: "PATCH",
           body: JSON.stringify({ ...form.getValues() }),
         });
-  
+
         if (!result.ok) {
           throw new Error('Failed to update post');
         }
-  
+
       }
       setIsSaving(false);
     }
@@ -330,7 +322,18 @@ export function PostEditorForm(props: { post: any, user: any }) {
   async function handleContentChange(value: string) {
     form.setValue('content', value);
     setMarkdownContent(value);
+    const description = markdownToText(value).slice(0, 280);
+    form.getValues('subtitle') == '' && form.setValue('subtitle', description);
   }
+
+  async function handleSubtitleChange(value: string) {
+    const description = markdownToText(value).slice(0, 280);
+    value == '' && form.setValue('subtitle', description);
+  }
+
+function markdownToText(markdown: string) {
+  return markdown.replace(/!\[(.*?)\]\((.*?)\)/g, '$1').replace(/\[(.*?)\]\((.*?)\)/g, '$1').replace(/<\/?[^>]+(>|$)/g, '');
+}
 
   //Set url value from title value
   async function handleTitleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -351,7 +354,8 @@ export function PostEditorForm(props: { post: any, user: any }) {
   }
 
   function handleDescriptionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    form.setValue('subtitle', e.target.value);
+    const description = markdownToText(form.getValues('content')).slice(0, 280);
+    e.target.value == '' || !e.target.value ? form.setValue('subtitle', description) : form.setValue('subtitle', e.target.value);
   }
 
   return (
@@ -398,7 +402,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
           </Tabs>
 
           <Dialog onOpenChange={setOpen} open={open}>
-            <DialogContent className="h-full max-h-[405px] md:max-h-[540px] !p-0">
+            <DialogContent className="h-full max-h-[405px] md:max-h-[610px] !p-0">
               <ScrollArea className="h-full w-full px-6">
                 <DialogHeader className="py-6">
                   <DialogTitle className="font-bold">Post Settings for publishing</DialogTitle>
@@ -436,33 +440,30 @@ export function PostEditorForm(props: { post: any, user: any }) {
                     name="coverImage"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Post Preview</FormLabel>
+                        <FormLabel>FalseNotes Preview</FormLabel>
+                        <FormDescription>Manage the image and short description for the post.</FormDescription>
                         <FormControl>
                           <>
-                            
+
                             <div className="flex items-center justify-center w-full">
-                              <label className="flex flex-col items-center justify-center w-full h-64 border border-dashed rounded-md cursor-pointer bg-popover/50">
-                              {
-                              cover ? (
-                                <AspectRatio ratio={16 / 9} className="bg-muted rounded-md">
-                                  <Image
-                                    src={file ? URL.createObjectURL(file) as string : field.value as string}
-                                    alt="Cover Image"
-                                    fill
-                                    className="object-cover rounded-md"
-                                  />
-                                </AspectRatio>
-                              ) : (
-                            
-                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                  <svg className="w-9 h-9 mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                  </svg>
-                                  <p className="mb-2 text-sm text-secondary-foreground font-medium">Click to upload</p>
-                                  <p className="text-xs text-secondary-foreground">PNG, JPG (MAX. 2MB)</p>
-                                </div> )
+                              <label className="flex flex-col items-center relative justify-center w-full h-64 border aspect-video border-dashed rounded-md cursor-pointer bg-popover/50">
+                                {
+                                  cover ? (
+                                    <AspectRatio ratio={16 / 9} className="bg-muted rounded-md">
+                                      <div
+                                        className="object-cover rounded-md w-full h-full bg-cover bg-center"
+                                        style={{ backgroundImage: `url(${file ? URL.createObjectURL(file) as string : field.value as string})` }}
+                                      />
+                                    </AspectRatio>
+                                  ) : (
+
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                      <Icons.upload className="w-9 h-9 mb-4" />
+                                      <p className="mb-2 text-sm text-secondary-foreground font-medium">Click to upload</p>
+                                      <p className="text-xs text-secondary-foreground">PNG, JPG (MAX. 2MB)</p>
+                                    </div>)
                                 }
-                                <Input id="dropzone-file" type="file" accept="image/*" onChange={(e) => {
+                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png" onChange={(e) => {
                                   const file = e.target.files?.[0];
                                   if (file) {
                                     if (file.size > 2 * 1024 * 1024) {
@@ -474,38 +475,66 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                     }
                                   }
                                 }} className="hidden" />
+                                {
+                                  (cover || file) && (
+                                    <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
+                                      <Button variant="secondary" size={'icon'} className="bg-secondary/75 backdrop-blur-md hover:bg-secondary" onClick={
+                                        async() => {
+                                          const coverUrl = await uploadCover();
+                                          if (coverUrl) {
+                                            form.setValue('coverImage', coverUrl);
+                                          }
+                                        }
+                                      }>
+                                        <Icons.upload className="h-4 w-4" />
+                                        <span className="sr-only">Upload</span>
+                                      </Button>
+                                      <Button variant="secondary" size={'icon'} className="bg-secondary/75 backdrop-blur-md hover:bg-secondary" onClick={() => {
+                                        form.setValue('coverImage', '');
+                                        setCover('');
+                                        setFile(undefined);
+                                      }}>
+                                        <Icons.delete className="h-4 w-4" />
+                                        <span className="sr-only">Remove</span>
+                                      </Button>
+                                    </div>
+                                  )
+                                }
                               </label>
                             </div>
-                            {
-                              (cover || file) && (
-                                <div className="flex items-center justify-center">
-                                  <Button variant="ghost" className="" onClick={() => {
-                                    form.setValue('coverImage', '');
-                                    setCover('');
-                                    setFile(undefined);
-                                  }}>
-                                    <Icons.delete className="h-4 w-4 mr-2 ml-auto" />
-                                    Remove
-                                  </Button>
-                                </div>
-                              )
-                            }
                           </>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="subtitle"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Subtitle</FormLabel>
                         <FormControl>
                           <TextareaAutosize {...field} className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]" rows={1}
                             onChange={handleDescriptionChange} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="coverImage"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Social media preview</FormLabel>
+                        <FormDescription>An image of superior quality enhances the attractiveness of your post for readers, especially on social networks.</FormDescription>
+                        <FormControl>
+                          <>
+                          <AspectRatio ratio={1200 / 630} className="bg-muted rounded-md">
+                                      
+                                       <Image src={`/api/posts/thumbnail?title=${form.getValues('title')}&subtitle=${form.getValues('subtitle')}&cover=${form.getValues('coverImage')}&readingTime=${readingTime(form.getValues('content')).text}&authorid=${props.user?.username}`} className="rounded-md" alt="Thumbnail" height={630} width={1200} objectFit="cover" /> 
+                                    </AspectRatio>
+                          </>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -585,27 +614,27 @@ export function PostEditorForm(props: { post: any, user: any }) {
                 </div>
               </ScrollArea>
               <DialogFooter className="p-6 border-t">
-              <Button
-                    type="submit"
-                    className="ml-auto w-full"
-                    size={"lg"}
-                    form="PostForm"
-                    disabled={isPublishing}
-                    onClick={() => {
-                      form.setValue('published', true);
-                    }
-                    }
-                  >
-                    {
-                      isPublishing ? (
-                        <>
-                          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> {previousStatus ? 'Updating' : 'Publishing'}
-                        </>
-                      ) : (
-                        <>{ previousStatus ? 'Update' : 'Publish' }</>
-                      )
-                    }
-                  </Button>
+                <Button
+                  type="submit"
+                  className="ml-auto w-full"
+                  size={"lg"}
+                  form="PostForm"
+                  disabled={isPublishing || isValidUrl === null ? false : !isValidUrl}
+                  onClick={() => {
+                    form.setValue('published', true);
+                  }
+                  }
+                >
+                  {
+                    isPublishing ? (
+                      <>
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> {previousStatus ? 'Updating' : 'Publishing'}
+                      </>
+                    ) : (
+                      <>{previousStatus ? 'Update' : 'Publish'}</>
+                    )
+                  }
+                </Button>
               </DialogFooter>
 
             </DialogContent>
@@ -614,83 +643,83 @@ export function PostEditorForm(props: { post: any, user: any }) {
         </form>
       </Form>
       <nav className="menu">
-               <div className="menu-container fixed p-3.5 bg-background border-b w-full top-0 left-0">
-                    
-                         <Link href={`/@${props.user?.username}`} className="flex align-items-center">
-                              <Avatar className="h-8 w-8 mr-1 border">
-                                   <AvatarImage src={ props.user?.image } alt={ props.user?.name || props.user?.username } />
-                                   <AvatarFallback>{props.user?.name ? props.user?.name.charAt(0) : props.user?.username.charAt(0)}</AvatarFallback>
+        <div className="menu-container fixed p-3.5 bg-background border-b w-full top-0 left-0">
 
-                              </Avatar>
-                              <Button variant="ghost" size={"sm"} className="hidden md:flex" asChild>
-                              <div className="font-medium">
-                                   { props.user?.name || props.user?.username }
-                              </div>
-                              </Button>
-                              
-                         </Link>
-                         <div className="flex items-center gap-1.5">
-        <Dialog>
-          <DialogTrigger><Button size={"icon"} variant={"outline"} disabled={isSaving}>{isSaving ? <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" /> : <Save className="h-[1.2rem] w-[1.2rem]" />}</Button></DialogTrigger>
-          <DialogContent className="flex flex-col justify-center md:w-72">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted mx-auto">
-              <RefreshCcw className={"h-10 w-10"} strokeWidth={1.25} />
-            </div>
-            <div className="flex flex-col space-y-2 text-center sm:text-left mx-auto">
-              <h1 className="text-lg font-semibold leading-none tracking-tight text-center">Auto Saved, {dateFormat(lastSavedTime)}</h1>
-              <p className="text-sm text-muted-foreground text-center">
-                FalseNotes automatically saves your post as a draft every 15 seconds. You can also save it manually by clicking the save button.
-              </p>
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-              <Button onClick={() => saveDraft()} className="m-auto" size={"lg"} variant="outline" disabled={isSaving}>{
-                isSaving ? (
-                  <>
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> Saving
-                  </>
-                ) : (
-                  <>Save</>
-                )
+          <Link href={`/@${props.user?.username}`} className="flex align-items-center">
+            <Avatar className="h-8 w-8 mr-1 border">
+              <AvatarImage src={props.user?.image} alt={props.user?.name || props.user?.username} />
+              <AvatarFallback>{props.user?.name ? props.user?.name.charAt(0) : props.user?.username.charAt(0)}</AvatarFallback>
 
-              }</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </Avatar>
+            <Button variant="ghost" size={"sm"} className="hidden md:flex" asChild>
+              <div className="font-medium">
+                {props.user?.name || props.user?.username}
+              </div>
+            </Button>
 
-        <Button size={"icon"} variant={"outline"} disabled={isSaving} onClick={() => setShowDeleteAlert(true)}>{isSaving ? <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" /> : <Icons.delete className="h-[1.2rem] w-[1.2rem]" />}</Button>
-        <PostDeleteDialog post={props.post} user={props.user} open={showDeleteAlert} onOpenChange={setShowDeleteAlert} />
+          </Link>
+          <div className="flex items-center gap-1.5">
+            <Dialog>
+              <DialogTrigger asChild><Button size={"icon"} variant={"outline"} disabled={isSaving}>{isSaving ? <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" /> : <Save className="h-[1.2rem] w-[1.2rem]" />}</Button></DialogTrigger>
+              <DialogContent className="flex flex-col justify-center md:w-72">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted mx-auto">
+                  <RefreshCcw className={"h-10 w-10"} strokeWidth={1.25} />
+                </div>
+                <div className="flex flex-col space-y-2 text-center sm:text-left mx-auto">
+                  <h1 className="text-lg font-semibold leading-none tracking-tight text-center">Auto Saved, {dateFormat(lastSavedTime)}</h1>
+                  <p className="text-sm text-muted-foreground text-center">
+                    FalseNotes automatically saves your post as a draft every 15 seconds. You can also save it manually by clicking the save button.
+                  </p>
+                </div>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button onClick={() => saveDraft()} className="m-auto" size={"lg"} variant="outline" disabled={isSaving}>{
+                      isSaving ? (
+                        <>
+                          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> Saving
+                        </>
+                      ) : (
+                        <>Save</>
+                      )
+
+                    }</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
+            <Button size={"icon"} variant={"outline"} disabled={isSaving} onClick={() => setShowDeleteAlert(true)}>{isSaving ? <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" /> : <Icons.delete className="h-[1.2rem] w-[1.2rem]" />}</Button>
+            <PostDeleteDialog post={props.post} user={props.user} open={showDeleteAlert} onOpenChange={setShowDeleteAlert} />
 
 
-        <Button size={"icon"} disabled={isSaving} onClick={
-          () => {
-            if (form.getValues('title') === undefined) {
-              toast({
-                description: "Please enter a title for your post!",
-                variant: "destructive",
-              })
-            }
-            if (!form.getValues('content') || form.getValues('content') === '') {
-              toast({
-                description: "Please enter a content for your post!",
-                variant: "destructive",
-              })
-            }
-            if (form.getValues('content') == undefined && form.getValues('title') == undefined) {
-              toast({
-                description: "Please enter a title and content for your post!",
-                variant: "destructive",
-              })
-            }
-            if (form.getValues('content') !== undefined && form.getValues('title') !== undefined) {
-              setOpen(true);
-            }
-          }
-        }>{isPublishing ? <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" /> : <ArrowUp className="h-[1.2rem] w-[1.2rem]" />}</Button>
+            <Button size={"icon"} disabled={isSaving} onClick={
+              () => {
+                if (form.getValues('title') === undefined) {
+                  toast({
+                    description: "Please enter a title for your post!",
+                    variant: "destructive",
+                  })
+                }
+                if (!form.getValues('content') || form.getValues('content') === '') {
+                  toast({
+                    description: "Please enter a content for your post!",
+                    variant: "destructive",
+                  })
+                }
+                if (form.getValues('content') == undefined && form.getValues('title') == undefined) {
+                  toast({
+                    description: "Please enter a title and content for your post!",
+                    variant: "destructive",
+                  })
+                }
+                if (form.getValues('content') !== undefined && form.getValues('title') !== undefined) {
+                  setOpen(true);
+                }
+              }
+            }>{isPublishing ? <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" /> : <ArrowUp className="h-[1.2rem] w-[1.2rem]" />}</Button>
+          </div>
         </div>
-               </div>
-          </nav>
+      </nav>
     </>
   )
 }
