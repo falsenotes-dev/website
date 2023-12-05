@@ -22,12 +22,14 @@ import { validate } from "@/lib/revalidate"
 const TagsDialog = forwardRef(({ tags: initialTags, session, ...props }: React.ComponentPropsWithoutRef<typeof AlertDialog> & { tags: any, session: any }) => {
      const router = useRouter()
 
-     const [tags, setTags] = useState<any[]>(initialTags.filter((tag: any) => tag.followingtag?.followerId !== session?.id))
-     const [followingTags, setFollowingTags] = useState<any[]>(initialTags.filter((tag: any) => tag.followingtag?.followerId === session?.id));
+     const [tags, setTags] = useState<any[]>(initialTags)
+     const [followingTags, setFollowingTags] = useState<any[]>(initialTags.filter((tag: any) => tag.followingtag.some((following: any) => following.followerId === session?.id)))
      useEffect(() => {
           // set tags where not in followingTags
-          setTags(initialTags?.filter((tag: any) => tag.followingtag?.followerId !== session?.id))
+          setTags(initialTags)
      }, [initialTags, session])
+
+     console.log(tags)
 
      const [isLast, setIsLast] = useState<boolean>(false)
      const [page, setPage] = useState<number>(0)
@@ -36,9 +38,16 @@ const TagsDialog = forwardRef(({ tags: initialTags, session, ...props }: React.C
           const next = page + 1
           const result = await fetch(`api/tags?page=${next}`).then(res => res.json())
           const fetchedTags = result?.tags
-          if (fetchedTags?.length) {
+          if (fetchedTags.length) {
                setPage(next)
-               setTags(fetchedTags.filter((tag: any) => tag.followingtag?.followerId !== session?.id) || [])
+               const filteredTags = fetchedTags.filter((tag: any) => !followingTags.some((followingTag: any) => followingTag.id === tag.id))
+               const filteredDuplicateTags = filteredTags.filter((tag: any) => !tags.some((t: any) => tag.id === t.id))
+               if (filteredTags.length) {
+                    setTags(filteredDuplicateTags)
+               } else {
+                    setPage(-1)
+                    setIsLast(true)
+               }
           } else {
                setPage(-1)
                setIsLast(true)
