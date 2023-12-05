@@ -532,7 +532,7 @@ function markdownToText(markdown: string) {
                           <>
                           <AspectRatio ratio={1200 / 630} className="bg-muted rounded-md">
                                       
-                                       <Image src={`https://falsenotes.dec/api/posts/thumbnail?title=${form.getValues('title')}&subtitle=${form.getValues('subtitle')}&cover=${form.getValues('coverImage')}&readingTime=${readingTime(form.getValues('content')).text}&authorid=${props.user?.username}`} className="rounded-md" alt="Thumbnail" height={630} width={1200} objectFit="cover" /> 
+                                       <Image src={`https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues('title')}&subtitle=${form.getValues('subtitle')}&cover=${form.getValues('coverImage')}&readingTime=${readingTime(form.getValues('content')).text}&authorid=${props.user?.username}`} className="rounded-md" alt="Thumbnail" height={630} width={1200} objectFit="cover" /> 
                                     </AspectRatio>
                           </>
                         </FormControl>
