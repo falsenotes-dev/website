@@ -402,7 +402,7 @@ function markdownToText(markdown: string) {
           </Tabs>
 
           <Dialog onOpenChange={setOpen} open={open}>
-            <DialogContent className="h-full max-h-[405px] md:max-h-[610px] !p-0">
+            <DialogContent className="h-full max-h-[70%] md:max-h-[610px] !p-0 left-0 bottom-0 md:left-[50%] top-auto md:top-[50%] translate-x-0 translate-y-0 md:translate-x-[-50%] md:translate-y-[-50%] data-[state=closed]:slide-out-to-left-0 data-[state=closed]:slide-out-to-bottom-0 data-[state=open]:slide-in-from-left-0 data-[state=open]:slide-in-from-bottom-0 md:data-[state=closed]:slide-out-to-left-1/2 md:data-[state=closed]:slide-out-to-top-[48%] md:data-[state=open]:slide-in-from-left-1/2 md:data-[state=open]:slide-in-from-top-[48%]">
               <ScrollArea className="h-full w-full px-6">
                 <DialogHeader className="py-6">
                   <DialogTitle className="font-bold">Post Settings for publishing</DialogTitle>
@@ -446,7 +446,7 @@ function markdownToText(markdown: string) {
                           <>
 
                             <div className="flex items-center justify-center w-full">
-                              <label className="flex flex-col items-center relative justify-center w-full h-64 border aspect-video border-dashed rounded-md cursor-pointer bg-popover/50">
+                              <label className="flex flex-col items-center relative justify-center w-full border aspect-video border-dashed rounded-md cursor-pointer bg-popover/50">
                                 {
                                   cover ? (
                                     <AspectRatio ratio={16 / 9} className="bg-muted rounded-md">
