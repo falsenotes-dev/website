@@ -74,9 +74,9 @@ export default function LandingPostCard(
                   }
 
                 </div>
-                <div className="flex items-center space-x-1 text-muted-foreground text-sm feedpost__action-btn">
+                <div className="flex items-center space-x-1 text-muted-foreground text-sm">
                   <LoginDialog>
-                    <Button variant="ghost" size={"icon"} className=" text-muted-foreground">
+                    <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground">
                       <Icons.bookmark className={`h-5 w-5 `} />
                       <span className="sr-only">Save</span>
                     </Button>
