@@ -577,3 +577,15 @@
 .swiper-slide {
   @apply self-stretch !h-auto
 }
+
+::-webkit-scrollbar {
+  @apply hover:flex touch-none select-none transition-colors h-full w-2 border-l border-l-transparent p-0.5
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent
+}
+
+::-webkit-scrollbar-thumb {
+  @apply relative flex-1 rounded-full bg-border hover:bg-secondary/80 m-0.5;
+}

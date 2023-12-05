@@ -402,7 +402,7 @@ function markdownToText(markdown: string) {
           </Tabs>
 
           <Dialog onOpenChange={setOpen} open={open}>
-            <DialogContent className="h-full max-h-[405px] md:max-h-[610px] !p-0">
+            <DialogContent className="h-full max-h-[70%] md:max-h-[610px] !p-0">
               <ScrollArea className="h-full w-full px-6">
                 <DialogHeader className="py-6">
                   <DialogTitle className="font-bold">Post Settings for publishing</DialogTitle>
@@ -446,7 +446,7 @@ function markdownToText(markdown: string) {
                           <>
 
                             <div className="flex items-center justify-center w-full">
-                              <label className="flex flex-col items-center relative justify-center w-full h-64 border aspect-video border-dashed rounded-md cursor-pointer bg-popover/50">
+                              <label className="flex flex-col items-center relative justify-center w-full border aspect-video border-dashed rounded-md cursor-pointer bg-popover/50">
                                 {
                                   cover ? (
                                     <AspectRatio ratio={16 / 9} className="bg-muted rounded-md">
