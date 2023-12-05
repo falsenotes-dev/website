@@ -38,8 +38,10 @@ export const config = {
           // Check if the user exists in your database based on their email
           const userExists = await postgres.user.findFirst({
             where: {
-              githubId: githubId.toString(),
-              email: email
+              OR: [
+                { email: email },
+                { githubId: githubId.toString() },
+              ]
             }
           })
           
@@ -113,8 +115,10 @@ export const config = {
           // Check if the user exists in your database based on their email
           const userExists = await postgres.user.findFirst({
             where: {
-              email: email,
-              googleId: googleId
+              OR: [
+                { email: email },
+                { googleId: googleId },
+              ]
             }
           })
 

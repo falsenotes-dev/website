@@ -22,8 +22,8 @@ import { validate } from "@/lib/revalidate"
 const TagsDialog = forwardRef(({ tags: initialTags, session, ...props }: React.ComponentPropsWithoutRef<typeof AlertDialog> & { tags: any, session: any }) => {
      const router = useRouter()
 
-     const [tags, setTags] = useState<any[]>(initialTags?.filter((tag: any) => tag.followingtag?.followerId !== session?.id))
-     const [followingTags, setFollowingTags] = useState<any[]>(initialTags?.filter((tag: any) => tag.followingtag?.followerId === session?.id));
+     const [tags, setTags] = useState<any[]>(initialTags.filter((tag: any) => tag.followingtag?.followerId !== session?.id))
+     const [followingTags, setFollowingTags] = useState<any[]>(initialTags.filter((tag: any) => tag.followingtag?.followerId === session?.id));
      useEffect(() => {
           // set tags where not in followingTags
           setTags(initialTags?.filter((tag: any) => tag.followingtag?.followerId !== session?.id))
@@ -38,7 +38,7 @@ const TagsDialog = forwardRef(({ tags: initialTags, session, ...props }: React.C
           const fetchedTags = result?.tags
           if (fetchedTags?.length) {
                setPage(next)
-               setTags(fetchedTags)
+               setTags(fetchedTags.filter((tag: any) => tag.followingtag?.followerId !== session?.id) || [])
           } else {
                setPage(-1)
                setIsLast(true)
