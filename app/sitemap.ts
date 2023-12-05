@@ -21,15 +21,7 @@ export default async function Sitemap() {
       lastModified: new Date(),
     },
     {
-      url: `${domain}/signup`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${domain}/forgot-password`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${domain}/reset-password`,
+      url: `${domain}/tags`,
       lastModified: new Date(),
     },
     ...posts.map(({ url, author, updated, updatedAt, publishedAt }) => ({
