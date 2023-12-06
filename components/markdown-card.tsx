@@ -12,12 +12,14 @@ export default function MarkdownCard({ code, className }: { code: string, classN
                          img: {
                               component: (props: any) => {
                                    return props.title ? (
-                                        <figure>
+                                        <figure className="blog_image_wrap">
                                              <img {...props} className="!relative w-full hover:scale-105" alt={props.alt} />
                                              <figcaption className="text-center text-sm text-muted">{props.title}</figcaption>
                                         </figure>
                                    ) : (
-                                        <img {...props} className="!relative w-full" alt={props.alt} />
+                                        <figure className="blog_image_wrap">
+                                             <img {...props} className="!relative w-full hover:scale-105" alt={props.alt} />
+                                        </figure>
                                    )
                               }
                          },
