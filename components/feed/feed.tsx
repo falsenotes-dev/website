@@ -26,10 +26,9 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session }: { in
   async function loadMoreFeed() {
     const next = page + 1
     const result = await fetchFeed({ page: next, tab: tag, limit: 10 })
-    const fetchedFeed = result?.feed
-    if (fetchedFeed?.length) {
+    if (result?.length) {
       setPage(next)
-      setFeed(prev => [...prev, ...fetchedFeed])
+      setFeed(prev => [...prev, ...result])
     }
   }
 
