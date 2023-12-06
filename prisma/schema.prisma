@@ -57,6 +57,7 @@ model Post {
   updatedAt   DateTime         @updatedAt
   published   Boolean          @default(false)
   publishedAt DateTime?
+  modifiedAt  DateTime?
   updated     Boolean          @default(false)
   tags        PostTag[]
   comments    Comment[]
