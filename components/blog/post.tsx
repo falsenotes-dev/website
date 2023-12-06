@@ -77,7 +77,16 @@ export default function SinglePost({ post: initialPost, author, sessionUser, tag
                          <div className="article__header lg:text-xl">
                               {
                                    post?.cover && (
-                                        <Image src={post?.cover} alt={post?.title} fill className="!relative w-full rounded-md hover:scale-105" placeholder={`data:image/svg+xml;base64,${toBase64(shimmer(1920, 1080))}`} />
+                                        <div className="article__header-img">
+                                             <Image
+                                             className="w-full h-72 rounded-lg object-cover"
+                                             src={post?.cover}
+                                             alt={post?.title}
+                                             layout="responsive"
+                                             placeholder="blur"
+                                             blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
+                                        />
+                                        </div>
                                    )
                               }
                               <h1 className="article__title">{post?.title}</h1>
