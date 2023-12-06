@@ -65,6 +65,12 @@ export async function generateMetadata(
                               alt: `${post.title} - FalseNotes`,
                          }
                     ],
+                    type: 'article',
+                    authors: `${process.env.DOMAIN}/@${post.author.username}`,
+                    publishedTime: post.publishedAt?.toISOString() || '',
+                    modifiedTime: post.updatedAt?.toISOString() || '',
+                    tags: post.tags.map((tag: any) => tag.tag.name),
+                    siteName: 'FalseNotes',
                },
                twitter: {
                     card: 'summary_large_image',
