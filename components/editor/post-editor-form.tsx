@@ -94,7 +94,7 @@ const postFormSchema = z.object({
     })
     .optional(),
   url: z.string(),
-  subtitle: z.string().max(280, { message: "Subtitle must not be longer than 280 characters." }).optional(),
+  subtitle: z.string().optional(),
   published: z.boolean().optional(),
 })
 
@@ -111,7 +111,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
     title: props.post?.title,
     content: props.post?.content,
     coverImage: props.post?.cover || '',
-    url: props.post?.url,
+    url: props.post?.url || '',
     subtitle: props.post?.subtitle || '',
     published: props.post?.published,
     tags: props.post?.tags?.map((tag: any) => ({
@@ -186,7 +186,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
       setOpen(false);
     }
   }
-  const [isValidUrl, setIsValidUrl] = useState<boolean | null>(null);
+  const [isValidUrl, setIsValidUrl] = useState<boolean>(true);
   const [isPublishing, setIsPublishing] = useState<boolean>(false);
   const [cover, setCover] = useState<string>(props.post?.cover || '');
   const [file, setFile] = useState<File>(); // State for the uploaded file
@@ -293,48 +293,60 @@ export function PostEditorForm(props: { post: any, user: any }) {
     try {
       const result = await fetch(`/api/posts/validate-url?url=${value}&authorId=${props.user?.id}`, {
         method: 'GET',
-      });
+      }).then((res) => res.json());
 
-      setIsValidUrl(result.ok);
+      (result.status !== 500 || result.status !== 400) &&
+        result.isValid ? setIsValidUrl(true) : setIsValidUrl(false);
     } catch (error) {
       console.error(error);
-      setIsValidUrl(false);
       // Consider showing an error message to the user here
     }
     return isValidUrl;
   }
 
   // URL-friendly link validation
-  function handleUrlChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleUrlChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    const words = value.split(' ');
-    const url = words.length > 1 ? `${words[0].toLowerCase()}-${words[1].toLowerCase()}` : value.toLowerCase();
-
-    validateUrl(url);
-
-    if (isValidUrl) {
-      form.setValue('url', url);
+    form.setValue('url', value);
+    // if value has spaces, set isValidUrl to false, else set it to true and check if the url is valid or not
+    if (value.includes(' ')) {
+      setIsValidUrl(false);
     } else {
-      setIsValidUrl(null);
+      await validateUrl(value);
     }
   }
 
   async function handleContentChange(value: string) {
     form.setValue('content', value);
     setMarkdownContent(value);
-    const description = markdownToText(value).slice(0, 280);
+
+    // Split the markdown content by sections
+    const sections = value.split("\n\n");
+
+    // Convert only the first section to text
+    const firstSection = sections[0];
+
+    // If first section is empty or has less than 100 characters, use the second section
+    if (firstSection.length < 100) {
+      const secondSection = sections[1];
+      const description = markdownToText(secondSection);
+
+      form.getValues('subtitle') == '' && form.setValue('subtitle', description);
+      return;
+    } else {
+      const description = markdownToText(firstSection);
+
     form.getValues('subtitle') == '' && form.setValue('subtitle', description);
+    }
   }
 
-  async function handleSubtitleChange(value: string) {
-    const description = markdownToText(value).slice(0, 280);
-    value == '' && form.setValue('subtitle', description);
+  function markdownToText(markdown: string) {
+    return markdown
+      .replace(/!\[(.*?)\]\((.*?)\)/g, '$1') // remove image markdown
+      .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // remove link markdown
+      .replace(/<\/?[^>]+(>|$)/g, '') // remove HTML tags
+      .replace(/#+\s?/g, ''); // remove markdown headers
   }
-
-function markdownToText(markdown: string) {
-  return markdown.replace(/!\[(.*?)\]\((.*?)\)/g, '$1').replace(/\[(.*?)\]\((.*?)\)/g, '$1').replace(/<\/?[^>]+(>|$)/g, '');
-}
-
   //Set url value from title value
   async function handleTitleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const value = e.target.value;
@@ -343,7 +355,7 @@ function markdownToText(markdown: string) {
     //if title has less than 2 words, change the url to random string
     if (value.length < 100) {
       if (value.split(' ').length < 2) {
-        const url = Math.random().toString(36).substring(2, 15)
+        const url = value.replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g, '-').toLowerCase().split(' ').slice(0, 2).join('-') + Math.random().toString(36).substring(2, 15)
         if (await validateUrl(url)) form.setValue('url', url);
       } else {
         // Replace spaces with dashes and make lowercase of 2 words only and remove special characters
@@ -354,8 +366,21 @@ function markdownToText(markdown: string) {
   }
 
   function handleDescriptionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    const description = markdownToText(form.getValues('content')).slice(0, 280);
-    e.target.value == '' || !e.target.value ? form.setValue('subtitle', description) : form.setValue('subtitle', e.target.value);
+    const value = e.target.value;
+    // Split the markdown content by sections
+    const sections = form.getValues('content').split("\n\n");
+
+    // Convert only the first section to text
+    const firstSection = sections[0];
+    const description = markdownToText(firstSection);
+    // If first section is empty or has less than 100 characters, use the second section
+    if (firstSection.length < 100) {
+      const secondSection = sections[1];
+      const description = markdownToText(secondSection);
+      value !== '' ? form.setValue('subtitle', value) : form.setValue('subtitle', description);
+      return;
+    }
+    value !== '' ? form.setValue('subtitle', value) : form.setValue('subtitle', markdownToText(description));
   }
 
   return (
@@ -402,7 +427,7 @@ function markdownToText(markdown: string) {
           </Tabs>
 
           <Dialog onOpenChange={setOpen} open={open}>
-            <DialogContent className="h-full max-h-[70%] md:max-h-[610px] !p-0">
+            <DialogContent className="h-full max-h-[70%] md:max-h-[625px] !p-0">
               <ScrollArea className="h-full w-full px-6">
                 <DialogHeader className="py-6">
                   <DialogTitle className="font-bold">Post Settings for publishing</DialogTitle>
@@ -418,19 +443,31 @@ function markdownToText(markdown: string) {
                           {`falsenotes.dev/@${props.user?.username}/`}
                         </FormDescription>
                         <FormControl>
-                          <Input placeholder="URL" {...field} onChange={handleUrlChange} />
+                          <div className="flex justify-end flex-col">
+                            <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center">
+
+                              <Input className="border-none p-0 focus-visible:ring-offset-0 focus-visible:ring-0 bg-transparent" placeholder="URL" {...field} onChange={handleUrlChange} />
+                              {isValidUrl !== null && (
+                                !isValidUrl && (
+                                  <Icons.xCircle className="text-muted-foreground h-5 w-5" />
+                                )
+                              )}
+                            </div>
+                            {
+                              (!form.getValues('url') || form.getValues('url') == '') && (
+                                <Button variant="ghost" className="mt-1 ml-auto" onClick={() => {
+                                  const url = Math.random().toString(36).substring(2, 15)
+                                  form.setValue('url', url);
+                                  setIsValidUrl(true);
+                                }
+                                }>
+                                  Make Default
+                                </Button>
+                              )
+                            }
+                          </div>
                         </FormControl>
-                        {isValidUrl !== null && (
-                          isValidUrl ? (
-                            <FormMessage className="text-green-500">
-                              This URL is available.
-                            </FormMessage>
-                          ) : (
-                            <FormMessage className="text-red-500">
-                              This URL is unavailable. Please try another one.
-                            </FormMessage>
-                          )
-                        )}
+
                       </FormItem>
                     )}
                   />
@@ -479,7 +516,7 @@ function markdownToText(markdown: string) {
                                   (cover || file) && (
                                     <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
                                       <Button variant="secondary" size={'icon'} className="bg-secondary/75 backdrop-blur-md hover:bg-secondary" onClick={
-                                        async() => {
+                                        async () => {
                                           const coverUrl = await uploadCover();
                                           if (coverUrl) {
                                             form.setValue('coverImage', coverUrl);
@@ -514,8 +551,7 @@ function markdownToText(markdown: string) {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <TextareaAutosize {...field} className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]" rows={1}
-                            onChange={handleDescriptionChange} />
+                          <TextareaAutosize {...field} className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]" rows={1} onChange={handleDescriptionChange} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -530,10 +566,10 @@ function markdownToText(markdown: string) {
                         <FormDescription>An image of superior quality enhances the attractiveness of your post for readers, especially on social networks.</FormDescription>
                         <FormControl>
                           <>
-                          <AspectRatio ratio={1200 / 630} className="bg-muted rounded-md">
-                                      
-                                       <Image src={`https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues('title')}&subtitle=${form.getValues('subtitle')}&cover=${form.getValues('coverImage')}&readingTime=${readingTime(form.getValues('content')).text}&authorid=${props.user?.username}`} className="rounded-md" alt="Thumbnail" height={630} width={1200} objectFit="cover" /> 
-                                    </AspectRatio>
+                            <AspectRatio ratio={1200 / 630} className="bg-muted rounded-md">
+
+                              <Image src={`https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues('title')}&subtitle=${form.getValues('subtitle')}&cover=${form.getValues('coverImage')}&readingTime=${readingTime(form.getValues('content')).text}&authorid=${props.user?.username}`} className="rounded-md" alt="Thumbnail" height={630} width={1200} objectFit="cover" />
+                            </AspectRatio>
                           </>
                         </FormControl>
                         <FormMessage />
