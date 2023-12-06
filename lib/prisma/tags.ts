@@ -207,6 +207,13 @@ export const getFollowersByTag = async ({
           Followers: true,
         },
       },
+    },
+    orderBy: {
+      follower: {
+        Followers: {
+          _count: "desc",
+        },
+      }
     }
   });
 
