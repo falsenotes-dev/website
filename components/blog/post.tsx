@@ -48,24 +48,24 @@ export default function SinglePost({ post: initialPost, author, sessionUser, tag
 
      async function handleFollow(followeeId: string) {
           if (status === "authenticated") {
-              setIsFollowingLoading(true);
-              try {
-                  setIsFollowing(!isFollowing);
-                  const followerId = session.id;
-                  const result = await fetch(`/api/follow?followeeId=${followeeId}&followerId=${followerId}`, {
-                      method: "GET",
-                  }).then((res) => res.json());
-                  if (!result.ok) {
-                      setIsFollowing(!isFollowing);
-                  }
-                  await validate(pathname)
-                  setIsFollowingLoading(false);
-              } catch (error) {
-                  console.error(error);
-                  setIsFollowingLoading(false);
-              }
+               setIsFollowingLoading(true);
+               try {
+                    setIsFollowing(!isFollowing);
+                    const followerId = session.id;
+                    const result = await fetch(`/api/follow?followeeId=${followeeId}&followerId=${followerId}`, {
+                         method: "GET",
+                    }).then((res) => res.json());
+                    if (!result.ok) {
+                         setIsFollowing(!isFollowing);
+                    }
+                    await validate(pathname)
+                    setIsFollowingLoading(false);
+               } catch (error) {
+                    console.error(error);
+                    setIsFollowingLoading(false);
+               }
           }
-      }
+     }
      if (openPublishDialog === false && published === true) {
           router.replace(`/@${author?.username}/${post?.url}`)
      }
@@ -77,15 +77,13 @@ export default function SinglePost({ post: initialPost, author, sessionUser, tag
                          <div className="article__header lg:text-xl">
                               {
                                    post?.cover && (
-                                        <div className="article__header-img">
+                                        <div className="article__header-img w-full h-fit">
                                              <Image
-                                             className="w-full h-72 rounded-lg object-cover"
-                                             src={post?.cover}
-                                             alt={post?.title}
-                                             layout="responsive"
-                                             placeholder="blur"
-                                             blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
-                                        />
+                                                  src={post?.cover}
+                                                  alt={post?.title}
+                                                  fill className="!relative w-full rounded-md hover:scale-105 object-cover"
+                                                  placeholder={`data:image/svg+xml;base64,${toBase64(shimmer(1920, 1080))}`}
+                                             />
                                         </div>
                                    )
                               }
