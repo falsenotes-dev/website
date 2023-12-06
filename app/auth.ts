@@ -3,6 +3,7 @@ import type { NextAuthOptions as NextAuthConfig } from "next-auth"
 import GitHub from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { equal } from "assert"
 
 export const config = {
   // https://next-auth.js.org/configuration/providers/oauth
@@ -38,10 +39,11 @@ export const config = {
           // Check if the user exists in your database based on their email
           const userExists = await postgres.user.findFirst({
             where: {
-              OR: [
+               OR: [
                 { email: email },
                 { githubId: githubId.toString() },
-              ]
+                { githubprofile: githubProfileURL }
+              ] 
             }
           })
           
@@ -169,12 +171,13 @@ export const config = {
           } else {
             // User exists, update their details in the Users table
             try {
-              await postgres.user.update({
+              const user = await postgres.user.update({
                 where: {
                   id: userExists.id
                 },
                 data: {
                   googleId: googleId,
+                  name: userExists.name ? userExists.name : name,
                 },
               })
             } catch (error) {
