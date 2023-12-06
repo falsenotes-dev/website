@@ -77,7 +77,7 @@ export default async function TagPage({ params }: { params: { tagname: string } 
      if (!tag) redirect("/404");
      const session = await getSessionUser();
 
-     const { followers } = await getFollowersByTag({ id: tag.id, limit: 5, session: session?.id });
+     const { followers } = await getFollowersByTag({ id: tag.id, limit: 6, session: session?.id });
      return (
           <>
                <div className="flex flex-col space-y-6 my-8">
