@@ -66,7 +66,7 @@ export async function generateMetadata(
                          }
                     ],
                     type: 'article',
-                    authors: `${process.env.DOMAIN}/@${post.author.username}`,
+                    authors: `${post.author.name || post.author.username}`,
                     publishedTime: post.publishedAt?.toISOString() || '',
                     modifiedTime: post.updatedAt?.toISOString() || '',
                     tags: post.tags.map((tag: any) => tag.tag.name),
