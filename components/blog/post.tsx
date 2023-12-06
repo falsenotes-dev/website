@@ -142,7 +142,7 @@ export default function SinglePost({ post: initialPost, author, sessionUser, tag
                                                   post?.updated && (
                                                        <>
                                                             <span className=" mx-1">·</span>
-                                                            <span className="">Updated on {dateFormat(post?.updatedAt)}</span>
+                                                            <span className="">Updated {dateFormat(post?.modifiedAt)}</span>
                                                        </>
                                                   )
                                              }
