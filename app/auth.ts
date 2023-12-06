@@ -98,6 +98,7 @@ export const config = {
                 },
                 data: {
                   githubId: githubId.toString(),
+                  email: email,
                 },
               })
             } catch (error) {
