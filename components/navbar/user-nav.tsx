@@ -45,10 +45,18 @@ export function UserNav() {
                               <AvatarImage src={user.image} alt={user.name} />
                               <AvatarFallback>{user.name?.charAt(0) || user.username?.charAt(0)}</AvatarFallback>
                          </Avatar>
-                         <div className="flex flex-col space-y-1">
-                              <p className="text-xl font-bold leading-none">{user.name}</p>
-                              <p className="text-sm text-muted-foreground leading-none font-normal">{user.username}</p>
-                         </div>
+                         {
+                              user.name ? (
+                                   <div className="flex flex-col space-y-1">
+                                        <p className="text-xl font-bold leading-none">{user.name}</p>
+                                        <p className="text-sm text-muted-foreground leading-none font-normal">{user.username}</p>
+                                   </div>
+                              ) : (
+                                   <div className="flex flex-col space-y-1">
+                                        <p className="text-xl font-bold leading-none">{user.username}</p>
+                                   </div>
+                              )
+                         }
                     </DropdownMenuLabel>
                     <div className="text-muted-foreground font-medium mt-4 mb-3.5 px-2.5">Profile</div>
                     <DropdownMenuItem asChild>
