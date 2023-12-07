@@ -20,7 +20,6 @@ export const metadata: Metadata = {
   icons: { apple: '/apple-192x192.png', icon: '/favicon.ico', shortcut: '/favicon.ico' },
   verification: {google: 'A9rA7yXdPFGwGxzMtOJ1tXoD0d5NBfJX7nEWrU37iJg', me: '@me', yandex: '37a0482b63273551'},
   manifest: `${process.env.DOMAIN}/manifest.json`,
-  themeColor: '#000000',
   title: 'FalseNotes - Where Creativity Takes Flight',
   description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
   keywords: ['FalseNotes', 'False Notes', 'FalseNotes Blog', 'FalseNotes Blogging', 'FalseNotes Blogging Platform', 'FalseNotes Platform', 'FalseNotes Blogging Platform', 'FalseNotes Blogging Platform'],
@@ -76,6 +75,9 @@ export default async function Rootayout({
     <html lang={settings?.language || 'en'}>
       <head>
       <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="apple-touch-icon" href="/apple-192x192.png" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="theme-color" content={'#000000'} />
       </head>
       <body className={`${GeistSans.className}`}>
         <ThemeProvider attribute="class" defaultTheme={settings?.appearance || 'system'} enableSystem>
