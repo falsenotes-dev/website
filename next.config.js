@@ -48,6 +48,30 @@ const nextConfig = {
       }
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/beta',
+        destination: 'https://beta.falsenotes.dev/',
+        permanent: false,
+      },
+      {
+        source: '/github',
+        destination: 'https://github.com/falsenotes-dev/',
+        permanent: false,
+      },
+      {
+        source: '/twitter',
+        destination: 'https://twitter.com/falsenotesteam/',
+        permanent: false,
+      },
+      {
+        source: '/instagram',
+        destination: 'https://instagram.com/falsenotes.dev/',
+        permanent: false,
+      }
+    ]
+  },
   env: {
     DOMAIN: process.env.DOMAIN,
   }

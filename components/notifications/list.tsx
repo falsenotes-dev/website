@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { dateFormat } from "@/lib/format-date";
 import { notificationRead } from "./update";
 import { useRouter } from "next/navigation";
+import { EmptyPlaceholder } from "../empty-placeholder";
 
 export default function NotificationList({ notifications, ...props }: { notifications: any } & React.ComponentPropsWithoutRef<typeof Card>) {
      const router = useRouter()
@@ -17,7 +18,7 @@ export default function NotificationList({ notifications, ...props }: { notifica
                     </CardHeader>
                     <CardContent className="p-0">
                          <div className="flex flex-col items-start justify-between gap-4">
-                              {notifications.length && (notifications?.map((notification: any) => (
+                              {notifications.length > 0 && (notifications?.map((notification: any) => (
                                    <div className="flex gap-4 items-center" key={notification.id}  onClick={
                                         async () => {
                                              await notificationRead(notification.id)
@@ -78,6 +79,17 @@ export default function NotificationList({ notifications, ...props }: { notifica
                                    </div>
                                    </div>
                               )))}
+                              {
+                                   notifications.length === 0 && (
+                                        <EmptyPlaceholder className="w-full">
+                                             <EmptyPlaceholder.Icon name="notification" />
+                                             <EmptyPlaceholder.Title>No notifications</EmptyPlaceholder.Title>
+                                             <EmptyPlaceholder.Description>
+                                                  You don&apos;t have any notifications yet.
+                                             </EmptyPlaceholder.Description>
+                                        </EmptyPlaceholder>
+                                   )
+                              }
                          </div>
                     </CardContent>
                </Card>

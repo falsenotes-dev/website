@@ -2,39 +2,29 @@ import * as React from "react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icon"
 import { ModeToggle } from "@/components/mode-toggle"
+import Link from "next/link"
+import { Separator } from "./ui/separator"
 
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
      return (
-          <footer className={cn("container border-t flex flex-col items-center justify-between gap-4 py-6 md:h-24 md:flex-row md:py-0 text-sm", className)}>
-               <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0 flex-auto">
-                    <Icons.logoIcon />
-                    <p className="text-center text-inherit leading-loose md:text-left">
-                         Built by{" "}
-                         <a
-                              href={siteConfig.links.authorTwitter}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="font-medium underline underline-offset-4"
-                         >
-                              yusupovbg
-                         </a>
-                         . The source code is available on{" "}
-                         <a
-                              href={siteConfig.links.github}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="font-medium underline underline-offset-4"
-                         >
-                              GitHub
-                         </a>
-                         .
-                    </p>
-               </div>
-               <div className="">
-               <ModeToggle />
-               </div>
-          </footer>
+          <>
+               <footer className={cn("container md:flex items-center gap-4 w-full flex-row justify-between py-6 border-t hidden text-sm text-muted-foreground", className)}>
+                    <div className="copyright">
+                         <p className="text-inherit  pb-0 mx-auto">
+                              &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+                         </p>
+                    </div>
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-inherit">
+                         <Link href="/beta">Beta</Link>
+                         <Link target="_blank" href="/github">GitHub</Link>
+                         <Link target="_blank" href="/twitter">Twitter</Link>
+                         <Link target="_blank" href="/instagram">Instagram</Link>
+                    </div>
+                    <div className="">
+                         <ModeToggle />
+                    </div>
+               </footer>
+          </>
      )
 }

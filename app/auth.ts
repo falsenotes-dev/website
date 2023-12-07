@@ -110,7 +110,7 @@ export const config = {
           }
         } else if (account?.provider === 'google') {
           console.log("Google Profile:", profile);
-          const { sub: googleId, name, email, picture: image, email_verified, locale } = profile as any;
+          const { sub: googleId, name, email, picture, email_verified, locale } = profile as any;
           if (!googleId) {
             return false; // Do not continue with the sign-in process
           }
@@ -128,6 +128,8 @@ export const config = {
           if (!userExists) {
             // User doesn't exist, add them to the Users table
             //create username (login) form email if not exists in db else add number to username
+            // remove =s96-c from image url
+            const image = picture.replace("=s96-c", "");
             let username = email.split("@")[0];
             let usernameExists = await postgres.user.findUnique({
               where: {

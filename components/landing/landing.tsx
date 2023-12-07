@@ -27,7 +27,7 @@ export default function Landing({ latest, tags, popular }: { latest: any, tags: 
           <div className="landing__hero_content flex flex-col md:mt-28 mt-20 space-y-8 items-center justify-center">
             <div className="flex flex-col justify-center gap-8">
               <div className="flex flex-col justify-center gap-2">
-              <Link href="/@falsetech/introducing-the-falsenotes-editor-where-your-ideas-come-to-life" className="mx-auto">
+              <Link href="/@falsenotes/introducing-the-falsenotes-editor-where-your-ideas-come-to-life" className="mx-auto">
               <Badge variant={'secondary'} className="text-sm font-normal py-1.5 my-5 px-3 w-fit space-x-2 rounded-sm flex gap-1.5"><Image src="/assets/rocket.png" width={20} height={20} alt="" /><Separator orientation="vertical" className="!m-0 h-5" />Introducing the FalseNotes Editor <ArrowRight className="ml-1 h-3.5 w-3.5" /></Badge>
               </Link>
               <h1 className="landing__hero_title max-w-[1200px] font-black leading-snug text-3xl lg:text-5xl xl:text-6xl text-center"><Balancer>Where Creativity Takes Flight:

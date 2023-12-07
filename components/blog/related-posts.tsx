@@ -21,7 +21,7 @@ export default function RelatedPosts({ posts, post, session }: { posts: any, pos
                               session && (
                                    <>
                                         <Separator className="mb-6" />
-                                   <Button variant={"outline"} className="w-full md:w-max" size={"lg"} asChild>
+                                   <Button variant={"outline"} className="w-full md:w-max mb-16 md:mb-0" size={"lg"} asChild>
                                         <Link href={`/feed`}>
                                              See more recommendations
                                         </Link>

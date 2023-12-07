@@ -589,3 +589,7 @@
 ::-webkit-scrollbar-thumb {
   @apply relative flex-1 rounded-full bg-border hover:bg-secondary/80 m-0.5;
 }
+
+.theme-switcher input:checked~label {
+  @apply bg-background shadow-md;
+}
