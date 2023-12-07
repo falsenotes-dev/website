@@ -230,7 +230,7 @@ export default async function PostLayout(
 
                {post && (
                     <div className="bg-popover flex flex-col gap-16 pt-16 mt-4 border-t">
-                         <div className=' md:container mx-auto px-4'>
+                         <div className=' md:container mx-auto px-4 w-full'>
                               <MoreFromAuthor post={authorPosts} author={author} sessionUser={sessionUser} />
                               {
                                    posts?.length > 0 &&
