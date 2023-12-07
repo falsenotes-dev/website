@@ -96,11 +96,14 @@ export const searchTags = async ({
     } : {},
     take: limit,
     skip: page * limit,
-    orderBy: {
+    orderBy: search !== undefined ? {
+      posts: {
+        _count: "desc",
+      },
       followingtag: {
         _count: "desc",
       },
-    },
+    } : {},
     include: {
       _count: { select: { posts: true, followingtag: true } },
     },

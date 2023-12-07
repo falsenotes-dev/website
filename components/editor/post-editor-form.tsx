@@ -107,15 +107,15 @@ export function PostEditorForm(props: { post: any, user: any }) {
 
   // This can come from your database or API.
   const defaultValues: Partial<PostFormValues> = {
-    id: props.post?.id,
-    title: props.post?.title,
-    content: props.post?.content,
-    coverImage: props.post?.cover || '',
-    url: props.post?.url || '',
-    subtitle: props.post?.subtitle || '',
-    published: props.post?.published,
-    tags: props.post?.tags?.map((tag: any) => ({
-      value: tag.tag?.name,
+    id: props.post.id,
+    title: props.post.title,
+    content: props.post.content,
+    coverImage: props.post.cover || '',
+    url: props.post.url || '',
+    subtitle: props.post.subtitle,
+    published: props.post.published,
+    tags: props.post.tags.map((tag: any) => ({
+      value: tag.tag.name,
     })),
   }
 
@@ -328,7 +328,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
 
     // If first section is empty or has less than 100 characters, use the second section
     if (firstSection.length < 100) {
-      const secondSection = sections[0] + sections[1];
+      const secondSection = sections[0] + ' ' + sections[1];
       const description = markdownToText(secondSection);
 
       form.getValues('subtitle') == '' && form.setValue('subtitle', description);
@@ -375,7 +375,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
     const description = markdownToText(firstSection);
     // If first section is empty or has less than 100 characters, use the 1st and 2nd section
     if (firstSection.length < 100) {
-      const secondSection = sections[0] + sections[1];
+      const secondSection = sections[0] + ' ' + sections[1];
       const description = markdownToText(secondSection);
       value !== '' ? form.setValue('subtitle', value) : form.setValue('subtitle', description);
       return;
