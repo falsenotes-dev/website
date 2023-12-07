@@ -500,7 +500,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                       <p className="text-xs text-secondary-foreground">PNG, JPG (MAX. 2MB)</p>
                                     </div>)
                                 }
-                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png" onChange={(e) => {
+                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png" onChange={async(e) => {
                                   const file = e.target.files?.[0];
                                   if (file) {
                                     if (file.size > 2 * 1024 * 1024) {
@@ -509,6 +509,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                       toast({ description: "File type must be PNG or JPEG.", variant: "destructive" });
                                     } else {
                                       setFile(file);
+                                      await uploadCover();
                                     }
                                   }
                                 }} className="hidden" />
