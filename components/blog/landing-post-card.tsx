@@ -59,17 +59,19 @@ export default function LandingPostCard(
                   </span>
                   <span>·</span>
                   <p className="card-text mb-0 text-muted-foreground text-xs">{props.post.readingTime}</p>
-                  <span className="hidden md:inline">·</span>
                   {
                     props.post.tags?.length > 0 && (
-                      <Link href={`/tags/${props.post.tags[0].tag?.name}`} className="hidden md:block" key={props.post.tags[0].tag?.id}>
-                        <TagBadge variant={"secondary"} className="flex">
-                          {
-                            //replace - with space
-                            props.post.tags[0].tag?.name.replace(/-/g, " ")
-                          }
-                        </TagBadge>
-                      </Link>
+                      <>
+                        <span className="hidden md:inline">·</span>
+                        <Link href={`/tags/${props.post.tags[0].tag?.name}`} className="hidden md:block" key={props.post.tags[0].tag?.id}>
+                          <TagBadge variant={"secondary"} className="flex">
+                            {
+                              //replace - with space
+                              props.post.tags[0].tag?.name.replace(/-/g, " ")
+                            }
+                          </TagBadge>
+                        </Link>
+                      </>
                     )
                   }
 
