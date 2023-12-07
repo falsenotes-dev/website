@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { dateFormat } from "@/lib/format-date";
 import { notificationRead } from "./update";
 import { useRouter } from "next/navigation";
+import { EmptyPlaceholder } from "../empty-placeholder";
 
 export default function NotificationList({ notifications, ...props }: { notifications: any } & React.ComponentPropsWithoutRef<typeof Card>) {
      const router = useRouter()
@@ -78,6 +79,17 @@ export default function NotificationList({ notifications, ...props }: { notifica
                                    </div>
                                    </div>
                               )))}
+                              {
+                                   notifications.length === 0 && (
+                                        <EmptyPlaceholder>
+                                             <EmptyPlaceholder.Icon name="notification" className="w-16 h-16" />
+                                             <EmptyPlaceholder.Title>No notifications</EmptyPlaceholder.Title>
+                                             <EmptyPlaceholder.Description>
+                                                  You don&apos;t have any notifications yet.
+                                             </EmptyPlaceholder.Description>
+                                        </EmptyPlaceholder>
+                                   )
+                              }
                          </div>
                     </CardContent>
                </Card>
