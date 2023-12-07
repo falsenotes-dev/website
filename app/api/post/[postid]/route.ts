@@ -65,7 +65,7 @@ export async function PATCH(
         ...(oldData?.published === false &&
           published === true && { publishedAt: new Date() }),
         ...(oldData?.published === true &&
-          published === true && { updatedAt: new Date(), updated: true }),
+          published === true && { modifiedAt: new Date(), updated: true }),
       },
     });
 

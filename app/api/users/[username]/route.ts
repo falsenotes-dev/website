@@ -24,6 +24,7 @@ export async function GET(req: Request, { params }: { params: { username: string
           }
         },
         notifications: true,
+        _count: { select: { posts: true, Followers: true, Followings: true, notifications: true } }
       },
       where: {
         OR: [{username: username}, {name: username}]        

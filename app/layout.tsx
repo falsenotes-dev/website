@@ -17,8 +17,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.DOMAIN!),
   appleWebApp: true,
   applicationName: 'FalseNotes',
-  authors: [{ name: 'bkhtdev', url: siteConfig.links.authorTwitter }],
-  creator: 'bkhtdev',
   icons: { apple: '/apple-192x192.png', icon: '/favicon.ico', shortcut: '/favicon.ico' },
   verification: {google: 'A9rA7yXdPFGwGxzMtOJ1tXoD0d5NBfJX7nEWrU37iJg', me: '@me', yandex: '37a0482b63273551'},
   manifest: `${process.env.DOMAIN}/manifest.json`,
@@ -47,7 +45,8 @@ export const metadata: Metadata = {
         alt: 'FalseNotes',
       },
     ],
-    creators: ['@bkhtdev'],
+    type: 'website',
+    siteName: 'FalseNotes',
   },
   twitter: {
     card: 'summary_large_image',
@@ -59,7 +58,7 @@ export const metadata: Metadata = {
         alt: 'FalseNotes',
       },
     ],
-    creator: '@bkhtdev',
+    site: 'FalseNotes',
   },
 }
 
@@ -76,6 +75,9 @@ export default async function Rootayout({
     <html lang={settings?.language || 'en'}>
       <head>
       <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="apple-touch-icon" href="/apple-192x192.png" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="theme-color" content={'#000000'} />
       </head>
       <body className={`${GeistSans.className}`}>
         <ThemeProvider attribute="class" defaultTheme={settings?.appearance || 'system'} enableSystem>

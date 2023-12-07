@@ -7,21 +7,20 @@ export async function GET(request: NextRequest) {
           const authorId = request.nextUrl.searchParams.get("author")?.toString();
 
           if (!url) {
-               return new Response("url is required query parameter", { status: 400 });
+               return NextResponse.json({ message: "url is required" }, { status: 400 });
           }
 
-          const isUrlValid = await postgres.post.findUnique({
+          const isUrlValid = await postgres.post.findFirst({
                where: {
                     url: url,
-                    authorId: authorId,
                },
           })
           if (isUrlValid) {
-               return new Response("url is not available", { status: 400 });
+               return NextResponse.json({ isValid: false });
           } else {
-               return new Response("url is available", { status: 200 });
+               return NextResponse.json({ isValid: true });
           }
      } catch (error: any) {
-          return new Response(error.message, { status: 500 });
+          return NextResponse.json({ message: error.message }, { status: 500 });
      }
 }
