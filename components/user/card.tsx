@@ -36,7 +36,7 @@ export function UserCard({ user, session, className }: { user: any, session: any
           }
      }
      return (
-          <div className="flex justify-between w-full my-8">
+          <div className="md:flex justify-between w-full my-8 hidden">
                <Link href={`/@${user?.username}`} className="font-bold text-3xl flex items-center gap-1">
                          {user.name || user.username} {user?.verified && (
                               <Icons.verified className="h-5 lg:h-6 w-5 lg:w-6 inline fill-primary align-middle" />
