@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import UserBookmarks from "@/components/user/bookmark";
 import { SiteFooter } from "@/components/footer";
+import { UserAbout } from "@/components/user/about";
 
 
 export default async function Page({ params, searchParams }: {
@@ -105,40 +106,52 @@ export default async function Page({ params, searchParams }: {
   return (
     <div className="md:container mx-auto px-4 pt-5">
       <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5" >
-        <div className="w-full user__header md:w-1/3 lg:w-1/4 flex flex-col" style={{
+        <div className="w-full user__header md:w-1/3 lg:w-1/4 flex flex-col md:sticky top-[115px]" style={{
           minHeight: 'calc(100vh - 115px)'
         }}>
           <div className="md:flex-[1_0_auto]">
           <UserDetails user={user} followers={followers} followings={following} session={sessionUserName} />
           </div>
-          <SiteFooter className='text-xs flex-col justify-start items-start mb-0' />
+          <SiteFooter className='text-xs flex-col justify-start items-start mb-0 mt-4 !px-0' />
         </div>
         <div className="lg:pl-8 w-full">
-          {sessionUserName?.id === user?.id ? (
+          
             <Tabs className="w-full" defaultValue={tab || "posts"}>
               <TabsList className="bg-background w-full py-4 justify-start h-fit rounded-none gap-2 sticky top-[90px] z-10">
                 <TabsTrigger value="posts" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]:shadow-sm data-[state=active]:text-secondary">
                   Posts
                 </TabsTrigger>
-                <TabsTrigger value="bookmarks" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]shadow-sm data-[state=active]:text-secondary">
+                <TabsTrigger value="about" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]shadow-sm data-[state=active]:text-secondary">
+                  About
+                </TabsTrigger>
+                {sessionUserName?.id === user?.id && (
+                <>
+                 <TabsTrigger value="bookmarks" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]shadow-sm data-[state=active]:text-secondary">
                   Bookmarks
                 </TabsTrigger>
                 <TabsTrigger value="reading-history" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]:shadow-sm data-[state=active]:text-secondary">
                   Reading History
                 </TabsTrigger>
+                </>
+                )}
               </TabsList>
               <TabsContent value="posts" className="w-full">
                 <UserPosts posts={posts} user={user} sessionUser={sessionUserName} query={whereQuery} search={search} className="w-full" />
               </TabsContent>
-              <TabsContent value="bookmarks" className="w-full">
+              <TabsContent value="about">
+                <UserAbout user={user} session={sessionUserName} />
+              </TabsContent>
+              {sessionUserName?.id === user?.id && (
+                <>
+                <TabsContent value="bookmarks" className="w-full">
                 <UserBookmarks posts={bookmarks} user={user} sessionUser={sessionUserName} tab={`bookmarks`} className="w-full" />
               </TabsContent>
               <TabsContent value="reading-history">
                 <UserBookmarks posts={history} user={user} sessionUser={sessionUserName} tab={`history`} className="w-full" />
               </TabsContent>
-            </Tabs>) : (
-            <UserPosts posts={posts} user={user} sessionUser={sessionUserName} query={whereQuery} search={search} className="w-full" />
-          )}
+              </>
+              )}
+            </Tabs>
         </div>
       </div>
     </div>
