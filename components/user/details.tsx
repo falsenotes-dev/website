@@ -63,11 +63,7 @@ export default function UserDetails({ className, children, user, followers, foll
                   </div>
                 ) : (
                   <div className="md:space-y-3 w-full">
-                    <h1 className="font-bold text-lg lg:text-2xl flex items-center"><span>{user?.username}</span> {user?.verified && (
-                      <Icons.verified className="h-5 lg:h-6 w-5 lg:w-6 mx-0.5 inline fill-primary align-middle" />
-                    )} {user?.falsemember && (
-                      <Image src='https://avatars.githubusercontent.com/u/144859178?v=4' alt="False icon" height={30} width={30} className="h-5 lg:h-6 w-5 lg:w-6 inline rounded border align-middle" />
-                    )}</h1>
+                    <h1 className="font-bold text-lg lg:text-2xl flex items-center"><span>{user?.username}</span></h1>
                   </div>
                 )
               }
@@ -76,7 +72,7 @@ export default function UserDetails({ className, children, user, followers, foll
         </div>
         <div className="items-center flex gap-2 w-full">
           <Icons.users className="h-5 w-5 text-muted-foreground" />
-          <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-xs">{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followers</span></div>
+          <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-xs">{formatNumberWithSuffix(user.Followers?.length)} <span className="text-muted-foreground ml-2">Followers</span></div>
           <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-xs">{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followings</span></div>
 
         </div>
@@ -91,7 +87,7 @@ export default function UserDetails({ className, children, user, followers, foll
           }
           {user.falsemember && (
             <div className="flex items-center gap-1">
-              <Image src='https://avatars.githubusercontent.com/u/144859178?v=4' alt="False icon" height={20} width={20} className="h-5 w-5 inline rounded border align-middle" />
+              <Image src='/assets/falsemember.png' alt="False icon" height={20} width={20} className="h-5 w-5 inline rounded border align-middle" />
               <span className="text-muted-foreground text-sm font-medium">FalseNotes Staff</span>
             </div>
           )
