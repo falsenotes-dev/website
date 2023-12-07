@@ -39,7 +39,7 @@ export default async function HomeLayout({
                               </div>
                               <div className="hidden lg:block md:my-4 lg:w-1/3 xl:pl-8 md:pl-4 border-l min-h-screen">
                                    <div className="relative w-full h-full inline-block">
-                                        <div className="sticky space-y-4 top-[90px]">
+                                        <div className="sticky flex flex-col gap-4 top-[90px]">
                                              <PopularPosts />
                                              {popularTags.length !== 0 && (
                                                   <Card className="feed__content_featured_card bg-background">
@@ -116,7 +116,7 @@ export default async function HomeLayout({
                                                        )}
                                                   </CardContent>
                                              </Card>
-                                             <SiteFooter className='text-xs !px-0' />
+                                             <SiteFooter className='text-xs flex-col justify-center mb-0' />
                                         </div>
                                    </div>
                               </div>

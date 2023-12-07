@@ -11,33 +11,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Icons } from "@/components/icon"
+import { Switch } from "./ui/switch"
+import { Label } from "./ui/label"
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
+import { Input } from "./ui/input"
 
 export function ModeToggle() {
-  const { setTheme } = useTheme()
+  const { setTheme, theme } = useTheme()
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-8 px-0">
-          <Icons.sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Icons.moon className="h-[1.2rem] w-[1.2rem] absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          <Icons.sun className="mr-2 h-4 w-4" />
-          <span>Light</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          <Icons.moon className="mr-2 h-4 w-4" />
-          <span>Dark</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          <Icons.laptop className="mr-2 h-4 w-4" />
-          <span>System</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <RadioGroup defaultValue={theme} className="flex p-1 h-9 rounded-full bg-accent border border-input theme-switcher">
+      <div className="h-full">
+        <Input type="radio" name="theme" value="system" id="r1" className="hidden" checked={theme == 'system'} />
+        <Label htmlFor="r1" className="h-7 w-7 rounded-full flex justify-center items-center cursor-pointer" onClick={
+          () => { setTheme('system') }
+        }><Icons.laptop className="h-4 w-4" /></Label>
+      </div>
+      <div className="h-full">
+        <Input type="radio" name="theme" value="dark" id="r2" className="hidden" checked={theme == 'dark'} />
+        <Label htmlFor="r2" className="h-7 w-7 rounded-full flex justify-center items-center cursor-pointer" onClick={
+          () => { setTheme('dark') }
+        }><Icons.moon className="h-4 w-4" /></Label>
+      </div>
+      <div className="h-full">
+        <Input type="radio" name="theme" id="r3" className="hidden" checked={theme == 'light'} />
+        <Label htmlFor="r3" className="h-7 w-7 rounded-full flex justify-center items-center cursor-pointer" onClick={
+          () => { setTheme('light') }
+        }><Icons.sun className="h-4 w-4" /></Label>
+      </div>
+    </RadioGroup>
   )
 }
