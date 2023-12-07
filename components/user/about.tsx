@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import UserHoverCard from "../user-hover-card";
 import Link from "next/link";
 import { formatNumberWithSuffix } from "../format-numbers";
+import { EmptyPlaceholder } from "../empty-placeholder";
 
 function getRegistrationDateDisplay(date: string) {
      const dateObj = new Date(date);
@@ -42,7 +43,7 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                     <Icons.users className="h-5 w-5 text-muted-foreground" />
                     <Dialog>
                          <DialogTrigger><Button variant={"ghost"} size={"sm"} asChild>
-                              <>{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followers</span></>
+                              <span>{formatNumberWithSuffix(user.Followers?.length)} <span className="text-muted-foreground ml-2">Followers</span></span>
                          </Button></DialogTrigger>
                          <DialogContent>
                               <DialogHeader>
@@ -83,7 +84,13 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                                    }
                                    {
                                         user.Followers?.length === 0 && (
-                                             <p className="text-sm text-muted-foreground">No followers</p>
+                                             <EmptyPlaceholder>
+                                                  <EmptyPlaceholder.Icon name="users" strokeWidth={1.25} />
+                                                  <EmptyPlaceholder.Title>No followers</EmptyPlaceholder.Title>
+                                                  <EmptyPlaceholder.Description>
+                                                       {user?.id === session?.id ? "You don't have any followers yet." : " The user doesn't have any followers yet." }
+                                                  </EmptyPlaceholder.Description>
+                                             </EmptyPlaceholder>
                                         )
                                    }
                               </div>
@@ -91,7 +98,7 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                     </Dialog>
                     <Dialog>
                          <DialogTrigger><Button variant={"ghost"} size={"sm"} asChild>
-                              <>{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followings</span></>
+                              <span>{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followings</span></span>
                          </Button></DialogTrigger>
                          <DialogContent>
                               <DialogHeader>
@@ -133,7 +140,13 @@ export function UserAbout({ user, className, session }: { user: any, className?:
 
                                    {
                                         user.Followings?.length === 0 && (
-                                             <p className="text-sm text-muted-foreground">No followings</p>
+                                             <EmptyPlaceholder>
+                                                  <EmptyPlaceholder.Icon name="users" strokeWidth={1.25} />
+                                                  <EmptyPlaceholder.Title>No followings</EmptyPlaceholder.Title>
+                                                  <EmptyPlaceholder.Description>
+                                                       {user?.id === session?.id ? "You don't have any followings yet." : " The user doesn't have any followings yet." }
+                                                  </EmptyPlaceholder.Description>
+                                             </EmptyPlaceholder>
                                         )
                                    }
                               </div>
