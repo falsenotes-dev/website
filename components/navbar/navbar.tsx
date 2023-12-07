@@ -26,7 +26,7 @@ function Navbar(notifications: any) {
 
   return (
     <div className="md:container px-4 sticky top-4 z-20">
-      <div className="menu-container py-4 px-8 bg-background/70 backdrop-blur-md border rounded-2xl shadow-xl xl:mx-8">
+      <div className="menu-container py-4 px-8 bg-background/95 backdrop-blur border rounded-2xl shadow-xl xl:mx-8 supports-[backdrop-filter]:bg-background/60">
         <Link href={session ? "/feed" : "/"} className="flex items-center">
           <Icons.logo className="md:block hidden h-7" />
           <Icons.logoIcon className="md:hidden block h-7" />
