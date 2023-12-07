@@ -17,6 +17,7 @@ import { UserAbout } from "@/components/user/about";
 import { Icons } from "@/components/icon";
 import Image from "next/image";
 import { UserCard } from "@/components/user/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 
 export default async function Page({ params, searchParams }: {
@@ -120,6 +121,7 @@ export default async function Page({ params, searchParams }: {
         <div className="lg:pl-8 w-full">
           <UserCard user={user} session={sessionUserName} />
           <Tabs className="w-full" defaultValue={tab || "posts"}>
+            <ScrollArea className="w-full">
             <TabsList className="bg-background w-full py-4 justify-start h-fit rounded-none gap-2">
               <TabsTrigger value="posts" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]:shadow-sm data-[state=active]:text-secondary">
                 Posts
@@ -138,6 +140,8 @@ export default async function Page({ params, searchParams }: {
                 </>
               )}
             </TabsList>
+            <ScrollBar orientation="horizontal" />
+            </ScrollArea>
             <TabsContent value="posts" className="w-full">
               <UserPosts posts={posts} user={user} sessionUser={sessionUserName} query={whereQuery} search={search} className="w-full" />
             </TabsContent>
