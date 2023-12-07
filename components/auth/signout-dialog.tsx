@@ -20,7 +20,7 @@ export default function SignOutDialog({ ...props }: React.ComponentPropsWithoutR
     <AlertDialog {...props}>
       <AlertDialogContent className="flex flex-col justify-center !rounded-lg">
         <AlertDialogHeader className="justify-center">
-          <Link href={'/'} className="mx-auto"><Icons.logo className="md:h-5 mt-5 mb-8" /></Link>
+          <Link href={'/'} className="mx-auto"><Icons.logo className="md:h-6 mt-5 mb-8" /></Link>
           <AlertDialogTitle className="mx-auto text-xl">Are you sure you want to sign out?</AlertDialogTitle>
           <AlertDialogDescription className="mt-4 text-center">
             You can always sign back in at any time.
@@ -33,25 +33,6 @@ export default function SignOutDialog({ ...props }: React.ComponentPropsWithoutR
           </Button>
 
         </div>
-        <AlertDialogFooter className="!flex-row !justify-center space-x-2">
-          <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{" "}
-            <Link
-              href="/terms"
-              className="underline underline-offset-4 hover:text-primary"
-            >
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/privacy"
-              className="underline underline-offset-4 hover:text-primary"
-            >
-              Privacy Policy
-            </Link>
-            .
-          </p>
-        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   )
