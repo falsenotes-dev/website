@@ -38,13 +38,11 @@ function getRegistrationDateDisplay(date: string) {
 export function UserAbout({ user, className, session }: { user: any, className?: string, session: any }) {
      return (
           <>
-               {user.bio && (<div className="w-full mt-5">{user?.bio}</div>)}
-
                <div className="py-4 items-center flex gap-2 w-full">
                     <Icons.users className="h-5 w-5 text-muted-foreground" />
                     <Dialog>
                          <DialogTrigger><Button variant={"ghost"} size={"sm"} asChild>
-                              <span>{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followers</span></span>
+                              <>{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followers</span></>
                          </Button></DialogTrigger>
                          <DialogContent>
                               <DialogHeader>
@@ -93,7 +91,7 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                     </Dialog>
                     <Dialog>
                          <DialogTrigger><Button variant={"ghost"} size={"sm"} asChild>
-                              <span>{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followings</span></span>
+                              <>{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followings</span></>
                          </Button></DialogTrigger>
                          <DialogContent>
                               <DialogHeader>
