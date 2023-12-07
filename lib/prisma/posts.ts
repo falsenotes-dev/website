@@ -38,63 +38,53 @@ export const getPosts = async ({
   page?: number;
   limit?: number;
 }) => {
+  const orderByQuery =
+    search !== undefined
+      ? [
+          {
+            readedUsers: {
+              _count: "desc",
+            },
+          },
+          {
+            savedUsers: {
+              _count: "desc",
+            },
+          },
+          {
+            likes: {
+              _count: "desc",
+            },
+          },
+          { views: "desc" },
+        ]
+      : {};
   const posts = await postgres.post.findMany({
     ...baseQuery,
     where:
       search !== undefined
         ? {
-            /* OR: [
-                    {
-                         title: {
-                              contains: search,
-                              mode: "insensitive",
-                         },
-                    },
-                    {
-                         content: {
-                              contains: search,
-                              mode: "insensitive",
-                         },
-                    },
-               ], */
-            title: {
-              contains: search,
-              mode: "insensitive",
+            OR: [
+              {
+                title: {
+                contains: search,
+                mode: "insensitive",
+              }
             },
+            {
+              subtitle: {
+                contains: search,
+                mode: "insensitive",
+              }
+            },
+          ],
             published: true,
           }
         : { published: true },
     take: limit,
     skip: page * limit,
-    orderBy: [
-      {
-        readedUsers: {
-          _count: "desc",
-        },
-      },
-      {
-        savedUsers: {
-          _count: "desc",
-        },
-      },
-      {
-        likes: {
-          _count: "desc",
-        },
-      },
-      {
-        views: "desc",
-      },
-    ],
+    orderBy: orderByQuery,
   });
-
-  // // Sort the results in your application code
-  // posts.sort((a, b) => {
-  //   const aCount = a._count.likes + a._count.savedUsers + a._count.readedUsers;
-  //   const bCount = b._count.likes + b._count.savedUsers + b._count.readedUsers;
-
-  //   return bCount - aCount;
-  // });
 
   return { posts: JSON.parse(JSON.stringify(posts)) };
 };
