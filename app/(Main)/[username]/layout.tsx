@@ -20,7 +20,7 @@ export async function generateMetadata(
     return {
       metadataBase: new URL(`${process.env.DOMAIN}/${user.username}`),
       title: `${user.username} ${user?.name ? `(` + user?.name + `)` : ``} - FalseNotes`,
-      description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${user?.postsnum} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
+      description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${user?._count.posts} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
       openGraph: {
         title: `${user.username} ${user?.name ? `(` + user?.name + `)` : ``} - FalseNotes`,
         description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(user?.posts.length)} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
