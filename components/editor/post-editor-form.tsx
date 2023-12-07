@@ -331,12 +331,12 @@ export function PostEditorForm(props: { post: any, user: any }) {
       const secondSection = sections[0] + ' ' + sections[1];
       const description = markdownToText(secondSection);
 
-      form.getValues('subtitle') == '' && form.setValue('subtitle', description);
+      (form.getValues('subtitle') == '' || form.getValues('subtitle') === null) && form.setValue('subtitle', description);
       return;
     } else {
       const description = markdownToText(firstSection);
 
-    form.getValues('subtitle') == '' && form.setValue('subtitle', description);
+    (form.getValues('subtitle') == '' || form.getValues('subtitle') === null) && form.setValue('subtitle', description);
     }
   }
 
@@ -377,10 +377,10 @@ export function PostEditorForm(props: { post: any, user: any }) {
     if (firstSection.length < 100) {
       const secondSection = sections[0] + ' ' + sections[1];
       const description = markdownToText(secondSection);
-      value !== '' ? form.setValue('subtitle', value) : form.setValue('subtitle', description);
+      (value !== '' || value === null) ? form.setValue('subtitle', value) : form.setValue('subtitle', description);
       return;
     }
-    value !== '' ? form.setValue('subtitle', value) : form.setValue('subtitle', markdownToText(description));
+    (value !== '' || value === null) ? form.setValue('subtitle', value) : form.setValue('subtitle', markdownToText(description));
   }
 
   return (
