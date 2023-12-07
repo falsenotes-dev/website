@@ -10,7 +10,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
           <footer className={cn("container border-t flex flex-col items-center justify-between gap-4 py-6 md:h-24 md:flex-row md:py-0 text-sm", className)}>
                <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0 flex-auto">
                     <Icons.logoIcon />
-                    <p className="text-center text-inherit leading-loose md:text-left">
+                    <p className="text-center text-xs leading-loose md:text-left">
                          Built by{" "}
                          <a
                               href={siteConfig.links.authorTwitter}

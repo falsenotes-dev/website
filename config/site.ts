@@ -6,5 +6,6 @@ export const siteConfig = {
      authorTwitter: "https://twitter.com/yusupovbg",
     twitter: "https://twitter.com/falsenotesteam",
     github: "https://github.com/falsenotes-dev/website",
+    instagram: "https://www.instagram.com/falsenotes.dev/",
   },
 };
