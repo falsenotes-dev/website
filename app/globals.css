@@ -599,3 +599,12 @@
     min-height: fit-content !important;
   }
  }
+
+.bg-pattern {
+  background-image: url(/assets/light.png);
+  background-size: 400px;
+}
+
+.dark .bg-pattern {
+  background-image: url(/assets/dark.png);
+}
