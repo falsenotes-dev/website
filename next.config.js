@@ -53,22 +53,26 @@ const nextConfig = {
       {
         source: '/beta',
         destination: 'https://beta.falsenotes.dev/',
-        permanent: false,
+        basePath: false,
+        permanent: true,
       },
       {
         source: '/github',
         destination: 'https://github.com/falsenotes-dev/',
-        permanent: false,
+        basePath: false,
+        permanent: true,
       },
       {
         source: '/twitter',
         destination: 'https://twitter.com/falsenotesteam/',
-        permanent: false,
+        basePath: false,
+        permanent: true,
       },
       {
         source: '/instagram',
         destination: 'https://instagram.com/falsenotes.dev/',
-        permanent: false,
+        basePath: false,
+        permanent: true,
       }
     ]
   },

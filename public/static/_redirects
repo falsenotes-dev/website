@@ -1,0 +1,5 @@
+# Redirects from what the browser requests to what we serve
+/beta                https://beta.falsenotes.dev/
+/github              https://github.com/falsenotes-dev/
+/instagram           https://instagram.com/falsenotes.dev/
+/twitter             https://twitter.com/falsenotesteam/

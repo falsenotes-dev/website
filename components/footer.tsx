@@ -16,10 +16,10 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
                          </p>
                     </div>
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-inherit">
-                         <Link href="/beta">Beta</Link>
-                         <Link target="_blank" href="/github">GitHub</Link>
-                         <Link target="_blank" href="/twitter">Twitter</Link>
-                         <Link target="_blank" href="/instagram">Instagram</Link>
+                         <Link href="https://beta.faslenotes.dev">Beta</Link>
+                         <Link target="_blank" href="https://github.com/falsenotes-dev/">GitHub</Link>
+                         <Link target="_blank" href="https://twitter.com/falsenotesteam/">Twitter</Link>
+                         <Link target="_blank" href="https://instagram.com/falsenotes.dev/">Instagram</Link>
                     </div>
                     <div className="">
                          <ModeToggle />
