@@ -88,8 +88,7 @@ export default function UserDetails({ className, children, user, followers, foll
   return (
     <>
       <div className={cn("flex flex-col items-stretch justify-between xs:h-fit details", className)}>
-        <div className="flex-1">
-          <div className="flex lg:flex-col items-start">
+      <div className="flex lg:flex-col items-start">
             <div className="user__header flex md:block md:items-start lg:space-y-4 space-y-2 pb-4">
               <Avatar className="rounded-full mr-3 lg:w-64 xl:w-[296px] w-16 md:w-56 md:h-56 lg:h-64 xl:h-[296px] border h-16">
                 <AvatarImage className="rounded-full" src={user?.image} alt={user?.name} />
@@ -296,7 +295,6 @@ export default function UserDetails({ className, children, user, followers, foll
               </Button>
             </li>
           </ul>
-        </div>
       </div>
       <div className={`${isScrolled ? 'opacity-100' : 'opacity-0'} lg:flex hidden justify-between duration-700 ease-in-out pr-8 items-center py-4 gap-2 fixed bg-background top-[90px] z-10`}>
         <Avatar className="h-8 w-8">

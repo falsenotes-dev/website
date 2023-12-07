@@ -116,7 +116,7 @@ export default async function HomeLayout({
                                                        )}
                                                   </CardContent>
                                              </Card>
-                                             <SiteFooter className='text-xs flex-col justify-center mb-0' />
+                                             <SiteFooter className='text-xs flex-col justify-start items-start mb-0' />
                                         </div>
                                    </div>
                               </div>

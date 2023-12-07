@@ -593,3 +593,9 @@
 .theme-switcher input:checked~label {
   @apply bg-background shadow-md;
 }
+
+@media (max-width: 640px) { 
+  .user__header{
+    min-height: fit-content !important;
+  }
+ }

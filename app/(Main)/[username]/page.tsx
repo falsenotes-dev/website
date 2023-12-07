@@ -105,8 +105,13 @@ export default async function Page({ params, searchParams }: {
   return (
     <div className="md:container mx-auto px-4 pt-5">
       <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5" >
-        <div className="w-full md:w-1/3 lg:w-1/4">
+        <div className="w-full user__header md:w-1/3 lg:w-1/4 flex flex-col" style={{
+          minHeight: 'calc(100vh - 115px)'
+        }}>
+          <div className="md:flex-[1_0_auto]">
           <UserDetails user={user} followers={followers} followings={following} session={sessionUserName} />
+          </div>
+          <SiteFooter className='text-xs flex-col justify-start items-start mb-0' />
         </div>
         <div className="lg:pl-8 w-full">
           {sessionUserName?.id === user?.id ? (
