@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader } from '../ui/card';
 import { Skeleton } from "../ui/skeleton";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function UserBookmarks({ posts: initialPosts, className, user, sessionUser, tab, search }: { posts: any, className?: string, user?: any, sessionUser?: any, tab?: string, search?: string | undefined }) {
   const router = useRouter();
@@ -88,13 +89,21 @@ export default function UserBookmarks({ posts: initialPosts, className, user, se
 
         ) : (
           <EmptyPlaceholder>
-            <EmptyPlaceholder.Icon name="post" strokeWidth={1.25} />
+            <EmptyPlaceholder.Icon name={tab === 'bookmarks' ? 'bookmark' : 'history'} strokeWidth={1.25} />
             <EmptyPlaceholder.Title>No posts created</EmptyPlaceholder.Title>
             <EmptyPlaceholder.Description>
-              {user?.id === sessionUser?.id ? (
-                <>You don&apos;t have any posts yet. Start creating content.</>)
-                : (
-                  <>The user doesn&apos;t have any posts yet.</>)
+              {
+                tab === 'bookmarks' ? (
+                  <div>
+                    <p className="mb-2">When you bookmark a post, it will show up here.</p>
+                    <Button onClick={() => router.push('/feed')}>Explore</Button>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="mb-2">When you read a post, it will show up here.</p>
+                    <Button onClick={() => router.push('/feed')}>Explore</Button>
+                  </div>
+                )
               }
             </EmptyPlaceholder.Description>
           </EmptyPlaceholder>
