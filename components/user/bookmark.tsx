@@ -77,7 +77,7 @@ export default function UserBookmarks({ posts: initialPosts, className, user, se
                             </div>
                           </div>
                         </div>
-                        <Skeleton className="h-14 md:h-28 aspect-[8/5] ml-6 md:ml-8 rounded-none" />
+                        <Skeleton className="h-14 md:h-28 aspect-[8/5] ml-6 md:ml-8" />
                       </div>
                     </CardContent>
                   </Card>
