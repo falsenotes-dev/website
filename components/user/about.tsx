@@ -144,42 +144,42 @@ export function UserAbout({ user, className, session }: { user: any, className?:
 
                </div>
 
-               <ul className="details list-none">
-                    {user?.location && <li>
+               <div className="details list-none grid md:grid-cols-2">
+                    {user?.location && <div>
                          <Button variant={"link"} size={"sm"} asChild className="p-0 !text-sm hover:!no-underline text-foreground">
                               <span>
                                    <Icons.location className="mr-2 h-5 w-5 text-muted-foreground" />
                                    {user?.location}
                               </span>
                          </Button>
-                    </li>}
-                    {user?.email && <li>
+                    </div>}
+                    {user?.email && <div>
                          <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground">
                               <Link href={`mailto:${user?.email}`} target="_blank" className="flex items-center font-light !text-sm">
                                    <Icons.envelope className="mr-2 h-5 w-5 text-muted-foreground" />
                                    {user?.email}
                               </Link>
                          </Button>
-                    </li>}
-                    {user?.githubprofile && (<li>
+                    </div>}
+                    {user?.githubprofile && (<div>
                          <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground" >
                               <Link href={user?.githubprofile} target="_blank" className="flex items-center font-light !text-sm">
                                    <Github className="mr-2 h-5 w-5 text-muted-foreground" />
                                    {user?.githubprofile?.replace("https://github.com/", "")}
                               </Link>
                          </Button>
-                    </li>
+                    </div>
                     )
                     }
-                    <li>
+                    <div>
                          <Button variant={"link"} size={"sm"} asChild className="p-0 !text-sm hover:!no-underline text-foreground" >
                               <span>
                                    <Icons.calendarDays className="mr-2 h-5 w-5 text-muted-foreground" />
                                    Joined {getRegistrationDateDisplay(user?.createdAt)}
                               </span>
                          </Button>
-                    </li>
-               </ul>
+                    </div>
+               </div>
           </>
      )
 }
