@@ -29,7 +29,7 @@ export default function SinglePost({ post: initialPost, author, sessionUser, tag
      const [session, setSession] = useState<any>(sessionUser);
      const [post, setPost] = useState<any>(initialPost);
      const [openComments, setOpenComments] = useState<boolean>(comments || false);
-     const [openPublishDialog, setOpenPublishDialog] = useState<boolean>(published || false);
+     const [openPublishDialog, setOpenPublishDialog] = useState<boolean>(typeof published === "undefined" ? false : published);
 
      useEffect(() => {
           setPost(initialPost);
