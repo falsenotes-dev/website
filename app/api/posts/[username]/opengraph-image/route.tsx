@@ -48,10 +48,10 @@ export async function GET(req: NextRequest, { params }: { params: { username: st
     return new ImageResponse(
       (
         post.cover ? (
-          <div tw="flex flex-col w-full h-full justify-end bg-white" >
-            <div tw="absolute flex bg-white w-full h-8 top-0 z-50"></div>
-            <img src={post.cover} alt="" />
-            <div tw="absolute flex flex-col bg-white py-8 px-14 w-full bottom-0">
+          <div tw="flex flex-col w-full h-full justify-end bg-slate-200 box-content" >
+          <img src={post.cover} alt="" tw="absolute object-cover object-center w-full h-full" style={{ objectFit: 'cover', objectPosition: 'center'
+         }} />
+            <div tw="fixed flex flex-col bg-white p-6 w-full bottom-0 z-10">
               <div tw="text-3xl font-bold w-3/5 mb-4"
               style={{
                 overflow: "hidden",
