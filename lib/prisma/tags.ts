@@ -96,18 +96,29 @@ export const searchTags = async ({
     } : {},
     take: limit,
     skip: page * limit,
-    orderBy: search !== undefined ? {
-      posts: {
-        _count: "desc",
-      },
-      followingtag: {
-        _count: "desc",
-      },
-    } : {},
     include: {
       _count: { select: { posts: true, followingtag: true } },
     },
   });
+
+  //sort by number of posts and then by number of followers
+  if(typeof search === 'string') {
+    tags.sort((a, b) => {
+      if (a._count.posts > b._count.posts) {
+        return -1;
+      }
+      if (a._count.posts < b._count.posts) {
+        return 1;
+      }
+      if (a._count.followingtag > b._count.followingtag) {
+        return -1;
+      }
+      if (a._count.followingtag < b._count.followingtag) {
+        return 1;
+      }
+      return 0;
+    });
+  }
 
   return { tags: JSON.parse(JSON.stringify(tags)) };
 }

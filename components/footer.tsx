@@ -16,6 +16,9 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
                          </p>
                     </div>
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-inherit">
+                         <Link href="/about">About</Link>
+                         <Link href="/privacy">Privacy</Link>
+                         <Link href="/terms">Terms</Link>
                          <Link href="/beta">Beta</Link>
                          <Link target="_blank" href="/github">GitHub</Link>
                          <Link target="_blank" href="/twitter">Twitter</Link>
