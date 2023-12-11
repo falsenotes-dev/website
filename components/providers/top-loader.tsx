@@ -7,13 +7,13 @@ import { useTheme } from "next-themes";
 function TopLoader() {
   return (
     <NextTopLoader
-      color="#2564eb"
-      initialPosition={0.1}
-      height={3}
-      showSpinner={true}
-      crawl={true}
-      crawlSpeed={100}
-      shadow="0 0 10px #2463eb,0 0 5px #2463eb"
+    color="#2564EB"
+    initialPosition={0.5}
+    crawlSpeed={200}
+    height={3}
+    crawl={true}
+    easing="ease"
+    speed={200}
     />
   );
 }
