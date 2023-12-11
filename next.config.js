@@ -73,6 +73,16 @@ const nextConfig = {
         destination: 'https://instagram.com/falsenotes.dev/',
         basePath: false,
         permanent: true,
+      },
+      {
+        source: '/terms',
+        destination: '/@falsenotes/terms-of-service',
+        permanent: true,
+      },
+      {
+        source: '/privacy',
+        destination: '/@falsenotes/privacy-policy',
+        permanent: true,
       }
     ]
   },
