@@ -21,9 +21,9 @@ export default async function Explore({
      let { posts } = await getPosts({ search, limit: 3 })
      let { users } = await getUsers({ search, limit: 3 })
      let { tags } = await searchTags({ search, limit: 3 })
-     tab === 'posts' && (posts = await getPosts({ search, limit: 5 }).then(res => res.posts))
-     tab === 'users' && (users = await getUsers({ search, limit: 5 }).then(res => res.users))
-     tab === 'tags' && (tags = await searchTags({ search, limit: 5 }).then(res => res.tags))
+     tab === 'posts' && (posts = await getPosts({ search, limit: 10 }).then(res => res.posts))
+     tab === 'users' && (users = await getUsers({ search, limit: 10 }).then(res => res.users))
+     tab === 'tags' && (tags = await searchTags({ search, limit: 10 }).then(res => res.tags))
      const session = await getSessionUser()
      // ...
 

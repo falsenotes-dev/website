@@ -55,7 +55,7 @@ export const getUsers = async ({
   });
   
   // Sort the results in your application code
-  if (search !== undefined) {
+  if (typeof search !== undefined) {
     users.sort((a, b) => {
       const aCount = a._count.Followers + a._count.posts;
       const bCount = b._count.Followers + b._count.posts;
