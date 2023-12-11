@@ -60,6 +60,8 @@ import { validate } from "@/lib/revalidate"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import readingTime from "reading-time"
+import { Switch } from "../ui/switch"
+import { Label } from "../ui/label"
 
 async function fetchSuggestions(query: string) {
   const tagResponse = await fetch(`/api/tags/search?search=${encodeURIComponent(query)}&limit=5`);
@@ -96,6 +98,7 @@ const postFormSchema = z.object({
   url: z.string(),
   subtitle: z.string().optional(),
   published: z.boolean().optional(),
+  commentsOn: z.boolean().optional().default(true),
 })
 
 type PostFormValues = z.infer<typeof postFormSchema>
@@ -117,6 +120,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
     tags: props.post.tags.map((tag: any) => ({
       value: tag.tag.name,
     })),
+    commentsOn: props.post.commentsOn || true,
   }
 
   const form = useForm<PostFormValues>({
@@ -336,7 +340,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
     } else {
       const description = markdownToText(firstSection);
 
-    (form.getValues('subtitle') == '' || form.getValues('subtitle') === null) && form.setValue('subtitle', description);
+      (form.getValues('subtitle') == '' || form.getValues('subtitle') === null) && form.setValue('subtitle', description);
     }
   }
 
@@ -500,7 +504,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                       <p className="text-xs text-secondary-foreground">PNG, JPG (MAX. 2MB)</p>
                                     </div>)
                                 }
-                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png" onChange={async(e) => {
+                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png" onChange={async (e) => {
                                   const file = e.target.files?.[0];
                                   if (file) {
                                     if (file.size > 2 * 1024 * 1024) {
@@ -647,7 +651,22 @@ export function PostEditorForm(props: { post: any, user: any }) {
                       Add Tag
                     </Button>
                   )}
-
+                  <FormField
+                    control={form.control}
+                    name="commentsOn"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Community</FormLabel>
+                        <FormControl>
+                          <div className="flex items-center space-x-2">
+                            <Switch id="comments-on" checked={field.value} onCheckedChange={field.onChange}  />
+                            <Label htmlFor="comments-on">Allow Comments</Label>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </ScrollArea>
               <DialogFooter className="p-6 border-t">
