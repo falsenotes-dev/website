@@ -8,7 +8,7 @@ function TopLoader() {
   return (
     <NextTopLoader
     color="#2564EB"
-    initialPosition={0.5}
+    initialPosition={1}
     crawlSpeed={200}
     height={3}
     crawl={true}
