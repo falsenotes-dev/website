@@ -23,18 +23,6 @@ export const metadata: Metadata = {
   title: 'FalseNotes - Where Creativity Takes Flight',
   description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
   keywords: ['FalseNotes', 'False Notes', 'FalseNotes Blog', 'FalseNotes Blogging', 'FalseNotes Blogging Platform', 'FalseNotes Platform', 'FalseNotes Blogging Platform', 'FalseNotes Blogging Platform'],
-  robots: {
-    index: true,
-    follow: true,
-    nocache: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-snippet": 50,
-      "max-image-preview": 'large',
-      "max-video-preview": -1,
-    },
-  },
   openGraph: {
     title: 'FalseNotes - Where Creativity Takes Flight',
     description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
