@@ -71,9 +71,8 @@ export default function UserDetails({ className, children, user, followers, foll
           </div>
         </div>
         <div className="items-center flex gap-2 w-full">
-          <Icons.users className="h-5 w-5 text-muted-foreground" />
           <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-xs">{formatNumberWithSuffix(user.Followers?.length)} <span className="text-muted-foreground ml-2">Followers</span></div>
-          <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-xs">{formatNumberWithSuffix(user.Followings?.length)} <span className="text-muted-foreground ml-2">Followings</span></div>
+          <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-xs">{formatNumberWithSuffix(user._count.posts)} <span className="text-muted-foreground ml-2">Posts</span></div>
 
         </div>
 
