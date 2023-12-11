@@ -67,7 +67,7 @@
     "next-auth": "^4.24.5",
     "next-share": "^0.27.0",
     "next-themes": "^0.2.1",
-    "nextjs-toploader": "^1.4.2",
+    "nextjs-toploader": "^1.6.4",
     "pg": "^8.11.0",
     "postcss": "^8.4.31",
     "prisma": "^5.7.0",

@@ -5,17 +5,14 @@ import NextTopLoader from "nextjs-toploader";
 import { useTheme } from "next-themes";
 
 function TopLoader() {
-  const { theme, setTheme } = useTheme(); 
   return (
     <NextTopLoader
-      color="#2463eb"
-      initialPosition={0.08}
-      crawlSpeed={200}
-      height={5}
-      crawl={true}
+      color="#2564eb"
+      initialPosition={0.1}
+      height={3}
       showSpinner={true}
-      easing="ease"
-      speed={200}
+      crawl={true}
+      crawlSpeed={100}
       shadow="0 0 10px #2463eb,0 0 5px #2463eb"
     />
   );
