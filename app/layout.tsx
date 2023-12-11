@@ -67,6 +67,7 @@ export default async function Rootayout({
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta name="theme-color" content={'#000000'} />
       <meta name="google-adsense-account" content="ca-pub-8147189047076030" />
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8147189047076030" crossOrigin="anonymous"/>
       </head>
       <body className={`${GeistSans.className}`}>
         <ThemeProvider attribute="class" defaultTheme={settings?.appearance || 'system'} enableSystem>

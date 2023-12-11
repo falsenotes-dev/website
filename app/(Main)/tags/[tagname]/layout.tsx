@@ -39,7 +39,7 @@ export async function generateMetadata(
                },
                twitter: {
                     card: 'summary',
-                    title: `The most insightful posts about ${title} | FalseNotes`,
+                    title: `The most insightful posts about ${title} - FalseNotes`,
                     description: `Read posts about ${tag?.name?.charAt(0)?.toUpperCase() ?? ''}${tag?.name?.slice(1)} on FalseNotes, the largest publishing community for young writers.`,
                },
           }
