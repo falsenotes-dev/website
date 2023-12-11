@@ -50,37 +50,57 @@ export default function MobilePostTabs({ post: initialPost, className, session, 
                <div className={cn("py-2 border rounded-full shadow-xl flex md:hidden mx-auto w-max sticky bottom-5 bg-background/60 backdrop-blur-md", className)}>
                     <div className="flex items-center justify-between w-full gap-4 px-4">
                          <div className="flex items-center justify-center flex-1">
-                              {
-                                   session ? (
-                                        <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} onClick={() => like(post.id)} disabled={session.id == post.authorId} >
-                                             <Icons.like className={`w-5 h-5 ${isLiked && 'fill-current'}`} />
+                              {session ? (
+                                   <Button
+                                        className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                                        size={"icon"}
+                                        variant={"ghost"}
+                                        onClick={() => like(post.id)}
+                                        disabled={(session.id == post.authorId) || (post.allowLikes == null ? false : !post.allowLikes)}
+                                   >
+                                        <Icons.like
+                                             className={`w-6 h-6 ${isLiked && "fill-current"}`}
+                                        />
+                                        <span className="sr-only">Like</span>
+                                   </Button>
+                              ) : (
+                                   <LoginDialog>
+                                        <Button
+                                             className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                                             size={"icon"}
+                                             variant={"ghost"}
+                                        >
+                                             <Icons.like className="w-6 h-6" />
                                              <span className="sr-only">Like</span>
                                         </Button>
-                                   ) : (
-                                        <LoginDialog>
-                                             <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} >
-                                                  <Icons.like className="w-5 h-5" />
-                                                  <span className="sr-only">Like</span>
-                                             </Button>
-                                        </LoginDialog>
-                                   )
-                              }
-                              <span className="text-sm">{post?._count.likes}</span>
+                                   </LoginDialog>
+                              )}
+                              {post.allowLikes && (
+                                   <span className="text-sm">{post?._count.likes}</span>
+                              )}
                          </div>
                          <Separator orientation="vertical" />
                          <div className="flex items-center justify-center flex-1">
-                              <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} onClick={onClicked}>
-                                   <Icons.commentBubble className="w-5 h-5" />
+                              <Button
+                                   className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                                   size={"icon"}
+                                   variant={"ghost"}
+                                   onClick={onClicked}
+                                   disabled={post.allowComments == null ? false : !post.allowComments}
+                              >
+                                   <Icons.commentBubble className="w-6 h-6" />
                                    <span className="sr-only">Comment</span>
                               </Button>
-                              <span className="text-sm">{post?._count.comments}</span>
+                              {post.allowComments && (
+                                   <span className="text-sm">{post?._count.comments}</span>
+                              )}
                          </div>
                          <Separator orientation="vertical" />
                          <div className="flex items-center justify-center flex-1">
                               {
                                    session ? (
                                         <Button className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground" size={"icon"} variant={"ghost"} onClick={() => save(post.id)} >
-                                             { isSaved ? <Icons.bookmarkFill className="h-5 w-5" /> : <Icons.bookmark className="h-5 w-5" /> }
+                                             {isSaved ? <Icons.bookmarkFill className="h-5 w-5" /> : <Icons.bookmark className="h-5 w-5" />}
                                              <span className="sr-only">Save</span>
                                         </Button>
                                    ) : (

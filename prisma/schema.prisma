@@ -66,6 +66,8 @@ model Post {
   readedUsers ReadingHistory[]
   drafts      DraftPost[]
   shares      PostShare[]
+  allowComments  Boolean          @default(true)
+  allowLikes     Boolean          @default(true)
 
   @@index([createdAt])
   @@map("posts")
