@@ -11,8 +11,7 @@ export default function Error({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 h-screen w-screen">
-      <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 254.14 261.78">
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 254.14 261.78">
   <defs>
     <style>
       .cls-1 {
@@ -87,48 +86,48 @@ export default function Error({
     </style>
     <mask id="mask" x="11.76" y="0" width="242.38" height="261.03" maskUnits="userSpaceOnUse">
       <g id="a">
-        <ellipse class="cls-15" cx="181.62" cy="72.71" rx="72.51" ry="72.7"/>
+        <ellipse className="cls-15" cx="181.62" cy="72.71" rx="72.51" ry="72.7"/>
       </g>
     </mask>
   </defs>
   <g>
     <g>
-      <polyline class="cls-12" points="89.29 176.13 92.29 170.93 98.29 170.93"/>
-      <line class="cls-10" x1="111.04" y1="170.93" x2="130.18" y2="170.93"/>
-      <polyline class="cls-12" points="136.56 170.93 142.56 170.93 142.56 170.93 139.56 176.13"/>
-      <polyline class="cls-9" points="133 187.51 117.55 214.31 96.9 250.14"/>
-      <polyline class="cls-12" points="93.62 255.84 90.62 261.03 87.63 255.84"/>
-      <line class="cls-14" x1="81.25" y1="244.77" x2="71.68" y2="228.16"/>
-      <polyline class="cls-12" points="68.48 222.63 65.49 217.43 68.48 212.23"/>
-      <line class="cls-11" x1="75.42" y1="200.19" x2="85.82" y2="182.14"/>
+      <polyline className="cls-12" points="89.29 176.13 92.29 170.93 98.29 170.93"/>
+      <line className="cls-10" x1="111.04" y1="170.93" x2="130.18" y2="170.93"/>
+      <polyline className="cls-12" points="136.56 170.93 142.56 170.93 142.56 170.93 139.56 176.13"/>
+      <polyline className="cls-9" points="133 187.51 117.55 214.31 96.9 250.14"/>
+      <polyline className="cls-12" points="93.62 255.84 90.62 261.03 87.63 255.84"/>
+      <line className="cls-14" x1="81.25" y1="244.77" x2="71.68" y2="228.16"/>
+      <polyline className="cls-12" points="68.48 222.63 65.49 217.43 68.48 212.23"/>
+      <line className="cls-11" x1="75.42" y1="200.19" x2="85.82" y2="182.14"/>
     </g>
     <g>
-      <polyline class="cls-12" points="96.62 80.83 90.62 80.83 87.63 86.03"/>
-      <line class="cls-8" x1="81.29" y1="97.02" x2="71.79" y2="113.5"/>
-      <polyline class="cls-12" points="68.62 119 65.62 124.2 71.62 124.2"/>
-      <line class="cls-1" x1="84.75" y1="124.2" x2="156.93" y2="124.2"/>
-      <polyline class="cls-12" points="163.49 124.2 169.49 124.2 172.48 119"/>
-      <line class="cls-4" x1="178.82" y1="108.01" x2="188.32" y2="91.52"/>
-      <polyline class="cls-12" points="191.49 86.03 194.49 80.83 188.49 80.83"/>
-      <line class="cls-7" x1="175.36" y1="80.83" x2="103.18" y2="80.83"/>
+      <polyline className="cls-12" points="96.62 80.83 90.62 80.83 87.63 86.03"/>
+      <line className="cls-8" x1="81.29" y1="97.02" x2="71.79" y2="113.5"/>
+      <polyline className="cls-12" points="68.62 119 65.62 124.2 71.62 124.2"/>
+      <line className="cls-1" strokeDasharray={'4 4'} x1="84.75" y1="124.2" x2="156.93" y2="124.2"/>
+      <polyline className="cls-12" points="163.49 124.2 169.49 124.2 172.48 119"/>
+      <line className="cls-4" x1="178.82" y1="108.01" x2="188.32" y2="91.52"/>
+      <polyline className="cls-12" points="191.49 86.03 194.49 80.83 188.49 80.83"/>
+      <line className="cls-7" x1="175.36" y1="80.83" x2="103.18" y2="80.83"/>
     </g>
     <g>
-      <polyline class="cls-12" points="68.59 129.41 65.62 124.21 65.61 124.2 59.61 124.2"/>
-      <line class="cls-2" x1="45.66" y1="124.2" x2="24.73" y2="124.2"/>
-      <polyline class="cls-12" points="17.76 124.2 11.76 124.2 14.75 129.4"/>
-      <line class="cls-13" x1="21.73" y1="141.51" x2="32.2" y2="159.68"/>
-      <polyline class="cls-12" points="35.69 165.73 38.69 170.93 44.69 170.93"/>
-      <line class="cls-5" x1="58.56" y1="170.93" x2="79.35" y2="170.93"/>
-      <polyline class="cls-12" points="86.29 170.93 92.29 170.93 89.31 165.72"/>
-      <line class="cls-3" x1="82.4" y1="153.62" x2="72.04" y2="135.46"/>
+      <polyline className="cls-12" points="68.59 129.41 65.62 124.21 65.61 124.2 59.61 124.2"/>
+      <line className="cls-2" x1="45.66" y1="124.2" x2="24.73" y2="124.2"/>
+      <polyline className="cls-12" points="17.76 124.2 11.76 124.2 14.75 129.4"/>
+      <line className="cls-13" x1="21.73" y1="141.51" x2="32.2" y2="159.68"/>
+      <polyline className="cls-12" points="35.69 165.73 38.69 170.93 44.69 170.93"/>
+      <line className="cls-5" x1="58.56" y1="170.93" x2="79.35" y2="170.93"/>
+      <polyline className="cls-12" points="86.29 170.93 92.29 170.93 89.31 165.72"/>
+      <line className="cls-3" x1="82.4" y1="153.62" x2="72.04" y2="135.46"/>
     </g>
   </g>
   <g>
-    <ellipse class="cls-6" cx="181.63" cy="72.7" rx="72.51" ry="72.7"/>
-    <path class="cls-6" d="m253.65,72.7c0,39.88-32.24,72.21-72.02,72.21s-72.03-32.33-72.03-72.21S141.85.5,181.63.5s72.02,32.33,72.02,72.2h0Z"/>
+    <ellipse className="cls-6" cx="181.63" cy="72.7" rx="72.51" ry="72.7"/>
+    <path className="cls-6" d="m253.65,72.7c0,39.88-32.24,72.21-72.02,72.21s-72.03-32.33-72.03-72.21S141.85.5,181.63.5s72.02,32.33,72.02,72.2h0Z"/>
   </g>
-  <g class="cls-16">
-    <path class="cls-6" d="m92.29,170.93h50.27s-25,43.38-25,43.38l-26.93,46.72-25.13-43.61,26.8-46.5Zm-1.67-90.1l-25,43.37h103.87l25-43.37h-103.87Zm-25.01,43.37H11.76l26.93,46.73h53.6l-26.67-46.72h0Z"/>
+  <g className="cls-16">
+    <path className="cls-6" d="m92.29,170.93h50.27s-25,43.38-25,43.38l-26.93,46.72-25.13-43.61,26.8-46.5Zm-1.67-90.1l-25,43.37h103.87l25-43.37h-103.87Zm-25.01,43.37H11.76l26.93,46.73h53.6l-26.67-46.72h0Z"/>
   </g>
 </svg>
       <h2 className="font-medium text-xl">Something went wrong!</h2>
