@@ -121,8 +121,8 @@ export function PostEditorForm(props: { post: any, user: any }) {
     tags: props.post.tags.map((tag: any) => ({
       value: tag.tag.name,
     })),
-    commentsOn: props.post.allowComments || true,
-    likesOn: props.post.allowLikes || true,
+    commentsOn: props.post.allowComments == null ? true : props.post.allowComments,
+    likesOn: props.post.allowLikes == null ? true : props.post.allowLikes,
   }
 
   const form = useForm<PostFormValues>({
