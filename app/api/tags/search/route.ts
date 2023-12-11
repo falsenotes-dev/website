@@ -32,6 +32,25 @@ export async function GET(request: NextRequest) {
           },
         });
 
+        if(typeof search === 'string') {
+          //sort by number of posts and then by number of followers
+          tags.sort((a, b) => {
+            if (a._count.posts > b._count.posts) {
+              return -1;
+            }
+            if (a._count.posts < b._count.posts) {
+              return 1;
+            }
+            if (a._count.followingtag > b._count.followingtag) {
+              return -1;
+            }
+            if (a._count.followingtag < b._count.followingtag) {
+              return 1;
+            }
+            return 0;
+          });
+        }
+
     return NextResponse.json({ tags: tags }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
