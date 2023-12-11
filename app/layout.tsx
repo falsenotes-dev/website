@@ -10,6 +10,7 @@ import { getSessionUser } from '@/components/get-session-user'
 import { getSettings } from '@/lib/prisma/session'
 import { GeistSans } from "geist/font";
 import { siteConfig } from '@/config/site'
+import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -76,6 +77,15 @@ export default async function Rootayout({
           <AuthProvider>
             <TopLoader />
             {children}
+            <Script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS}`}></Script>
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.GOOGLE_ANALYTICS}');
+              `}
+            </Script>
             <Toaster />
             <TailwindIndicator />
           </AuthProvider>
