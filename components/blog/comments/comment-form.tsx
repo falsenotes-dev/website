@@ -127,7 +127,7 @@ export default function CommentForm(props: { post: any, session: any }) {
         <Button variant="ghost" className="flex gap-2 items-center" onClick={() => setCommenting(false)} disabled={!commenting}>
           Cancel
         </Button>
-        <Button type="submit" form={"comment"} disabled={!commenting || posting}>
+        <Button type="submit" form={"comment"} disabled={!commenting || posting || !props.post.allowComments}>
           Comment
         </Button>
       </div>
