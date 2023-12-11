@@ -89,7 +89,7 @@ export default function PostTabs({
                 size={"icon"}
                 variant={"ghost"}
                 onClick={() => like(post.id)}
-                disabled={session.id == post.authorId}
+                disabled={(session.id == post.authorId) || (post.allowLikes == null ? false : !post.allowLikes)}
               >
                 <Icons.like
                   className={`w-6 h-6 ${isLiked && "fill-current"}`}
@@ -108,7 +108,9 @@ export default function PostTabs({
                 </Button>
               </LoginDialog>
             )}
-            <span className="text-sm">{post?._count.likes}</span>
+            {post.allowLikes && (
+              <span className="text-sm">{post?._count.likes}</span>
+            )}
           </div>
           <Separator orientation="vertical" />
           <div className="flex items-center">
@@ -117,12 +119,12 @@ export default function PostTabs({
               size={"icon"}
               variant={"ghost"}
               onClick={onClicked}
-              disabled={!post.commentsOn}
+              disabled={post.allowComments == null ? false : !post.allowComments}
             >
               <Icons.commentBubble className="w-6 h-6" />
               <span className="sr-only">Comment</span>
             </Button>
-            {post.commentsOn && (
+            {post.allowComments && (
               <span className="text-sm">{post?._count.comments}</span>
             )}
           </div>

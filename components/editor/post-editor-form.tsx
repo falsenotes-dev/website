@@ -99,6 +99,7 @@ const postFormSchema = z.object({
   subtitle: z.string().optional(),
   published: z.boolean().optional(),
   commentsOn: z.boolean().optional().default(true),
+  likesOn: z.boolean().optional().default(true),
 })
 
 type PostFormValues = z.infer<typeof postFormSchema>
@@ -120,7 +121,8 @@ export function PostEditorForm(props: { post: any, user: any }) {
     tags: props.post.tags.map((tag: any) => ({
       value: tag.tag.name,
     })),
-    commentsOn: props.post.commentsOn || true,
+    commentsOn: props.post.allowComments || true,
+    likesOn: props.post.allowLikes || true,
   }
 
   const form = useForm<PostFormValues>({
@@ -661,6 +663,21 @@ export function PostEditorForm(props: { post: any, user: any }) {
                           <div className="flex items-center space-x-2">
                             <Switch id="comments-on" checked={field.value} onCheckedChange={field.onChange}  />
                             <Label htmlFor="comments-on">Allow Comments</Label>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="likesOn"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="flex items-center space-x-2">
+                            <Switch id="likes-on" checked={field.value} onCheckedChange={field.onChange} />
+                            <Label htmlFor="likes-on">Allow Reactions</Label>
                           </div>
                         </FormControl>
                         <FormMessage />

@@ -29,6 +29,7 @@ export async function PATCH(
       tags,
       url,
       commentsOn,
+      likesOn,
       subtitle,
     } = data;
     const stats = readingTime(content);
@@ -62,7 +63,8 @@ export async function PATCH(
         url: url,
         subtitle: subtitle || null,
         readingTime: readTime,
-        commentsOn: commentsOn,
+        allowComments: commentsOn,
+        allowLikes: likesOn,
         ...(oldData?.published === false &&
           published === true && { publishedAt: new Date() }),
         ...(oldData?.published === true &&
