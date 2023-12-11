@@ -3,7 +3,7 @@ import { fetchFollowingTags } from '@/components/get-following-tags';
 import { getSessionUser } from '@/components/get-session-user';
 import Landing from '@/components/landing/landing';
 import postgres from '@/lib/postgres';
-import { getPosts } from '@/lib/prisma/posts';
+import { getFeaturedPosts, getPosts } from '@/lib/prisma/posts';
 
 export default async function Home() {
 
@@ -19,64 +19,19 @@ export default async function Home() {
   }
 
   // Use Promise.all to run both fetch operations in parallel
-const [latestPosts, tags, popularPosts] = await Promise.all([
-  postgres.post.findMany({
-    where: {
-      published: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-    select: {
-      id: true,
-      title: true,
-      subtitle: true,
-      url: true,
-      createdAt: true,
-      readingTime: true,
-      publishedAt: true,
-      cover: true,
-      _count: {
-        select: {
-         likes: true,
-         savedUsers: true,
-         readedUsers: true,
-         shares: true,
-         comments: true,
-        },
-      },
-      author: {
-        select: {
-          username: true,
-          name: true,
-          image: true,
-          verified: true,
-          falsemember: true,
-          Followers: true,
-          Followings: true,
-          createdAt: true,
-        }
-      },
-      tags: {
-        select: {
-          tag: true,
-        },
-        take: 1,
-      },
-      savedUsers: {
-        select: {
-          userId: true,
-        }
-      },
-    },
-    take: 10
-  }),
+const [{posts: latestPosts}, tags, popularPosts] = await Promise.all([
+  getFeaturedPosts({page: 0}),
   postgres.tag.findMany({
     select: {
       name: true,
-      id: true,
+      id: true
     },
     take: 10,
+    orderBy: {
+      posts: {
+        _count: "desc"
+      }
+    }
   }),
   getPosts({limit: 6})
 ]);

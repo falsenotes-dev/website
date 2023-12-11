@@ -1,3 +1,4 @@
+'use server';
 import { getSessionUser } from "@/components/get-session-user";
 import postgres from "../postgres";
 import { Prisma } from "@prisma/client";
@@ -67,17 +68,17 @@ export const getPosts = async ({
             OR: [
               {
                 title: {
-                contains: search,
-                mode: "insensitive",
-              }
-            },
-            {
-              subtitle: {
-                contains: search,
-                mode: "insensitive",
-              }
-            },
-          ],
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                subtitle: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            ],
             published: true,
           }
         : { published: true },
@@ -121,5 +122,26 @@ export const getPost = async ({
       createdAt: "desc",
     },
   });
+  return { posts: JSON.parse(JSON.stringify(posts)) };
+};
+
+export const getFeaturedPosts = async ({
+  limit = 10,
+  page = 0,
+}: {
+  limit?: number;
+  page?: number;
+}) => {
+  //fetch featured posts (recommended) for guest users
+  const posts = await postgres.post.findMany({
+    ...baseQuery,
+    where: { published: true },
+    take: limit,
+    skip: page * limit,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
   return { posts: JSON.parse(JSON.stringify(posts)) };
 };
