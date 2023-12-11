@@ -22,22 +22,16 @@ export function ModeToggle() {
   return (
     <RadioGroup defaultValue={theme} className="flex p-1 h-9 rounded-full bg-accent border border-input theme-switcher">
       <div className="h-full">
-        <Input type="radio" name="theme" value="system" id="r1" className="hidden" checked={theme == 'system'} />
-        <Label htmlFor="r1" className="h-7 w-7 rounded-full flex justify-center items-center cursor-pointer" onClick={
-          () => { setTheme('system') }
-        }><Icons.laptop className="h-4 w-4" /></Label>
+        <Input type="radio" name="theme" value="system" id="r1" className="hidden" checked={theme == 'system'} onChange={() => setTheme('system')} />
+        <Label htmlFor="r1" className="h-7 w-7 rounded-full flex justify-center items-center cursor-pointer"><Icons.laptop className="h-4 w-4" /></Label>
       </div>
       <div className="h-full">
-        <Input type="radio" name="theme" value="dark" id="r2" className="hidden" checked={theme == 'dark'} />
-        <Label htmlFor="r2" className="h-7 w-7 rounded-full flex justify-center items-center cursor-pointer" onClick={
-          () => { setTheme('dark') }
-        }><Icons.moon className="h-4 w-4" /></Label>
+        <Input type="radio" name="theme" value="dark" id="r2" className="hidden" checked={theme == 'dark'} onChange={() => setTheme('dark')} />
+        <Label htmlFor="r2" className="h-7 w-7 rounded-full flex justify-center items-center cursor-pointer"><Icons.moon className="h-4 w-4" /></Label>
       </div>
       <div className="h-full">
-        <Input type="radio" name="theme" id="r3" className="hidden" checked={theme == 'light'} />
-        <Label htmlFor="r3" className="h-7 w-7 rounded-full flex justify-center items-center cursor-pointer" onClick={
-          () => { setTheme('light') }
-        }><Icons.sun className="h-4 w-4" /></Label>
+        <Input type="radio" name="theme" id="r3" className="hidden" checked={theme == 'light'} onChange={() => setTheme('light') } />
+        <Label htmlFor="r3" className="h-7 w-7 rounded-full flex justify-center items-center cursor-pointer"><Icons.sun className="h-4 w-4" /></Label>
       </div>
     </RadioGroup>
   )
