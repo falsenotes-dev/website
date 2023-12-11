@@ -69,8 +69,8 @@ export default async function Rootayout({
         <link rel="icon" className="js-site-favicon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content={'#000000'} />
-        <meta name="google-adsense-account" content="ca-pub-8147189047076030" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8147189047076030" crossOrigin="anonymous" />
+        <meta name="google-adsense-account" content={process.env.GOOGLE_ADSENSE} />
+        <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.GOOGLE_ADSENSE}`} crossOrigin="anonymous" />
       </head>
       <body className={`${GeistSans.className}`}>
         <ThemeProvider attribute="class" defaultTheme={settings?.appearance || 'system'} enableSystem>
@@ -78,7 +78,7 @@ export default async function Rootayout({
             <TopLoader />
             {children}
             <Script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS}`}></Script>
-            <Script id="gtag-init" strategy="afterInteractive">
+            <Script id="gtag-init">
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
