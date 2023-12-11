@@ -19,7 +19,7 @@ export async function generateMetadata(
     const user = data.user;
     return {
       metadataBase: new URL(`${process.env.DOMAIN}/${user.username}`),
-      title: `${user.username} ${user?.name ? `(` + user?.name + `)` : ``} - FalseNotes`,
+      title: `${user.name || user.username} - FalseNotes`,
       description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${user?._count.posts} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
       openGraph: {
         title: `${user.username} ${user?.name ? `(` + user?.name + `)` : ``} - FalseNotes`,
