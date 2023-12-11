@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   const page = pageString ? parseInt(pageString) : 0;
   const search = request.nextUrl.searchParams.get('search');
   const limitString = request.nextUrl.searchParams.get('limit');
-  const limit = limitString ? parseInt(limitString) : 5;
+  const limit = limitString ? parseInt(limitString) : 10;
   try {
      const tags = await postgres.tag.findMany({
           where: search != undefined ? {
