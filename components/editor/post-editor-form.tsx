@@ -653,7 +653,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                       Add Tag
                     </Button>
                   )}
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2.5">
                   <FormField
                     control={form.control}
                     name="commentsOn"
