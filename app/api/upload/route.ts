@@ -29,6 +29,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, message: 'File uploaded', data: { url } });
   } catch (error : any) {
-    return NextResponse.json({ success: false, message: error.message });
+    return NextResponse.json({ success: false, message: error });
   }
 }
