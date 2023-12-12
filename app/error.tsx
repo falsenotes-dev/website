@@ -12,7 +12,7 @@ export default function Error({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-6 h-screen w-screen">
-      <Icons.errorLogo />
+      <Icons.errorLogo className="-mt-[90px]" />
       <h2 className="font-medium text-3xl">Something went wrong!</h2>
       <Button size={"lg"} onClick={() => reset()}>
         Try again
