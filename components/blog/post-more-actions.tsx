@@ -35,10 +35,12 @@ import { handleDelete } from "../delete";
 import { useRouter } from "next/navigation";
 import PostDeleteDialog from "./post-delete-dialog";
 import { addShare } from "@/lib/prisma/add-share";
+import { toast } from "sonner";
 
 export default function PostMoreActions({ post, session, className, children, ...props }: React.ComponentPropsWithoutRef<typeof DropdownMenu> & { post: any, session: any, className?: string }) {
      const copylink = async(link: string) => {
           navigator.clipboard.writeText(link)
+          toast('Link copied to clipboard')
           await addShare(post?.id)
      }
      const router = useRouter()

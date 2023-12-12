@@ -31,6 +31,7 @@ import { User } from "lucide-react"
 import { Icons } from "../icon"
 import { useRouter } from "next/navigation"
 import { ToastAction } from "../ui/toast"
+import { toast } from "sonner"
 
 const profileFormSchema = z.object({
   id: z.string(),
@@ -54,7 +55,6 @@ const defaultValues: Partial<ProfileFormValues> = {
     bio: data.bio ?? "",
     location: data.location,
 }
-  const { toast } = useToast()
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
@@ -69,24 +69,25 @@ const defaultValues: Partial<ProfileFormValues> = {
     })
 
     if (!response?.ok) {
-      return toast({
-        title: "Something went wrong.",
-        description: "Your name was not updated. Please try again.",
-        variant: "destructive",
+      return toast.error("Something went wrong.", {
+        description: "Your profile could not be updated.",
+        action: {
+          label: "Try again",
+          onClick: async() => {
+            //resubmit
+            await onSubmit(data)
+          },
+        }
       })
     }
 
-    toast({
-      description: "Profile updated successfully.",
-      action: (
-        <ToastAction
-          altText="View profile"
-          onClick={() => router.push(`/@${data.username}`)}
-          className="hover:text-secondary-foreground"
-        >
-          View profile
-        </ToastAction>
-      ),
+    toast.success("Profile updated!", {
+      action: {
+        label: "View profile",
+        onClick: () => {
+          router.push(`/@${data.username}`)
+        },
+      }
     })
 
     router.refresh()

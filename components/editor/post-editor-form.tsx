@@ -37,7 +37,7 @@ import { Icons } from "../icon"
 import { useRouter } from "next/navigation"
 import { Textarea } from "../ui/textarea"
 import { ToastAction } from "../ui/toast"
-import { toast } from "../ui/use-toast"
+import { toast } from "sonner"
 import { dateFormat } from "@/lib/format-date"
 import TagBadge from "../tags/tag"
 import { Cross2Icon } from "@radix-ui/react-icons"
@@ -173,21 +173,17 @@ export function PostEditorForm(props: { post: any, user: any }) {
       await validate(`/@${props.user?.username}`)
       if (data.published == true && previousStatus == false) {
         router.push(`/@${props.user?.username}/${form.getValues('url')}?published=true`);
-        toast({ description: "Post Published!" });
+        toast.success("Post Published!");
       }
       else {
         router.push(`/@${props.user?.username}/`);
-        toast({ description: "Post Updated!" });
+        toast.success("Post Updated!");
       }
 
     } catch (error) {
       console.error(error);
       setIsPublishing(false);
-      toast({
-        description: "Something went wrong. Please try again later.",
-        variant: "destructive",
-        action: <ToastAction altText="Try again">Try again</ToastAction>
-      });
+      toast.error("Something went wrong. Please try again later.");
     } finally {
       setOpen(false);
     }
@@ -216,6 +212,19 @@ export function PostEditorForm(props: { post: any, user: any }) {
           method: 'POST',
           body: dataForm,
         });
+
+        if (!res.ok) {
+          toast.error("Something went wrong.", {
+            description: "Your cover image could not be uploaded.",
+            action: {
+              label: "Try again",
+              onClick: async() => {
+                //resubmit
+                await uploadCover()
+              },
+            }
+          });
+        }
         // get the image url
         const { data: coverUrl } = await res.json()
         return coverUrl.url;
@@ -238,17 +247,11 @@ export function PostEditorForm(props: { post: any, user: any }) {
             body: JSON.stringify({ ...form.getValues() }),
           })
           if (result.status !== 200) {
-            toast({
-              description: "Something went wrong. Please try again later.",
-              variant: "destructive",
-              action: <ToastAction altText="Try again">Try again</ToastAction>
-            })
+            toast.error("Something went wrong. Please try again later.");
             setIsSaving(false);
           }
           setLastSavedTime(Date.now());
-          toast({
-            description: "Draft Saved!",
-          })
+          toast.success("Draft Saved!");
         } catch (error) {
           console.error(error)
           setIsSaving(false);
@@ -503,19 +506,20 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                       <Icons.upload className="w-9 h-9 mb-4" />
                                       <p className="mb-2 text-sm text-secondary-foreground font-medium">Click to upload</p>
-                                      <p className="text-xs text-secondary-foreground">PNG, JPG (MAX. 2MB)</p>
+                                      <p className="text-xs text-secondary-foreground">PNG, JPG, GIF (MAX. 2MB)</p>
                                     </div>)
                                 }
-                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png" onChange={async (e) => {
+                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png, image/gif" onChange={async (e) => {
                                   const file = e.target.files?.[0];
                                   if (file) {
                                     if (file.size > 2 * 1024 * 1024) {
-                                      toast({ description: "File size should not exceed 2MB.", variant: "destructive" });
-                                    } else if (!['image/png', 'image/jpeg'].includes(file.type)) {
-                                      toast({ description: "File type must be PNG or JPEG.", variant: "destructive" });
+                                      toast.warning("File size must be less than 2MB.");
+                                    } else if (!['image/png', 'image/jpeg', 'image/gif'].includes(file.type)) {
+                                      toast.warning("File type must be PNG, JPG, or GIF.");
                                     } else {
                                       setFile(file);
-                                      await uploadCover();
+                                      const url = await uploadCover();
+                                      form.setValue('coverImage', url);
                                     }
                                   }
                                 }} className="hidden" />
@@ -770,22 +774,13 @@ export function PostEditorForm(props: { post: any, user: any }) {
             <Button size={"icon"} disabled={isSaving} onClick={
               () => {
                 if (form.getValues('title') === undefined) {
-                  toast({
-                    description: "Please enter a title for your post!",
-                    variant: "destructive",
-                  })
+                  toast.error("Please enter a title for your post!");
                 }
                 if (!form.getValues('content') || form.getValues('content') === '') {
-                  toast({
-                    description: "Please enter a content for your post!",
-                    variant: "destructive",
-                  })
+                  toast.error("Please enter a content for your post!");
                 }
                 if (form.getValues('content') == undefined && form.getValues('title') == undefined) {
-                  toast({
-                    description: "Please enter a title and content for your post!",
-                    variant: "destructive",
-                  })
+                  toast.error("Please enter a title and content for your post!");
                 }
                 if (form.getValues('content') !== undefined && form.getValues('title') !== undefined) {
                   setOpen(true);

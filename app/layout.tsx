@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google'
 import TopLoader from '@/components/providers/top-loader'
 import AuthProvider from '@/components/providers/auth-provider'
 import { TailwindIndicator } from '@/components/indicator'
-import { Toaster } from '@/components/ui/toaster'
+import { Toaster } from 'sonner'
 import { getSessionUser } from '@/components/get-session-user'
 import { getSettings } from '@/lib/prisma/session'
 import { GeistSans } from "geist/font";
@@ -87,7 +87,7 @@ export default async function Rootayout({
                 gtag('config', '${process.env.GOOGLE_ANALYTICS}');
               `}
             </Script>
-            <Toaster />
+            <Toaster position='bottom-center' closeButton />
             <TailwindIndicator />
           </AuthProvider>
         </ThemeProvider>
