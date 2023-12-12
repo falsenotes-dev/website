@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BlobServiceClient } from "@azure/storage-blob";
-import { Stream } from "stream";
+import { Readable } from 'stream';
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.formData(); 
-    const file: Stream | null = data.get('file') as unknown as Stream;
+    const file: Readable | null = data.get('file') as unknown as Readable;
 
     if (!file) {
       return NextResponse.json({ success: false, message: 'No file provided' });
@@ -18,18 +18,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'postId and authorId are required query parameters' });
     }
 
-    const buffer = Buffer.from(await new Promise((resolve, reject) => {
-      const chunks: any[] = [];
-      file.on('data', chunk => chunks.push(chunk));
-      file.on('error', reject);
-      file.on('end', () => resolve(Buffer.concat(chunks)));
-    }));
-
     const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING!);
     const containerClient = blobServiceClient.getContainerClient('blogs');
     const blockBlobClient = containerClient.getBlockBlobClient(`${authorId}/${postId}`);
 
-    await blockBlobClient.upload(buffer, buffer.length);
+    await blockBlobClient.uploadStream(file);
 
     const url = `https://falsenotescontent.blob.core.windows.net/blogs/${authorId}/${postId}`;
 
