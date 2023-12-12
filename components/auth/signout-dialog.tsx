@@ -28,7 +28,7 @@ export default function SignOutDialog({ ...props }: React.ComponentPropsWithoutR
         </AlertDialogHeader>
 
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[320px] my-10">
-          <Button size={"lg"} className="w-full" onClick={() => signOut()}>
+          <Button size={"lg"} className="w-full" onClick={() => signout()}>
             Sign out
           </Button>
 
