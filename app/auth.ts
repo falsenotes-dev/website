@@ -243,8 +243,7 @@ export const config = {
         },
       };
     },
-  },
-  
+  },  
 } satisfies NextAuthConfig
 
 // We recommend doing your own environment variable validation
