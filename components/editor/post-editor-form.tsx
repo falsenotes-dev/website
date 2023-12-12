@@ -239,23 +239,40 @@ export function PostEditorForm(props: { post: any, user: any }) {
   const saveDraft = async () => {
     if (!isPublishing) {
       setIsSaving(true);
-      if (form.getValues('title') && form.getValues('content') !== props.post?.content) {
-        try {
-          // Submit the form
-          const result = await fetch(`/api/post/${props.post?.id}/drafts`, {
-            method: "PATCH",
-            body: JSON.stringify({ ...form.getValues() }),
-          })
-          if (result.status !== 200) {
-            toast.error("Something went wrong. Please try again later.");
-            setIsSaving(false);
-          }
-          setLastSavedTime(Date.now());
-          toast.info("Draft Saved!");
-        } catch (error) {
-          console.error(error)
+      try {
+        // Submit the form
+        const result = await fetch(`/api/post/${props.post?.id}/drafts`, {
+          method: "PATCH",
+          body: JSON.stringify({ ...form.getValues() }),
+        })
+        if (result.status !== 200) {
+          toast.error("Something went wrong. Please try again later.", {
+            description: "Your draft could not be saved.",
+            action: {
+              label: "Try again",
+              onClick: async() => {
+                //resubmit
+                await saveDraft()
+              },
+            }
+          });
           setIsSaving(false);
         }
+        setLastSavedTime(Date.now());
+        toast.info("Draft Saved!");
+      } catch (error) {
+        console.error(error)
+        toast.error("Something went wrong.", {
+          description: "Your draft could not be saved.",
+          action: {
+            label: "Try again",
+            onClick: async() => {
+              //resubmit
+              await saveDraft()
+            },
+          }
+        });
+        setIsSaving(false);
       }
       if (!form.getValues('published') && previousStatus == false) {
         const result = await fetch(`/api/post/${props.post?.id}`, {
@@ -264,7 +281,17 @@ export function PostEditorForm(props: { post: any, user: any }) {
         });
 
         if (!result.ok) {
-          throw new Error('Failed to update post');
+          toast.error("Something went wrong.", {
+            description: "Your draft could not be saved.",
+            action: {
+              label: "Try again",
+              onClick: async() => {
+                //resubmit
+                await saveDraft()
+              },
+            }
+          });
+          setIsSaving(false);
         }
 
       }
@@ -279,7 +306,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
   useEffect(() => {
     const timeout = setTimeout(saveDraft, 15000);
     return () => clearTimeout(timeout);
-  }, [form, file, props.user, props.post, open])
+  }, [form.getValues, file, props.user, props.post])
 
 
   useEffect(() => {
@@ -752,7 +779,19 @@ export function PostEditorForm(props: { post: any, user: any }) {
                 </div>
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button onClick={() => saveDraft()} className="m-auto" size={"lg"} variant="outline" disabled={isSaving}>{
+                    <Button onClick={() => 
+                    {
+                      if ((!form.getValues('content') || form.getValues('content') === '') && (!form.getValues('title') || form.getValues('title') === '')) {
+                        toast.error("Please enter a title and content for your post!");
+                      } else if (!form.getValues('title') || form.getValues('title') === '') {
+                        toast.error("Please enter a title for your post!");
+                      } else if (!form.getValues('content') || form.getValues('content') === '') {
+                        toast.error("Please enter a content for your post!");
+                      }else {
+                        saveDraft();
+                      }
+                    }  
+                  } className="m-auto" size={"lg"} variant="outline" disabled={isSaving}>{
                       isSaving ? (
                         <>
                           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> Saving
@@ -773,16 +812,16 @@ export function PostEditorForm(props: { post: any, user: any }) {
 
             <Button size={"icon"} disabled={isSaving} onClick={
               () => {
-                if (form.getValues('title') === undefined) {
-                  toast.error("Please enter a title for your post!");
-                }
-                if (!form.getValues('content') || form.getValues('content') === '') {
-                  toast.error("Please enter a content for your post!");
-                }
-                if (form.getValues('content') == undefined && form.getValues('title') == undefined) {
+                if ((!form.getValues('content') || form.getValues('content') === '') && (!form.getValues('title') || form.getValues('title') === '')) {
                   toast.error("Please enter a title and content for your post!");
-                }
-                if (form.getValues('content') !== undefined && form.getValues('title') !== undefined) {
+                  setOpen(false)
+                } else if (!form.getValues('title') || form.getValues('title') === '') {
+                  toast.error("Please enter a title for your post!");
+                  setOpen(false)
+                } else if (!form.getValues('content') || form.getValues('content') === '') {
+                  toast.error("Please enter a content for your post!");
+                  setOpen(false)
+                }else {
                   setOpen(true);
                 }
               }
