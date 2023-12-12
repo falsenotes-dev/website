@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BlobServiceClient } from "@azure/storage-blob";
+import { Stream } from "stream";
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.formData(); 
-    const file: File | null = data.get('file') as unknown as File;
+    const file: Stream | null = data.get('file') as unknown as Stream;
 
     if (!file) {
       return NextResponse.json({ success: false, message: 'No file provided' });
@@ -17,7 +18,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'postId and authorId are required query parameters' });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+    const buffer = Buffer.from(await new Promise((resolve, reject) => {
+      const chunks: any[] = [];
+      file.on('data', chunk => chunks.push(chunk));
+      file.on('error', reject);
+      file.on('end', () => resolve(Buffer.concat(chunks)));
+    }));
 
     const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING!);
     const containerClient = blobServiceClient.getContainerClient('blogs');
