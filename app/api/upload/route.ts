@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BlobServiceClient } from "@azure/storage-blob";
-import { Readable } from 'stream';
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.formData(); 
-    const file: Readable | null = data.get('file') as unknown as Readable;
+    const file: File | null = data.get('file') as unknown as File;
 
     if (!file) {
       return NextResponse.json({ success: false, message: 'No file provided' });
@@ -18,16 +17,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'postId and authorId are required query parameters' });
     }
 
+    const buffer = Buffer.from(await file.arrayBuffer());
+
     const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING!);
     const containerClient = blobServiceClient.getContainerClient('blogs');
     const blockBlobClient = containerClient.getBlockBlobClient(`${authorId}/${postId}`);
 
-    await blockBlobClient.uploadStream(file);
+    await blockBlobClient.upload(buffer, buffer.length);
 
     const url = `https://falsenotescontent.blob.core.windows.net/blogs/${authorId}/${postId}`;
 
-    return NextResponse.json({ success: true, message: 'File uploaded', data: { url } }, { status: 200 });
+    return NextResponse.json({ success: true, message: 'File uploaded', data: { url } });
   } catch (error : any) {
-    return NextResponse.json({ success: false, message: error }, { status: 500 });
+    return NextResponse.json({ success: false, message: error.message });
   }
 }
