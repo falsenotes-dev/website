@@ -14,7 +14,7 @@ export async function getSessionUser() {
       where: {
         OR: [
           {
-            username: user?.name as string,
+            username: user?.username as string,
           },
           {
             image: user?.image,

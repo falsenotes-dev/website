@@ -6,14 +6,17 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { EmptyPlaceholder } from "@/components/empty-placeholder";
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
+import Balancer from "react-wrap-balancer";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center gap-6 h-screen w-screen bg-pattern">
+    <div className="flex flex-col items-center justify-center gap-6 h-screen w-screen">
       <Icons.errorLogo className="-mt-[90px]" />
       <h2 className="font-bold text-5xl">404</h2>
-      <p className="text-muted-foreground font-light">
+      <p className="text-muted-foreground font-light text-center">
+        <Balancer>
         Sorry 😔 — we couldn&apos;t find what you were looking for.
+        </Balancer>
       </p>
       <Button size={"lg"} asChild>
         <Link href="/">
