@@ -88,7 +88,7 @@ export const Icons = {
         d="m92.29,170.93h50.27s-25,43.38-25,43.38l-26.93,46.72-25.13-43.61,26.8-46.5Zm-1.67-90.1l-25,43.37h103.87l25-43.37h-103.87Zm-25.01,43.37H11.76l26.93,46.73h53.6l-26.67-46.72h0Z"
         fill="hsl(var(--background))"
         fill-rule="evenodd"
-        stroke="hsl(var(--foreground) / 0.3)"
+        stroke="hsl(var(--muted-foreground))"
         stroke-dasharray="4 4"
         stroke-width="1.75"
       ></path>
@@ -103,7 +103,7 @@ export const Icons = {
         <ellipse
           cx="182.68"
           cy="142.48"
-          stroke="hsl(var(--foreground) / 0.3)"
+          stroke="hsl(var(--muted-foreground))"
           rx="70"
           ry="70"
         ></ellipse>
