@@ -117,7 +117,7 @@ export default function TagPostCard({
                                                   {props.post.author?.name || props.post.author?.username}
                                              </p>
                                              {props.post.author?.verified && (
-                                                  <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                                                  <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                                              )}
                                         </Link>
                                    </UserHoverCard>

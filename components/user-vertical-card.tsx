@@ -46,7 +46,7 @@ export default function UserVerticalCard({ user, className, session, ...props }:
                                         <h2 className="line-clamp-1 max-h-5 text-ellipsis font-medium">{user.name || user.username}
                                         </h2>
                                         {user.verified && (
-                                             <Icons.verified className="h-4 w-4 mx-0.5 inline fill-primary align-middle" />
+                                             <Icons.verified className="h-4 w-4 mx-0.5 inline fill-verified align-middle" />
                                         )}
                                    </div>
                               </Link>

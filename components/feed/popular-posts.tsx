@@ -52,7 +52,7 @@ export default async function PopularPosts() {
                       <AvatarFallback>{item.author?.name?.charAt(0) || item.author?.username?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     {item.author.name || item.author.username} {item.author?.verified && (
-                      <Icons.verified className="h-3 w-3 mx-0.5 inline fill-primary align-middle" />
+                      <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
                     )}
                   </Link>
 

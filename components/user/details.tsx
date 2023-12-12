@@ -79,15 +79,15 @@ export default function UserDetails({ className, children, user, followers, foll
         <div className="flex flex-col gap-1.5">
           {user.verified && (
             <div className="flex items-center gap-1">
-              <Icons.verified className="h-5 w-5 text-muted-foreground fill-primary" />
-              <span className="text-muted-foreground text-sm font-medium"><span className="text-primary">Verified Author</span></span>
+              <Icons.verified className="h-5 w-5 text-muted-foreground fill-verified" />
+              <span className="text-muted-foreground text-sm font-medium"><span className="text-verified">Verified Author</span></span>
             </div>
           )
           }
           {user.falsemember && (
             <div className="flex items-center gap-1">
               <Image src='/assets/falsemember.png' alt="False icon" height={20} width={20} className="h-5 w-5 inline rounded border align-middle" />
-              <span className="text-muted-foreground text-sm font-medium">FalseNotes Staff</span>
+              <span className="text-muted-foreground text-sm font-medium">&quot;The False&quot; Staff</span>
             </div>
           )
           }
@@ -105,7 +105,7 @@ export default function UserDetails({ className, children, user, followers, foll
                   </Link>
                 </Button>
               ) : (
-                <Button className="w-full" onClick={() => {
+                <Button className="w-full" variant={isFollowing ? 'outline' : 'default'} onClick={() => {
                   handleFollow(user?.id);
                 }} disabled={isFollowingLoading} >
                   {

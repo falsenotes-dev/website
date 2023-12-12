@@ -553,7 +553,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                 {
                                   (cover || file) && (
                                     <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
-                                      <Button variant="secondary" size={'icon'} className="bg-secondary/75 backdrop-blur-md hover:bg-secondary" onClick={
+                                      <Button variant="secondary" size={'icon'} className="bg-secondary/10 backdrop-blur-xl hover:bg-secondary" onClick={
                                         async () => {
                                           const coverUrl = await uploadCover();
                                           if (coverUrl) {
@@ -564,7 +564,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                         <Icons.upload className="h-4 w-4" />
                                         <span className="sr-only">Upload</span>
                                       </Button>
-                                      <Button variant="secondary" size={'icon'} className="bg-secondary/75 backdrop-blur-md hover:bg-secondary" onClick={() => {
+                                      <Button variant="secondary" size={'icon'} className="bg-secondary/10 backdrop-blur-xl hover:bg-secondary" onClick={() => {
                                         form.setValue('coverImage', '');
                                         setCover('');
                                         setFile(undefined);
@@ -693,7 +693,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                         <FormLabel>Community</FormLabel>
                         <FormControl>
                           <div className="flex items-center space-x-2">
-                            <Switch id="comments-on" checked={field.value} onCheckedChange={field.onChange}  />
+                            <Switch id="comments-on" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground"  />
                             <Label htmlFor="comments-on">Allow Comments</Label>
                           </div>
                         </FormControl>
@@ -708,7 +708,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                       <FormItem>
                         <FormControl>
                           <div className="flex items-center space-x-2">
-                            <Switch id="likes-on" checked={field.value} onCheckedChange={field.onChange} />
+                            <Switch id="likes-on" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground" />
                             <Label htmlFor="likes-on">Allow Reactions</Label>
                           </div>
                         </FormControl>

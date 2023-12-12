@@ -82,13 +82,13 @@ export default function CommentCard({ comment: initialComment, post, session, ..
                                                        <div className="flex flex-col">
                                                        <span className="article__comments-item-author text-sm">{comment.author?.name || comment.author?.username} {comment.author?.verified &&
                                                             (
-                                                                 <Icons.verified className="h-4 w-4 mx-1 inline fill-primary align-middle" />
+                                                                 <Icons.verified className="h-4 w-4 mx-1 inline fill-verified align-middle" />
                                                             )}</span>
                                                        
                                                             <span className="article__comments-item-date text-muted-foreground text-sm !mt-0">{dateFormat(comment.createdAt)}</span>
                                                        </div>
                                                        {comment.author?.id === post?.authorId && (
-                                                            <Badge className="ml-1 text-xs py-0">Author</Badge>
+                                                            <Badge variant={'secondary'} className="ml-1 text-xs py-0">Author</Badge>
                                                        )}
                                                   </Link>
                                              </div>

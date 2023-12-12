@@ -12,9 +12,9 @@ export default function MarkdownCard({ code, className }: { code: string, classN
                          img: {
                               component: (props: any) => {
                                    return props.title ? (
-                                        <figure className="blog_image_wrap">
-                                             <img {...props} className="!relative w-full hover:scale-105" alt={props.alt} />
-                                             <figcaption className="text-center text-sm text-muted">{props.title}</figcaption>
+                                        <figure className="blog_image_wrap relative">
+                                             <img {...props} className="!relative w-full rounded-md" alt={props.alt} />
+                                             <figcaption className="absolute right-2.5 z-10 bottom-2 py-2 px-8 text-sm rounded-md w-fit bg-secondary/25 backdrop-blur-xl text-secondary-foreground">{props.title}</figcaption>
                                         </figure>
                                    ) : (
                                         <figure className="blog_image_wrap">

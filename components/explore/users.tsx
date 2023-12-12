@@ -59,13 +59,13 @@ export default function Users({ users: initialUser, search, session }: { users: 
                                                             !item.name ? (
                                                                  <div>
                                                                       <p className="text-sm font-medium leading-none">{item.username} {item?.verified && (
-                                                                           <Icons.verified className="h-3 w-3 mx-1 inline fill-primary align-middle" />
+                                                                           <Icons.verified className="h-3 w-3 mx-1 inline fill-verified align-middle" />
                                                                       )}</p>
                                                                  </div>
                                                             ) : (
                                                                  <div>
                                                                       <p className="text-sm font-medium leading-none">{item.name} {item?.verified && (
-                                                                           <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                                                                           <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                                                                       )}</p>
                                                                       <p className="text-sm text-muted-foreground">{item.username}</p>
                                                                  </div>

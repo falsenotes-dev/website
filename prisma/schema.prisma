@@ -27,6 +27,7 @@ model User {
   updatedAt      DateTime            @updatedAt
   githubId       String?
   googleId       String?             @map("google_id")
+  isPublication  Boolean             @default(false)
   settings       UserSettings?
   notifications  Notification[]
   posts          Post[]
@@ -59,8 +60,6 @@ model Publication {
   @@map("publications")
 }
 
-
-
 model PublicationAuthor {
   id            String      @id @default(cuid()) @map("_id")
   publication   Publication @relation(fields: [publicationId], references: [id])
@@ -90,6 +89,7 @@ model Post {
   publishedAt   DateTime?
   modifiedAt    DateTime?
   updated       Boolean          @default(false)
+  pinned        Boolean          @default(false)
   tags          PostTag[]
   comments      Comment[]
   likes         Like[]
@@ -223,13 +223,13 @@ model TagFollow {
 }
 
 model PublicationFollow {
-  id             String        @id @default(uuid()) @map("_id")
-  follower       User          @relation(fields: [followerId], references: [id])
-  followerId     String
-  publication    Publication   @relation(fields: [publicationId], references: [id])
-  publicationId  String
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id            String      @id @default(uuid()) @map("_id")
+  follower      User        @relation(fields: [followerId], references: [id])
+  followerId    String
+  publication   Publication @relation(fields: [publicationId], references: [id])
+  publicationId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@map("publicationfollows")
 }

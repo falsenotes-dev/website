@@ -63,13 +63,13 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                                                                  follower.follower?.name === null ? (
                                                                       <div>
                                                                            <p className="text-sm font-medium leading-none">{follower.follower?.username} {follower?.follower?.verified && (
-                                                                                <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                                                                                <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                                                                            )}</p>
                                                                       </div>
                                                                  ) : (
                                                                       <div>
                                                                            <p className="text-sm font-medium leading-none">{follower.follower?.name} {follower?.follower?.verified && (
-                                                                                <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                                                                                <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                                                                            )}</p>
                                                                            <p className="text-sm text-muted-foreground">{follower.follower?.username}</p>
                                                                       </div>
@@ -118,13 +118,13 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                                                                  following.following.name === null ? (
                                                                       <div>
                                                                            <p className="text-sm font-medium leading-none">{following.following.username} {following?.following.verified && (
-                                                                                <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                                                                                <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                                                                            )}</p>
                                                                       </div>
                                                                  ) : (
                                                                       <div>
                                                                            <p className="text-sm font-medium leading-none">{following.following.name} {following?.following.verified && (
-                                                                                <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                                                                                <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                                                                            )}</p>
                                                                            <p className="text-sm text-muted-foreground">{following.following.username}</p>
                                                                       </div>

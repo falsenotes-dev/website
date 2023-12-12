@@ -35,7 +35,7 @@ export default function LandingPostCard(
                     <AvatarFallback>{props.post.author?.name?.charAt(0) || props.post.author?.username?.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <p className="text-sm font-normal leading-none">{props.post.author?.name || props.post.author?.username} {props.post.author?.verified && (
-                    <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                    <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                   )}</p>
                 </Link>
               </UserHoverCard>

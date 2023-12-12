@@ -81,7 +81,7 @@ export default async function HomeLayout({
                                                                                           <AvatarFallback>{item.post?.author?.name?.charAt(0) || item.post?.author?.username?.charAt(0)}</AvatarFallback>
                                                                                      </Avatar>
                                                                                      {item.post?.author.name || item.post?.author.username} {item.post.author?.verified && (
-                                                                                          <Icons.verified className="h-3 w-3 mx-0.5 inline fill-primary align-middle" />
+                                                                                          <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
                                                                                      )}
                                                                                 </Link>
 
