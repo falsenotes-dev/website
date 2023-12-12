@@ -100,6 +100,7 @@ const postFormSchema = z.object({
   published: z.boolean().optional(),
   commentsOn: z.boolean().optional().default(true),
   likesOn: z.boolean().optional().default(true),
+  pinned: z.boolean().optional().default(false),
 })
 
 type PostFormValues = z.infer<typeof postFormSchema>
@@ -123,6 +124,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
     })),
     commentsOn: props.post.allowComments == null ? true : props.post.allowComments,
     likesOn: props.post.allowLikes == null ? true : props.post.allowLikes,
+    pinned: props.post.pinned == null ? false : props.post.pinned,
   }
 
   const form = useForm<PostFormValues>({
@@ -684,6 +686,25 @@ export function PostEditorForm(props: { post: any, user: any }) {
                       Add Tag
                     </Button>
                   )}
+                  <FormField
+                    control={form.control}
+                    name="pinned"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Pin post</FormLabel>
+                        <FormDescription>
+                          Pin this post to the top of your profile. This will override any other pinned posts.
+                        </FormDescription>
+                        <FormControl>
+                          <div className="flex items-center space-x-2">
+                            <Switch id="pinned" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground" />
+                            <Label htmlFor="pinned">Pin this post</Label>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <div className="flex flex-col gap-2.5">
                   <FormField
                     control={form.control}

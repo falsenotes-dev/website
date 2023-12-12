@@ -12,6 +12,12 @@ export async function PATCH(
   try {
     const { postid } = params;
 
+    const session = await getSessionUser();
+
+    if (!session) {
+      return new Response(null, { status: 401 });
+    }
+
     if (!(await verifyCurrentUserHasAccessToPost(postid))) {
       return new Response(null, { status: 403 });
     }
@@ -31,6 +37,7 @@ export async function PATCH(
       commentsOn,
       likesOn,
       subtitle,
+      pinned,
     } = data;
     const stats = readingTime(content);
     const readTime = stats.text;
@@ -51,6 +58,18 @@ export async function PATCH(
       },
     });
 
+    //if pinned is true, then we need to unpin all other posts
+    if (pinned) {
+      await postgres.post.updateMany({
+        where: {
+          authorId: session.id,
+        },
+        data: {
+          pinned: false,
+        },
+      });
+    }
+
     await postgres.post.update({
       where: {
         id: postid,
@@ -65,6 +84,7 @@ export async function PATCH(
         readingTime: readTime,
         allowComments: commentsOn,
         allowLikes: likesOn,
+        pinned: pinned,
         ...(oldData?.published === false &&
           published === true && { publishedAt: new Date() }),
         ...(oldData?.published === true &&
