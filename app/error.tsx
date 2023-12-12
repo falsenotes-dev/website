@@ -10,7 +10,7 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 h-screen w-screen">
+    <div className="flex flex-col items-center justify-center gap-6 h-screen w-screen">
       <svg
         fill="none"
         viewBox="-80 0 369 271"
@@ -20,24 +20,27 @@ export default function Error({
         <path
           clip-rule="evenodd"
           d="m92.29,170.93h50.27s-25,43.38-25,43.38l-26.93,46.72-25.13-43.61,26.8-46.5Zm-1.67-90.1l-25,43.37h103.87l25-43.37h-103.87Zm-25.01,43.37H11.76l26.93,46.73h53.6l-26.67-46.72h0Z"
-          fill="none"
+          fill="hsl(var(--background))"
           fill-rule="evenodd"
-          stroke="currentColor"
+          stroke="hsl(var(--foreground) / 0.3)"
           stroke-dasharray="4 4"
-          stroke-width="2"
+          stroke-width="1.75"
         ></path>
         <g filter="url(#filter0_d)">
           <ellipse
             cx="182.68"
-            cy="156.48"
-            fill="none"
-            rx="74.32"
-            ry="74.52"
+            cy="142.48"
+            fill="hsl(var(--background))"
+            rx="70"
+            ry="70"
           ></ellipse>
-          <path
-            d="M256.5 156.48c0 40.88-33.05 74.02-73.82 74.02-40.77 0-73.83-33.14-73.83-74.02 0-40.87 33.06-74.01 73.83-74.01 40.77 0 73.82 33.14 73.82 74.01z"
-            stroke="currentColor"
-          ></path>
+          <ellipse
+            cx="182.68"
+            cy="142.48"
+            stroke="hsl(var(--foreground) / 0.3)"
+            rx="70"
+            ry="70"
+          ></ellipse>
         </g>
         <mask
           height="150"
@@ -49,17 +52,17 @@ export default function Error({
         >
           <ellipse
             cx="182.68"
-            cy="156.48"
+            cy="142.48"
             fill="#fff"
-            rx="74.32"
-            ry="74.52"
+            rx="70"
+            ry="70"
           ></ellipse>
         </mask>
         <g mask="url(#a)">
           <path
             clip-rule="evenodd"
             d="m92.29,170.93h50.27s-25,43.38-25,43.38l-26.93,46.72-25.13-43.61,26.8-46.5Zm-1.67-90.1l-25,43.37h103.87l25-43.37h-103.87Zm-25.01,43.37H11.76l26.93,46.73h53.6l-26.67-46.72h0Z"
-            fill="currentColor"
+            fill="hsl(var(--foreground))"
             fill-rule="evenodd"
           ></path>
         </g>
@@ -93,7 +96,7 @@ export default function Error({
           </filter>
         </defs>
       </svg>
-      <h2 className="font-medium text-xl">Something went wrong!</h2>
+      <h2 className="font-medium text-3xl">Something went wrong!</h2>
       <Button size={"lg"} onClick={() => reset()}>
         Try again
       </Button>
