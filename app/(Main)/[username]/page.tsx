@@ -28,9 +28,8 @@ export default async function Page({ params, searchParams }: {
 }) {
   const decodedUsername = decodeURIComponent(params.username);
 
-  if (!decodedUsername.startsWith('@')) {
-    redirect('/404')
-  }
+  if (!decodedUsername.startsWith('@')) redirect('/404')
+
   const sessionUserName = await getSessionUser();
   const user = await postgres.user.findFirst({
     include: {
@@ -101,17 +100,18 @@ export default async function Page({ params, searchParams }: {
   })
 
   const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
+  if (!user) {
+    return notFound();
+  }
 
-
-  if (!user) notFound();
 
   const whereQuery = sessionUserName?.id === user?.id ? {} : { published: true };
 
   const { posts } = await getPost({ id: user?.id, search, whereQuery });
 
 
-  const followers = user.Followers;
-  const following = user.Followings;
+  const followers = user?.Followers;
+  const following = user?.Followings;
 
   const tab = typeof searchParams.tab === 'string' ? searchParams.tab : undefined;
   const { bookmarks } = await getBookmarks({ id: sessionUserName?.id, limit: 10 })

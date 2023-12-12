@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 export async function getSessionUser() {
   try {
     const session = await getServerSession(config);
-    if (!session) {
+    if (!session || typeof session.user !== 'object') {
       return null;
     }
     const { user } = session;

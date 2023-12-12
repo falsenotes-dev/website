@@ -3,28 +3,25 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
-import { buttonVariants } from "@/components/ui/button"
-import { EmptyPlaceholder } from "@/components/empty-placeholder"
+import { buttonVariants } from "@/components/ui/button";
+import { EmptyPlaceholder } from "@/components/empty-placeholder";
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 
 export default function NotFound() {
   return (
-    
-    <AlertDialog open>
-    <AlertDialogContent className="p-0 border-none">
-    <EmptyPlaceholder className="w-full">
-      <EmptyPlaceholder.Icon name="warning" />
-      <EmptyPlaceholder.Title>Page not found</EmptyPlaceholder.Title>
-      <EmptyPlaceholder.Description>
+    <div className="flex flex-col items-center justify-center gap-6 h-screen w-screen bg-pattern">
+      <Icons.errorLogo className="-mt-[90px]" />
+      <h2 className="font-bold text-5xl">404</h2>
+      <p className="text-muted-foreground font-light">
         Sorry 😔 — we couldn&apos;t find what you were looking for.
-      </EmptyPlaceholder.Description>
-      <Link href="/" className={buttonVariants({ variant: "default" })}>
-        Go to Home
-      </Link>
-    </EmptyPlaceholder>
-    </AlertDialogContent>
-  </AlertDialog>
-  )
+      </p>
+      <Button size={"lg"} asChild>
+        <Link href="/">
+          Go back home
+        </Link>
+      </Button>
+    </div>
+  );
 }
 // export default function NotFound(){
 //      const h1Style = {
@@ -32,7 +29,7 @@ export default function NotFound() {
 //           fontSize: "24px",
 //           fontWeight: 500,
 //         };
-      
+
 //         const h2Style = {
 //           fontSize: "14px",
 //           fontWeight: 400,
