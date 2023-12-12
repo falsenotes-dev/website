@@ -4,7 +4,7 @@ import { BlobServiceClient } from "@azure/storage-blob";
 export async function POST(req: NextRequest) {
   try {
     const data = await req.formData(); 
-    const file: File | null = data.get('file') as unknown as File;
+    const file: File | null = data.get('file') as File;
 
     if (!file) {
       return NextResponse.json({ success: false, message: 'No file provided' });
