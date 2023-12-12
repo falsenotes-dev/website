@@ -164,7 +164,7 @@ export default function TagPostCard({
                                                             disabled={(props.session.id === props.post.author.id) || (props.post.allowLikes == null ? false : !props.post.allowLikes)}
                                                        >
                                                             <Icons.like
-                                                                 className={`w-6 h-6 ${isLiked && "fill-current"}`}
+                                                                 className={`w-5 h-5 ${isLiked && "fill-current"}`}
                                                             />
                                                             <span className="sr-only">Like</span>
                                                        </Button>
@@ -175,13 +175,13 @@ export default function TagPostCard({
                                                                  size={"icon"}
                                                                  className="hover:text-primary h-8 w-8 text-muted-foreground"
                                                             >
-                                                                 <Icons.like className={`w-6 h-6`} />
+                                                                 <Icons.like className={`w-5 h-5`} />
                                                                  <span className="sr-only">Like</span>
                                                             </Button>
                                                        </LoginDialog>
                                                   )}
                                                   {props.post.allowLikes && (
-                                                       <span>
+                                                       <span className="text-sm">
                                                             {formatNumberWithSuffix(props.post._count.likes)}
                                                        </span>
                                                   )}
@@ -196,12 +196,12 @@ export default function TagPostCard({
                                                             className="hover:text-primary h-8 w-8 text-muted-foreground"
                                                             disabled={props.post.allowComments == null ? false : !props.post.allowComments}
                                                        >
-                                                            <Icons.commentBubble className="w-6 h-6" />
+                                                            <Icons.commentBubble className="w-5 h-5" />
                                                             <span className="sr-only">Comment</span>
                                                        </Button>
                                                   </Link>
                                                   {props.post.allowComments && (
-                                                       <span>
+                                                       <span className="text-sm">
                                                             {formatNumberWithSuffix(props.post._count.comments)}
                                                        </span>
                                                   )}

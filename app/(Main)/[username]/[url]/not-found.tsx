@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog"
 import Image from "next/image"
+import { Icons } from "@/components/icon"
 
 export default function NotFound() {
   return (
@@ -14,12 +15,12 @@ export default function NotFound() {
     <AlertDialog open>
       <AlertDialogContent className="p-0 border-none">
         <EmptyPlaceholder className="w-full">
-          <EmptyPlaceholder.Icon name="warning" />
-          <EmptyPlaceholder.Title>Uh oh! Not Found</EmptyPlaceholder.Title>
+          <Icons.errorLogo className="w-60 h-60 -mt-[80px]" />
+          <EmptyPlaceholder.Title className="mt-0">Uh oh! Not Found</EmptyPlaceholder.Title>
           <EmptyPlaceholder.Description>
             This post cound not be found or has been deleted. If you think this is a mistake, please contact us.
           </EmptyPlaceholder.Description>
-          <Link href="/" className={buttonVariants({ variant: "ghost" })}>
+          <Link href="/" className={buttonVariants({ variant: "default" })}>
             Go to Home
           </Link>
         </EmptyPlaceholder>

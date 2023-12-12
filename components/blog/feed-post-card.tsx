@@ -76,7 +76,7 @@ export default function FeedPostCard(
                 </div>
               </div>
             </Link>
-            <div className="hidden py-8 md:block">
+            <div className="hidden pt-8 pb-4 md:pb-6 md:block">
               <div className="flex justify-between items-center">
                 <div className="flex flex-1 items-center space-x-2.5">
                   {
