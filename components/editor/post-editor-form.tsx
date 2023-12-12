@@ -173,11 +173,11 @@ export function PostEditorForm(props: { post: any, user: any }) {
       await validate(`/@${props.user?.username}`)
       if (data.published == true && previousStatus == false) {
         router.push(`/@${props.user?.username}/${form.getValues('url')}?published=true`);
-        toast.success("Post Published!");
+        toast.info("Post Published!");
       }
       else {
         router.push(`/@${props.user?.username}/`);
-        toast.success("Post Updated!");
+        toast.info("Post Updated!");
       }
 
     } catch (error) {
@@ -251,7 +251,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
             setIsSaving(false);
           }
           setLastSavedTime(Date.now());
-          toast.success("Draft Saved!");
+          toast.info("Draft Saved!");
         } catch (error) {
           console.error(error)
           setIsSaving(false);
