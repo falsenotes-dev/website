@@ -26,8 +26,8 @@ export async function POST(req: NextRequest) {
 
     const url = `https://falsenotescontent.blob.core.windows.net/blogs/${authorId}/${postId}`;
 
-    return NextResponse.json({ success: true, message: 'File uploaded', data: { url } });
+    return NextResponse.json({ success: true, message: 'File uploaded', data: { url } }, { status: 200 });
   } catch (error : any) {
-    return NextResponse.json({ success: false, message: error.message });
+    return NextResponse.json({ success: false, message: error }, { status: 500 });
   }
 }
