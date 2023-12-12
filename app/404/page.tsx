@@ -9,7 +9,7 @@ import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center gap-6 h-screen w-screen">
+    <div className="flex flex-col items-center justify-center gap-6 h-screen w-screen bg-pattern">
       <Icons.errorLogo className="-mt-[90px]" />
       <h2 className="font-bold text-5xl">404</h2>
       <p className="text-muted-foreground font-light">
