@@ -84,13 +84,13 @@ export const Icons = {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        clip-rule="evenodd"
+        clipRule="evenodd"
         d="m92.29,170.93h50.27s-25,43.38-25,43.38l-26.93,46.72-25.13-43.61,26.8-46.5Zm-1.67-90.1l-25,43.37h103.87l25-43.37h-103.87Zm-25.01,43.37H11.76l26.93,46.73h53.6l-26.67-46.72h0Z"
         fill="hsl(var(--background))"
-        fill-rule="evenodd"
+        fillRule="evenodd"
         stroke="hsl(var(--muted-foreground))"
-        stroke-dasharray="4 4"
-        stroke-width="1.75"
+        strokeDasharray="4 4"
+        strokeWidth="1.5"
       ></path>
       <g filter="url(#filter0_d)">
         <ellipse
@@ -120,15 +120,15 @@ export const Icons = {
       </mask>
       <g mask="url(#a)">
         <path
-          clip-rule="evenodd"
+          clipRule="evenodd"
           d="m92.29,170.93h50.27s-25,43.38-25,43.38l-26.93,46.72-25.13-43.61,26.8-46.5Zm-1.67-90.1l-25,43.37h103.87l25-43.37h-103.87Zm-25.01,43.37H11.76l26.93,46.73h53.6l-26.67-46.72h0Z"
           fill="hsl(var(--foreground))"
-          fill-rule="evenodd"
+          fillRule="evenodd"
         ></path>
       </g>
       <defs>
         <filter
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
           height="213.03"
           id="filter0_d"
@@ -136,7 +136,7 @@ export const Icons = {
           x="76.35"
           y="57.97"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
           <feColorMatrix
             in="SourceAlpha"
             values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"

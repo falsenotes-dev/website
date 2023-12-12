@@ -206,7 +206,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
         dataForm.set('file', file)
         // Construct the request body with postId and authorId
         const requestBody = {
-          postId: form.getValues('url'),
+          postId: form.getValues('id'),
           userId: props.user?.id,
         };
 
