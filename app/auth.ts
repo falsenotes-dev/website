@@ -14,10 +14,16 @@ export const config = {
   pages: {
     signIn: "/signin",
   },
+  theme: {
+    colorScheme: "auto",
+    logo: "/logo.svg",
+    brandColor: "#2564eb",
+    buttonText: "Continue with {provider}",
+  },
   providers: [
     GitHub({ 
-      clientId: process.env.GITHUB_CLIENT_ID, 
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientId: process.env.GITHUB_CLIENT_ID!, 
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,

@@ -10,7 +10,7 @@ import Balancer from "react-wrap-balancer";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center gap-6 h-screen w-screen">
+    <div className="flex flex-col items-center justify-center bg-background gap-6 h-screen w-screen">
       <Icons.errorLogo className="-mt-[90px]" />
       <h2 className="font-bold text-5xl">404</h2>
       <p className="text-muted-foreground font-light text-center">
