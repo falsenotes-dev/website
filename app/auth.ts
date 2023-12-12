@@ -13,6 +13,8 @@ export const config = {
   },
   pages: {
     signIn: "/signin",
+    signOut: "/signout",
+    newUser: "/get-started",
   },
   theme: {
     colorScheme: "auto",
