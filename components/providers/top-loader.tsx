@@ -7,7 +7,7 @@ import { useTheme } from "next-themes";
 function TopLoader() {
   return (
     <NextTopLoader
-    color="#2564EB"
+    color="#7c3aed"
     initialPosition={1}
     crawlSpeed={200}
     height={3}

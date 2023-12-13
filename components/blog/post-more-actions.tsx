@@ -68,78 +68,82 @@ export default function PostMoreActions({
                   <span>Edit post</span>
                 </Link>
               </DropdownMenuItem>
-              {post.pinned ? (
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    const res = await unPin(post?.id);
-                    await validate(`/@${post.author.username}`);
-                    if (res.status !== 200) {
-                      toast.error("Something went wrong");
-                    }
-                  }}
-                >
-                  <Icons.pinOff className="mr-2 h-4 w-4" />
-                  <span>Unpin post</span>
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem onSelect={() => setShowPinAlert(true)}>
-                  <Icons.pin className="mr-2 h-4 w-4" />
-                  <span>Pin to Top</span>
-                </DropdownMenuItem>
-              )}
-              {post.allowComments ? (
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    const res = await allowComments(post?.id, false);
-                    await validate(`/@${post.author.username}`);
-                    if (res.status !== 200) {
-                      toast.error("Something went wrong");
-                    }
-                  }}
-                >
-                  <Icons.commentOff className="mr-2 h-4 w-4" />
-                  <span>Disable comments</span>
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    const res = await allowComments(post?.id, true);
-                    await validate(`/@${post.author.username}`);
-                    if (res.status !== 200) {
-                      toast.error("Something went wrong");
-                    }
-                  }}
-                >
-                  <Icons.commentBubble className="mr-2 h-4 w-4" />
-                  <span>Enable comments</span>
-                </DropdownMenuItem>
-              )}
-              {post.allowLikes ? (
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    const res = await allowLikes(post?.id, false);
-                    await validate(`/@${post.author.username}`);
-                    if (res.status !== 200) {
-                      toast.error("Something went wrong");
-                    }
-                  }}
-                >
-                  <Icons.likeOff className="mr-2 h-4 w-4" />
-                  <span>Disable likes</span>
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    const res = await allowLikes(post?.id, true);
-                    await validate(`/@${post.author.username}`);
-                    if (res.status !== 200) {
-                      toast.error("Something went wrong");
-                    }
-                  }}
-                >
-                  <Icons.like className="mr-2 h-4 w-4" />
-                  <span>Enable likes</span>
-                </DropdownMenuItem>
+              {post.published && (
+                <>
+                  {post.pinned ? (
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        const res = await unPin(post?.id);
+                        await validate(`/@${post.author.username}`);
+                        if (res.status !== 200) {
+                          toast.error("Something went wrong");
+                        }
+                      }}
+                    >
+                      <Icons.pinOff className="mr-2 h-4 w-4" />
+                      <span>Unpin post</span>
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem onSelect={() => setShowPinAlert(true)}>
+                      <Icons.pin className="mr-2 h-4 w-4" />
+                      <span>Pin to Top</span>
+                    </DropdownMenuItem>
+                  )}
+                  {post.allowComments ? (
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        const res = await allowComments(post?.id, false);
+                        await validate(`/@${post.author.username}`);
+                        if (res.status !== 200) {
+                          toast.error("Something went wrong");
+                        }
+                      }}
+                    >
+                      <Icons.commentOff className="mr-2 h-4 w-4" />
+                      <span>Disable comments</span>
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        const res = await allowComments(post?.id, true);
+                        await validate(`/@${post.author.username}`);
+                        if (res.status !== 200) {
+                          toast.error("Something went wrong");
+                        }
+                      }}
+                    >
+                      <Icons.commentBubble className="mr-2 h-4 w-4" />
+                      <span>Enable comments</span>
+                    </DropdownMenuItem>
+                  )}
+                  {post.allowLikes ? (
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        const res = await allowLikes(post?.id, false);
+                        await validate(`/@${post.author.username}`);
+                        if (res.status !== 200) {
+                          toast.error("Something went wrong");
+                        }
+                      }}
+                    >
+                      <Icons.likeOff className="mr-2 h-4 w-4" />
+                      <span>Disable likes</span>
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem
+                      onSelect={async () => {
+                        const res = await allowLikes(post?.id, true);
+                        await validate(`/@${post.author.username}`);
+                        if (res.status !== 200) {
+                          toast.error("Something went wrong");
+                        }
+                      }}
+                    >
+                      <Icons.like className="mr-2 h-4 w-4" />
+                      <span>Enable likes</span>
+                    </DropdownMenuItem>
+                  )}
+                </>
               )}
               <DropdownMenuItem
                 className="flex cursor-pointer items-center text-destructive focus:text-destructive"
