@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PostCreateButton } from "./post-create-button";
 
-export default function UserPosts({ posts: initialPosts, className, user, sessionUser, children, query, search }: { posts: any, className?: string, user?: any, sessionUser?: any, children?: React.ReactNode, query?: any, search: string | undefined }) {
+export default function UserPosts({ posts: initialPosts, className, user, sessionUser, children, query, search, pinned }: { posts: any, className?: string, user?: any, sessionUser?: any, children?: React.ReactNode, query?: any, search: string | undefined, pinned?: any }) {
   const router = useRouter();
   const [posts, setPosts] = useState<Array<any>>(initialPosts);
 
@@ -43,6 +43,9 @@ export default function UserPosts({ posts: initialPosts, className, user, sessio
       <div className="user-articles lg:mb-6 md:mb-5 mb-4">
         {posts?.length > 0 ? (
           <div className="flex flex-col lg:gap-6 md:gap-5 gap-4">
+            {pinned && (
+              <PostCard post={pinned} session={sessionUser} user={true.toString()} />
+            )}
             {posts?.map((article: any) => (
               <div key={article.id}>
                 <PostCard post={article} session={sessionUser} user={true.toString()} />

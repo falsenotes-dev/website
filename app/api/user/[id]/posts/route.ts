@@ -36,7 +36,7 @@ export async function GET(req: NextRequest, { params } : { params: { id: string 
      const posts = await postgres.post.findMany({
           ...baseQuery,
           where: {
-               ...(session?.id === userId ? {} : { published: true }),
+               ...(session?.id === userId ? { pinned: false } : { published: true, pinned: false }),
                authorId: userId,
                published: session?.id === userId ? undefined : true,
                ...(search ? { title: { contains: search, mode: "insensitive" } } : {}),

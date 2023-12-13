@@ -2,10 +2,7 @@ import { getSession } from "next-auth/react";
 import { getSessionUser } from "@/components/get-session-user";
 import { notFound, redirect, useRouter } from "next/navigation";
 import postgres from "@/lib/postgres";
-import {
-  UserDetails,
-  UserPosts,
-} from "@/components/user";
+import { UserDetails, UserPosts } from "@/components/user";
 import UserTab from "@/components/user/tabs";
 import { getPost } from "@/lib/prisma/posts";
 import { getBookmarks, getHistory } from "@/lib/prisma/session";
@@ -19,23 +16,25 @@ import Image from "next/image";
 import { UserCard } from "@/components/user/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-
-export default async function Page({ params, searchParams }: {
+export default async function Page({
+  params,
+  searchParams,
+}: {
   params: {
-    username: string
-  },
-  searchParams: { [key: string]: string | string[] | undefined }
+    username: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const decodedUsername = decodeURIComponent(params.username);
 
-  if (!decodedUsername.startsWith('@')) redirect('/404')
+  if (!decodedUsername.startsWith("@")) redirect("/404");
 
   const sessionUserName = await getSessionUser();
   const user = await postgres.user.findFirst({
     include: {
       posts: {
         orderBy: {
-          createdAt: "desc"
+          createdAt: "desc",
         },
         include: {
           _count: {
@@ -71,7 +70,7 @@ export default async function Page({ params, searchParams }: {
               published: true,
             },
           },
-        }
+        },
       },
       Followers: {
         include: {
@@ -79,9 +78,9 @@ export default async function Page({ params, searchParams }: {
             include: {
               Followers: true,
               Followings: true,
-            }
-          }
-        }
+            },
+          },
+        },
       },
       Followings: {
         include: {
@@ -89,61 +88,117 @@ export default async function Page({ params, searchParams }: {
             include: {
               Followers: true,
               Followings: true,
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
     where: {
-      username: decodedUsername.substring(1)
-    }
-  })
+      username: decodedUsername.substring(1),
+    },
+  });
 
-  const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
+  const search =
+    typeof searchParams.search === "string" ? searchParams.search : undefined;
   if (!user) {
     return notFound();
   }
 
+  const pinnedPost = await postgres.post.findFirst({
+    where: {
+      authorId: user?.id,
+      pinned: true,
+    },
+    include: {
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+          savedUsers: true,
+          shares: true,
+        },
+      },
+      savedUsers: true,
+      tags: {
+        take: 1,
+        include: {
+          tag: true,
+        },
+      },
+      author: {
+        include: {
+          Followers: true,
+          Followings: true,
+        },
+      },
+    },
+  });
 
-  const whereQuery = sessionUserName?.id === user?.id ? {} : { published: true };
+  const whereQuery =
+    sessionUserName?.id === user?.id
+      ? { pinned: false }
+      : { published: true, pinned: false };
 
   const { posts } = await getPost({ id: user?.id, search, whereQuery });
-
 
   const followers = user?.Followers;
   const following = user?.Followings;
 
-  const tab = typeof searchParams.tab === 'string' ? searchParams.tab : undefined;
-  const { bookmarks } = await getBookmarks({ id: sessionUserName?.id, limit: 10 })
-  const { history } = await getHistory({ id: sessionUserName?.id, limit: 10 })
+  const tab =
+    typeof searchParams.tab === "string" ? searchParams.tab : undefined;
+  const { bookmarks } = await getBookmarks({
+    id: sessionUserName?.id,
+    limit: 10,
+  });
+  const { history } = await getHistory({ id: sessionUserName?.id, limit: 10 });
   return (
     <div className="md:container mx-auto px-4 pt-5">
-      <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5" >
-        <div className="user__header md:hidden lg:min-w-[352px] lg:max-w-[352px] md:px-6 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]" style={{
-          minHeight: 'calc(100vh - 115px)'
-        }}>
+      <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
+        <div
+          className="user__header md:hidden lg:min-w-[352px] lg:max-w-[352px] md:px-6 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"
+          style={{
+            minHeight: "calc(100vh - 115px)",
+          }}
+        >
           <div className="md:flex-[1_0_auto]">
-            <UserDetails user={user} followers={followers} followings={following} session={sessionUserName} />
+            <UserDetails
+              user={user}
+              followers={followers}
+              followings={following}
+              session={sessionUserName}
+            />
           </div>
-          <SiteFooter className='text-xs flex-col justify-start items-start mb-0 mt-4 !px-0' />
+          <SiteFooter className="text-xs flex-col justify-start items-start mb-0 mt-4 !px-0" />
         </div>
         <div className="lg:pl-8 w-full">
           <UserCard user={user} session={sessionUserName} />
           <Tabs className="w-full" defaultValue={tab || "posts"}>
             <ScrollArea className="w-full">
               <TabsList className="bg-background w-full py-4 justify-start h-fit rounded-none gap-2">
-                <TabsTrigger value="posts" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]:shadow-sm data-[state=active]:text-secondary">
+                <TabsTrigger
+                  value="posts"
+                  className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]:shadow-sm data-[state=active]:text-secondary"
+                >
                   Posts
                 </TabsTrigger>
-                <TabsTrigger value="about" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]shadow-sm data-[state=active]:text-secondary">
+                <TabsTrigger
+                  value="about"
+                  className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]shadow-sm data-[state=active]:text-secondary"
+                >
                   About
                 </TabsTrigger>
                 {sessionUserName?.id === user?.id && (
                   <>
-                    <TabsTrigger value="bookmarks" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]shadow-sm data-[state=active]:text-secondary">
+                    <TabsTrigger
+                      value="bookmarks"
+                      className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]shadow-sm data-[state=active]:text-secondary"
+                    >
                       Bookmarks
                     </TabsTrigger>
-                    <TabsTrigger value="reading-history" className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]:shadow-sm data-[state=active]:text-secondary">
+                    <TabsTrigger
+                      value="reading-history"
+                      className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]:shadow-sm data-[state=active]:text-secondary"
+                    >
                       Reading History
                     </TabsTrigger>
                   </>
@@ -152,7 +207,15 @@ export default async function Page({ params, searchParams }: {
               <ScrollBar orientation="horizontal" />
             </ScrollArea>
             <TabsContent value="posts" className="w-full">
-              <UserPosts posts={posts} user={user} sessionUser={sessionUserName} query={whereQuery} search={search} className="w-full" />
+              <UserPosts
+                pinned={pinnedPost}
+                posts={posts}
+                user={user}
+                sessionUser={sessionUserName}
+                query={whereQuery}
+                search={search}
+                className="w-full"
+              />
             </TabsContent>
             <TabsContent value="about">
               <UserAbout user={user} session={sessionUserName} />
@@ -160,10 +223,22 @@ export default async function Page({ params, searchParams }: {
             {sessionUserName?.id === user?.id && (
               <>
                 <TabsContent value="bookmarks" className="w-full">
-                  <UserBookmarks posts={bookmarks} user={user} sessionUser={sessionUserName} tab={`bookmarks`} className="w-full" />
+                  <UserBookmarks
+                    posts={bookmarks}
+                    user={user}
+                    sessionUser={sessionUserName}
+                    tab={`bookmarks`}
+                    className="w-full"
+                  />
                 </TabsContent>
                 <TabsContent value="reading-history">
-                  <UserBookmarks posts={history} user={user} sessionUser={sessionUserName} tab={`history`} className="w-full" />
+                  <UserBookmarks
+                    posts={history}
+                    user={user}
+                    sessionUser={sessionUserName}
+                    tab={`history`}
+                    className="w-full"
+                  />
                 </TabsContent>
               </>
             )}

@@ -51,7 +51,7 @@ export default function PostCard(
           <Card {...props} className={cn("feedArticleCard bg-background max-h-72 w-full", props.className
           )}>
                <CardContent className="md:p-6 p-4">
-                    <CardHeader className={cn("pb-4 pt-0 px-0 gap-y-4")}>
+                    <CardHeader className={cn("pb-4 pt-0 px-0 gap-y-4 flex-row")}>
                          <div className="flex items-center space-x-1">
                               {
                                    props.user != 'true' && (
@@ -85,6 +85,13 @@ export default function PostCard(
                                    {props.post.published ? dateFormat(props.post.publishedAt) : dateFormat(props.post.createdAt)}
                               </span>
                          </div>
+                         {
+                                   props.user == 'true' && (
+                                        props.post.pinned && (
+                                             <Icons.pin className="h-4 w-4 inline ml-auto text-muted-foreground align-middle" />
+                                        )
+                                   )
+                              }
                     </CardHeader>
                     <div className="flex">
                          <div className="flex-initial w-full">
