@@ -1,4 +1,5 @@
 import { formatNumberWithSuffix } from "@/components/format-numbers";
+import { Icons } from "@/components/icon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { dateFormat } from "@/lib/format-date";
 import postgres from "@/lib/postgres";
@@ -71,7 +72,7 @@ export default async function ListPage({
                                         </AvatarFallback>
                                       </Avatar>
                                       <div className="flex flex-col">
-                                      <div className="line-clamp-1">{list.author.name || list.author.username}</div>
+                                      <div className="line-clamp-1 inline-flex items-center">{list.author.name || list.author.username} {list.author.verified && (<Icons.verified className="h-4 w-4 mx-0.5 fill-verified" />)}</div>
                                       <div className="flex flex-wrap items-center">
                                         <div className="inline-flex items-center text-xs text-muted-foreground">
                                           <p className="text-inherit">{dateFormat(list.createdAt)}</p>
