@@ -15,6 +15,7 @@ import { Icons } from "@/components/icon";
 import Image from "next/image";
 import { UserCard } from "@/components/user/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 export default async function Page({
   params,
@@ -155,9 +156,9 @@ export default async function Page({
     <div className="md:container mx-auto px-4 pt-5">
       <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
         <div
-          className="user__header md:hidden lg:min-w-[352px] lg:max-w-[352px] md:px-6 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"
+          className="user__header md:hidden lg:min-w-[352px] border-r lg:max-w-[352px] md:px-8 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"
           style={{
-            minHeight: "calc(100vh - 115px)",
+            minHeight: "calc(100vh - 125px)",
           }}
         >
           <div className="md:flex-[1_0_auto]">
@@ -170,7 +171,8 @@ export default async function Page({
           </div>
           <SiteFooter className="text-xs flex-col justify-start items-start mb-0 mt-4 !px-0" />
         </div>
-        <div className="lg:pl-8 w-full">
+        <Separator className="block md:hidden lg:block h-full" orientation="vertical" />
+        <div className="w-full">
           <UserCard user={user} session={sessionUserName} />
           <Tabs className="w-full" defaultValue={tab || "posts"}>
             <ScrollArea className="w-full">

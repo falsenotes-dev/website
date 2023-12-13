@@ -94,15 +94,15 @@ export default function UserBookmarks({ posts: initialPosts, className, user, se
             <EmptyPlaceholder.Description>
               {
                 tab === 'bookmarks' ? (
-                  <div>
-                    <p className="mb-2">When you bookmark a post, it will show up here.</p>
+                  <>
+                    <span className="mb-2">When you bookmark a post, it will show up here.</span>
                     <Button onClick={() => router.push('/feed')}>Explore</Button>
-                  </div>
+                  </>
                 ) : (
-                  <div>
-                    <p className="mb-2">When you read a post, it will show up here.</p>
+                  <>
+                    <span className="mb-2">When you read a post, it will show up here.</span>
                     <Button onClick={() => router.push('/feed')}>Explore</Button>
-                  </div>
+                  </>
                 )
               }
             </EmptyPlaceholder.Description>
