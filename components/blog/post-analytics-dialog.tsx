@@ -9,14 +9,10 @@ import {
      DialogTitle,
      DialogTrigger,
 } from "@/components/ui/dialog"
-import { Button, buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
 import { Icons } from "../icon";
-import { BarChart2, Bookmark, Facebook, Link2, Linkedin, MoreHorizontal } from "lucide-react";
-import { LinkedInLogoIcon, FaceIcon, Cross2Icon } from "@radix-ui/react-icons";
-import { FacebookShareButton, LinkedinShareButton, TwitterShareButton } from "next-share";
+import { BarChart2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { toast } from "../ui/use-toast";
-import PostCard from "../tags/post-card-v2";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { BlurImage as Image } from "../image";
 import { shimmer, toBase64 } from "@/lib/image";
@@ -28,7 +24,7 @@ export default function PostAnalyticsDialog({ post, className, ...props }: { pos
           <>
                <Dialog {...props} >
                     <DialogTrigger asChild>
-                         <Button variant="ghost" size="icon" className={cn("hover:bg-accent hover:text-primary text-muted-foreground", className)}>
+                         <Button variant="ghost" size="icon" className={cn("", className)}>
                               <BarChart2 className={`h-5 w-5`} strokeWidth={1.5} />
                               <span className="sr-only">Analytics</span>
                          </Button>

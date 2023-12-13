@@ -51,7 +51,7 @@ export default function PostCard(
           <Card {...props} className={cn("feedArticleCard bg-background max-h-72 w-full", props.className
           )}>
                <CardContent className="md:p-6 p-4">
-                    <CardHeader className={cn("pb-4 pt-0 px-0 gap-y-4")}>
+                    <CardHeader className={cn("pb-4 pt-0 px-0 gap-y-4 flex-row")}>
                          <div className="flex items-center space-x-1">
                               {
                                    props.user != 'true' && (
@@ -64,7 +64,7 @@ export default function PostCard(
                                                        </Avatar>
                                                        <p className="text-sm font-normal leading-none">{props.post.author?.name || props.post.author?.username}</p>
                                                        {props.post.author?.verified && (
-                                                            <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                                                            <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                                                        )}
                                                   </Link>
                                              </UserHoverCard>
@@ -85,6 +85,13 @@ export default function PostCard(
                                    {props.post.published ? dateFormat(props.post.publishedAt) : dateFormat(props.post.createdAt)}
                               </span>
                          </div>
+                         {
+                                   props.user == 'true' && (
+                                        props.post.pinned && (
+                                             <Icons.pin className="h-4 w-4 inline ml-auto text-muted-foreground align-middle" />
+                                        )
+                                   )
+                              }
                     </CardHeader>
                     <div className="flex">
                          <div className="flex-initial w-full">
@@ -127,13 +134,13 @@ export default function PostCard(
                                              <div className="flex items-center space-x-1 text-sm text-muted-foreground">
                                                   {
                                                        props.session ? (
-                                                            <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                                            <Button variant="ghost" size={"icon"} className="">
                                                                  { isSaved ? <Icons.bookmarkFill className="h-5 w-5" onClick={() => save(props.post.id)} /> : <Icons.bookmark className="h-5 w-5" onClick={() => save(props.post.id)} /> }
                                                                  <span className="sr-only">Save</span>
                                                             </Button>
                                                        ) : (
                                                             <LoginDialog>
-                                                                 <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                                                 <Button variant="ghost" size={"icon"} className="">
                                                                       <Icons.bookmark className={`h-5 w-5 ${isSaved && 'fill-current'}`} />
                                                                       <span className="sr-only">Save</span>
                                                                  </Button>
@@ -143,7 +150,7 @@ export default function PostCard(
                                              </div>
                                              <div className="flex items-center space-x-1 text-sm text-muted-foreground">
                                                   <PostMoreActions post={props.post} session={props.session}>
-                                                       <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                                       <Button variant="ghost" size={"icon"} className="">
                                                             <MoreHorizontal className="h-5 w-5" />
                                                             <span className="sr-only">More</span>
                                                        </Button>
@@ -203,12 +210,12 @@ export default function PostCard(
                                    <div className="flex items-center space-x-1 text-muted-foreground text-sm">
                                         {
                                              props.session ? (
-                                                  <Button variant="ghost" size={"icon"} className="hover:text-primary" onClick={() => save(props.post.id)}>
+                                                  <Button variant="ghost" size={"icon"} className="" onClick={() => save(props.post.id)}>
                                                        { isSaved ? <Icons.bookmarkFill className="h-5 w-5" /> : <Icons.bookmark className="h-5 w-5" /> }
                                                   </Button>
                                              ) : (
                                                   <LoginDialog>
-                                                       <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                                       <Button variant="ghost" size={"icon"} className="">
                                                             <Icons.bookmark className={`h-5 w-5 ${isSaved && 'fill-current'}`} />
                                                        </Button>
                                                   </LoginDialog>
@@ -217,7 +224,7 @@ export default function PostCard(
                                    </div>
                                    <div className="flex items-center space-x-1 text-muted-foreground text-sm">
                                         <PostMoreActions post={props.post} session={props.session}>
-                                             <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                             <Button variant="ghost" size={"icon"} className="">
                                                   <MoreHorizontal className="h-5 w-5" />
                                              </Button>
                                         </PostMoreActions>

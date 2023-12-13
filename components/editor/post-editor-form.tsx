@@ -37,7 +37,7 @@ import { Icons } from "../icon"
 import { useRouter } from "next/navigation"
 import { Textarea } from "../ui/textarea"
 import { ToastAction } from "../ui/toast"
-import { toast } from "../ui/use-toast"
+import { toast } from "sonner"
 import { dateFormat } from "@/lib/format-date"
 import TagBadge from "../tags/tag"
 import { Cross2Icon } from "@radix-ui/react-icons"
@@ -100,6 +100,7 @@ const postFormSchema = z.object({
   published: z.boolean().optional(),
   commentsOn: z.boolean().optional().default(true),
   likesOn: z.boolean().optional().default(true),
+  pinned: z.boolean().optional().default(false),
 })
 
 type PostFormValues = z.infer<typeof postFormSchema>
@@ -123,6 +124,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
     })),
     commentsOn: props.post.allowComments == null ? true : props.post.allowComments,
     likesOn: props.post.allowLikes == null ? true : props.post.allowLikes,
+    pinned: props.post.pinned == null ? false : props.post.pinned,
   }
 
   const form = useForm<PostFormValues>({
@@ -173,21 +175,17 @@ export function PostEditorForm(props: { post: any, user: any }) {
       await validate(`/@${props.user?.username}`)
       if (data.published == true && previousStatus == false) {
         router.push(`/@${props.user?.username}/${form.getValues('url')}?published=true`);
-        toast({ description: "Post Published!" });
+        toast.info("Post Published!");
       }
       else {
         router.push(`/@${props.user?.username}/`);
-        toast({ description: "Post Updated!" });
+        toast.info("Post Updated!");
       }
 
     } catch (error) {
       console.error(error);
       setIsPublishing(false);
-      toast({
-        description: "Something went wrong. Please try again later.",
-        variant: "destructive",
-        action: <ToastAction altText="Try again">Try again</ToastAction>
-      });
+      toast.error("Something went wrong. Please try again later.");
     } finally {
       setOpen(false);
     }
@@ -216,6 +214,19 @@ export function PostEditorForm(props: { post: any, user: any }) {
           method: 'POST',
           body: dataForm,
         });
+
+        if (!res.ok) {
+          toast.error("Something went wrong.", {
+            description: "Your cover image could not be uploaded.",
+            action: {
+              label: "Try again",
+              onClick: async() => {
+                //resubmit
+                await uploadCover()
+              },
+            }
+          });
+        }
         // get the image url
         const { data: coverUrl } = await res.json()
         return coverUrl.url;
@@ -230,29 +241,40 @@ export function PostEditorForm(props: { post: any, user: any }) {
   const saveDraft = async () => {
     if (!isPublishing) {
       setIsSaving(true);
-      if (form.getValues('title') && form.getValues('content') !== props.post?.content) {
-        try {
-          // Submit the form
-          const result = await fetch(`/api/post/${props.post?.id}/drafts`, {
-            method: "PATCH",
-            body: JSON.stringify({ ...form.getValues() }),
-          })
-          if (result.status !== 200) {
-            toast({
-              description: "Something went wrong. Please try again later.",
-              variant: "destructive",
-              action: <ToastAction altText="Try again">Try again</ToastAction>
-            })
-            setIsSaving(false);
-          }
-          setLastSavedTime(Date.now());
-          toast({
-            description: "Draft Saved!",
-          })
-        } catch (error) {
-          console.error(error)
+      try {
+        // Submit the form
+        const result = await fetch(`/api/post/${props.post?.id}/drafts`, {
+          method: "PATCH",
+          body: JSON.stringify({ ...form.getValues() }),
+        })
+        if (result.status !== 200) {
+          toast.error("Something went wrong. Please try again later.", {
+            description: "Your draft could not be saved.",
+            action: {
+              label: "Try again",
+              onClick: async() => {
+                //resubmit
+                await saveDraft()
+              },
+            }
+          });
           setIsSaving(false);
         }
+        setLastSavedTime(Date.now());
+        toast.info("Draft Saved!");
+      } catch (error) {
+        console.error(error)
+        toast.error("Something went wrong.", {
+          description: "Your draft could not be saved.",
+          action: {
+            label: "Try again",
+            onClick: async() => {
+              //resubmit
+              await saveDraft()
+            },
+          }
+        });
+        setIsSaving(false);
       }
       if (!form.getValues('published') && previousStatus == false) {
         const result = await fetch(`/api/post/${props.post?.id}`, {
@@ -261,7 +283,17 @@ export function PostEditorForm(props: { post: any, user: any }) {
         });
 
         if (!result.ok) {
-          throw new Error('Failed to update post');
+          toast.error("Something went wrong.", {
+            description: "Your draft could not be saved.",
+            action: {
+              label: "Try again",
+              onClick: async() => {
+                //resubmit
+                await saveDraft()
+              },
+            }
+          });
+          setIsSaving(false);
         }
 
       }
@@ -276,7 +308,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
   useEffect(() => {
     const timeout = setTimeout(saveDraft, 15000);
     return () => clearTimeout(timeout);
-  }, [form, file, props.user, props.post, open])
+  }, [form.getValues, file, props.user, props.post])
 
 
   useEffect(() => {
@@ -503,26 +535,27 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                       <Icons.upload className="w-9 h-9 mb-4" />
                                       <p className="mb-2 text-sm text-secondary-foreground font-medium">Click to upload</p>
-                                      <p className="text-xs text-secondary-foreground">PNG, JPG (MAX. 2MB)</p>
+                                      <p className="text-xs text-secondary-foreground">PNG, JPG, GIF (MAX. 2MB)</p>
                                     </div>)
                                 }
-                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png" onChange={async (e) => {
+                                <Input id="dropzone-file" type="file" accept="image/jpeg, image/png, image/gif" onChange={async (e) => {
                                   const file = e.target.files?.[0];
                                   if (file) {
                                     if (file.size > 2 * 1024 * 1024) {
-                                      toast({ description: "File size should not exceed 2MB.", variant: "destructive" });
-                                    } else if (!['image/png', 'image/jpeg'].includes(file.type)) {
-                                      toast({ description: "File type must be PNG or JPEG.", variant: "destructive" });
+                                      toast.warning("File size must be less than 2MB.");
+                                    } else if (!['image/png', 'image/jpeg', 'image/gif'].includes(file.type)) {
+                                      toast.warning("File type must be PNG, JPG, or GIF.");
                                     } else {
                                       setFile(file);
-                                      await uploadCover();
+                                      const url = await uploadCover();
+                                      form.setValue('coverImage', url);
                                     }
                                   }
                                 }} className="hidden" />
                                 {
                                   (cover || file) && (
                                     <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
-                                      <Button variant="secondary" size={'icon'} className="bg-secondary/75 backdrop-blur-md hover:bg-secondary" onClick={
+                                      <Button variant="secondary" size={'icon'} className="bg-secondary/10 backdrop-blur-xl hover:bg-secondary" onClick={
                                         async () => {
                                           const coverUrl = await uploadCover();
                                           if (coverUrl) {
@@ -533,7 +566,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                         <Icons.upload className="h-4 w-4" />
                                         <span className="sr-only">Upload</span>
                                       </Button>
-                                      <Button variant="secondary" size={'icon'} className="bg-secondary/75 backdrop-blur-md hover:bg-secondary" onClick={() => {
+                                      <Button variant="secondary" size={'icon'} className="bg-secondary/10 backdrop-blur-xl hover:bg-secondary" onClick={() => {
                                         form.setValue('coverImage', '');
                                         setCover('');
                                         setFile(undefined);
@@ -653,6 +686,25 @@ export function PostEditorForm(props: { post: any, user: any }) {
                       Add Tag
                     </Button>
                   )}
+                  <FormField
+                    control={form.control}
+                    name="pinned"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Pin post</FormLabel>
+                        <FormDescription>
+                          Pin this post to the top of your profile. This will override any other pinned posts.
+                        </FormDescription>
+                        <FormControl>
+                          <div className="flex items-center space-x-2">
+                            <Switch id="pinned" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground" />
+                            <Label htmlFor="pinned">Pin this post</Label>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <div className="flex flex-col gap-2.5">
                   <FormField
                     control={form.control}
@@ -662,7 +714,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                         <FormLabel>Community</FormLabel>
                         <FormControl>
                           <div className="flex items-center space-x-2">
-                            <Switch id="comments-on" checked={field.value} onCheckedChange={field.onChange}  />
+                            <Switch id="comments-on" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground"  />
                             <Label htmlFor="comments-on">Allow Comments</Label>
                           </div>
                         </FormControl>
@@ -677,7 +729,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                       <FormItem>
                         <FormControl>
                           <div className="flex items-center space-x-2">
-                            <Switch id="likes-on" checked={field.value} onCheckedChange={field.onChange} />
+                            <Switch id="likes-on" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground" />
                             <Label htmlFor="likes-on">Allow Reactions</Label>
                           </div>
                         </FormControl>
@@ -748,7 +800,19 @@ export function PostEditorForm(props: { post: any, user: any }) {
                 </div>
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button onClick={() => saveDraft()} className="m-auto" size={"lg"} variant="outline" disabled={isSaving}>{
+                    <Button onClick={() => 
+                    {
+                      if ((!form.getValues('content') || form.getValues('content') === '') && (!form.getValues('title') || form.getValues('title') === '')) {
+                        toast.error("Please enter a title and content for your post!");
+                      } else if (!form.getValues('title') || form.getValues('title') === '') {
+                        toast.error("Please enter a title for your post!");
+                      } else if (!form.getValues('content') || form.getValues('content') === '') {
+                        toast.error("Please enter a content for your post!");
+                      }else {
+                        saveDraft();
+                      }
+                    }  
+                  } className="m-auto" size={"lg"} variant="outline" disabled={isSaving}>{
                       isSaving ? (
                         <>
                           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> Saving
@@ -769,25 +833,16 @@ export function PostEditorForm(props: { post: any, user: any }) {
 
             <Button size={"icon"} disabled={isSaving} onClick={
               () => {
-                if (form.getValues('title') === undefined) {
-                  toast({
-                    description: "Please enter a title for your post!",
-                    variant: "destructive",
-                  })
-                }
-                if (!form.getValues('content') || form.getValues('content') === '') {
-                  toast({
-                    description: "Please enter a content for your post!",
-                    variant: "destructive",
-                  })
-                }
-                if (form.getValues('content') == undefined && form.getValues('title') == undefined) {
-                  toast({
-                    description: "Please enter a title and content for your post!",
-                    variant: "destructive",
-                  })
-                }
-                if (form.getValues('content') !== undefined && form.getValues('title') !== undefined) {
+                if ((!form.getValues('content') || form.getValues('content') === '') && (!form.getValues('title') || form.getValues('title') === '')) {
+                  toast.error("Please enter a title and content for your post!");
+                  setOpen(false)
+                } else if (!form.getValues('title') || form.getValues('title') === '') {
+                  toast.error("Please enter a title for your post!");
+                  setOpen(false)
+                } else if (!form.getValues('content') || form.getValues('content') === '') {
+                  toast.error("Please enter a content for your post!");
+                  setOpen(false)
+                }else {
                   setOpen(true);
                 }
               }

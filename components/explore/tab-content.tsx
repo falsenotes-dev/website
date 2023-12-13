@@ -29,7 +29,7 @@ export default function ExploreComponent({ users, posts, tags, search, className
                                                             <AvatarFallback>{item.author?.name?.charAt(0) || item.author?.username?.charAt(0)}</AvatarFallback>
                                                        </Avatar>
                                                        {item.author.name || item.author.username} {item.author?.verified && (
-                                                            <Icons.verified className="h-3 w-3 mx-0.5 inline fill-primary align-middle" />
+                                                            <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
                                                        )}
                                                   </Link>
 
@@ -65,13 +65,13 @@ export default function ExploreComponent({ users, posts, tags, search, className
                                                                       !item.name ? (
                                                                            <div>
                                                                                 <p className="text-sm font-medium leading-none">{item.username} {item?.verified && (
-                                                                                     <Icons.verified className="h-3 w-3 mx-1 inline fill-primary align-middle" />
+                                                                                     <Icons.verified className="h-3 w-3 mx-1 inline fill-verified align-middle" />
                                                                                 )}</p>
                                                                            </div>
                                                                       ) : (
                                                                            <div>
                                                                                 <p className="text-sm font-medium leading-none">{item.name} {item?.verified && (
-                                                                                     <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                                                                                     <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                                                                                 )}</p>
                                                                                 <p className="text-sm text-muted-foreground">{item.username}</p>
                                                                            </div>

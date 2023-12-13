@@ -105,7 +105,7 @@ export default function SinglePost({ post: initialPost, author, sessionUser, tag
                                                        {author?.name || author?.username}
                                                        {author?.verified &&
                                                             (
-                                                                 <Icons.verified className="h-4 w-4 mx-1 inline fill-primary align-middle" />
+                                                                 <Icons.verified className="h-4 w-4 mx-1 inline fill-verified align-middle" />
                                                             )}
                                                   </Link>
                                              </UserHoverCard>
@@ -116,7 +116,7 @@ export default function SinglePost({ post: initialPost, author, sessionUser, tag
                                                             (
                                                                  <Button
                                                                       variant="link"
-                                                                      className="py-0 h-6 px-1"
+                                                                      className="py-0 h-6 px-1 text-foreground"
                                                                       onClick={() => handleFollow(post?.authorId)}
                                                                       disabled={isFollowingLoading} >
                                                                       {isFollowing ? "Following" : "Follow"}
@@ -125,9 +125,8 @@ export default function SinglePost({ post: initialPost, author, sessionUser, tag
                                                                  <LoginDialog className="py-0 h-6 px-0">
                                                                       <Button
                                                                            variant="link"
-                                                                           className="py-0 h-6 px-1"
-                                                                           disabled={isFollowingLoading} >
-                                                                           {isFollowing ? "Following" : "Follow"}
+                                                                           className="py-0 h-6 px-1 text-foreground" >
+                                                                           Follow
                                                                       </Button>
                                                                  </LoginDialog>
                                                             ))

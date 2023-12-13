@@ -7,14 +7,14 @@ export async function POST(req: NextRequest) {
     const file: File | null = data.get('file') as File;
 
     if (!file) {
-      return NextResponse.json({ success: false, message: 'No file provided' });
+      return NextResponse.json({ success: false, message: 'No file provided' }, { status: 400 });
     }
 
     const postId = req.nextUrl.searchParams.get("postId");
     const authorId = req.nextUrl.searchParams.get("authorId");
 
     if (!postId || !authorId) {
-      return NextResponse.json({ success: false, message: 'postId and authorId are required query parameters' });
+      return NextResponse.json({ success: false, message: 'postId and authorId are required query parameters' }, { status: 400 });
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -27,9 +27,9 @@ export async function POST(req: NextRequest) {
 
     const url = `https://falsenotescontent.blob.core.windows.net/blogs/${authorId}/${postId}`;
 
-    return NextResponse.json({ success: true, message: 'File uploaded', data: { url } });
+    return NextResponse.json({ success: true, message: 'File uploaded', data: { url } }, { status: 201 });
   } catch (error : any) {
     console.error(error);
-    return NextResponse.json({ success: false, message: error });
+    return NextResponse.json({ success: false, message: error }, { status: 500 });
   }
 }

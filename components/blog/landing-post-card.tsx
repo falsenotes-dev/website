@@ -35,7 +35,7 @@ export default function LandingPostCard(
                     <AvatarFallback>{props.post.author?.name?.charAt(0) || props.post.author?.username?.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <p className="text-sm font-normal leading-none">{props.post.author?.name || props.post.author?.username} {props.post.author?.verified && (
-                    <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                    <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                   )}</p>
                 </Link>
               </UserHoverCard>
@@ -78,7 +78,7 @@ export default function LandingPostCard(
                 </div>
                 <div className="flex items-center space-x-1 text-muted-foreground text-sm">
                   <LoginDialog>
-                    <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground">
+                    <Button variant="ghost" size={"icon"} className="text-muted-foreground">
                       <Icons.bookmark className={`h-5 w-5 `} />
                       <span className="sr-only">Save</span>
                     </Button>

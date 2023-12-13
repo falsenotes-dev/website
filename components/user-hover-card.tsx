@@ -50,11 +50,11 @@ export default function UserHoverCard({ user, children, className, ...props }: R
           {
             user?.name ? (
               <div>
-                <h4 className="text-sm font-semibold">{user?.name} {user?.verified && (<Icons.verified className="h-4 w-4 inline fill-primary align-middle" />)} {user?.falsemember && <Image src='/assets/falsemember.png' alt="False icon" height={30} width={30} className="h-4 w-4 inline rounded border align-middle" />}</h4>
+                <h4 className="text-sm font-semibold">{user?.name} {user?.verified && (<Icons.verified className="h-4 w-4 inline fill-verified align-middle" />)} {user?.falsemember && <Image src='/assets/falsemember.png' alt="False icon" height={30} width={30} className="h-4 w-4 inline rounded border align-middle" />}</h4>
                 <h6 className="text-sm text-muted-foreground !mt-0">{user?.username}</h6>
               </div>
             ) : (
-              <h4 className="text-sm font-semibold">{user?.username} {user?.verified && (<Icons.verified className="h-4 w-4 inline fill-primary align-middle" />)} {user?.falsemember && <Image src='/assets/falsemember.png' alt="False icon" height={30} width={30} className="h-4 w-4 inline rounded border align-middle" />}</h4>
+              <h4 className="text-sm font-semibold">{user?.username} {user?.verified && (<Icons.verified className="h-4 w-4 inline fill-verified align-middle" />)} {user?.falsemember && <Image src='/assets/falsemember.png' alt="False icon" height={30} width={30} className="h-4 w-4 inline rounded border align-middle" />}</h4>
             )
           }
           <p className="text-sm">

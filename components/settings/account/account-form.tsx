@@ -31,7 +31,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 
 const languages = [
   { label: "English", value: "en" },
@@ -77,13 +77,13 @@ export function AccountForm({ data }: { data?: Partial<AccountFormValues>}) {
   })
 
   function onSubmit(data: AccountFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+    toast("Account updated!", {
+      action: {
+        label: "View profile",
+        onClick: () => {
+          // router.push(`/@${user.username}`)
+        },
+      }
     })
   }
 

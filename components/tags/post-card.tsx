@@ -117,7 +117,7 @@ export default function TagPostCard({
                                                   {props.post.author?.name || props.post.author?.username}
                                              </p>
                                              {props.post.author?.verified && (
-                                                  <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                                                  <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                                              )}
                                         </Link>
                                    </UserHoverCard>
@@ -159,12 +159,12 @@ export default function TagPostCard({
                                                        <Button
                                                             variant="ghost"
                                                             size={"icon"}
-                                                            className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                            className="h-8 w-8 text-muted-foreground"
                                                             onClick={() => like(props.post.id)}
                                                             disabled={(props.session.id === props.post.author.id) || (props.post.allowLikes == null ? false : !props.post.allowLikes)}
                                                        >
                                                             <Icons.like
-                                                                 className={`w-6 h-6 ${isLiked && "fill-current"}`}
+                                                                 className={`w-5 h-5 ${isLiked && "fill-current"}`}
                                                             />
                                                             <span className="sr-only">Like</span>
                                                        </Button>
@@ -173,15 +173,15 @@ export default function TagPostCard({
                                                             <Button
                                                                  variant="ghost"
                                                                  size={"icon"}
-                                                                 className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                                 className="h-8 w-8 text-muted-foreground"
                                                             >
-                                                                 <Icons.like className={`w-6 h-6`} />
+                                                                 <Icons.like className={`w-5 h-5`} />
                                                                  <span className="sr-only">Like</span>
                                                             </Button>
                                                        </LoginDialog>
                                                   )}
                                                   {props.post.allowLikes && (
-                                                       <span>
+                                                       <span className="text-sm">
                                                             {formatNumberWithSuffix(props.post._count.likes)}
                                                        </span>
                                                   )}
@@ -193,15 +193,15 @@ export default function TagPostCard({
                                                        <Button
                                                             variant="ghost"
                                                             size={"icon"}
-                                                            className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                            className="h-8 w-8 text-muted-foreground"
                                                             disabled={props.post.allowComments == null ? false : !props.post.allowComments}
                                                        >
-                                                            <Icons.commentBubble className="w-6 h-6" />
+                                                            <Icons.commentBubble className="w-5 h-5" />
                                                             <span className="sr-only">Comment</span>
                                                        </Button>
                                                   </Link>
                                                   {props.post.allowComments && (
-                                                       <span>
+                                                       <span className="text-sm">
                                                             {formatNumberWithSuffix(props.post._count.comments)}
                                                        </span>
                                                   )}
@@ -219,7 +219,7 @@ export default function TagPostCard({
                                                        <Button
                                                             variant="ghost"
                                                             size={"icon"}
-                                                            className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                            className="h-8 w-8 text-muted-foreground"
                                                             onClick={() => save(props.post.id)}
                                                        >
                                                             {isSaved ? (
@@ -234,7 +234,7 @@ export default function TagPostCard({
                                                             <Button
                                                                  variant="ghost"
                                                                  size={"icon"}
-                                                                 className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                                 className="h-8 w-8 text-muted-foreground"
                                                             >
                                                                  <Icons.bookmark className={`h-5 w-5`} />
                                                                  <span className="sr-only">Save</span>
@@ -247,7 +247,7 @@ export default function TagPostCard({
                                                        <Button
                                                             variant="ghost"
                                                             size={"icon"}
-                                                            className="hover:text-primary text-muted-foreground"
+                                                            className="text-muted-foreground"
                                                        >
                                                             <Icons.moreHorizontal className="h-5 w-5" />
                                                             <span className="sr-only">More</span>

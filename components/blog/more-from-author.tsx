@@ -68,7 +68,7 @@ export default function MoreFromAuthor({ author: initialAuthor, post: initialPos
                                                   <h2 className="text-2xl font-medium">
                                                        {author?.name || author?.username} {author?.verified &&
                                                             (
-                                                                 <Icons.verified className="h-5 w-5 mx-0.5 inline fill-primary align-middle" />
+                                                                 <Icons.verified className="h-5 w-5 mx-0.5 inline fill-verified align-middle" />
                                                             )}
                                                   </h2>
                                              </Link>
@@ -80,7 +80,7 @@ export default function MoreFromAuthor({ author: initialAuthor, post: initialPos
                                    <div>
                                         {sessionUser?.id !== author?.id && (
                                              status === "authenticated" ? (
-                                                  <Button onClick={() => handleFollow(author.id)} disabled={isFollowingLoading}>{isFollowing ? "Following" : "Follow"}</Button>
+                                                  <Button onClick={() => handleFollow(author.id)} variant={isFollowing ? 'outline' : 'default'} disabled={isFollowingLoading}>{isFollowing ? "Following" : "Follow"}</Button>
                                              ) : (
                                                   <LoginDialog>
                                                        <Button >Follow</Button>

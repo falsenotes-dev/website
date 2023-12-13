@@ -13,11 +13,13 @@ import {
 } from 'next-share'
 import { Icons } from "@/components/icon";
 import { Facebook, Link2, Linkedin } from "lucide-react";
+import {toast} from "sonner";
 
 
 export default function ShareList({ className, children, url, text, ...props }: React.ComponentPropsWithoutRef<typeof DropdownMenu> & { children: React.ReactNode, className?: string, url: string, text: string }) {
      const copylink = (link: string) => {
           navigator.clipboard.writeText(link)
+          toast('Link copied to clipboard')
      }
      return (
           <>

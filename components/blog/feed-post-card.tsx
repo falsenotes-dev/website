@@ -54,7 +54,7 @@ export default function FeedPostCard(
                 </Avatar>
                 <p className="text-sm font-normal leading-none">{props.post.author?.name || props.post.author?.username}</p>
                 {props.post.author?.verified && (
-                  <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />
+                  <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
                 )}
               </Link>
             </UserHoverCard>
@@ -76,7 +76,7 @@ export default function FeedPostCard(
                 </div>
               </div>
             </Link>
-            <div className="hidden py-8 md:block">
+            <div className="hidden pt-8 pb-4 md:pb-6 md:block">
               <div className="flex justify-between items-center">
                 <div className="flex flex-1 items-center space-x-2.5">
                   {
@@ -102,13 +102,13 @@ export default function FeedPostCard(
 
                   }
                   <div className="flex items-center space-x-1">
-                    <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground" onClick={() => save(props.post.id)} >
+                    <Button variant="ghost" size={"icon"} className="text-muted-foreground" onClick={() => save(props.post.id)} >
                       { isSaved ? <Icons.bookmarkFill className="h-5 w-5"/> : <Icons.bookmark className="h-5 w-5" /> }
                       <span className="sr-only">Save</span>
                     </Button>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground">
+                    <Button variant="ghost" size={"icon"} className="text-muted-foreground">
                       <ShareList post={props.post.id} url={`${process.env.DOMAIN}/@${props.post.author.username}/${props.post.url}`} text={props.post.title}>
                         <div>
                           <MoreHorizontal className="h-5 w-5" />
@@ -170,13 +170,13 @@ export default function FeedPostCard(
 
               }
               <div className="flex items-center space-x-1 text-muted-foreground">
-                <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground" onClick={() => save(props.post.id)}>
+                <Button variant="ghost" size={"icon"} className="text-muted-foreground" onClick={() => save(props.post.id)}>
                 { isSaved ? <Icons.bookmarkFill className="h-5 w-5" /> : <Icons.bookmark className="h-5 w-5" /> }
                   <span className="sr-only">Save</span>
                 </Button>
               </div>
               <div className="flex items-center space-x-1 text-muted-foreground">
-                <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground">
+                <Button variant="ghost" size={"icon"} className="text-muted-foreground">
                   <ShareList url={`${process.env.DOMAIN}/@${props.post.author.username}/${props.post.url}`} post={props.post.id} text={props.post.title}>
                     <div>
                       <Icons.moreHorizontal className="h-6 w-6" />

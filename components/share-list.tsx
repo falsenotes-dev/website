@@ -15,11 +15,13 @@ import { Icons } from "@/components/icon";
 import { Facebook, Linkedin } from "lucide-react";
 import { Post } from "@prisma/client";
 import { addShare } from "@/lib/prisma/add-share";
+import { toast } from "sonner";
 
 
 export default function ShareList({ className, children, url, text, post, ...props }: React.ComponentPropsWithoutRef<typeof DropdownMenu> & { children: React.ReactNode, className?: string, url: string, text: string, post: Post['id'] }) {
      const copylink = async(link: string) => {
           navigator.clipboard.writeText(link)
+          toast('Link copied to clipboard')
           await addShare(post)
      }
      return (

@@ -39,7 +39,7 @@ export function UserCard({ user, session, className }: { user: any, session: any
           <div className="md:flex justify-between w-full my-8 hidden">
                <Link href={`/@${user?.username}`} className="font-bold text-3xl flex items-center gap-1">
                          {user.name || user.username} {user?.verified && (
-                              <Icons.verified className="h-5 lg:h-6 w-5 lg:w-6 inline fill-primary align-middle" />
+                              <Icons.verified className="h-5 lg:h-6 w-5 lg:w-6 inline fill-verified align-middle" />
                          )} {user?.falsemember && (
                               <Image src='/assets/falsemember.png' alt="False icon" height={30} width={30} className="h-5 lg:h-6 w-5 lg:w-6 inline rounded border align-middle" />
                          )}
