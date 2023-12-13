@@ -134,13 +134,13 @@ export default function PostCard(
                                              <div className="flex items-center space-x-1 text-sm text-muted-foreground">
                                                   {
                                                        props.session ? (
-                                                            <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                                            <Button variant="ghost" size={"icon"} className="">
                                                                  { isSaved ? <Icons.bookmarkFill className="h-5 w-5" onClick={() => save(props.post.id)} /> : <Icons.bookmark className="h-5 w-5" onClick={() => save(props.post.id)} /> }
                                                                  <span className="sr-only">Save</span>
                                                             </Button>
                                                        ) : (
                                                             <LoginDialog>
-                                                                 <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                                                 <Button variant="ghost" size={"icon"} className="">
                                                                       <Icons.bookmark className={`h-5 w-5 ${isSaved && 'fill-current'}`} />
                                                                       <span className="sr-only">Save</span>
                                                                  </Button>
@@ -150,7 +150,7 @@ export default function PostCard(
                                              </div>
                                              <div className="flex items-center space-x-1 text-sm text-muted-foreground">
                                                   <PostMoreActions post={props.post} session={props.session}>
-                                                       <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                                       <Button variant="ghost" size={"icon"} className="">
                                                             <MoreHorizontal className="h-5 w-5" />
                                                             <span className="sr-only">More</span>
                                                        </Button>
@@ -210,12 +210,12 @@ export default function PostCard(
                                    <div className="flex items-center space-x-1 text-muted-foreground text-sm">
                                         {
                                              props.session ? (
-                                                  <Button variant="ghost" size={"icon"} className="hover:text-primary" onClick={() => save(props.post.id)}>
+                                                  <Button variant="ghost" size={"icon"} className="" onClick={() => save(props.post.id)}>
                                                        { isSaved ? <Icons.bookmarkFill className="h-5 w-5" /> : <Icons.bookmark className="h-5 w-5" /> }
                                                   </Button>
                                              ) : (
                                                   <LoginDialog>
-                                                       <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                                       <Button variant="ghost" size={"icon"} className="">
                                                             <Icons.bookmark className={`h-5 w-5 ${isSaved && 'fill-current'}`} />
                                                        </Button>
                                                   </LoginDialog>
@@ -224,7 +224,7 @@ export default function PostCard(
                                    </div>
                                    <div className="flex items-center space-x-1 text-muted-foreground text-sm">
                                         <PostMoreActions post={props.post} session={props.session}>
-                                             <Button variant="ghost" size={"icon"} className="hover:text-primary">
+                                             <Button variant="ghost" size={"icon"} className="">
                                                   <MoreHorizontal className="h-5 w-5" />
                                              </Button>
                                         </PostMoreActions>

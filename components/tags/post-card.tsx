@@ -159,7 +159,7 @@ export default function TagPostCard({
                                                        <Button
                                                             variant="ghost"
                                                             size={"icon"}
-                                                            className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                            className="h-8 w-8 text-muted-foreground"
                                                             onClick={() => like(props.post.id)}
                                                             disabled={(props.session.id === props.post.author.id) || (props.post.allowLikes == null ? false : !props.post.allowLikes)}
                                                        >
@@ -173,7 +173,7 @@ export default function TagPostCard({
                                                             <Button
                                                                  variant="ghost"
                                                                  size={"icon"}
-                                                                 className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                                 className="h-8 w-8 text-muted-foreground"
                                                             >
                                                                  <Icons.like className={`w-5 h-5`} />
                                                                  <span className="sr-only">Like</span>
@@ -193,7 +193,7 @@ export default function TagPostCard({
                                                        <Button
                                                             variant="ghost"
                                                             size={"icon"}
-                                                            className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                            className="h-8 w-8 text-muted-foreground"
                                                             disabled={props.post.allowComments == null ? false : !props.post.allowComments}
                                                        >
                                                             <Icons.commentBubble className="w-5 h-5" />
@@ -219,7 +219,7 @@ export default function TagPostCard({
                                                        <Button
                                                             variant="ghost"
                                                             size={"icon"}
-                                                            className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                            className="h-8 w-8 text-muted-foreground"
                                                             onClick={() => save(props.post.id)}
                                                        >
                                                             {isSaved ? (
@@ -234,7 +234,7 @@ export default function TagPostCard({
                                                             <Button
                                                                  variant="ghost"
                                                                  size={"icon"}
-                                                                 className="hover:text-primary h-8 w-8 text-muted-foreground"
+                                                                 className="h-8 w-8 text-muted-foreground"
                                                             >
                                                                  <Icons.bookmark className={`h-5 w-5`} />
                                                                  <span className="sr-only">Save</span>
@@ -247,7 +247,7 @@ export default function TagPostCard({
                                                        <Button
                                                             variant="ghost"
                                                             size={"icon"}
-                                                            className="hover:text-primary text-muted-foreground"
+                                                            className="text-muted-foreground"
                                                        >
                                                             <Icons.moreHorizontal className="h-5 w-5" />
                                                             <span className="sr-only">More</span>

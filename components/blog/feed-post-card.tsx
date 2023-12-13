@@ -102,13 +102,13 @@ export default function FeedPostCard(
 
                   }
                   <div className="flex items-center space-x-1">
-                    <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground" onClick={() => save(props.post.id)} >
+                    <Button variant="ghost" size={"icon"} className="text-muted-foreground" onClick={() => save(props.post.id)} >
                       { isSaved ? <Icons.bookmarkFill className="h-5 w-5"/> : <Icons.bookmark className="h-5 w-5" /> }
                       <span className="sr-only">Save</span>
                     </Button>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground">
+                    <Button variant="ghost" size={"icon"} className="text-muted-foreground">
                       <ShareList post={props.post.id} url={`${process.env.DOMAIN}/@${props.post.author.username}/${props.post.url}`} text={props.post.title}>
                         <div>
                           <MoreHorizontal className="h-5 w-5" />
@@ -170,13 +170,13 @@ export default function FeedPostCard(
 
               }
               <div className="flex items-center space-x-1 text-muted-foreground">
-                <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground" onClick={() => save(props.post.id)}>
+                <Button variant="ghost" size={"icon"} className="text-muted-foreground" onClick={() => save(props.post.id)}>
                 { isSaved ? <Icons.bookmarkFill className="h-5 w-5" /> : <Icons.bookmark className="h-5 w-5" /> }
                   <span className="sr-only">Save</span>
                 </Button>
               </div>
               <div className="flex items-center space-x-1 text-muted-foreground">
-                <Button variant="ghost" size={"icon"} className="hover:text-primary text-muted-foreground">
+                <Button variant="ghost" size={"icon"} className="text-muted-foreground">
                   <ShareList url={`${process.env.DOMAIN}/@${props.post.author.username}/${props.post.url}`} post={props.post.id} text={props.post.title}>
                     <div>
                       <Icons.moreHorizontal className="h-6 w-6" />
