@@ -167,7 +167,6 @@ export default async function Page({
             <UserDetails
               user={user}
               followers={followers}
-              followings={following}
               session={sessionUserName}
             />
           </div>

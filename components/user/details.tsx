@@ -36,14 +36,12 @@ export default function UserDetails({
   children,
   user,
   followers,
-  followings,
   session,
 }: {
   children?: React.ReactNode;
   className?: string;
   user: any;
   followers: any;
-  followings: any;
   session: any;
 }) {
   const [isFollowing, setIsFollowing] = useState<boolean | null>(
