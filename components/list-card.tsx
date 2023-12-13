@@ -34,7 +34,7 @@ export default function ListCard({
                   )}
                 </p>
               </Link>
-              <Link href={`/@${list.author.username}/${list.slug}`}>
+              <Link href={`/list/${list.slug}`}>
                 <CardTitle className="line-clamp-1 my-2">{list.name}</CardTitle>
                 {list.description && (
                   <CardDescription className="line-clamp-2">
@@ -53,7 +53,7 @@ export default function ListCard({
                 </div>
               </div>
             </CardHeader>
-            <Link href={`/@${list.author.username}/${list.slug}`} className="pointer-events-none">
+            <Link href={`/list/${list.slug}`} className="pointer-events-none">
                <div className="relative flex justify-end w-80 overflow-hidden h-full">
                     <div className="relative bg-muted w-full z-[3] border-r-[3px] border-background pl-0">
                          <div className="h-full w-full">

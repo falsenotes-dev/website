@@ -1,4 +1,3 @@
-"use server";
 import CreateListButton from "@/components/create-list-button";
 import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { getSessionUser } from "@/components/get-session-user";
