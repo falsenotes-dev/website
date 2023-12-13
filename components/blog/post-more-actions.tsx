@@ -84,7 +84,7 @@ export default function PostMoreActions({
               ) : (
                 <DropdownMenuItem onSelect={() => setShowPinAlert(true)}>
                   <Icons.pin className="mr-2 h-4 w-4" />
-                  <span>Pin post</span>
+                  <span>Pin to Top</span>
                 </DropdownMenuItem>
               )}
               {post.allowComments ? (
