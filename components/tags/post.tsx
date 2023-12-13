@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function TagPopularPosts({ posts: initialPosts, tag, session }: { posts: any, tag: any, session: any }) {
+export default function TagPopularPosts({ posts: initialPosts, tag, session, list }: { posts: any, tag: any, session: any, list: any }) {
      const [posts, setPosts] = useState<Array<any>>(initialPosts);
      useEffect(() => {
           setPosts(initialPosts)
@@ -21,10 +21,10 @@ export default function TagPopularPosts({ posts: initialPosts, tag, session }: {
                     </div>
                     <div className="grid md:grid-cols-6 gap-10">
                          {firstTwoPosts.map((post: any) => (
-                              <TagPostCard key={post.id} post={post} session={session} className="md:col-span-3  col-span-6" />
+                              <TagPostCard key={post.id} post={post} session={session} list={list} className="md:col-span-3  col-span-6" />
                          ))}
                          {restPosts.map((post: any) => (
-                              <TagPostCard key={post.id} post={post} session={session} className="lg:col-span-2 md:col-span-3 col-span-6" />
+                              <TagPostCard key={post.id} post={post} session={session} list={list} className="lg:col-span-2 md:col-span-3 col-span-6" />
                          ))}
                     </div>
                     {/* <div className="mt-20">

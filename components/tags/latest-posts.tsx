@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
 
-export default function TagLatestPosts({ posts, tag, session }: { posts: any, tag: any, session: any }) {
+export default function TagLatestPosts({ posts, tag, session, list }: { posts: any, tag: any, session: any, list: any }) {
      return (
           <div className="flex justify-center">
                <div className="mb-20 w-full">
@@ -19,7 +19,7 @@ export default function TagLatestPosts({ posts, tag, session }: { posts: any, ta
                                    {
                                         posts.map((post: any) => (
                                              <>
-                                                  <PostCard key={post.id} post={post} session={session} />
+                                                  <PostCard key={post.id} post={post} session={session} list={list} />
                                              </>
                                         ))
                                    }

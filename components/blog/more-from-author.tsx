@@ -12,7 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Icons } from "../icon";
 import { validate } from "@/lib/revalidate";
 
-export default function MoreFromAuthor({ author: initialAuthor, post: initialPost, sessionUser }: { author: any, post: any, sessionUser: any }) {
+export default function MoreFromAuthor({ author: initialAuthor, post: initialPost, sessionUser, list }: { author: any, post: any, sessionUser: any, list: any }) {
      const { status } = useSession();
 
      const [author, setAuthor] = useState(initialAuthor);
@@ -99,7 +99,7 @@ export default function MoreFromAuthor({ author: initialAuthor, post: initialPos
                                    <div className="grid md:grid-cols-2 gap-4">
                                         {
                                              post?.map((p: any) => (
-                                                  <TagPostCard key={p.id} post={p} session={sessionUser} />
+                                                  <TagPostCard key={p.id} post={p} session={sessionUser} list={list} />
                                              ))
                                         }
                                    </div>

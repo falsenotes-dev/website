@@ -13,7 +13,7 @@ import { Button } from '../ui/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function InfinitiveScrollFeed({ initialFeed, tag, session }: { initialFeed: any | undefined, tag: string | undefined, session: any }) {
+export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }: { initialFeed: any | undefined, tag: string | undefined, session: any, list: any }) {
   const [feed, setFeed] = useState<Array<any>>(initialFeed)
   const [page, setPage] = useState<number>(0)
   const [ref, inView] = useInView()
@@ -49,6 +49,7 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session }: { in
             <FeedPostCard
               post={post}
               session={session}
+              list={list}
             />
           </React.Fragment>
         ))}

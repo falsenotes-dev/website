@@ -5,7 +5,7 @@ import postgres from "@/lib/postgres";
 import { UserDetails, UserPosts } from "@/components/user";
 import UserTab from "@/components/user/tabs";
 import { getPost } from "@/lib/prisma/posts";
-import { getBookmarks, getHistory } from "@/lib/prisma/session";
+import { getBookmarks, getHistory, getLists } from "@/lib/prisma/session";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import UserBookmarks from "@/components/user/bookmark";
@@ -153,6 +153,7 @@ export default async function Page({
     limit: 10,
   });
   const { history } = await getHistory({ id: sessionUserName?.id, limit: 10 });
+  const list = await getLists({ id: sessionUserName?.id });
   return (
     <div className="md:container mx-auto px-4 pt-5">
       <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
@@ -217,6 +218,7 @@ export default async function Page({
                 sessionUser={sessionUserName}
                 query={whereQuery}
                 search={search}
+                list={list}
                 className="w-full"
               />
             </TabsContent>
@@ -230,6 +232,7 @@ export default async function Page({
                     posts={bookmarks}
                     user={user}
                     sessionUser={sessionUserName}
+                    list={list}
                     className="w-full"
                   />
                 </TabsContent>

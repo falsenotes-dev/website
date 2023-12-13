@@ -5,6 +5,7 @@ import { getSessionUser } from "@/components/get-session-user";
 import { Separator } from "@/components/ui/separator";
 import postgres from "@/lib/postgres";
 import { getForYou } from "@/lib/prisma/feed";
+import { getLists } from "@/lib/prisma/session";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -242,6 +243,8 @@ export default async function PostLayout({ children, params }: Props) {
       ? relatedPosts
       : forYou.filter((p: any) => p.id !== post.id);
   posts.length % 2 !== 0 && posts.pop();
+
+  const list = await getLists({ id: sessionUser?.id });
   return (
     <>
       <div
@@ -260,6 +263,7 @@ export default async function PostLayout({ children, params }: Props) {
                   post={authorPosts}
                   author={author}
                   sessionUser={sessionUser}
+                  list={list}
                 />
                 {posts?.length > 0 && (
                   <>
@@ -268,6 +272,7 @@ export default async function PostLayout({ children, params }: Props) {
                       posts={posts}
                       post={post}
                       session={sessionUser}
+                      list={list}
                     />
                   </>
                 )}

@@ -27,6 +27,7 @@ import { revalidatePath } from "next/cache";
 import { validate } from "@/lib/revalidate";
 import { Icons } from "../icon";
 import PostAnalyticsDialog from "./post-analytics-dialog";
+import ListPopover from "../list-popover";
 
 export default function PostTabs({
   post: initialPost,
@@ -34,12 +35,14 @@ export default function PostTabs({
   session,
   author,
   onClicked,
+  list,
 }: {
   post: any;
   className?: string;
   session: any;
   author: any;
   onClicked: () => void;
+  list: any;
 }) {
   const [post, setPost] = useState<any>(initialPost);
   useEffect(() => {
@@ -69,9 +72,11 @@ export default function PostTabs({
   const isLiked = post?.likes?.some(
     (like: any) => like.authorId === session?.id
   );
-  const isSaved = post?.savedUsers?.some(
-    (savedUser: any) => savedUser.userId === session?.id
-  );
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  useEffect(() => {
+    setIsSaved(list?.bookmarks?.some((bookmark: any) => bookmark.postId === post?.id) || list?.lists?.some((list: any) => list.posts?.some((post: any) => post.id === post?.id)));
+  }, [list, post?.id]);
+  
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   return (
     <>
@@ -131,11 +136,11 @@ export default function PostTabs({
         </div>
         <div className="flex items-center gap-1.5">
           {session ? (
+            <ListPopover lists={list.lists} session={session} postId={post.id} bookmarks={list.bookmarks} >
             <Button
               className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
               size={"icon"}
               variant={"ghost"}
-              onClick={() => save(post.id)}
             >
               {isSaved ? (
                 <Icons.bookmarkFill className="h-5 w-5" />
@@ -144,6 +149,7 @@ export default function PostTabs({
               )}
               <span className="sr-only">Save</span>
             </Button>
+            </ListPopover>
           ) : (
             <LoginDialog>
               <Button

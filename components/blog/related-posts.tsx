@@ -3,7 +3,7 @@ import TagPostCard from "../tags/post-card";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 
-export default function RelatedPosts({ posts, post, session }: { posts: any, post: any, session: any }) {
+export default function RelatedPosts({ posts, post, session, list }: { posts: any, post: any, session: any, list: any }) {
      return (
           <>
                <div className="max-w-[680px] mx-auto">
@@ -12,7 +12,7 @@ export default function RelatedPosts({ posts, post, session }: { posts: any, pos
                          <div className="grid md:grid-cols-2 gap-4">
                               {
                                    posts?.map((post: any) => (
-                                        <TagPostCard post={post} session={session} key={post.id} />
+                                        <TagPostCard post={post} session={session} key={post.id} list={list} />
                                    ))
                               }
                          </div>

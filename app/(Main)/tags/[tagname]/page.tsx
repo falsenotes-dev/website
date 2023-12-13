@@ -7,6 +7,7 @@ import TagPopularPosts from "@/components/tags/post";
 import TagFollowers from "@/components/tags/users";
 import { Separator } from "@/components/ui/separator";
 import postgres from "@/lib/postgres";
+import { getLists } from "@/lib/prisma/session";
 import { getFollowersByTag } from "@/lib/prisma/tags";
 import { redirect } from "next/navigation";
 
@@ -76,6 +77,7 @@ export default async function TagPage({ params }: { params: { tagname: string } 
      });
      if (!tag) redirect("/404");
      const session = await getSessionUser();
+     const list = await getLists({ id: session?.id });
 
      const { followers } = await getFollowersByTag({ id: tag.id, limit: 6, session: session?.id });
      return (
@@ -85,7 +87,7 @@ export default async function TagPage({ params }: { params: { tagname: string } 
                     {popularPosts.length > 0 && (
                          <>
                               <Separator />
-                              <TagPopularPosts posts={popularPosts} tag={tag} session={session} />
+                              <TagPopularPosts posts={popularPosts} tag={tag} session={session} list={list} />
                          </>
                     )}
                     {
@@ -100,7 +102,7 @@ export default async function TagPage({ params }: { params: { tagname: string } 
                          latestPosts.length > 0 && (
                               <>
                                    <Separator />
-                                   <TagLatestPosts posts={latestPosts} tag={tag} session={session} />
+                                   <TagLatestPosts posts={latestPosts} tag={tag} session={session} list={list} />
                               </>
                          )
                     }

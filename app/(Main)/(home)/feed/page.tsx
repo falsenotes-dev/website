@@ -12,7 +12,7 @@ import { redirect } from 'next/navigation';
 import { fetchFollowingTags } from '@/components/get-following-tags';
 import { getSession } from 'next-auth/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getBookmarks, getFollowings } from '@/lib/prisma/session';
+import { getBookmarks, getFollowings, getLists } from '@/lib/prisma/session';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { dateFormat } from '@/lib/format-date';
 import { Icons } from '@/components/icon';
@@ -37,12 +37,13 @@ export default async function Feed({
 
   const tab = typeof searchParams.tab === 'string' ? searchParams.tab : undefined
   const feed = await fetchFeed({ page: 0, tab, limit: 10 });
+  const userLists = await getLists({ id: session?.id });
 
   return (
     <>
       <FeedTabs tabs={userFollowingsTags} activeTab={tab} />
       <div className="pt-10">
-        <InfinitiveScrollFeed initialFeed={feed} tag={tab} session={session} />
+        <InfinitiveScrollFeed initialFeed={feed} tag={tab} session={session} list={userLists} />
       </div>
     </>
   )
