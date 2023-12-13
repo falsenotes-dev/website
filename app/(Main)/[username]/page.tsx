@@ -16,6 +16,7 @@ import Image from "next/image";
 import { UserCard } from "@/components/user/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import UserHistory from "@/components/user/history";
 
 export default async function Page({
   params,
@@ -229,16 +230,14 @@ export default async function Page({
                     posts={bookmarks}
                     user={user}
                     sessionUser={sessionUserName}
-                    tab={`bookmarks`}
                     className="w-full"
                   />
                 </TabsContent>
                 <TabsContent value="reading-history">
-                  <UserBookmarks
+                  <UserHistory
                     posts={history}
                     user={user}
                     sessionUser={sessionUserName}
-                    tab={`history`}
                     className="w-full"
                   />
                 </TabsContent>
