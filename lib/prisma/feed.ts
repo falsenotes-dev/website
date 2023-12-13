@@ -200,6 +200,8 @@ const baseQuery = {
     updatedAt: true,
     publishedAt: true,
     readingTime: true,
+    allowLikes: true,
+    allowComments: true,
     views: true,
     author: {
       select: {
