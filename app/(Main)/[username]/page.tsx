@@ -191,22 +191,6 @@ export default async function Page({
                 >
                   About
                 </TabsTrigger>
-                {sessionUserName?.id === user?.id && (
-                  <>
-                    <TabsTrigger
-                      value="bookmarks"
-                      className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]shadow-sm data-[state=active]:text-secondary"
-                    >
-                      Bookmarks
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="reading-history"
-                      className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]:shadow-sm data-[state=active]:text-secondary"
-                    >
-                      Reading History
-                    </TabsTrigger>
-                  </>
-                )}
               </TabsList>
               <ScrollBar orientation="horizontal" />
             </ScrollArea>
@@ -225,27 +209,6 @@ export default async function Page({
             <TabsContent value="about">
               <UserAbout user={user} session={sessionUserName} />
             </TabsContent>
-            {sessionUserName?.id === user?.id && (
-              <>
-                <TabsContent value="bookmarks" className="w-full">
-                  <UserBookmarks
-                    posts={bookmarks}
-                    user={user}
-                    sessionUser={sessionUserName}
-                    list={list}
-                    className="w-full"
-                  />
-                </TabsContent>
-                <TabsContent value="reading-history">
-                  <UserHistory
-                    posts={history}
-                    user={user}
-                    sessionUser={sessionUserName}
-                    className="w-full"
-                  />
-                </TabsContent>
-              </>
-            )}
           </Tabs>
         </div>
       </div>
