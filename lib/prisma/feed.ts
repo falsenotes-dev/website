@@ -215,6 +215,7 @@ const baseQuery = {
         Followings: true,
       },
     },
+    likes: true,
     savedUsers: { select: { userId: true } },
     _count: {
       select: {
