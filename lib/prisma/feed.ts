@@ -200,6 +200,8 @@ const baseQuery = {
     updatedAt: true,
     publishedAt: true,
     readingTime: true,
+    allowLikes: true,
+    allowComments: true,
     views: true,
     author: {
       select: {
@@ -302,7 +304,7 @@ const sortedTagIds = Object.entries(tagCounts)
 const uniquePosts = posts.filter((post, index) => posts.findIndex((p) => p.id === post.id) === index);
 
 return fetchFeed({
-  where: { id: { in: uniquePosts.map((post) => post.id) }, published: true },
+  where: { id: { in: uniquePosts.map((post) => post.id) }, published: true, authorId: { not: id } },
   ...baseQuery,
   take: Number(limit),
   skip: page * Number(limit),
@@ -361,7 +363,7 @@ export const getFeed = async ({ page = 0, tab, limit = 10 }: { page?: number | u
       ...baseQuery,
       take: Number(limit),
       skip: page * Number(limit),
-      where: { id: { in: postIds }, published: true },
+      where: { id: { in: postIds }, published: true, authorId: { not: id } },
     });
   } 
 };

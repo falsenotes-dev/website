@@ -41,6 +41,8 @@ model User {
   readinghistory ReadingHistory[]
   publications   PublicationAuthor[]
   followingPubs  PublicationFollow[]
+  lists          List[]
+  savedLists     ListSaving[]
 
   @@map("users")
 }
@@ -101,6 +103,7 @@ model Post {
   allowLikes    Boolean          @default(true)
   publication   Publication?     @relation(fields: [publicationId], references: [id])
   publicationId String?
+  lists         PostList[]
 
   @@index([createdAt])
   @@map("posts")
@@ -131,6 +134,46 @@ model PostShare {
   updatedAt DateTime @updatedAt
 
   @@map("postshares")
+}
+
+model List {
+  id          String     @id @default(uuid()) @map("_id")
+  name        String
+  description String?
+  visibility  String     @default("public")
+  sortOder    String     @default("newest")
+  author      User       @relation(fields: [authorId], references: [id])
+  authorId    String
+  posts       PostList[]
+  savedUsers  ListSaving[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("lists")
+}
+
+model PostList {
+  id        String   @id @default(uuid()) @map("_id")
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  list      List     @relation(fields: [listId], references: [id])
+  listId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("postlists")
+}
+
+model ListSaving {
+  id        String   @id @default(uuid()) @map("_id")
+  list      List     @relation(fields: [listId], references: [id])
+  listId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("listsaving")
 }
 
 model Comment {

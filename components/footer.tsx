@@ -24,9 +24,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
                          <Link target="_blank" href="/twitter">Twitter</Link>
                          <Link target="_blank" href="/instagram">Instagram</Link>
                     </div>
-                    <div className="">
-                         <ModeToggle />
-                    </div>
+                    <ModeToggle />
                </footer>
           </>
      )

@@ -84,7 +84,7 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                                    }
                                    {
                                         user.Followers?.length === 0 && (
-                                             <EmptyPlaceholder>
+                                             <EmptyPlaceholder className="border-none">
                                                   <EmptyPlaceholder.Icon name="users" strokeWidth={1.25} />
                                                   <EmptyPlaceholder.Title>No followers</EmptyPlaceholder.Title>
                                                   <EmptyPlaceholder.Description>
@@ -140,7 +140,7 @@ export function UserAbout({ user, className, session }: { user: any, className?:
 
                                    {
                                         user.Followings?.length === 0 && (
-                                             <EmptyPlaceholder>
+                                             <EmptyPlaceholder className="border-none">
                                                   <EmptyPlaceholder.Icon name="users" strokeWidth={1.25} />
                                                   <EmptyPlaceholder.Title>No followings</EmptyPlaceholder.Title>
                                                   <EmptyPlaceholder.Description>
