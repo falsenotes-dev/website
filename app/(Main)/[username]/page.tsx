@@ -178,17 +178,15 @@ export default async function Page({
           <UserCard user={user} session={sessionUserName} />
           <Tabs className="w-full" defaultValue={tab || "posts"}>
             <ScrollArea className="w-full">
-              <TabsList className="bg-background w-full py-4 justify-start h-fit rounded-none gap-2">
+              <TabsList>
                 <TabsTrigger
                   value="posts"
-                  className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]:shadow-sm data-[state=active]:text-secondary"
                 >
                   Posts
                 </TabsTrigger>
                 <TabsTrigger
                   value="about"
-                  className="bg-muted data-[state=active]:bg-secondary-foreground data-[state=active]shadow-sm data-[state=active]:text-secondary"
-                >
+                  >
                   About
                 </TabsTrigger>
               </TabsList>
@@ -203,7 +201,7 @@ export default async function Page({
                 query={whereQuery}
                 search={search}
                 list={list}
-                className="w-full"
+                className="w-full mt-6"
               />
             </TabsContent>
             <TabsContent value="about">
