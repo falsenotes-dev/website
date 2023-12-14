@@ -19,9 +19,9 @@ export default function ListCard({
   return (
     <>
       <Card {...props}>
-        <CardContent className="py-0 pr-0">
+        <CardContent className="py-0 pr-0 md:pl-6 px-0">
           <div className="flex md:flex-row flex-col">
-            <CardHeader className="w-full px-0 gap-4 h-full">
+            <CardHeader className="w-full md:px-0 pr-6 gap-4 h-full">
               <Link href={`/@${list.author.username}`} className="flex gap-2">
                 <Avatar className="h-5 w-5">
                   <AvatarImage src={list.author.image} />
@@ -53,9 +53,9 @@ export default function ListCard({
                 </div>
               </div>
             </CardHeader>
-            <Link href={`/list/${list.slug}`} className="pointer-events-none">
-               <div className="relative flex justify-end w-80 overflow-hidden h-full">
-                    <div className="relative bg-muted w-full z-[3] border-r-[3px] border-background pl-0">
+            <Link href={`/list/${list.slug}`} className="pointer-events-none rounded-b-lg">
+               <div className="relative flex justify-end md:w-80 w-full overflow-hidden h-full">
+                    <div className="relative bg-muted z-[3] border-r-[3px] border-background w-full pl-0 rounded-bl-lg md:rounded-none min-h-[8rem] h-full">
                          <div className="h-full w-full">
                               {
                                    list.posts.filter((p: any) => p.post.cover)[0] && (
@@ -63,16 +63,13 @@ export default function ListCard({
                                              src={list.posts.filter((p: any) => p.post.cover)[0].post.cover!}
                                              fill
                                              alt={'Read Later'}
-                                             placeholder={`data:image/svg+xml;base64,${toBase64(
-                                                  shimmer(1920, 1080)
-                                             )}`}
-                                             className="object-cover !relative h-full"
+                                             className="object-cover !relative h-full rounded-bl-lg md:rounded-none"
                                         />
                                    )
                               }
                          </div>
                     </div>
-                    <div className="relative bg-muted w-full z-[2] border-r-[3px] border-background pl-2 -ml-20">
+                    <div className="relative bg-muted w-full z-[2] border-r-[3px] border-background pl-2 -ml-20 min-h-[8rem] h-full">
                          <div className="h-full w-full">
                          {
                               list.posts.filter((p: any) => p.post.cover)[1] && (
@@ -80,27 +77,21 @@ export default function ListCard({
                                         src={list.posts.filter((p: any) => p.post.cover)[1].post.cover!}
                                         fill
                                         alt={'Read Later'}
-                                        placeholder={`data:image/svg+xml;base64,${toBase64(
-                                             shimmer(1920, 1080)
-                                        )}`}
                                         className="object-cover !relative h-full"
                                    />
                               )
                          }
                          </div>
                     </div>
-                    <div className="relative bg-muted w-full z-[1] border-none pl-2 -ml-32 rounded-lg">
-                         <div className="h-full w-full rounded-lg">
+                    <div className="relative bg-muted z-[1] border-none pl-2 -ml-32 w-full rounded-br-lg md:rounded-r-lg min-h-[8rem] h-full">
+                         <div className="h-full w-full">
                          {
                               list.posts.filter((p: any) => p.post.cover)[2] && (
                                    <Image
                                         src={list.posts.filter((p: any) => p.post.cover)[2].post.cover!}
                                         fill
                                         alt={'Read Later'}
-                                        placeholder={`data:image/svg+xml;base64,${toBase64(
-                                             shimmer(1920, 1080)
-                                        )}`}
-                                        className="object-cover !relative h-full rounded-lg"
+                                        className="object-cover !relative h-full rounded-br-lg md:rounded-r-lg"
                                    />
                               )
                          }
