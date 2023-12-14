@@ -121,6 +121,11 @@ export default async function ListPage({
                     <h2 className="text-3xl line-clamp-2 font-bold">
                       {list.name}
                     </h2>
+                    {list.description && (
+                      <p className="text-lg text-muted-foreground line-clamp-2">
+                        {list.description}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
