@@ -276,3 +276,57 @@ export const searchLists = async ({ search, limit = 10, page = 0 }: { search?: s
 
   return { lists: JSON.parse(JSON.stringify(lists))};
 }
+
+// get list by its post's tags
+export const getListByTags = async ({ tags, limit = 10, page = 0 }: { tags: string[], limit?: number, page?: number }) => {
+  const lists = await postgres.list.findMany({
+    where: {
+      visibility: 'public',
+      posts: {
+        some: {
+          post: {
+            tags: {
+              some: {
+                tag: {
+                  name: {
+                    in: tags,
+                  },
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    take: limit,
+    skip: page * limit,
+    include: {
+      _count: { select: { posts: true, savedUsers: true } },
+    },
+  });
+}
+
+// get list by its post's tag id
+export const getListByTagId = async ({ tagId, limit = 10, page = 0 }: { tagId: string, limit?: number, page?: number }) => {
+  const lists = await postgres.list.findMany({
+    where: {
+      visibility: 'public',
+      posts: {
+        some: {
+          post: {
+            tags: {
+              some: {
+                tagId,
+              }
+            }
+          }
+        }
+      }
+    },
+    take: limit,
+    skip: page * limit,
+    include: {
+      _count: { select: { posts: true, savedUsers: true } },
+    },
+  });
+}
