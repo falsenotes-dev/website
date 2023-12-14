@@ -13,6 +13,7 @@ import { validate } from "@/lib/revalidate";
 import { Icons } from "./icon";
 import { List } from "@prisma/client";
 import { deleteList } from "@/lib/prisma/list";
+import { toast } from "sonner";
 
 
 export default function ListDeleteDialog({ list, ...props }: React.ComponentPropsWithoutRef<typeof AlertDialog> & { list: List }) {
@@ -38,6 +39,9 @@ export default function ListDeleteDialog({ list, ...props }: React.ComponentProp
                 async () => {
                   const res = await deleteList({ id: list?.id })
                   await validate(pathname)
+                  if (!res.success) {
+                    toast.error(res.message)
+                  }
                 }
               } className="bg-destructive focus:ring-destructive">Delete</AlertDialogAction>
             </AlertDialogFooter>

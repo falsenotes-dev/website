@@ -80,6 +80,14 @@ export const deleteList = async ({ id }: { id: string }) => {
   }
 
   try {
+    await postgres.postList.deleteMany({
+      where: { listId: id },
+    });
+
+    await postgres.listSaving.deleteMany({
+      where: { listId: id },
+    });
+    
     await postgres.list.delete({
       where: { id },
     });
