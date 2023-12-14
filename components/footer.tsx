@@ -23,6 +23,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
                          <Link target="_blank" href="/github">GitHub</Link>
                          <Link target="_blank" href="/twitter">Twitter</Link>
                          <Link target="_blank" href="/instagram">Instagram</Link>
+                         <Link target="_blank" href="/donate">Donate</Link>
                     </div>
                     <ModeToggle />
                </footer>
