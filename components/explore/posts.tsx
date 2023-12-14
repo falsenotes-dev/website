@@ -9,7 +9,7 @@ import { Separator } from '@radix-ui/react-context-menu';
 import { Button } from '../ui/button';
 import { EmptyPlaceholder } from '../empty-placeholder';
 
-export default function Posts({ initialPosts, search, session }: { initialPosts: any | undefined, search?: string | undefined, session: any }) {
+export default function Posts({ initialPosts, search, session, list }: { initialPosts: any | undefined, search?: string | undefined, session: any, list: any }) {
      const [posts, setposts] = useState<Array<any>>(initialPosts)
      const [page, setPage] = useState<number>(0)
      const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -46,6 +46,7 @@ export default function Posts({ initialPosts, search, session }: { initialPosts:
                                         key={post.id}
                                         post={post}
                                         session={session}
+                                        list={list}
                                         className='bg-transparent border-none shadow-none md:-px-4'
                                    />
                                    <Separator />

@@ -8,6 +8,7 @@ import ExploreComponent from "@/components/explore/tab-content"
 import ExploreTab from "@/components/explore/tab"
 import Users from "@/components/explore/users"
 import Tags from "@/components/explore/tags"
+import { getLists } from "@/lib/prisma/session"
 
 export default async function Explore({
      searchParams
@@ -25,7 +26,7 @@ export default async function Explore({
      tab === 'users' && (users = await getUsers({ search, limit: 10 }).then(res => res.users))
      tab === 'tags' && (tags = await searchTags({ search, limit: 10 }).then(res => res.tags))
      const session = await getSessionUser()
-     // ...
+     const list = await getLists({ id: session?.id })
 
      return (
           <>
@@ -37,7 +38,7 @@ export default async function Explore({
                          <ExploreComponent users={users} posts={posts} tags={tags} session={session} search={search} className="md:w-[600px]" />
                     )}
                     {tab === 'posts' && (
-                         <Posts initialPosts={posts} session={session} search={search} />
+                         <Posts initialPosts={posts} session={session} search={search} list={list} />
                     )}
                     {tab === 'users' && (
                          <Users users={users} session={session} search={search} />
