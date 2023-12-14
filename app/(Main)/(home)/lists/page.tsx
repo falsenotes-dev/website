@@ -47,8 +47,6 @@ export default async function ListsPage() {
     },
   });
 
-  console.log(lists);
-
   const bookmarks = await postgres.bookmark.findMany({
     where: {
       userId: session?.id,
