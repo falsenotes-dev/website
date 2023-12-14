@@ -68,3 +68,18 @@ export async function getTagsForSite() {
     }
   )();
 }
+
+export async function getListsForSite() {
+  return await unstable_cache(async () => {
+    return postgres.list.findMany({
+      where: {
+        visibility: "public",
+      },
+      select: {
+        slug: true,
+        updatedAt: true,
+        createdAt: true,
+      },
+    });
+  })();
+}
