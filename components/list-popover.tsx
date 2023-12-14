@@ -30,6 +30,12 @@ export default function ListPopover({
     bookmarks?.some((bookmark: any) => bookmark.postId === postId)
   );
 
+  React.useEffect(() => {
+     setIsSavedInBookmarks(
+       bookmarks?.some((bookmark: any) => bookmark.postId === postId)
+     );
+       }, [bookmarks, postId]);
+
   const [createList, setCreateList] = React.useState(false);
 
   const pathname = usePathname();

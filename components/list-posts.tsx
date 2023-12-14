@@ -5,7 +5,7 @@ import PostCard from "./tags/post-card-v2";
 import { buttonVariants } from "./ui/button";
 import Link from "next/link";
 
-export default function ListPosts({ list, session }: { list: any, session: any}) {
+export default function ListPosts({ list, session, lists }: { list: any, session: any, lists: any }) {
      return (
           <div className="lg:px-6 w-full lg:mb-6 md:mb-5 mb-4">
                 {list.posts?.length > 0 ? (
@@ -15,7 +15,7 @@ export default function ListPosts({ list, session }: { list: any, session: any})
                         <PostCard
                           post={article.post}
                           session={session}
-                          list={list}
+                          list={lists}
                         />
                       </>
                     ))}

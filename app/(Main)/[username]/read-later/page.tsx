@@ -6,6 +6,7 @@ import ReadLaterPosts from "@/components/read-later-posts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { dateFormat } from "@/lib/format-date";
 import postgres from "@/lib/postgres";
+import { getLists } from "@/lib/prisma/session";
 
 export default async function ListPage() {
   const session = await getSessionUser();
@@ -53,6 +54,9 @@ export default async function ListPage() {
            });
 
   if (!list) return null;
+  if (!session) return null;
+
+  const userLists = await getLists({ id: session?.id });
 
   return (
     <>
@@ -105,7 +109,7 @@ export default async function ListPage() {
                   </div>
                 </div>
               </div>
-              <ReadLaterPosts list={list} session={session} />
+              <ReadLaterPosts list={list} session={session} lists={userLists} />
             </div>
           </div>
         </div>

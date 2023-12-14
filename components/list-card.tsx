@@ -54,8 +54,8 @@ export default function ListCard({
               </div>
             </CardHeader>
             <Link href={`/list/${list.slug}`} className="pointer-events-none rounded-b-lg">
-               <div className="relative flex justify-end md:w-80 w-full overflow-hidden h-full">
-                    <div className="relative bg-muted z-[3] border-r-[3px] border-background w-full pl-0 rounded-bl-lg md:rounded-none min-h-[8rem] h-full">
+               <div className="relative flex justify-end md:w-80 w-full overflow-hidden h-full min-h-[8rem]">
+                    <div className="relative bg-muted z-[3] border-r-[3px] border-background w-full pl-0 rounded-bl-lg md:rounded-none min-h-[8rem] self-stretch">
                          <div className="h-full w-full">
                               {
                                    list.posts.filter((p: any) => p.post.cover)[0] && (
@@ -69,7 +69,7 @@ export default function ListCard({
                               }
                          </div>
                     </div>
-                    <div className="relative bg-muted w-full z-[2] border-r-[3px] border-background pl-2 -ml-20 min-h-[8rem] h-full">
+                    <div className="relative bg-muted w-full z-[2] border-r-[3px] border-background pl-2 -ml-20 min-h-[8rem] self-stretch">
                          <div className="h-full w-full">
                          {
                               list.posts.filter((p: any) => p.post.cover)[1] && (
@@ -83,7 +83,7 @@ export default function ListCard({
                          }
                          </div>
                     </div>
-                    <div className="relative bg-muted z-[1] border-none pl-2 -ml-32 w-full rounded-br-lg md:rounded-r-lg min-h-[8rem] h-full">
+                    <div className="relative bg-muted z-[1] border-none pl-2 -ml-32 w-full rounded-br-lg md:rounded-r-lg min-h-[8rem] self-stretch">
                          <div className="h-full w-full">
                          {
                               list.posts.filter((p: any) => p.post.cover)[2] && (

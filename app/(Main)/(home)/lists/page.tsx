@@ -123,49 +123,49 @@ export default async function ListsPage() {
                         href={`/@${user?.username}/read-later`}
                         className="pointer-events-none rounded-b-lg"
                       >
-                        <div className="relative flex justify-end md:w-80 w-full overflow-hidden h-full">
-                          <div className="relative bg-muted z-[3] border-r-[3px] border-background w-full pl-0 rounded-bl-lg md:rounded-none min-h-[8rem] h-full">
-                            <div className="h-full w-full">
-                              <Image
-                                src={
-                                  bookmarks.filter(
-                                    (bookmark) => bookmark.post.cover
-                                  )[0].post.cover!
-                                }
-                                fill
-                                alt={"Read Later"}
-                                className="object-cover !relative h-full rounded-bl-lg md:rounded-none"
-                              />
-                            </div>
-                          </div>
-                          <div className="relative bg-muted z-[2] border-r-[3px] border-background w-full pl-2 -ml-20 min-h-[8rem] h-full">
-                            <div className="h-full w-full">
-                              <Image
-                                src={
-                                  bookmarks.filter(
-                                    (bookmark) => bookmark.post.cover
-                                  )[1].post.cover!
-                                }
-                                fill
-                                alt={"Read Later"}
-                                className="object-cover !relative h-full"
-                              />
-                            </div>
-                          </div>
-                          <div className="relative bg-muted z-[1] border-none pl-2 -ml-32 w-full rounded-br-lg md:rounded-r-lg min-h-[8rem] h-full">
-                            <div className="h-full w-full">
-                              <Image
-                                src={
-                                  bookmarks.filter(
-                                    (bookmark) => bookmark.post.cover
-                                  )[2].post.cover!
-                                }
-                                fill
-                                alt={"Read Later"}
-                                className="object-cover !relative h-full rounded-br-lg md:rounded-r-lg"
-                              />
-                            </div>
-                          </div>
+                        <div className="relative flex justify-end md:w-80 w-full overflow-hidden h-full min-h-[8rem]">
+                        <div className="relative bg-muted self-stretch z-[3] border-r-[3px] border-background w-full pl-0 rounded-bl-lg md:rounded-none min-h-[8rem]">
+                         <div className="h-full w-full">
+                              {
+                                   bookmarks.filter((p: any) => p.post.cover)[0] && (
+                                        <Image
+                                             src={bookmarks.filter((p: any) => p.post.cover)[0].post.cover!}
+                                             fill
+                                             alt={'Read Later'}
+                                             className="object-cover !relative h-full rounded-bl-lg md:rounded-none"
+                                        />
+                                   )
+                              }
+                         </div>
+                    </div>
+                    <div className="relative bg-muted self-stretch w-full z-[2] border-r-[3px] border-background pl-2 -ml-20 min-h-[8rem]">
+                         <div className="h-full w-full">
+                         {
+                              bookmarks.filter((p: any) => p.post.cover)[1] && (
+                                   <Image
+                                        src={bookmarks.filter((p: any) => p.post.cover)[1].post.cover!}
+                                        fill
+                                        alt={'Read Later'}
+                                        className="object-cover !relative h-full"
+                                   />
+                              )
+                         }
+                         </div>
+                    </div>
+                    <div className="relative bg-muted self-stretch z-[1] border-none pl-2 -ml-32 w-full rounded-br-lg md:rounded-r-lg min-h-[8rem]">
+                         <div className="h-full w-full">
+                         {
+                              bookmarks.filter((p: any) => p.post.cover)[2] && (
+                                   <Image
+                                        src={bookmarks.filter((p: any) => p.post.cover)[2].post.cover!}
+                                        fill
+                                        alt={'Read Later'}
+                                        className="object-cover !relative h-full rounded-br-lg md:rounded-r-lg"
+                                   />
+                              )
+                         }
+                         </div>
+                    </div>
                         </div>
                       </Link>
                     </div>

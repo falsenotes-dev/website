@@ -5,6 +5,7 @@ import ListPosts from "@/components/list-posts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { dateFormat } from "@/lib/format-date";
 import postgres from "@/lib/postgres";
+import { getLists } from "@/lib/prisma/session";
 
 export default async function ListPage({
   params,
@@ -58,6 +59,10 @@ export default async function ListPage({
   });
 
   if (!list) return null;
+  if (list.visibility === "private" && list.authorId !== session?.id)
+    return null;
+
+    const lists = await getLists({ id: session?.id });
 
   return (
     <>
@@ -119,7 +124,7 @@ export default async function ListPage({
                   </div>
                 </div>
               </div>
-              <ListPosts list={list} session={session} />
+              <ListPosts list={list} session={session} lists={lists} />
             </div>
           </div>
         </div>
