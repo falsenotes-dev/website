@@ -100,7 +100,7 @@ export default async function ListPage() {
                 <div className="w-full mx-6">
                   <div className="pb-6">
                     <h2 className="text-3xl line-clamp-2 font-bold">
-                      {user?.name || user?.username}'s Read Later
+                      {user?.name || user?.username}&apos;s Read Later
                     </h2>
                   </div>
                 </div>
