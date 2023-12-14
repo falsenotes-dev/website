@@ -1,14 +1,17 @@
 import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { getSessionUser } from "@/components/get-session-user";
 import { Icons } from "@/components/icon";
+import ListHeader from "@/components/list-header";
 import ListMoreActions from "@/components/list-more-actions";
 import ListPosts from "@/components/list-posts";
+import LoginDialog from "@/components/login-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { dateFormat } from "@/lib/format-date";
 import postgres from "@/lib/postgres";
 import { getLists } from "@/lib/prisma/session";
 import { MoreHorizontalIcon } from "lucide-react";
+import Link from "next/link";
 
 export default async function ListPage({
   params,
@@ -58,6 +61,7 @@ export default async function ListPage({
           createdAt: "asc",
         },
       },
+      savedUsers: true,
     },
   });
 
@@ -76,6 +80,7 @@ export default async function ListPage({
               <div className="lg:mt-14 mt-8 mb-8">
                 <div className="flex items-start justify-between">
                   <div className="flex gap-4">
+                    <Link href={`/@${list.author.username}`}>
                     <Avatar className="w-12 h-12">
                       <AvatarImage
                         src={list.author?.image!}
@@ -85,13 +90,16 @@ export default async function ListPage({
                         {list.author.name?.charAt(0) || list.author.username.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
+                    </Link>
                     <div className="flex flex-col">
+                      <Link href={`/@${list.author.username}`}>
                       <div className="line-clamp-1 inline-flex items-center">
                         {list.author.name || list.author.username}{" "}
                         {list.author.verified && (
                           <Icons.verified className="h-4 w-4 mx-0.5 fill-verified" />
                         )}
                       </div>
+                      </Link>
                       <div className="flex flex-wrap items-center">
                         <div className="inline-flex items-center text-xs text-muted-foreground">
                           <p className="text-inherit">
@@ -118,25 +126,7 @@ export default async function ListPage({
               </div>
             </div>
             <div>
-              <div className="pb-16">
-                <div className="lg:mx-6 justify-between flex items-start">
-                  <div className="pb-6">
-                    <h2 className="text-3xl line-clamp-2 font-bold">
-                      {list.name}
-                    </h2>
-                    {list.description && (
-                      <p className="text-lg text-muted-foreground line-clamp-2">
-                        {list.description}
-                      </p>
-                    )}
-                  </div>
-                  <ListMoreActions list={list} session={session} >
-                    <Button variant="ghost" size={'icon'} className="text-muted-foreground">
-                      <MoreHorizontalIcon className="h-5 w-5" />
-                    </Button>
-                  </ListMoreActions>
-                </div>
-              </div>
+              <ListHeader list={list} session={session} lists={lists} />
               <ListPosts list={list} session={session} lists={lists} />
             </div>
           </div>

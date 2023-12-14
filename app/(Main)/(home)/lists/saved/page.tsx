@@ -50,6 +50,8 @@ export default async function ListsPage() {
             },
             take: 3,
           },
+          author: true,
+          savedUsers: { select: { userId: true } },
         },
       }
     },
@@ -73,7 +75,7 @@ export default async function ListsPage() {
               <div className="flex flex-col gap-10">
               {lists.map((list) => (
                   <>
-                    <ListCard list={list} session={session} />
+                    <ListCard list={list.list} session={session} />
                   </>
                 ))}
                 {

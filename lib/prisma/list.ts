@@ -2,7 +2,7 @@
 import { getSessionUser } from "@/components/get-session-user";
 import postgres from "../postgres";
 import { getLists } from "./session";
-import { Bookmark, Post } from "@prisma/client";
+import { Bookmark, List, Post } from "@prisma/client";
 
 type ListForm = {
   name: string;
@@ -201,3 +201,37 @@ export const addPostToList = async ({ listId, postId }: any) => {
     return { success: false, message: "Error adding post to list" };
   }
 };
+
+export const saveList = async ({ id }: any) => {
+  const session = await getSessionUser();
+
+  if (!session) {
+    return {
+      success: false,
+      message: "You must be logged in to save a list",
+    };
+  }
+
+  try {
+    const isListSaved = await postgres.listSaving.findFirst({
+      where: { listId: id, userId: session.id },
+    });
+
+    if (isListSaved) {
+      await postgres.listSaving.delete({ where: { id: isListSaved.id } });
+      return { success: true, message: "List removed from Your Library" };
+    } else {
+      await postgres.listSaving.create({
+        data: {
+          listId : id,
+          userId: session.id,
+        },
+      });
+
+      return { success: true, message: "List saved to Your Library" };
+    }
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Error saving list" };
+  }
+}

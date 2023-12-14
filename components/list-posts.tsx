@@ -16,6 +16,7 @@ export default function ListPosts({ list, session, lists }: { list: any, session
                           post={article.post}
                           session={session}
                           list={lists}
+                          className="max-h-fit"
                         />
                       </>
                     ))}

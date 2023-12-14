@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import { formatNumberWithSuffix } from "./format-numbers";
 import { Icons } from "./icon";
@@ -14,12 +15,21 @@ import Link from "next/link";
 import ListMoreActions from "./list-more-actions";
 import { Button } from "./ui/button";
 import { MoreHorizontalIcon } from "lucide-react";
+import LoginDialog from "./login-dialog";
+import { saveList } from "@/lib/prisma/list";
+import { validate } from "@/lib/revalidate";
+import { toast } from "sonner";
+import React from "react";
 
 export default function ListCard({
   list,
   session,
   ...props
 }: React.ComponentPropsWithoutRef<typeof Card> & { list: any, session: any }) {
+  const [saved, setSaved] = React.useState(false);
+     React.useEffect(() => {
+          setSaved(list.savedUsers.find((user: any) => user.userId === session?.id))
+     }, [list.savedUsers, session])
   return (
     <>
       <Card {...props}>
@@ -55,11 +65,40 @@ export default function ListCard({
                     <Icons.lock className="h-4 w-4 text-muted-foreground mx-2" />
                   )}
                 </div>
+                <div className="flex gap-1">
+                {
+                    session ? (
+                      <Button variant="ghost" size={'icon'} className="text-muted-foreground" disabled={list.authorId === session?.id} onClick={
+                        async () => {
+                          const res = await saveList({ id: list.id });
+                          await validate('/list/saved');
+                          if (res.success) {
+                              toast(res.message)
+                          } else {
+                              toast.error(res.message)
+                          }
+                        }
+                      }>
+                        {saved ? (
+                          <Icons.listSaveFill className="h-5 w-5" />
+                        ) : (
+                          <Icons.listSave className="h-5 w-5" />
+                        )}
+                      </Button>
+                    ) : (
+                      <LoginDialog>
+                        <Button variant="ghost" size={'icon'} className="text-muted-foreground">
+                          <Icons.listSave className="h-5 w-5" />
+                        </Button>
+                      </LoginDialog>
+                    )
+                  }
                 <ListMoreActions list={list} session={session}>
                   <Button variant="ghost" size={'icon'} className="text-muted-foreground">
                     <MoreHorizontalIcon className="h-5 w-5" />
                   </Button>
                 </ListMoreActions>
+                </div>
               </div>
             </CardHeader>
             <Link href={`/list/${list.slug}`} className="pointer-events-none rounded-b-lg">

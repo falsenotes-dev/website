@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { dateFormat } from "@/lib/format-date";
 import postgres from "@/lib/postgres";
 import { getLists } from "@/lib/prisma/session";
+import Link from "next/link";
 
 export default async function ListPage() {
   const session = await getSessionUser();
@@ -67,6 +68,7 @@ export default async function ListPage() {
               <div className="lg:mt-14 mt-8 mb-8">
                 <div className="flex items-start justify-between">
                   <div className="flex gap-4">
+                    <Link href={`/@${user?.username}`}>
                     <Avatar className="w-12 h-12">
                       <AvatarImage
                         src={user?.image!}
@@ -76,13 +78,16 @@ export default async function ListPage() {
                         {user?.name?.charAt(0) || user?.username.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
+                    </Link>
                     <div className="flex flex-col">
+                      <Link href={`/@${user?.username}`}>
                       <div className="line-clamp-1 inline-flex items-center">
                         {user?.name || user?.username}{" "}
                         {user?.verified && (
                           <Icons.verified className="h-4 w-4 mx-0.5 fill-verified" />
                         )}
                       </div>
+                      </Link>
                       <div className="flex flex-wrap items-center">
                         <div className="inline-flex items-center text-xs text-muted-foreground">
                           <p className="text-inherit">
@@ -93,8 +98,8 @@ export default async function ListPage() {
                             private
                           </p>
                         </div>
-                      </div>
-                    </div>
+                      L</div>
+                    L</div>
                   </div>
                 </div>
               </div>
