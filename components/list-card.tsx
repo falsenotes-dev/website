@@ -23,9 +23,9 @@ export default function ListCard({
   return (
     <>
       <Card {...props}>
-        <CardContent className="py-0 pr-0 md:pl-6 px-0">
+        <CardContent className="p-0">
           <div className="flex md:flex-row flex-col">
-            <CardHeader className="w-full md:px-0 pr-6 gap-4 h-full">
+            <CardHeader className="w-full gap-4 h-full">
               <Link href={`/@${list.author.username}`} className="flex gap-2">
                 <Avatar className="h-5 w-5">
                   <AvatarImage src={list.author.image} />
@@ -56,7 +56,7 @@ export default function ListCard({
                   )}
                 </div>
                 <ListMoreActions list={list} session={session}>
-                  <Button variant="link" className="text-muted-foreground">
+                  <Button variant="ghost" size={'icon'} className="text-muted-foreground">
                     <MoreHorizontalIcon className="h-5 w-5" />
                   </Button>
                 </ListMoreActions>

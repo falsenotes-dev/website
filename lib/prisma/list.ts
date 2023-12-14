@@ -69,6 +69,78 @@ export const createList = async ({ data }: { data: ListForm }) => {
   }
 };
 
+export const deleteList = async ({ id }: { id: string }) => {
+  const session = await getSessionUser();
+
+  if (!session) {
+    return {
+      success: false,
+      message: "You must be logged in to delete a list",
+    };
+  }
+
+  try {
+    await postgres.list.delete({
+      where: { id },
+    });
+
+    return { success: true, message: "List deleted" };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Error deleting list" };
+  }
+};
+
+export const makeListPublic = async ({ id }: { id: string }) => {
+  const session = await getSessionUser();
+
+  if (!session) {
+    return {
+      success: false,
+      message: "You must be logged in to make a list public",
+    };
+  }
+
+  try {
+    await postgres.list.update({
+      where: { id },
+      data: {
+        visibility: "public",
+      },
+    });
+
+    return { success: true, message: "List made public" };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Error making list public" };
+  }
+}
+
+export const makeListPrivate = async ({ id }: { id: string }) => {
+  const session = await getSessionUser();
+
+  if (!session) {
+    return {
+      success: false,
+      message: "You must be logged in to make a list private",
+    };
+  }
+
+  try {
+    await postgres.list.update({
+      where: { id },
+      data: {
+        visibility: "private",
+      },
+    });
+
+    return { success: true, message: "List made private" };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Error making list private" };
+  }
+}
+
 export const updateList = async ({ data, id }: { data: ListForm; id: string }) => {
   const session = await getSessionUser();
 

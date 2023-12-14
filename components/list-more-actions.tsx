@@ -1,7 +1,5 @@
 'use client'
 import { Facebook, Link2, Linkedin, Pencil, Trash2 } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,24 +14,15 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import {
-  TwitterShareButton,
-  FacebookShareButton,
-  LinkedinShareButton,
-} from "next-share";
 import { Icons } from "./icon";
 import React from "react";
-import { handleDelete } from "./delete";
-import { useRouter } from "next/navigation";
-import { addShare } from "@/lib/prisma/add-share";
-import { toast } from "sonner";
-import { unPin } from "@/lib/prisma/pin";
-import { validate } from "@/lib/revalidate";
-import { allowComments } from "@/lib/prisma/comments";
-import { allowLikes } from "@/lib/prisma/likes";
+import { usePathname, useRouter } from "next/navigation";
 import { List } from "@prisma/client";
 import ListEditDialog from "./list-edit-dialog";
+import ListDeleteDialog from "./list-delete-dialog";
+import { makeListPrivate, makeListPublic } from "@/lib/prisma/list";
+import { validate } from "@/lib/revalidate";
+import { toast } from "sonner";
 
 export default function ListMoreActions({
   list,
@@ -51,6 +40,7 @@ export default function ListMoreActions({
     toast("Link copied to clipboard");
   };
   const router = useRouter();
+  const pathname = usePathname();
   const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false);
   const [showPinAlert, setShowPinAlert] = React.useState<boolean>(false);
   const [showEditDialog, setShowEditDialog] = React.useState<boolean>(false);
@@ -62,16 +52,51 @@ export default function ListMoreActions({
           <DropdownMenuItem onSelect={() => copylink(`/list/${list.slug}`)}>
             <Icons.link className="h-4 w-4 mr-2" /> Copy Link
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setShowEditDialog(true)}>
+          {
+            session.id === list.authorId && (
+              <DropdownMenuItem onSelect={() => setShowEditDialog(true)}>
             <Pencil className="w-4 h-4 mr-2" /> Edit list info
           </DropdownMenuItem>
-          {list.visibility === "public" ? (
-            <DropdownMenuItem>
-              <Icons.lock className="w-4 h-4 mr-2" /> Make it private
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem>
-              <Icons.unLock className="w-4 h-4 mr-2" /> Make it public
+            )
+          }
+          {session.id === list.authorId && (
+            list.visibility === "public" ? (
+              <DropdownMenuItem onSelect={
+                async () => {
+                  const res = await makeListPrivate({ id: list.id })
+                  await validate(pathname)
+                  if (!res.success) {
+                    toast.error(res.message);
+                  } else {
+                    toast.success("List is now private");
+                  }
+                }
+              }>
+                <Icons.lock className="w-4 h-4 mr-2" /> Make it private
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem onSelect={
+                async () => {
+                  const res = await makeListPublic({ id: list.id })
+                  await validate(pathname)
+                  if (!res.success) {
+                    toast.error(res.message);
+                  } else {
+                    toast.success("List is now public");
+                  }
+                }
+              }>
+                <Icons.unLock className="w-4 h-4 mr-2" /> Make it public
+              </DropdownMenuItem>
+            )
+          )}
+          {session.id === list.authorId && (
+            <DropdownMenuItem className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
+              onSelect={async () => {
+                setShowDeleteAlert(true);
+              }}
+            >
+              <Trash2 className="w-4 h-4 mr-2" /> Delete list
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>
@@ -81,6 +106,7 @@ export default function ListMoreActions({
         onOpenChange={setShowEditDialog}
         list={list}
       />
+      <ListDeleteDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert} list={list} />
     </>
   );
 }
