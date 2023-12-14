@@ -98,8 +98,8 @@ export default async function ListPage() {
                             private
                           </p>
                         </div>
-                      L</div>
-                    L</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

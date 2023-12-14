@@ -101,7 +101,7 @@ export default async function HomeLayout({
                                                                  </li>
                                                             </ol>
                                                             <CardFooter className="px-0 py-4">
-                                                                 <Link href={`/@${session.username}?tab=bookmarks`} className="text-xs flex items-center mb-2 font-medium">
+                                                                 <Link href={`/@${session.username}/read-later`} className="text-xs flex items-center mb-2 font-medium">
                                                                            See all ({bookmarksCount})
                                                                       </Link>
                                                             </CardFooter>
