@@ -64,8 +64,8 @@ export default async function ListPage({
       <div className="flex-auto w-full">
         <div className="min-h-screen flex flex-col">
           <div className="flex flex-col justify-center">
-            <div className="w-full mx-6">
-              <div className="mt-14 mb-8">
+            <div className="w-full lg:mx-6">
+              <div className="lg:mt-14 mt-8 mb-8">
                 <div className="flex items-start justify-between">
                   <div className="flex gap-4">
                     <Avatar className="w-12 h-12">
@@ -111,7 +111,7 @@ export default async function ListPage({
             </div>
             <div>
               <div className="pb-16">
-                <div className="w-full mx-6">
+                <div className="w-full lg:mx-6">
                   <div className="pb-6">
                     <h2 className="text-3xl line-clamp-2 font-bold">
                       {list.name}

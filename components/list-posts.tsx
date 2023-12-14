@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function ListPosts({ list, session }: { list: any, session: any}) {
      return (
-          <div className="px-6 w-full lg:mb-6 md:mb-5 mb-4">
+          <div className="lg:px-6 w-full lg:mb-6 md:mb-5 mb-4">
                 {list.posts?.length > 0 ? (
                   <div className="flex flex-col lg:gap-6 md:gap-5 gap-4">
                     {list.posts?.map((article: any) => (
