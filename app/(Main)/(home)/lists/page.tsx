@@ -173,7 +173,7 @@ export default async function ListsPage() {
                 </Card>
                 {lists.map((list) => (
                   <>
-                    <ListCard list={list} />
+                    <ListCard list={list} session={session} />
                   </>
                 ))}
               </div>

@@ -3,7 +3,6 @@ import { getSessionUser } from "@/components/get-session-user";
 import postgres from "../postgres";
 import { getLists } from "./session";
 import { Bookmark, Post } from "@prisma/client";
-import { z } from "zod";
 
 type ListForm = {
   name: string;
@@ -69,6 +68,33 @@ export const createList = async ({ data }: { data: ListForm }) => {
     return { success: false, message: "Error creating list" };
   }
 };
+
+export const updateList = async ({ data, id }: { data: ListForm; id: string }) => {
+  const session = await getSessionUser();
+
+  if (!session) {
+    return {
+      success: false,
+      message: "You must be logged in to update a list",
+    };
+  }
+
+  try {
+    const list = await postgres.list.update({
+      where: { id },
+      data: {
+        name: data.name,
+        description: data.description || null,
+        visibility: data.public ? "public" : "private",
+      },
+    });
+
+    return { list, success: true, message: "List updated" };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Error updating list" };
+  }
+}
 
 export const addPostToList = async ({ listId, postId }: any) => {
   const session = await getSessionUser();

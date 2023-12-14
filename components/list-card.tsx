@@ -11,11 +11,15 @@ import {
 } from "./ui/card";
 import { shimmer, toBase64 } from "@/lib/image";
 import Link from "next/link";
+import ListMoreActions from "./list-more-actions";
+import { Button } from "./ui/button";
+import { MoreHorizontalIcon } from "lucide-react";
 
 export default function ListCard({
   list,
+  session,
   ...props
-}: React.ComponentPropsWithoutRef<typeof Card> & { list: any }) {
+}: React.ComponentPropsWithoutRef<typeof Card> & { list: any, session: any }) {
   return (
     <>
       <Card {...props}>
@@ -42,7 +46,7 @@ export default function ListCard({
                   </CardDescription>
                 )}
               </Link>
-              <div className="flex">
+              <div className="flex justify-between">
                 <div className="flex my-1.5">
                   <p className="text-muted-foreground text-xs">
                     {formatNumberWithSuffix(list._count.posts)} posts
@@ -51,6 +55,11 @@ export default function ListCard({
                     <Icons.lock className="h-4 w-4 text-muted-foreground mx-2" />
                   )}
                 </div>
+                <ListMoreActions list={list} session={session}>
+                  <Button variant="link" className="text-muted-foreground">
+                    <MoreHorizontalIcon className="h-5 w-5" />
+                  </Button>
+                </ListMoreActions>
               </div>
             </CardHeader>
             <Link href={`/list/${list.slug}`} className="pointer-events-none rounded-b-lg">

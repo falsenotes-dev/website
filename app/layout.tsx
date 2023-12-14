@@ -87,7 +87,7 @@ export default async function Rootayout({
                 gtag('config', '${process.env.GOOGLE_ANALYTICS}');
               `}
             </Script>
-            <Toaster position='bottom-center' closeButton richColors />
+            <Toaster position='bottom-center' closeButton theme='system' />
             <TailwindIndicator />
           </AuthProvider>
         </ThemeProvider>
