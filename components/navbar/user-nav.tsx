@@ -91,7 +91,7 @@ export function UserNav() {
           <DropdownMenuItem className="px-2.5 py-2" asChild>
             <Link href="/lists">
               <Icons.collection className="h-5 w-5 mr-2" />
-              Lists
+              Library
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="px-2.5 py-2" asChild>
