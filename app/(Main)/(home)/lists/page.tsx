@@ -85,9 +85,9 @@ export default async function ListsPage() {
               <ListsTabs />
               <div className="flex flex-col gap-10">
                 <Card>
-                  <CardContent className="py-0 pr-0 md:pl-6 px-0">
+                  <CardContent className="p-0">
                     <div className="flex md:flex-row flex-col">
-                      <CardHeader className="w-full md:px-0 pr-6 gap-4 h-full">
+                      <CardHeader className="w-full gap-4 h-full">
                         <Link
                           href={`/@${user?.username}`}
                           className="flex gap-2"
