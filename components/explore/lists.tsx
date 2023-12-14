@@ -8,47 +8,43 @@ import { cn } from '@/lib/utils';
 import { Separator } from '@radix-ui/react-context-menu';
 import { Button } from '../ui/button';
 import { EmptyPlaceholder } from '../empty-placeholder';
+import ListCard from '../list-card';
+import { searchLists } from '@/lib/prisma/list';
 
-export default function Posts({ initialPosts, search, session, list }: { initialPosts: any | undefined, search?: string | undefined, session: any, list: any }) {
-     const [posts, setposts] = useState<Array<any>>(initialPosts)
+export default function Lists({ initialLists, search, session }: { initialLists: any | undefined, search?: string | undefined, session: any }) {
+     const [lists, setLists] = useState<Array<any>>(initialLists)
      const [page, setPage] = useState<number>(0)
      const [isLoading, setIsLoading] = useState<boolean>(false)
      const [isLast, setIsLast] = useState<boolean>(false)
      useEffect(() => {
-          setposts(initialPosts)
+          setLists(initialLists)
           setIsLast(false)
-     }, [initialPosts])
+     }, [initialLists])
 
      async function loadMorePosts() {
           const next = page + 1
           setIsLoading(true)
-          const result = await fetch(`/api/posts?page=${next}${search ? `&search=${search}` : ''}`).then(res => res.json())
+          const result = await searchLists({ page: next, search, limit: 10  })
           setIsLoading(false)
-          const fetchedposts = result?.posts
+          const fetchedposts = result?.lists
           if (fetchedposts?.length) {
                setPage(next)
-               setposts(prev => [...prev, ...fetchedposts])
+               setLists(prev => [...prev, ...fetchedposts])
           } else {
                setIsLast(true)
           }
      }
 
-     return posts.length > 0 ? (
+     return lists.length > 0 ? (
           <div className="feed__list md:w-[600px]">
                <Card>
                     <CardHeader>
-                         <CardTitle className="feed__content_featured_card_title text-base">Posts</CardTitle>
+                         <CardTitle className="feed__content_featured_card_title text-base">Lists</CardTitle>
                     </CardHeader>
                     <CardContent className="px-6 flex flex-col gap-4">
-                         {posts?.map((post: any) => (
+                         {lists?.map((post: any) => (
                               <>
-                                   <FeedPostCard
-                                        key={post.id}
-                                        post={post}
-                                        session={session}
-                                        list={list}
-                                        className='md:-px-4'
-                                   />
+                                   <ListCard list={post} session={session} />
                                    <Separator />
                               </>
                          ))}
@@ -66,8 +62,8 @@ export default function Posts({ initialPosts, search, session, list }: { initial
      ) : (
           <div className="flex flex-col items-center justify-center w-full">
                <EmptyPlaceholder className='w-full'>
-                    <EmptyPlaceholder.Icon name="post" strokeWidth={1.25} />
-                    <EmptyPlaceholder.Title>No posts found</EmptyPlaceholder.Title>
+                    <EmptyPlaceholder.Icon name="list" strokeWidth={1.25} />
+                    <EmptyPlaceholder.Title>No lists found</EmptyPlaceholder.Title>
                     <EmptyPlaceholder.Description>
                          Try searching for something else.
                     </EmptyPlaceholder.Description>

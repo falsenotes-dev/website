@@ -19,19 +19,16 @@ export default async function Explore({
 
      const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
 
-     const { posts } = await getPosts({ search, limit: 3 })
-     const { users } = await getUsers({ search, limit: 3 })
-     const { tags } = await searchTags({ search, limit: 3 })
-     const { lists } = await searchLists({ search, limit: 3 })
+     const { tags } = await searchTags({ search, limit: 10 })
      const session = await getSessionUser()
 
      return (
           <>
                <div className="flex flex-col items-center py-10 space-y-8">
                     <h2 className="font-medium text-4xl">Explore</h2>
-                    <Search search={search} />
-                    <ExploreTab defaultValue="top" search={search} />
-                    <ExploreComponent users={users} posts={posts} tags={tags} lists={lists} session={session} search={search} className="md:w-[600px]" />
+                    <Search search={search} tab="tags" />
+                    <ExploreTab defaultValue="tags" search={search} />
+                    <Tags tags={tags} session={session} search={search} />
                </div>
           </>
      )

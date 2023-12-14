@@ -3,7 +3,7 @@ import { EmptyPlaceholder } from "@/components/empty-placeholder";
 import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { getSessionUser } from "@/components/get-session-user";
 import { Icons } from "@/components/icon";
-import ListCard from "@/components/list-card-v2";
+import ListCard from "@/components/list-card";
 import ListsTabs from "@/components/lists-tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";

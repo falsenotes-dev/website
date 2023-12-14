@@ -235,3 +235,36 @@ export const saveList = async ({ id }: any) => {
     return { success: false, message: "Error saving list" };
   }
 }
+
+export const searchLists = async ({ search, limit = 10, page = 0 }: { search?: string, limit?: number, page?: number }) => {
+  const lists = await postgres.list.findMany({
+    where: search !== undefined ? {visibility: 'public',
+      OR: [
+        { name: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+      ],
+    } : {visibility: 'public'},
+    take: limit,
+    skip: page * limit,
+    include: {
+      _count: { select: { posts: true, savedUsers: true } },
+      author: true,
+      posts: {
+        select: {
+          post: {
+            select: {
+              cover: true,
+            }
+          }
+        },
+        take: 3,
+      },
+      savedUsers: true,
+    },
+    orderBy: search !== undefined ? {
+      savedUsers: { _count: 'desc' },
+    } : {},
+  });
+
+  return { lists: JSON.parse(JSON.stringify(lists))};
+}

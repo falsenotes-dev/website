@@ -7,8 +7,8 @@ import { Hash } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { EmptyPlaceholder } from "../empty-placeholder"
 
-export default function ExploreComponent({ users, posts, tags, search, className }: {
-     users: any, posts: any, tags: any, session: any, search: any, className?: string
+export default function ExploreComponent({ users, posts, tags, lists, search, className }: {
+     users: any, posts: any, tags: any, lists: any, session: any, search: any, className?: string
 }) {
      return (
           <div className={cn("w-full mb-10 space-y-4", className)}>
@@ -41,6 +41,11 @@ export default function ExploreComponent({ users, posts, tags, search, className
                                         ))}
                               </ol>
                          </CardContent>
+                         <CardFooter className="flex justify-end">
+                              <Link href={`/explore/posts${(search !== undefined) ? `?search=${search}` : ''}`} className="text-sm font-medium">
+                                   See all posts
+                              </Link>
+                         </CardFooter>
                     </Card>
 
                )}
@@ -84,6 +89,11 @@ export default function ExploreComponent({ users, posts, tags, search, className
                                         ))}
                               </div>
                          </CardContent>
+                         <CardFooter className="flex justify-end">
+                              <Link href={`/explore/users${(search !== undefined) ? `?search=${search}` : ''}`} className="text-sm font-medium">
+                                   See all users
+                              </Link>
+                         </CardFooter>
                     </Card>
                )}
 
@@ -108,8 +118,42 @@ export default function ExploreComponent({ users, posts, tags, search, className
                                    ))}
                               </div>
                          </CardContent>
+                         <CardFooter className="flex justify-end">
+                              <Link href={`/explore/tags${(search !== undefined) ? `?search=${search}` : ''}`} className="text-sm font-medium">
+                                   See all tags
+                              </Link>
+                         </CardFooter>
                     </Card>
                )}
+               {lists.length > 0 && (
+                    <Card>
+                         <CardHeader>
+                              <CardTitle className="text-base">Lists</CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                   <div className="flex flex-col divide-y">
+                                        {lists?.map((list: any, index: number) => (
+                                             <div className="flex items-center justify-between py-4" key={list.id}>
+                                                  <Link href={`/@${list.author.username}/${list.slug}`} className="w-full">
+                                                       <div className="flex items-center">
+                                                            <div className="space-y-1">
+                                                                 <p className="text-base line-clamp-1"><Icons.list className="h-5 w-5 mr-1.5 inline" />{list.name}</p>
+                                                                 <p className="text-sm text-muted-foreground">{list._count.posts} posts · {list._count.savedUsers} saves</p>
+                                                            </div>
+                                                       </div>
+                                                  </Link>
+                                             </div>
+                                        ))}
+                                   </div>
+                              </CardContent>
+                              <CardFooter className="flex justify-end">
+                                   <Link href={`/explore/lists${(search !== undefined) ? `?search=${search}` : ''}`} className="text-sm font-medium">
+                                        See all lists
+                                   </Link>
+                              </CardFooter>
+                         </Card>
+                    )}
+                    
                {posts.length === 0 && users.length === 0 && tags.length === 0 && (
                     <EmptyPlaceholder className="w-full">
                          <EmptyPlaceholder.Icon name="notfound" strokeWidth={1.25} />

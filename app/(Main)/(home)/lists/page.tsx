@@ -44,6 +44,7 @@ export default async function ListsPage() {
         take: 3,
       },
       author: true,
+      savedUsers: true,
     },
   });
 
