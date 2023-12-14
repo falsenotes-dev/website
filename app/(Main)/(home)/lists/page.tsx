@@ -77,7 +77,7 @@ export default async function ListsPage() {
               <div className="mt-6 md:mt-12 mb-10">
                 <div className="flex justify-between">
                   <h1 className="font-medium line-clamp-1 break-all text-4xl">
-                    Your Lists
+                    Your Library
                   </h1>
                   <CreateListButton />
                 </div>
