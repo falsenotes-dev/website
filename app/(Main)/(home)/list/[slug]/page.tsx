@@ -1,11 +1,14 @@
 import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { getSessionUser } from "@/components/get-session-user";
 import { Icons } from "@/components/icon";
+import ListMoreActions from "@/components/list-more-actions";
 import ListPosts from "@/components/list-posts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { dateFormat } from "@/lib/format-date";
 import postgres from "@/lib/postgres";
 import { getLists } from "@/lib/prisma/session";
+import { MoreHorizontalIcon } from "lucide-react";
 
 export default async function ListPage({
   params,
@@ -116,7 +119,7 @@ export default async function ListPage({
             </div>
             <div>
               <div className="pb-16">
-                <div className="w-full lg:mx-6">
+                <div className="lg:mx-6 justify-between flex items-start">
                   <div className="pb-6">
                     <h2 className="text-3xl line-clamp-2 font-bold">
                       {list.name}
@@ -127,6 +130,11 @@ export default async function ListPage({
                       </p>
                     )}
                   </div>
+                  <ListMoreActions list={list} session={session} >
+                    <Button variant="ghost" size={'icon'} className="text-muted-foreground">
+                      <MoreHorizontalIcon className="h-5 w-5" />
+                    </Button>
+                  </ListMoreActions>
                 </div>
               </div>
               <ListPosts list={list} session={session} lists={lists} />
