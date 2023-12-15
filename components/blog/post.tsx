@@ -211,7 +211,6 @@ export default function SinglePost({
               </div>
             </>
           )}
-
           <PostTabs
             post={post}
             session={session}
