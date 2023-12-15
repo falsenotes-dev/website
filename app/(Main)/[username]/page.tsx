@@ -232,7 +232,7 @@ export default async function Page({
               />
             </TabsContent>
             <TabsContent value="lists">
-              <div className="flex flex-col gap-10">
+              <div className="flex flex-col gap-10 my-6">
                 {sessionUserName?.id === user?.id && (
                   <Card>
                     <CardContent className="p-0">
