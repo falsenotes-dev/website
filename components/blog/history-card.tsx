@@ -31,12 +31,16 @@ export default function HistoryPostCard({
         </CardHeader>
         <div className="flex justify-between items-start">
           <div className="flex flex-col w-full">
-            <CardTitle className="!text-base md:text-xl font-bold text-ellipsis overflow-hidden line-clamp-2 my-3">
-              {post.title}
-            </CardTitle>
-            <CardDescription className="text-ellipsis overflow-hidden line-clamp-3 text-muted-foreground">
-              {post.subtitle}
-            </CardDescription>
+            <Link href={`/@${post.author.username}/${post.url}`}>
+              <CardTitle className="!text-base md:text-xl font-bold text-ellipsis overflow-hidden line-clamp-2 my-3">
+                {post.title}
+              </CardTitle>
+            </Link>
+            <Link href={`/@${post.author.username}/${post.url}`}>
+              <CardDescription className="text-ellipsis overflow-hidden line-clamp-3 text-muted-foreground">
+                {post.subtitle}
+              </CardDescription>
+            </Link>
             <div className="flex justify-between items-center mt-8 w-full">
               <div className="flex flex-1 items-center space-x-2.5">
                 <p className="card-text mb-0 py-0.5 text-muted-foreground text-xs">
@@ -66,15 +70,17 @@ export default function HistoryPostCard({
               <div
                 className={`h-14 md:h-28 !relative bg-muted !pb-0 aspect-square overflow-hidden rounded-md`}
               >
-                <Image
-                  src={post.cover}
-                  fill
-                  alt={post.title}
-                  placeholder={`data:image/svg+xml;base64,${toBase64(
-                    shimmer(1920, 1080)
-                  )}`}
-                  className="object-cover max-w-full h-auto z-[1] rounded-md"
-                />
+                <Link href={`/@${post.author.username}/${post.url}`}>
+                  <Image
+                    src={post.cover}
+                    fill
+                    alt={post.title}
+                    placeholder={`data:image/svg+xml;base64,${toBase64(
+                      shimmer(1920, 1080)
+                    )}`}
+                    className="object-cover max-w-full h-auto z-[1] rounded-md"
+                  />
+                </Link>
               </div>
             </div>
           )}
