@@ -53,13 +53,13 @@ export default function ListMoreActions({
             <Icons.link className="h-4 w-4 mr-2" /> Copy Link
           </DropdownMenuItem>
           {
-            session.id === list.authorId && (
+            session?.id === list.authorId && (
               <DropdownMenuItem onSelect={() => setShowEditDialog(true)}>
             <Pencil className="w-4 h-4 mr-2" /> Edit list info
           </DropdownMenuItem>
             )
           }
-          {session.id === list.authorId && (
+          {session?.id === list.authorId && (
             list.visibility === "public" ? (
               <DropdownMenuItem onSelect={
                 async () => {
@@ -90,7 +90,7 @@ export default function ListMoreActions({
               </DropdownMenuItem>
             )
           )}
-          {session.id === list.authorId && (
+          {session?.id === list.authorId && (
             <DropdownMenuItem className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
               onSelect={async () => {
                 setShowDeleteAlert(true);
