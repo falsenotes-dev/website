@@ -104,7 +104,7 @@ export default async function ListsPage() {
                             )}
                           </p>
                         </Link>
-                        <Link href={`/@${user?.username}/read-later`}>
+                        <Link href={`/@${user?.username}/list/read-later`}>
                           <CardTitle className="line-clamp-1 my-2">
                             Read Later
                           </CardTitle>
@@ -119,7 +119,7 @@ export default async function ListsPage() {
                         </div>
                       </CardHeader>
                       <Link
-                        href={`/@${user?.username}/read-later`}
+                        href={`/@${user?.username}/list/read-later`}
                         className="pointer-events-none rounded-b-lg"
                       >
                         <div className="relative flex justify-end md:w-80 w-full overflow-hidden h-full min-h-[8rem]">

@@ -48,7 +48,7 @@ export default function ListCard({
                   )}
                 </p>
               </Link>
-              <Link href={`/list/${list.slug}`}>
+              <Link href={`/@${list.author.username}/list/${list.slug}`}>
                 <CardTitle className="line-clamp-1 my-2">{list.name}</CardTitle>
                 {list.description && (
                   <CardDescription className="line-clamp-2">
@@ -71,7 +71,7 @@ export default function ListCard({
                       <Button variant="ghost" size={'icon'} className="text-muted-foreground" disabled={list.authorId === session?.id} onClick={
                         async () => {
                           const res = await saveList({ id: list.id });
-                          await validate('/list/saved');
+                          await validate(`/list/saved`);
                           if (res.success) {
                               toast(res.message)
                           } else {

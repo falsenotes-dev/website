@@ -50,14 +50,14 @@ export default function PostCard(
   const [isSaved, setIsSaved] = React.useState(false);
      React.useEffect(() => {
      const checkIsSaved =
-          props.list.lists?.some((list: any) =>
+          props.list?.lists?.some((list: any) =>
           list.posts?.some((post: any) => post.postId === props.post.id)
           ) ||
-          props.list.bookmarks?.some(
+          props.list?.bookmarks?.some(
           (bookmark: any) => bookmark.postId === props.post.id
           );
      setIsSaved(checkIsSaved);
-     }, [props.list.lists, props.list.bookmarks, props.post.id]);
+     }, [props.list?.lists, props.list?.bookmarks, props.post.id]);
   return (
     <Card
       {...props}
@@ -195,7 +195,7 @@ export default function PostCard(
                       <LoginDialog>
                         <Button variant="ghost" size={"icon"} className="">
                           <Icons.bookmark
-                            className={`h-5 w-5 ${isSaved && "fill-current"}`}
+                            className={`h-5 w-5`}
                           />
                           <span className="sr-only">Save</span>
                         </Button>
@@ -297,7 +297,7 @@ export default function PostCard(
                   <LoginDialog>
                     <Button variant="ghost" size={"icon"} className="">
                       <Icons.bookmark
-                        className={`h-5 w-5 ${isSaved && "fill-current"}`}
+                        className={`h-5 w-5`}
                       />
                     </Button>
                   </LoginDialog>

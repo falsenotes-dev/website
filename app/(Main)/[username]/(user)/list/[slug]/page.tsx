@@ -16,13 +16,16 @@ import Link from "next/link";
 export default async function ListPage({
   params,
 }: {
-  params: { slug: string };
+  params: { slug: string, username: string };
 }) {
-  if (!params.slug) return null;
   const session = await getSessionUser();
+  const decodedUsername = decodeURIComponent(params.username);
   const list = await postgres.list.findFirst({
     where: {
       slug: params.slug,
+      author: {
+        username: decodedUsername.substring(1),
+      }
     },
     include: {
       _count: { select: { posts: true, savedUsers: true } },
@@ -65,11 +68,15 @@ export default async function ListPage({
     },
   });
 
-  if (!list) return null;
-  if (list.visibility === "private" && list.authorId !== session?.id)
-    return null;
+  console.log(list);
 
-    const lists = await getLists({ id: session?.id });
+  if (!list) return null;
+  if (
+    list.visibility === "private" &&
+    (!session || list.authorId !== session.id)
+  )
+    return null;
+  const lists = await getLists({ id: session?.id }) || [];
 
   return (
     <>
@@ -81,24 +88,25 @@ export default async function ListPage({
                 <div className="flex items-start justify-between">
                   <div className="flex gap-4">
                     <Link href={`/@${list.author.username}`}>
-                    <Avatar className="w-12 h-12">
-                      <AvatarImage
-                        src={list.author?.image!}
-                        alt={list.author.name || list.author.username}
-                      />
-                      <AvatarFallback>
-                        {list.author.name?.charAt(0) || list.author.username.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
+                      <Avatar className="w-12 h-12">
+                        <AvatarImage
+                          src={list.author?.image!}
+                          alt={list.author.name || list.author.username}
+                        />
+                        <AvatarFallback>
+                          {list.author.name?.charAt(0) ||
+                            list.author.username.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
                     </Link>
                     <div className="flex flex-col">
                       <Link href={`/@${list.author.username}`}>
-                      <div className="line-clamp-1 inline-flex items-center">
-                        {list.author.name || list.author.username}{" "}
-                        {list.author.verified && (
-                          <Icons.verified className="h-4 w-4 mx-0.5 fill-verified" />
-                        )}
-                      </div>
+                        <div className="line-clamp-1 inline-flex items-center">
+                          {list.author.name || list.author.username}{" "}
+                          {list.author.verified && (
+                            <Icons.verified className="h-4 w-4 mx-0.5 fill-verified" />
+                          )}
+                        </div>
                       </Link>
                       <div className="flex flex-wrap items-center">
                         <div className="inline-flex items-center text-xs text-muted-foreground">
@@ -126,7 +134,7 @@ export default async function ListPage({
               </div>
             </div>
             <div>
-              <ListHeader list={list} session={session} lists={lists} />
+              <ListHeader list={list} session={session} />
               <ListPosts list={list} session={session} lists={lists} />
             </div>
           </div>

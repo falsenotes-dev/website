@@ -48,13 +48,13 @@ export default function HistoryPostCard({
                 variant="destructive"
                 size="sm"
                 onClick={async () => {
-                  const res = await removeHistory(post.id);
+                  const res = await removeHistory({ postId: post.id });
                   if (!res.success) {
                     toast.error(res.message);
                   } else {
                     toast.success("Removed from history");
                   }
-                  await validate(`/@${session?.username}`);
+                  await validate(`/lists/history`);
                 }}
               >
                 Remove

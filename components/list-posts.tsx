@@ -33,9 +33,6 @@ export default function ListPosts({ list, session, lists }: { list: any, session
                         any FalseNotes post
                       </EmptyPlaceholder.Description>
                     )}
-                    <Link href={"/"} className={cn("", buttonVariants())}>
-                      Explore
-                    </Link>
                   </EmptyPlaceholder>
                 )}
               </div>
