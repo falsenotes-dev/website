@@ -327,6 +327,23 @@ export const getListByTagId = async ({ tagId, limit = 10, page = 0 }: { tagId: s
     skip: page * limit,
     include: {
       _count: { select: { posts: true, savedUsers: true } },
+      author: true,
+      posts: {
+        select: {
+          post: {
+            select: {
+              cover: true,
+            }
+          }
+        },
+        take: 3,
+      },
+      savedUsers: true,
     },
+    orderBy: {
+      savedUsers: { _count: 'desc' },
+    }
   });
+
+  return { lists: JSON.parse(JSON.stringify(lists))};
 }
