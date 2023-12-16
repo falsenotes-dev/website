@@ -35,19 +35,19 @@ export default function ListCard({
       <Card {...props}>
         <CardContent className="p-0">
           <div className="flex flex-col">
-            <CardHeader className="h-full p-4">
+            <CardHeader className="h-full md:p-6 p-4">
               <Link href={`/@${list.author.username}/list/${list.slug}`}>
                 <CardTitle className="line-clamp-1 text-base">{list.name}</CardTitle>
               </Link>
               <div className="flex justify-between">
                 <div className="flex my-1.5">
-                  <p className="text-muted-foreground text-xs">
+                  <p className="text-muted-foreground text-sm">
                     {formatNumberWithSuffix(list._count.posts)} posts
                   </p>
                   <span className="mx-2 text-muted-foreground text-xs">
                     ·
                   </span>
-                  <p className="text-muted-foreground text-xs">
+                  <p className="text-muted-foreground text-sm">
                     {formatNumberWithSuffix(list._count.savedUsers)} saves
                   </p>
                 </div>

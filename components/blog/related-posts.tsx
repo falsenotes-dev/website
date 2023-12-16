@@ -36,16 +36,20 @@ export default function RelatedPosts({
               />
             ))}
           </div>
-          <Separator className="my-6" />
-          <h2 className="font-medium text-xl mb-6">Lists</h2>
-          <div className="grid md:grid-cols-2 gap-4 w-full">
-            {lists?.map((list: any) => (
-              <ListCard key={list.id} list={list} session={session} />
-            ))}
-          </div>
-          {lastPosts?.length > 0 && (
+          {lists?.length > 0 && (
             <>
               <Separator className="my-6" />
+              <h2 className="font-medium text-xl mb-6 md:mx-6 mx-2">Lists</h2>
+              <div className="grid md:grid-cols-2 gap-4 w-full">
+                {lists?.map((list: any) => (
+                  <ListCard key={list.id} list={list} session={session} />
+                ))}
+              </div>
+              {lastPosts?.length > 0 && (
+                <>
+                  <Separator className="my-6" />
+                </>
+              )}
             </>
           )}
           <div className="grid md:grid-cols-2 gap-4">

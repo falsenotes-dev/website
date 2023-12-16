@@ -21,6 +21,7 @@ import ListCard from "@/components/list-card";
 import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { EmptyPlaceholder } from "@/components/empty-placeholder";
 
 export default async function Page({
   params,
@@ -339,6 +340,19 @@ export default async function Page({
                     <ListCard list={list} session={sessionUserName} />
                   </>
                 ))}
+                {
+                  sessionUserName?.id !== user.id && lists.length === 0 && (
+                    <EmptyPlaceholder>
+                      <EmptyPlaceholder.Icon name="list" />
+                      <EmptyPlaceholder.Title>
+                        No lists yet
+                      </EmptyPlaceholder.Title>
+                      <EmptyPlaceholder.Description>
+                        When user creates a list, it will show up here.
+                      </EmptyPlaceholder.Description>
+                    </EmptyPlaceholder>
+                  )
+                }
               </div>
             </TabsContent>
             <TabsContent value="about">
