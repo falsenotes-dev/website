@@ -56,7 +56,7 @@ function Navbar(notifications: any) {
               </>
             ) : (
               <div className="flex items-center gap-2 md:gap-4">
-                <Button onClick={() => router.replace('/signin')}>
+                <Button onClick={() => signIn()}>
                   Join
                 </Button>
               </div>

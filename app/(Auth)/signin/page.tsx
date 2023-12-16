@@ -12,7 +12,10 @@ import SigninDialog from "@/components/auth/dialog"
 //   description: "Authentication forms built using the components.",
 // }
 
-export default async function SigninPage() {
+export default async function SigninPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+
+  const callbackUrl = typeof searchParams.callbackUrl === "string" ? searchParams.callbackUrl : "/"
+
   return (
     <>
       {/* <div className="container relative h-screen w-screen bg-pattern">
@@ -54,7 +57,7 @@ export default async function SigninPage() {
                 Enter your email below to create your account
               </p>
             </div>
-            <UserAuthForm />
+            <UserAuthForm callbackUrl={callbackUrl} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link
