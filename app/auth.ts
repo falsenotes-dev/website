@@ -202,7 +202,7 @@ export const config = {
     async jwt({ token, user }) {
       const dbUser = await postgres.user.findFirst({
         where: {
-          OR: [
+          AND: [
             { email: user?.email },
             { githubId: user?.id },
             { googleId: user?.id },
