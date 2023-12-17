@@ -74,7 +74,8 @@ export default function PostTabs({
   );
   const [isSaved, setIsSaved] = useState<boolean>(false);
   useEffect(() => {
-    setIsSaved(list?.bookmarks?.some((bookmark: any) => bookmark.postId === post?.id) || list?.lists?.some((list: any) => list.posts?.some((post: any) => post.id === post?.id)));
+    const checkIsSaved = list.lists?.some((list: any) => list.posts?.some((post: any) => post.postId === post.id)) || list.bookmarks?.some((bookmark: any) => bookmark.postId === post.id);
+    setIsSaved(checkIsSaved);
   }, [list, post?.id]);
   
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
