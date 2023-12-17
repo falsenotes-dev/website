@@ -1,13 +1,12 @@
 import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { getSessionUser } from "@/components/get-session-user";
 import { Icons } from "@/components/icon";
-import ListPosts from "@/components/list-posts";
 import ReadLaterPosts from "@/components/read-later-posts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { dateFormat } from "@/lib/format-date";
 import postgres from "@/lib/postgres";
 import { getLists } from "@/lib/prisma/session";
 import Link from "next/link";
+
 
 export default async function ListPage() {
   const session = await getSessionUser();
