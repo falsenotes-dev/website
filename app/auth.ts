@@ -199,12 +199,10 @@ export const config = {
       return true; // Continue sign-in process
     },
     async jwt({ token, user }) {
+      console.log(user)
       const dbUser = await postgres.user.findFirst({
         where: {
-          OR: [
-            { githubId: user?.id },
-            { googleId: user?.id },
-          ]
+          email: user?.email,
         },
       })
 
