@@ -9,7 +9,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function UserAuthForm({ className, callbackUrl, ...props }: UserAuthFormProps & { callbackUrl?: string }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   async function onSubmit(event: React.SyntheticEvent) {
@@ -22,7 +22,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   async function signin(provider: string) {
-    await signIn(provider, { callbackUrl: "/feed" })
+    await signIn(provider, { callbackUrl: callbackUrl })
   }
 
   return (

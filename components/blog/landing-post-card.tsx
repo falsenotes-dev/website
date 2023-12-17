@@ -54,7 +54,7 @@ export default function LandingPostCard(
               <div className="flex justify-between items-center">
                 <div className="flex flex-1 items-center space-x-1.5">
 
-                  <span className="!text-muted-foreground text-sm">
+                  <span className="!text-muted-foreground text-xs">
                     {dateFormat(props.post.publishedAt)}
                   </span>
                   <span>·</span>

@@ -144,6 +144,7 @@ model List {
   sortOder    String     @default("newest")
   author      User       @relation(fields: [authorId], references: [id])
   authorId    String
+  slug        String     @unique
   posts       PostList[]
   savedUsers  ListSaving[]
   createdAt   DateTime   @default(now())

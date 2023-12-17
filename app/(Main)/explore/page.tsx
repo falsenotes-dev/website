@@ -8,6 +8,8 @@ import ExploreComponent from "@/components/explore/tab-content"
 import ExploreTab from "@/components/explore/tab"
 import Users from "@/components/explore/users"
 import Tags from "@/components/explore/tags"
+import { getLists } from "@/lib/prisma/session"
+import { searchLists } from "@/lib/prisma/list"
 
 export default async function Explore({
      searchParams
@@ -16,51 +18,20 @@ export default async function Explore({
 }) {
 
      const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
-     const tab = typeof searchParams.tab === 'string' ? searchParams.tab : undefined
 
-     let { posts } = await getPosts({ search, limit: 3 })
-     let { users } = await getUsers({ search, limit: 3 })
-     let { tags } = await searchTags({ search, limit: 3 })
-     tab === 'posts' && (posts = await getPosts({ search, limit: 10 }).then(res => res.posts))
-     tab === 'users' && (users = await getUsers({ search, limit: 10 }).then(res => res.users))
-     tab === 'tags' && (tags = await searchTags({ search, limit: 10 }).then(res => res.tags))
+     const { posts } = await getPosts({ search, limit: 3 })
+     const { users } = await getUsers({ search, limit: 3 })
+     const { tags } = await searchTags({ search, limit: 3 })
+     const { lists } = await searchLists({ search, limit: 3 })
      const session = await getSessionUser()
-     // ...
 
      return (
           <>
                <div className="flex flex-col items-center py-10 space-y-8">
                     <h2 className="font-medium text-4xl">Explore</h2>
                     <Search search={search} />
-                    <ExploreTab activeTab={tab} search={search} />
-                    {tab === undefined && (
-                         <ExploreComponent users={users} posts={posts} tags={tags} session={session} search={search} className="md:w-[600px]" />
-                    )}
-                    {tab === 'posts' && (
-                         <Posts initialPosts={posts} session={session} search={search} />
-                    )}
-                    {tab === 'users' && (
-                         <Users users={users} session={session} search={search} />
-                    )}
-                    {tab === 'tags' && (
-                         <Tags tags={tags} session={session} search={search} />
-                    )}
-                    {/* <div className="w-full mb-10 space-y-4">
-
-
-                         {tab === 'posts' && posts.length === 0 && search && (
-                              <div className="flex flex-col items-center justify-center w-full">
-                                   <EmptyPlaceholder>
-                                        <EmptyPlaceholder.Icon name="post" strokeWidth={1.25} />
-                                        <EmptyPlaceholder.Title>No posts found</EmptyPlaceholder.Title>
-                                        <EmptyPlaceholder.Description>
-                                             Try searching for something else.
-                                        </EmptyPlaceholder.Description>
-                                   </EmptyPlaceholder>
-                              </div>
-                         )
-                         }
-                    </div> */}
+                    <ExploreTab defaultValue="top" search={search} />
+                    <ExploreComponent users={users} posts={posts} tags={tags} lists={lists} session={session} search={search} className="md:w-[600px]" />
                </div>
           </>
      )

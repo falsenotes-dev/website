@@ -9,7 +9,7 @@ import { Separator } from '@radix-ui/react-context-menu';
 import { Button } from '../ui/button';
 import { EmptyPlaceholder } from '../empty-placeholder';
 
-export default function Posts({ initialPosts, search, session }: { initialPosts: any | undefined, search?: string | undefined, session: any }) {
+export default function Posts({ initialPosts, search, session, list }: { initialPosts: any | undefined, search?: string | undefined, session: any, list: any }) {
      const [posts, setposts] = useState<Array<any>>(initialPosts)
      const [page, setPage] = useState<number>(0)
      const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -36,17 +36,18 @@ export default function Posts({ initialPosts, search, session }: { initialPosts:
      return posts.length > 0 ? (
           <div className="feed__list md:w-[600px]">
                <Card>
-                    <CardHeader className="pb-0">
+                    <CardHeader>
                          <CardTitle className="feed__content_featured_card_title text-base">Posts</CardTitle>
                     </CardHeader>
-                    <CardContent className="px-6">
+                    <CardContent className="px-6 flex flex-col gap-4">
                          {posts?.map((post: any) => (
                               <>
                                    <FeedPostCard
                                         key={post.id}
                                         post={post}
                                         session={session}
-                                        className='bg-transparent border-none shadow-none md:-px-4'
+                                        list={list}
+                                        className='md:-px-4'
                                    />
                                    <Separator />
                               </>

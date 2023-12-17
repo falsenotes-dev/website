@@ -75,6 +75,12 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/donate',
+        destination: 'https://www.buymeacoffee.com/bkhtdev',
+        basePath: false,
+        permanent: true,
+      },
+      {
         source: '/terms',
         destination: '/@falsenotes/terms-of-service',
         permanent: true,

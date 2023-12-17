@@ -44,7 +44,7 @@ export default function UserHistory({
   async function loadMoreFeed() {
     const next = page + 1;
     const result = await fetch(
-      `api/user/${user.id}/history?page=${next}${
+      `/api/user/${sessionUser.id}/history?page=${next}${
         search ? `&search=${search}` : ""
       }`
     ).then((res) => res.json());

@@ -17,6 +17,7 @@ export default function UserBookmarks({
   sessionUser,
   tab,
   search,
+  list,
 }: {
   posts: any;
   className?: string;
@@ -24,6 +25,7 @@ export default function UserBookmarks({
   sessionUser?: any;
   tab?: string;
   search?: string | undefined;
+  list?: any;
 }) {
   const router = useRouter();
   const [posts, setPosts] = useState<Array<any>>(initialPosts);
@@ -62,7 +64,7 @@ export default function UserBookmarks({
           <div className="flex flex-col lg:gap-6 md:gap-5 gap-4">
             {posts?.map((article: any) => (
               <>
-                <PostCard post={article.post} session={sessionUser} />
+                <PostCard post={article.post} session={sessionUser} list={list} />
               </>
             ))}
 

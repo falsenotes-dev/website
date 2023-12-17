@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDebounce } from 'use-debounce'
 import { Icons } from "../icon";
 
-export default function Search({search} : {search: string | undefined}) {
+export default function Search({search, tab} : {search: string | undefined, tab?: string}) {
      const router = useRouter()
      const initialRender = useRef(true)
    
@@ -25,9 +25,9 @@ export default function Search({search} : {search: string | undefined}) {
        }
    
        if (!query) {
-         router.push(`/explore`)
+         router.push(`/explore${tab ? `/${tab}` : ''}`)
        } else if (query.length >= 3) {
-         router.push(`/explore?search=${query}`)
+         router.push(`/explore${tab ? `/${tab}` : ''}?search=${query}`)
        }
      }, [query])
      return (

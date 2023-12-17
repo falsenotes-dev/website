@@ -1,4 +1,4 @@
-import { getPostsForSite, getTagsForSite, getUsersForSite } from "@/lib/fetchers";
+import { getListsForSite, getPostsForSite, getTagsForSite, getUsersForSite } from "@/lib/fetchers";
 
 export default async function Sitemap() {
   const domain = process.env.DOMAIN
@@ -6,6 +6,7 @@ export default async function Sitemap() {
   const posts = await getPostsForSite();
   const users = await getUsersForSite();
   const tags = await getTagsForSite();
+  const lists = await getListsForSite();
 
   return [
     {
@@ -34,6 +35,10 @@ export default async function Sitemap() {
     ...tags.map(({ name }) => ({
       url: `${domain}/tags/${name}`,
       lastModified: new Date(),
+    })),
+    ...lists.map(({ slug, updatedAt }) => ({
+      url: `${domain}/lists/${slug}`,
+      lastModified: updatedAt || new Date(),
     })),
   ];
 }

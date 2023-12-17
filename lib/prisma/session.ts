@@ -26,23 +26,30 @@ export const getFollowingTags = async ({ id }: { id: string | undefined }) => {
     },
   });
 
-  const followingTagsWithLatestPostDate = followingTags?.tagfollower.map(tagFollower => {
-    const latestPostDate = tagFollower.tag.posts[0]?.createdAt;
+  const followingTagsWithLatestPostDate = followingTags?.tagfollower.map(
+    (tagFollower) => {
+      const latestPostDate = tagFollower.tag.posts[0]?.createdAt;
 
-    return {
-      ...tagFollower,
-      latestPostDate,
-    };
-  });
+      return {
+        ...tagFollower,
+        latestPostDate,
+      };
+    }
+  );
 
-  const sortedFollowingTags = followingTagsWithLatestPostDate?.sort((a, b) => new Date(b.latestPostDate).getTime() - new Date(a.latestPostDate).getTime());
+  const sortedFollowingTags = followingTagsWithLatestPostDate?.sort(
+    (a, b) =>
+      new Date(b.latestPostDate).getTime() -
+      new Date(a.latestPostDate).getTime()
+  );
   return {
-    followingTags: sortedFollowingTags ? JSON.parse(JSON.stringify(sortedFollowingTags)) : [],
+    followingTags: sortedFollowingTags
+      ? JSON.parse(JSON.stringify(sortedFollowingTags))
+      : [],
   };
 };
 
 export const getFollowings = async ({ id }: { id: string | undefined }) => {
-
   if (!id) {
     return { followings: [] };
   }
@@ -136,16 +143,28 @@ export const getSettings = async ({ id }: { id: string | undefined }) => {
           appearance: true,
           language: true,
           userId: true,
-        }
+        },
       },
       id: true,
     },
   });
 
-  return { settings: settings?.settings ? JSON.parse(JSON.stringify(settings?.settings)) : {} };
+  return {
+    settings: settings?.settings
+      ? JSON.parse(JSON.stringify(settings?.settings))
+      : {},
+  };
 };
 
-export const getBookmarks = async ({ id, limit = 5, page = 0 }: { id: string | undefined, limit?: number, page?: number }) => {
+export const getBookmarks = async ({
+  id,
+  limit = 5,
+  page = 0,
+}: {
+  id: string | undefined;
+  limit?: number;
+  page?: number;
+}) => {
   const user = await postgres.user.findFirst({
     where: { id },
     include: {
@@ -157,14 +176,14 @@ export const getBookmarks = async ({ id, limit = 5, page = 0 }: { id: string | u
               savedUsers: true,
               _count: {
                 select: {
-                 likes: true,
-                 savedUsers: true,
-                 readedUsers: true,
-                 shares: true,
-                 comments: true,
+                  likes: true,
+                  savedUsers: true,
+                  readedUsers: true,
+                  shares: true,
+                  comments: true,
                 },
               },
-            }
+            },
           },
         },
         orderBy: {
@@ -177,10 +196,21 @@ export const getBookmarks = async ({ id, limit = 5, page = 0 }: { id: string | u
     },
   });
 
-  return { bookmarks: JSON.parse(JSON.stringify(user?.bookmarks)), bookmarksCount: user?._count?.bookmarks };
+  return {
+    bookmarks: JSON.parse(JSON.stringify(user?.bookmarks)),
+    bookmarksCount: user?._count?.bookmarks,
+  };
 };
 
-export const getHistory = async ({ id, limit = 5, page = 0 }: { id: string | undefined, limit?: number, page?: number }) => {
+export const getHistory = async ({
+  id,
+  limit = 5,
+  page = 0,
+}: {
+  id: string | undefined;
+  limit?: number;
+  page?: number;
+}) => {
   const user = await postgres.user.findFirst({
     where: { id },
     select: {
@@ -192,14 +222,14 @@ export const getHistory = async ({ id, limit = 5, page = 0 }: { id: string | und
               author: true,
               _count: {
                 select: {
-                 likes: true,
-                 savedUsers: true,
-                 readedUsers: true,
-                 shares: true,
-                 comments: true,
+                  likes: true,
+                  savedUsers: true,
+                  readedUsers: true,
+                  shares: true,
+                  comments: true,
                 },
               },
-            }
+            },
           },
         },
         orderBy: {
@@ -213,13 +243,18 @@ export const getHistory = async ({ id, limit = 5, page = 0 }: { id: string | und
   });
 
   if (!user) {
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 
-  const history = user.readinghistory.filter((historyItem : any) => historyItem.post !== null);
+  const history = user.readinghistory.filter(
+    (historyItem: any) => historyItem.post !== null
+  );
 
-  return { history: JSON.parse(JSON.stringify(history)), historyCount: user._count.readinghistory };
-}
+  return {
+    history: JSON.parse(JSON.stringify(history)),
+    historyCount: user._count.readinghistory,
+  };
+};
 
 export const getNotifications = async ({ id }: { id: string | undefined }) => {
   const notifications = await postgres.user.findFirst({
@@ -238,23 +273,45 @@ export const getNotifications = async ({ id }: { id: string | undefined }) => {
     where: {
       id: {
         in: notifications?.notifications
-          .filter(notification => notification.senderId !== null)
-          .map(notification => notification.senderId as string),
+          .filter((notification) => notification.senderId !== null)
+          .map((notification) => notification.senderId as string),
       },
     },
-    include:{
+    include: {
       Followers: true,
       Followings: true,
+    },
+  });
+
+  const notificationsWithSenderDetails = notifications?.notifications.map(
+    (notification) => {
+      const sender = senderDetails?.find(
+        (sender) => sender.id === notification.senderId
+      );
+      return {
+        ...notification,
+        sender,
+      };
     }
+  );
+
+  return {
+    notifications: JSON.parse(JSON.stringify(notificationsWithSenderDetails)),
+  };
+};
+
+export const getLists = async ({ id }: { id: string | undefined }) => {
+  const lists = await postgres.list.findMany({
+    where: { authorId: id },
+    include: { posts: true },
   });
 
-  const notificationsWithSenderDetails = notifications?.notifications.map(notification => {
-    const sender = senderDetails?.find(sender => sender.id === notification.senderId);
-    return {
-      ...notification,
-      sender,
-    };
+  const bookmarks = await postgres.bookmark.findMany({
+    where: { userId: id },
   });
 
-  return { notifications: JSON.parse(JSON.stringify(notificationsWithSenderDetails)) };
+  return {
+    lists: JSON.parse(JSON.stringify(lists)),
+    bookmarks: JSON.parse(JSON.stringify(bookmarks)),
+  };
 };

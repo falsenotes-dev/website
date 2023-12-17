@@ -20,6 +20,7 @@ import { Skeleton } from "../ui/skeleton";
 import { shimmer, toBase64 } from "@/lib/image";
 import { validate } from "@/lib/revalidate";
 import PostAnalyticsDialog from "./post-analytics-dialog";
+import ListPopover from "../list-popover";
 
 
 export default function FeedPostCard(
@@ -27,8 +28,17 @@ export default function FeedPostCard(
     post: any;
     session: any;
     className?: string;
+    list: any;
   }
 ) {
+  const [openList, setOpenList] = React.useState(false);
+  const [isSaved, setIsSaved] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkIsSaved = props.list.lists?.some((list: any) => list.posts?.some((post: any) => post.postId === props.post.id)) || props.list.bookmarks?.some((bookmark: any) => bookmark.postId === props.post.id);
+    setIsSaved(checkIsSaved);
+  }, [props.list.lists, props.list.bookmarks, props.post.id]);
+
   const pathname = usePathname();
   const save = async (postId: string) => {
     await fetch(`/api/post/${postId}/save`, {
@@ -40,9 +50,10 @@ export default function FeedPostCard(
     });
     await validate(pathname)
   }
-  const isSaved = props.post?.savedUsers?.some((savedUser: any) => savedUser.userId === props.session?.id);
+
   return (
-    <Card {...props} className={cn("rounded-lg feedArticleCard w-full", props.className)}>
+    <>
+      <Card {...props} className={cn("rounded-lg feedArticleCard w-full", props.className)}>
       <CardContent className="py-0 px-4">
         <CardHeader className={cn("pt-4 pb-3 md:pt-6 px-0 gap-y-4")}>
           <div className="flex items-center space-x-1">
@@ -102,10 +113,12 @@ export default function FeedPostCard(
 
                   }
                   <div className="flex items-center space-x-1">
-                    <Button variant="ghost" size={"icon"} className="text-muted-foreground" onClick={() => save(props.post.id)} >
+                    <ListPopover lists={props.list.lists} session={props.session} postId={props.post.id} bookmarks={props.list.bookmarks} >
+                    <Button variant="ghost" size={"icon"} className="text-muted-foreground" >
                       { isSaved ? <Icons.bookmarkFill className="h-5 w-5"/> : <Icons.bookmark className="h-5 w-5" /> }
                       <span className="sr-only">Save</span>
                     </Button>
+                    </ListPopover>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Button variant="ghost" size={"icon"} className="text-muted-foreground">
@@ -170,10 +183,12 @@ export default function FeedPostCard(
 
               }
               <div className="flex items-center space-x-1 text-muted-foreground">
-                <Button variant="ghost" size={"icon"} className="text-muted-foreground" onClick={() => save(props.post.id)}>
-                { isSaved ? <Icons.bookmarkFill className="h-5 w-5" /> : <Icons.bookmark className="h-5 w-5" /> }
-                  <span className="sr-only">Save</span>
-                </Button>
+              <ListPopover lists={props.list.lists} session={props.session} postId={props.post.id} bookmarks={props.list.bookmarks} >
+                    <Button variant="ghost" size={"icon"} className="text-muted-foreground" >
+                      { isSaved ? <Icons.bookmarkFill className="h-5 w-5"/> : <Icons.bookmark className="h-5 w-5" /> }
+                      <span className="sr-only">Save</span>
+                    </Button>
+                    </ListPopover>
               </div>
               <div className="flex items-center space-x-1 text-muted-foreground">
                 <Button variant="ghost" size={"icon"} className="text-muted-foreground">
@@ -190,6 +205,7 @@ export default function FeedPostCard(
         </div>
       </CardContent>
     </Card>
+    </>
   );
 }
 

@@ -17,7 +17,7 @@ export default function LoginDialog({ className, children, ...props }: React.Com
                               You need to sign up or sign in to continue.
                          </DialogDescription>
                     </DialogHeader>
-                    <Button onClick={() => signIn("github")} className="mt-4">Join Now</Button>
+                    <Button onClick={() => signIn()} className="mt-4">Join Now</Button>
                </DialogContent>
           </Dialog>
      )

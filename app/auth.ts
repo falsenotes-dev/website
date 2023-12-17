@@ -50,7 +50,6 @@ export const config = {
                OR: [
                 { email: email },
                 { githubId: githubId.toString() },
-                { githubprofile: githubProfileURL }
               ] 
             }
           })
@@ -202,11 +201,7 @@ export const config = {
     async jwt({ token, user }) {
       const dbUser = await postgres.user.findFirst({
         where: {
-          OR: [
-            { email: user?.email },
-            { githubId: user?.id },
-            { googleId: user?.id },
-          ]
+          email: token?.email,
         },
       })
 

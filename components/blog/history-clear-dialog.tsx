@@ -41,7 +41,7 @@ export default function HistoryClearDialog({ post, user, ...props }: React.Compo
                         } else {
                           toast.success(res.message);
                         }
-                        await validate(`/@${user?.username}`);
+                        await validate(`/lists/history`);
                       }} className={cn(buttonVariants({variant: "destructive"}))}>Clear History</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
