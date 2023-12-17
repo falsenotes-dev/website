@@ -199,7 +199,6 @@ export const config = {
       return true; // Continue sign-in process
     },
     async jwt({ token, user }) {
-      console.log(user)
       const dbUser = await postgres.user.findFirst({
         where: {
           email: user?.email,
