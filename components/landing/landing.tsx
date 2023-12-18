@@ -26,6 +26,7 @@ import { ArrowRight } from "lucide-react";
 import React from "react";
 import { useInView } from "react-intersection-observer";
 import { getFeaturedPosts } from "@/lib/prisma/posts";
+import { signIn } from "next-auth/react";
 
 export default function Landing({
   latest,
@@ -95,8 +96,8 @@ export default function Landing({
                   </Balancer>
                 </p>
               </div>
-              <Button size={"lg"} className="mx-auto py-3" asChild>
-                <Link href="/signin">Join Now</Link>
+              <Button size={"lg"} className="mx-auto py-3" onClick={() => signIn()}>
+                Join Now
               </Button>
             </div>
             <div className="landing_hero-image w-[167vw] xl:w-screen">
