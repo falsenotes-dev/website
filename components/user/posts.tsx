@@ -10,6 +10,7 @@ import { Skeleton } from "../ui/skeleton";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PostCreateButton } from "./post-create-button";
+import { getPost } from "@/lib/prisma/posts";
 
 export default function UserPosts({
   posts: initialPosts,
@@ -44,15 +45,15 @@ export default function UserPosts({
 
   async function loadMoreFeed() {
     const next = page + 1;
-    const result = await fetch(
-      `api/user/${user.id}/posts?page=${next}${
-        search ? `&search=${search}` : ""
-      }`
-    ).then((res) => res.json());
-    const fetchedPosts = result?.posts;
-    if (fetchedPosts?.length) {
+    const whereQuery =
+    sessionUser?.id === user?.id
+      ? { pinned: false }
+      : { published: true, pinned: false };
+    const { posts } = await getPost({ id: user?.id, search, whereQuery, page: next });
+    
+    if (posts?.length) {
       setPage(next);
-      setPosts((prev) => [...prev, ...fetchedPosts]);
+      setPosts((prev) => [...prev, ...posts]);
     }
   }
 
