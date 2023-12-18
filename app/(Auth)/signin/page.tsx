@@ -56,7 +56,7 @@ export default async function SigninPage({ searchParams }: { searchParams: { [ke
             </div>
             <UserAuthForm callbackUrl={callbackUrl} />
             <p className="px-8 text-center text-sm text-muted-foreground">
-            By logging in or signing up using the options above, you agree to FalseNodes&apos;s{" "}
+            By logging in or signing up using the options above, you agree to FalseNotes&apos;{" "}
               <Link
                 href="/terms"
                 className="underline underline-offset-4 hover:text-primary"
