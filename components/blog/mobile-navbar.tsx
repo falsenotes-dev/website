@@ -77,7 +77,7 @@ export default function MobilePostTabs({
   );
   const [isSaved, setIsSaved] = useState<boolean>(false);
   useEffect(() => {
-    const checkIsSaved = list.lists?.some((list: any) => list.posts?.some((post: any) => post.postId === post.id)) || list.bookmarks?.some((bookmark: any) => bookmark.postId === post.id);
+    const checkIsSaved = list.lists?.some((list: any) => list.posts?.some((p: any) => p.postId === post.id)) || list.bookmarks?.some((bookmark: any) => bookmark.postId === post.id);
     setIsSaved(checkIsSaved);
   }, [list.lists, list.bookmarks, post.id]);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
