@@ -201,7 +201,7 @@ export const config = {
     async jwt({ token, user }) {
       const dbUser = await postgres.user.findFirst({
         where: {
-          email: token?.email,
+          email: token?.email ?? '',
         },
       })
 
