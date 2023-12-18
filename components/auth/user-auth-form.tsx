@@ -44,13 +44,13 @@ export function UserAuthForm({ className, callbackUrl, ...props }: UserAuthFormP
         )}{" "}
         Continue with GitHub
       </Button>
-      <Button variant={'outline'} type="button" disabled={isLoading} size={'lg'} onClick={() => signin("facebooj")}>
+      <Button variant="outline" type="button" disabled={isLoading} size={'lg'} onClick={() => signin("twitter")}>
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <Facebook className="mr-2 h-4 w-4" />
+          <Icons.twitter className="mr-2 h-4 w-4" />
         )}{" "}
-        Continue with Facebook
+        Continue with Twitter
       </Button>
 
     </div>

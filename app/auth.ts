@@ -3,6 +3,7 @@ import type { NextAuthOptions as NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
+import Twitter from "next-auth/providers/twitter";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { equal } from "assert";
 
@@ -35,6 +36,10 @@ export const config = {
     Facebook({
       clientId: process.env.FACEBOOK_CLIENT_ID!,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+    }),
+    Twitter({
+      clientId: process.env.TWITTER_CLIENT_ID!,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET!,
     }),
   ],
   callbacks: {
@@ -206,6 +211,114 @@ export const config = {
               console.error("Error updating user in the database:", error);
               return false; // Do not continue with the sign-in process
             }
+          }
+        } else if (account?.provider === "facebook") {
+          console.log("Facebook Profile:", profile);
+          const {
+            id: facebookId,
+            name,
+            email,
+            picture,
+            email_verified,
+            locale,
+          } = profile as any;
+          if (!facebookId) {
+            return false; // Do not continue with the sign-in process
+          }
+        } else if (account?.provider === "twitter") {
+          console.log("Twitter Profile:", profile);
+          const {
+            id: twitterId,
+            name,
+            email,
+            picture,
+            email_verified,
+            locale,
+            screen_name,
+            location,
+            description,
+            profile_image_url_https,
+          } = profile as any;
+          if (!twitterId) {
+            return false; // Do not continue with the sign-in process
+          }
+
+          // Check if the user exists in your database based on their email
+          try {
+            const userExists = await postgres.user.findFirst({
+              where: {
+                OR: [{ email: email }, { twitterId: twitterId.toString() }],
+              },
+            });
+
+            if (!userExists) {
+              // User doesn't exist, add them to the Users table
+              //create username (login) form email if not exists in db else add number to username
+              // remove =s96-c from image url
+              const image = profile_image_url_https.replace("_normal", "");
+              let username = screen_name;
+              let usernameExists = await postgres.user.findUnique({
+                where: {
+                  username: username,
+                },
+              });
+              if (usernameExists) {
+                username = username + Math.floor(Math.random() * 10000);
+              }
+              try {
+                const sessionUser = await postgres.user.create({
+                  data: {
+                    name: name,
+                    email: email,
+                    image: image,
+                    twitterId: twitterId,
+                    username: username,
+                    bio: description,
+                    location: location,
+                  },
+                  select: {
+                    id: true,
+                  },
+                });
+
+                const userSettingsExists =
+                  await postgres.userSettings.findFirst({
+                    where: {
+                      userId: sessionUser.id,
+                    },
+                  });
+                if (!userSettingsExists) {
+                  await postgres.userSettings.create({
+                    data: {
+                      userId: sessionUser.id,
+                      language: locale ? locale : "en",
+                    },
+                  });
+                }
+              } catch (error) {
+                console.error("Error inserting user into the database:", error);
+                return false; // Do not continue with the sign-in process
+              }
+            } else {
+              // User exists, update their details in the Users table
+              try {
+                const user = await postgres.user.update({
+                  where: {
+                    id: userExists.id,
+                  },
+                  data: {
+                    twitterId: twitterId.toString(),
+                    name: userExists.name ? userExists.name : name,
+                  },
+                });
+              } catch (error) {
+                console.error("Error updating user in the database:", error);
+                return false; // Do not continue with the sign-in process
+              }
+            }
+          } catch (error) {
+            console.error("Error updating user in the database:", error);
+            return false; // Do not continue with the sign-in process
           }
         }
       }
