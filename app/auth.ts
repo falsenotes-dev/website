@@ -1,9 +1,11 @@
-import postgres from "@/lib/postgres"
-import type { NextAuthOptions as NextAuthConfig } from "next-auth"
-import GitHub from "next-auth/providers/github"
-import Google from "next-auth/providers/google"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { equal } from "assert"
+import postgres from "@/lib/postgres";
+import type { NextAuthOptions as NextAuthConfig } from "next-auth";
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+import Facebook from "next-auth/providers/facebook";
+import Twitter from "next-auth/providers/twitter";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { equal } from "assert";
 
 export const config = {
   // https://next-auth.js.org/configuration/providers/oauth
@@ -23,44 +25,56 @@ export const config = {
     buttonText: "Continue with {provider}",
   },
   providers: [
-    GitHub({ 
-      clientId: process.env.GITHUB_CLIENT_ID!, 
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    })
+    }),
+    Facebook({
+      clientId: process.env.FACEBOOK_CLIENT_ID!,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+    }),
+    Twitter({
+      clientId: process.env.TWITTER_CLIENT_ID!,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET!,
+    }),
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      
       if (user) {
-        if (account?.provider === 'github') {
-          const { login, name, email, bio, html_url: githubProfileURL, avatar_url, location, id: githubId } = profile as any;
+        if (account?.provider === "github") {
+          const {
+            login,
+            name,
+            email,
+            bio,
+            html_url: githubProfileURL,
+            avatar_url,
+            location,
+            id: githubId,
+          } = profile as any;
           if (!login) {
-              
             return false; // Do not continue with the sign-in process
           }
           console.log("GitHub Profile:", profile);
-          
+
           // Check if the user exists in your database based on their email
           const userExists = await postgres.user.findFirst({
             where: {
-               OR: [
-                { email: email },
-                { githubId: githubId.toString() },
-              ] 
-            }
-          })
-          
+              OR: [{ email: email }, { githubId: githubId.toString() }],
+            },
+          });
+
           if (!userExists) {
-            let username = login
+            let username = login;
             let usernameExists = await postgres.user.findUnique({
               where: {
-                username: username
-              }
-            })
+                username: username,
+              },
+            });
             if (usernameExists) {
               username = username + Math.floor(Math.random() * 10000);
             }
@@ -75,24 +89,24 @@ export const config = {
                   githubprofile: githubProfileURL,
                   location: location,
                   image: avatar_url,
-                  githubId: githubId.toString()
+                  githubId: githubId.toString(),
                 },
                 select: {
-                  id: true
-                }
-              })
-  
+                  id: true,
+                },
+              });
+
               const userSettingsExists = await postgres.userSettings.findFirst({
                 where: {
-                  userId: sessionUser.id
-                }
-              })
+                  userId: sessionUser.id,
+                },
+              });
               if (!userSettingsExists) {
                 await postgres.userSettings.create({
                   data: {
-                    userId: sessionUser.id
-                  }
-                })
+                    userId: sessionUser.id,
+                  },
+                });
               }
             } catch (error) {
               console.error("Error inserting user into the database:", error);
@@ -103,21 +117,28 @@ export const config = {
             try {
               await postgres.user.update({
                 where: {
-                  id: userExists.id
+                  id: userExists.id,
                 },
                 data: {
                   githubId: githubId.toString(),
                   email: email,
                 },
-              })
+              });
             } catch (error) {
               console.error("Error updating user in the database:", error);
               return false; // Do not continue with the sign-in process
             }
           }
-        } else if (account?.provider === 'google') {
+        } else if (account?.provider === "google") {
           console.log("Google Profile:", profile);
-          const { sub: googleId, name, email, picture, email_verified, locale } = profile as any;
+          const {
+            sub: googleId,
+            name,
+            email,
+            picture,
+            email_verified,
+            locale,
+          } = profile as any;
           if (!googleId) {
             return false; // Do not continue with the sign-in process
           }
@@ -125,12 +146,9 @@ export const config = {
           // Check if the user exists in your database based on their email
           const userExists = await postgres.user.findFirst({
             where: {
-              OR: [
-                { email: email },
-                { googleId: googleId },
-              ]
-            }
-          })
+              OR: [{ email: email }, { googleId: googleId }],
+            },
+          });
 
           if (!userExists) {
             // User doesn't exist, add them to the Users table
@@ -140,9 +158,9 @@ export const config = {
             let username = email.split("@")[0];
             let usernameExists = await postgres.user.findUnique({
               where: {
-                username: username
-              }
-            })
+                username: username,
+              },
+            });
             if (usernameExists) {
               username = username + Math.floor(Math.random() * 10000);
             }
@@ -156,22 +174,22 @@ export const config = {
                   username: username,
                 },
                 select: {
-                  id: true
-                }
-              })
+                  id: true,
+                },
+              });
 
               const userSettingsExists = await postgres.userSettings.findFirst({
                 where: {
-                  userId: sessionUser.id
-                }
-              })
+                  userId: sessionUser.id,
+                },
+              });
               if (!userSettingsExists) {
                 await postgres.userSettings.create({
                   data: {
                     userId: sessionUser.id,
                     language: locale,
-                  }
-                })
+                  },
+                });
               }
             } catch (error) {
               console.error("Error inserting user into the database:", error);
@@ -182,17 +200,125 @@ export const config = {
             try {
               const user = await postgres.user.update({
                 where: {
-                  id: userExists.id
+                  id: userExists.id,
                 },
                 data: {
                   googleId: googleId,
                   name: userExists.name ? userExists.name : name,
                 },
-              })
+              });
             } catch (error) {
               console.error("Error updating user in the database:", error);
               return false; // Do not continue with the sign-in process
             }
+          }
+        } else if (account?.provider === "facebook") {
+          console.log("Facebook Profile:", profile);
+          const {
+            id: facebookId,
+            name,
+            email,
+            picture,
+            email_verified,
+            locale,
+          } = profile as any;
+          if (!facebookId) {
+            return false; // Do not continue with the sign-in process
+          }
+        } else if (account?.provider === "twitter") {
+          console.log("Twitter Profile:", profile);
+          const {
+            id: twitterId,
+            name,
+            email,
+            picture,
+            email_verified,
+            locale,
+            screen_name,
+            location,
+            description,
+            profile_image_url_https,
+          } = profile as any;
+          if (!twitterId) {
+            return false; // Do not continue with the sign-in process
+          }
+
+          // Check if the user exists in your database based on their email
+          try {
+            const userExists = await postgres.user.findFirst({
+              where: {
+                OR: [{ email: email }, { twitterId: twitterId.toString() }],
+              },
+            });
+
+            if (!userExists) {
+              // User doesn't exist, add them to the Users table
+              //create username (login) form email if not exists in db else add number to username
+              // remove =s96-c from image url
+              const image = profile_image_url_https.replace("_normal", "");
+              let username = screen_name;
+              let usernameExists = await postgres.user.findUnique({
+                where: {
+                  username: username,
+                },
+              });
+              if (usernameExists) {
+                username = username + Math.floor(Math.random() * 10000);
+              }
+              try {
+                const sessionUser = await postgres.user.create({
+                  data: {
+                    name: name,
+                    email: email,
+                    image: image,
+                    twitterId: twitterId,
+                    username: username,
+                    bio: description,
+                    location: location,
+                  },
+                  select: {
+                    id: true,
+                  },
+                });
+
+                const userSettingsExists =
+                  await postgres.userSettings.findFirst({
+                    where: {
+                      userId: sessionUser.id,
+                    },
+                  });
+                if (!userSettingsExists) {
+                  await postgres.userSettings.create({
+                    data: {
+                      userId: sessionUser.id,
+                      language: locale ? locale : "en",
+                    },
+                  });
+                }
+              } catch (error) {
+                console.error("Error inserting user into the database:", error);
+                return false; // Do not continue with the sign-in process
+              }
+            } else {
+              // User exists, update their details in the Users table
+              try {
+                const user = await postgres.user.update({
+                  where: {
+                    id: userExists.id,
+                  },
+                  data: {
+                    twitterId: twitterId.toString(),
+                    name: userExists.name ? userExists.name : name,
+                  },
+                });
+              } catch (error) {
+                console.error("Error updating user in the database:", error);
+                return false; // Do not continue with the sign-in process
+              }
+            }
+          } catch (error) {
+            console.error("Error updating user in the database:", error);
+            return false; // Do not continue with the sign-in process
           }
         }
       }
@@ -201,15 +327,15 @@ export const config = {
     async jwt({ token, user }) {
       const dbUser = await postgres.user.findFirst({
         where: {
-          email: token?.email ?? '',
+          email: token?.email ?? "",
         },
-      })
+      });
 
       if (!dbUser) {
         if (user) {
-          token.id = user?.id
+          token.id = user?.id;
         }
-        return token
+        return token;
       }
 
       return {
@@ -218,7 +344,7 @@ export const config = {
         username: dbUser.username,
         email: dbUser.email,
         picture: dbUser.image,
-      }
+      };
     },
     async session({ token, session }) {
       if (token) {
@@ -238,17 +364,17 @@ export const config = {
         },
       };
     },
-  },  
-} satisfies NextAuthConfig
+  },
+} satisfies NextAuthConfig;
 
 // We recommend doing your own environment variable validation
 declare global {
   namespace NodeJS {
     export interface ProcessEnv {
-      NEXTAUTH_SECRET: string
+      NEXTAUTH_SECRET: string;
 
-      GITHUB_CLIENT_ID: string
-      GITHUB_CLIENT_SECRET: string
+      GITHUB_CLIENT_ID: string;
+      GITHUB_CLIENT_SECRET: string;
     }
   }
 }
