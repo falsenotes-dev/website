@@ -79,6 +79,7 @@ export async function getListsForSite() {
         slug: true,
         updatedAt: true,
         createdAt: true,
+        author: true,
       },
     });
   })();
