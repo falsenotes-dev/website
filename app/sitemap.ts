@@ -36,8 +36,8 @@ export default async function Sitemap() {
       url: `${domain}/tags/${name}`,
       lastModified: new Date(),
     })),
-    ...lists.map(({ slug, updatedAt }) => ({
-      url: `${domain}/lists/${slug}`,
+    ...lists.map(({ slug, updatedAt, author }) => ({
+      url: `${domain}/@${author.username}/list/${slug}`,
       lastModified: updatedAt || new Date(),
     })),
   ];
