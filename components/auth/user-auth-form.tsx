@@ -27,7 +27,7 @@ export function UserAuthForm({ className, callbackUrl, ...props }: UserAuthFormP
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn("grid gap-6 py-4", className)} {...props}>
       <Button variant="default" type="button" disabled={isLoading} size={'lg'} onClick={() => signin("google")}>
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -36,22 +36,24 @@ export function UserAuthForm({ className, callbackUrl, ...props }: UserAuthFormP
         )}{" "}
         Continue with Google
       </Button>
-      <Button variant="outline" type="button" disabled={isLoading} size={'lg'} onClick={() => signin("github")}>
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
-        Continue with GitHub
-      </Button>
-      <Button variant="outline" type="button" disabled={isLoading} size={'lg'} onClick={() => signin("twitter")}>
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.twitter className="mr-2 h-4 w-4" />
-        )}{" "}
-        Continue with Twitter
-      </Button>
+      <div className="flex gap-2 w-full justify-center">
+        <Button variant="outline" type="button" disabled={isLoading} onClick={() => signin("github")}>
+          {isLoading ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Icons.gitHub className="mr-2 h-4 w-4" />
+          )}{" "}
+          GitHub
+        </Button>
+        <Button variant="outline" type="button" disabled={isLoading} onClick={() => signin("twitter")}>
+          {isLoading ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Icons.twitter className="mr-2 h-4 w-4" />
+          )}{" "}
+          Twitter
+        </Button>
+      </div>
 
     </div>
   )
