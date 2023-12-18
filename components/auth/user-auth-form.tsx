@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icon"
 import { Button } from "@/components/ui/button"
 import { signIn, signOut, useSession } from "next-auth/react";
+import { Facebook } from "lucide-react"
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, callbackUrl, ...props }: UserAuthFormProps & { callbackUrl?: string }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
@@ -43,6 +44,15 @@ export function UserAuthForm({ className, callbackUrl, ...props }: UserAuthFormP
         )}{" "}
         Continue with GitHub
       </Button>
+      <Button variant={'outline'} type="button" disabled={isLoading} size={'lg'} onClick={() => signin("facebooj")}>
+        {isLoading ? (
+          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Facebook className="mr-2 h-4 w-4" />
+        )}{" "}
+        Continue with Facebook
+      </Button>
+
     </div>
   )
 }
