@@ -59,6 +59,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description:
         post.subtitle || markdownToText(post.content?.slice(0, 100) || ""),
       keywords: post.tags.map((tag: any) => tag.tag.name).join(", "),
+      robots: {
+        index: true,
+        follow: true,
+        nocache: true,
+        "max-image-preview": "large",
+      },
+      alternates: {
+        canonical: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}`), 
+        types: {
+          url: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}?commentsOpen=true`),
+          title: `${post.title} - FalseNotes`,
+        }
+      },
       openGraph: {
         title: `${post.title} - FalseNotes`,
         description:
