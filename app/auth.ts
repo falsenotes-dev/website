@@ -310,7 +310,9 @@ export const config = {
                   data: {
                     twitterId: twitterId.toString(),
                     name: userExists.name ? userExists.name : name,
-                    twitterProfile: screen_name,
+                    twitterProfile: userExists.twitterProfile
+                      ? userExists.twitterProfile
+                      : screen_name,
                   },
                 });
               } catch (error) {

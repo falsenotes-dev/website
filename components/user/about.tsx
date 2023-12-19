@@ -88,7 +88,7 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                                                   <EmptyPlaceholder.Icon name="users" strokeWidth={1.25} />
                                                   <EmptyPlaceholder.Title>No followers</EmptyPlaceholder.Title>
                                                   <EmptyPlaceholder.Description>
-                                                       {user?.id === session?.id ? "You don't have any followers yet." : " The user doesn't have any followers yet." }
+                                                       {user?.id === session?.id ? "You don't have any followers yet." : " The user doesn't have any followers yet."}
                                                   </EmptyPlaceholder.Description>
                                              </EmptyPlaceholder>
                                         )
@@ -144,7 +144,7 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                                                   <EmptyPlaceholder.Icon name="users" strokeWidth={1.25} />
                                                   <EmptyPlaceholder.Title>No followings</EmptyPlaceholder.Title>
                                                   <EmptyPlaceholder.Description>
-                                                       {user?.id === session?.id ? "You don't have any followings yet." : " The user doesn't have any followings yet." }
+                                                       {user?.id === session?.id ? "You don't have any followings yet." : " The user doesn't have any followings yet."}
                                                   </EmptyPlaceholder.Description>
                                              </EmptyPlaceholder>
                                         )
@@ -181,6 +181,18 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                          </Button>
                     </div>
                     )
+                    }
+                    {
+                         user?.twitterProfile && (
+                              <div>
+                                   <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground" >
+                                        <Link href={`https://twitter.com/${user?.twitterProfile}`} target="_blank" className="flex items-center font-light !text-sm">
+                                             <Icons.twitter className="mr-2 h-5 w-5 text-muted-foreground" />
+                                             {user?.twitterProfile}
+                                        </Link>
+                                   </Button>
+                              </div>
+                         )
                     }
                     <div>
                          <Button variant={"link"} size={"sm"} asChild className="p-0 !text-sm hover:!no-underline text-foreground" >
