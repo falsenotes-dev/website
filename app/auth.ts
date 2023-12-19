@@ -272,6 +272,7 @@ export const config = {
                     email: email,
                     image: image,
                     twitterId: twitterId,
+                    twitterProfile: screen_name,
                     username: username,
                     bio: description,
                     location: location,
@@ -309,6 +310,9 @@ export const config = {
                   data: {
                     twitterId: twitterId.toString(),
                     name: userExists.name ? userExists.name : name,
+                    twitterProfile: userExists.twitterProfile
+                      ? userExists.twitterProfile
+                      : screen_name,
                   },
                 });
               } catch (error) {
