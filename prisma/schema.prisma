@@ -28,6 +28,7 @@ model User {
   githubId       String?
   googleId       String?             @map("google_id")
   twitterId      String?             @map("twitter_id")
+  twitterProfile String?             @map("twitter_profile")
   isPublication  Boolean             @default(false)
   settings       UserSettings?
   notifications  Notification[]
