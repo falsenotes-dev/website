@@ -27,14 +27,14 @@ export default function ListCard({
   ...props
 }: React.ComponentPropsWithoutRef<typeof Card> & { list: any, session: any }) {
   const [saved, setSaved] = React.useState(false);
-     React.useEffect(() => {
-          setSaved(list.savedUsers.find((user: any) => user.userId === session?.id))
-     }, [list.savedUsers, session])
+  React.useEffect(() => {
+    setSaved(list.savedUsers.find((user: any) => user.userId === session?.id))
+  }, [list.savedUsers, session])
   return (
     <>
       <Card {...props}>
-        <CardContent className="p-0">
-          <div className="flex md:flex-row flex-col">
+        <CardContent className="p-0 h-full">
+          <div className="flex md:flex-row flex-col h-full">
             <CardHeader className="w-full gap-4 h-full">
               <Link href={`/@${list.author.username}`} className="flex gap-2">
                 <Avatar className="h-5 w-5">
@@ -66,16 +66,16 @@ export default function ListCard({
                   )}
                 </div>
                 <div className="flex gap-1">
-                {
+                  {
                     session ? (
                       <Button variant="ghost" size={'icon'} className="text-muted-foreground" disabled={list.authorId === session?.id} onClick={
                         async () => {
                           const res = await saveList({ id: list.id });
                           await validate(`/list/saved`);
                           if (res.success) {
-                              toast(res.message)
+                            toast(res.message)
                           } else {
-                              toast.error(res.message)
+                            toast.error(res.message)
                           }
                         }
                       }>
@@ -93,59 +93,59 @@ export default function ListCard({
                       </LoginDialog>
                     )
                   }
-                <ListMoreActions list={list} session={session}>
-                  <Button variant="ghost" size={'icon'} className="text-muted-foreground">
-                    <MoreHorizontalIcon className="h-5 w-5" />
-                  </Button>
-                </ListMoreActions>
+                  <ListMoreActions list={list} session={session}>
+                    <Button variant="ghost" size={'icon'} className="text-muted-foreground">
+                      <MoreHorizontalIcon className="h-5 w-5" />
+                    </Button>
+                  </ListMoreActions>
                 </div>
               </div>
             </CardHeader>
             <Link href={`/list/${list.slug}`} className="pointer-events-none rounded-b-lg">
-               <div className="relative flex justify-end md:w-80 w-full overflow-hidden h-full min-h-[8rem]">
-                    <div className="relative bg-muted z-[3] border-r-[3px] border-background w-full pl-0 rounded-bl-lg md:rounded-none min-h-[8rem] self-stretch">
-                         <div className="h-full w-full">
-                              {
-                                   list.posts.filter((p: any) => p.post.cover)[0] && (
-                                        <Image
-                                             src={list.posts.filter((p: any) => p.post.cover)[0].post.cover!}
-                                             fill
-                                             alt={'Read Later'}
-                                             className="object-cover !relative h-full rounded-bl-lg md:rounded-none"
-                                        />
-                                   )
-                              }
-                         </div>
-                    </div>
-                    <div className="relative bg-muted w-full z-[2] border-r-[3px] border-background pl-2 -ml-20 min-h-[8rem] self-stretch">
-                         <div className="h-full w-full">
-                         {
-                              list.posts.filter((p: any) => p.post.cover)[1] && (
-                                   <Image
-                                        src={list.posts.filter((p: any) => p.post.cover)[1].post.cover!}
-                                        fill
-                                        alt={'Read Later'}
-                                        className="object-cover !relative h-full"
-                                   />
-                              )
-                         }
-                         </div>
-                    </div>
-                    <div className="relative bg-muted z-[1] border-none pl-2 -ml-32 w-full rounded-br-lg md:rounded-r-lg min-h-[8rem] self-stretch">
-                         <div className="h-full w-full">
-                         {
-                              list.posts.filter((p: any) => p.post.cover)[2] && (
-                                   <Image
-                                        src={list.posts.filter((p: any) => p.post.cover)[2].post.cover!}
-                                        fill
-                                        alt={'Read Later'}
-                                        className="object-cover !relative h-full rounded-br-lg md:rounded-r-lg"
-                                   />
-                              )
-                         }
-                         </div>
-                    </div>
-               </div>
+              <div className="relative flex justify-end md:w-80 w-full overflow-hidden h-full min-h-[8rem] max-h-48">
+                <div className="relative bg-muted z-[3] border-r-[3px] border-background w-full pl-0 rounded-bl-lg md:rounded-none min-h-[8rem] max-h-48 self-stretch">
+                  <div className="h-full w-full">
+                    {
+                      list.posts.filter((p: any) => p.post.cover)[0] && (
+                        <Image
+                          src={list.posts.filter((p: any) => p.post.cover)[0].post.cover!}
+                          fill
+                          alt={'Read Later'}
+                          className="object-cover !relative h-full rounded-bl-lg md:rounded-none"
+                        />
+                      )
+                    }
+                  </div>
+                </div>
+                <div className="relative bg-muted w-full z-[2] border-r-[3px] border-background pl-2 -ml-20 min-h-[8rem] max-h-48 self-stretch">
+                  <div className="h-full w-full">
+                    {
+                      list.posts.filter((p: any) => p.post.cover)[1] && (
+                        <Image
+                          src={list.posts.filter((p: any) => p.post.cover)[1].post.cover!}
+                          fill
+                          alt={'Read Later'}
+                          className="object-cover !relative h-full"
+                        />
+                      )
+                    }
+                  </div>
+                </div>
+                <div className="relative bg-muted z-[1] border-none pl-2 -ml-32 w-full rounded-br-lg md:rounded-r-lg min-h-[8rem] max-h-48 self-stretch">
+                  <div className="h-full w-full">
+                    {
+                      list.posts.filter((p: any) => p.post.cover)[2] && (
+                        <Image
+                          src={list.posts.filter((p: any) => p.post.cover)[2].post.cover!}
+                          fill
+                          alt={'Read Later'}
+                          className="object-cover !relative h-full rounded-br-lg md:rounded-r-lg"
+                        />
+                      )
+                    }
+                  </div>
+                </div>
+              </div>
             </Link>
           </div>
         </CardContent>
