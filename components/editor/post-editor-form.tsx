@@ -73,6 +73,7 @@ import readingTime from "reading-time";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { Editor } from "novel";
+import StarterKit from "@tiptap/starter-kit";
 
 async function fetchSuggestions(query: string) {
   const tagResponse = await fetch(
@@ -378,11 +379,6 @@ export function PostEditorForm(props: { post: any; user: any }) {
     }
   }
 
-  async function handleContentChange(value: string) {
-    form.setValue("content", value);
-    setMarkdownContent(value);
-  }
-
   function markdownToText(markdown: string) {
     return markdown
       .replace(/!\[(.*?)\]\((.*?)\)/g, "$1") // remove image markdown
@@ -470,7 +466,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                 <FormControl>
                   <TextareaAutosize
                     placeholder="Title of the post"
-                    className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
+                    className="w-full px-8 md:px-12 resize-none appearance-none overflow-hidden bg-transparent text-3xl md:text-4xl md:leading-snug font-bold focus:outline-none"
                     {...field}
                     onChange={handleTitleChange}
                   />
@@ -487,30 +483,16 @@ export function PostEditorForm(props: { post: any; user: any }) {
                 <FormControl>
                   <Editor
                     className="min-h-[250px]"
+
                     editorProps={{
                       attributes: {
                         class:
-                          "prose-lg prose dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full",
-                      },
-                      handleKeyDown: (e: any) => {
-                        if (e.key === "Tab") {
-                          e.preventDefault();
-                          const tab = "  ";
-                          const selection = window.getSelection();
-                          if (selection) {
-                            const range = selection.getRangeAt(0);
-                            const tabNode = document.createTextNode(tab);
-                            range.insertNode(tabNode);
-                            range.setStartAfter(tabNode);
-                            range.setEndAfter(tabNode);
-                            selection.removeAllRanges();
-                            selection.addRange(range);
-                          }
-                        }
+                          "prose-neutral dark:prose-invert prose-img:rounded-xl prose-a:text-primary prose-code:bg-popover prose-pre:!bg-popover prose-code:text-foreground prose-pre:text-foregroundlg:prose-xl prose prose-headings:font-title font-default focus:outline-none max-w-full",
                       },
                     }}
                     defaultValue={field.value}
                     onUpdate={(editor) => {
+                      console.log(editor?.storage.markdown.getMarkdown());
                       form.setValue("content", editor?.storage.markdown.getMarkdown());
                     }}
                     disableLocalStorage={true}
@@ -951,7 +933,8 @@ export function PostEditorForm(props: { post: any; user: any }) {
               <DialogFooter className="p-6 border-t">
                 <Button
                   type="submit"
-                  className="ml-auto w-full"
+                  variant={'default'}
+                  className="ml-auto w-full !bg-primary hover:!bg-primary/90"
                   size={"lg"}
                   form="PostForm"
                   disabled={
