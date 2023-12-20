@@ -197,11 +197,11 @@ export function PostEditorForm(props: { post: any, user: any }) {
 
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
-  async function uploadCover() {
-    if (file) {
+  async function uploadCover(cover?: File) {
+    if (cover) {
       try {
         const dataForm = new FormData()
-        dataForm.set('file', file)
+        dataForm.set('file', cover ? cover : file || '')
         // Construct the request body with postId and authorId
         const requestBody = {
           postId: form.getValues('id'),
@@ -220,9 +220,9 @@ export function PostEditorForm(props: { post: any, user: any }) {
             description: "Your cover image could not be uploaded.",
             action: {
               label: "Try again",
-              onClick: async() => {
+              onClick: async () => {
                 //resubmit
-                await uploadCover()
+                await uploadCover(cover)
               },
             }
           });
@@ -252,7 +252,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
             description: "Your draft could not be saved.",
             action: {
               label: "Try again",
-              onClick: async() => {
+              onClick: async () => {
                 //resubmit
                 await saveDraft()
               },
@@ -268,7 +268,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
           description: "Your draft could not be saved.",
           action: {
             label: "Try again",
-            onClick: async() => {
+            onClick: async () => {
               //resubmit
               await saveDraft()
             },
@@ -287,7 +287,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
             description: "Your draft could not be saved.",
             action: {
               label: "Try again",
-              onClick: async() => {
+              onClick: async () => {
                 //resubmit
                 await saveDraft()
               },
@@ -357,25 +357,6 @@ export function PostEditorForm(props: { post: any, user: any }) {
   async function handleContentChange(value: string) {
     form.setValue('content', value);
     setMarkdownContent(value);
-
-    // Split the markdown content by sections
-    const sections = value.split("\n\n");
-
-    // Convert only the first section to text
-    const firstSection = sections[0];
-
-    // If first section is empty or has less than 100 characters, use the second section
-    if (firstSection.length < 100) {
-      const secondSection = sections[0] + ' ' + sections[1];
-      const description = markdownToText(secondSection);
-
-      (form.getValues('subtitle') == '' || form.getValues('subtitle') === null) && form.setValue('subtitle', description);
-      return;
-    } else {
-      const description = markdownToText(firstSection);
-
-      (form.getValues('subtitle') == '' || form.getValues('subtitle') === null) && form.setValue('subtitle', description);
-    }
   }
 
   function markdownToText(markdown: string) {
@@ -413,13 +394,15 @@ export function PostEditorForm(props: { post: any, user: any }) {
     const description = markdownToText(firstSection);
     // If first section is empty or has less than 100 characters, use the 1st and 2nd section
     if (firstSection.length < 100) {
-      const secondSection = sections[0] + ' ' + sections[1];
+      const secondSection = sections[1] ? sections[0] + ' ' + sections[1] : sections[0];
       const description = markdownToText(secondSection);
       (value !== '' || value === null) ? form.setValue('subtitle', value) : form.setValue('subtitle', description);
       return;
     }
     (value !== '' || value === null) ? form.setValue('subtitle', value) : form.setValue('subtitle', markdownToText(description));
   }
+
+  const [socialPreview, setSocialPreview] = useState<string>(`https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues('title')}&subtitle=${form.getValues('subtitle')}&cover=${form.getValues('coverImage')}&readingTime=${readingTime(form.getValues('content')).text}&authorid=${props.user?.username}`);
 
   return (
     <>
@@ -539,15 +522,15 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                     </div>)
                                 }
                                 <Input id="dropzone-file" type="file" accept="image/jpeg, image/png, image/gif" onChange={async (e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    if (file.size > 2 * 1024 * 1024) {
+                                  const cover = e.target.files?.[0];
+                                  if (cover) {
+                                    if (cover.size > 2 * 1024 * 1024) {
                                       toast.warning("File size must be less than 2MB.");
-                                    } else if (!['image/png', 'image/jpeg', 'image/gif'].includes(file.type)) {
+                                    } else if (!['image/png', 'image/jpeg', 'image/gif'].includes(cover.type)) {
                                       toast.warning("File type must be PNG, JPG, or GIF.");
                                     } else {
-                                      setFile(file);
-                                      const url = await uploadCover();
+                                      setFile(cover);
+                                      const url = await uploadCover(cover);
                                       form.setValue('coverImage', url);
                                     }
                                   }
@@ -555,9 +538,9 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                 {
                                   (cover || file) && (
                                     <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
-                                      <Button variant="secondary" size={'icon'} className="bg-secondary/10 backdrop-blur-xl hover:bg-secondary" onClick={
+                                      <Button variant="secondary" size={'icon'} className="bg-secondary/60 backdrop-blur-md hover:bg-secondary" onClick={
                                         async () => {
-                                          const coverUrl = await uploadCover();
+                                          const coverUrl = await uploadCover(file);
                                           if (coverUrl) {
                                             form.setValue('coverImage', coverUrl);
                                           }
@@ -566,7 +549,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                                         <Icons.upload className="h-4 w-4" />
                                         <span className="sr-only">Upload</span>
                                       </Button>
-                                      <Button variant="secondary" size={'icon'} className="bg-secondary/10 backdrop-blur-xl hover:bg-secondary" onClick={() => {
+                                      <Button variant="secondary" size={'icon'} className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary" onClick={() => {
                                         form.setValue('coverImage', '');
                                         setCover('');
                                         setFile(undefined);
@@ -606,9 +589,19 @@ export function PostEditorForm(props: { post: any, user: any }) {
                         <FormDescription>An image of superior quality enhances the attractiveness of your post for readers, especially on social networks.</FormDescription>
                         <FormControl>
                           <>
-                            <AspectRatio ratio={1200 / 630} className="bg-muted rounded-md">
+                            <AspectRatio ratio={1200 / 630} className="bg-muted rounded-md relative">
 
-                              <Image src={`https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues('title')}&subtitle=${form.getValues('subtitle')}&cover=${form.getValues('coverImage')}&readingTime=${readingTime(form.getValues('content')).text}&authorid=${props.user?.username}`} className="rounded-md" alt="Thumbnail" height={630} width={1200} objectFit="cover" />
+                              <Image src={socialPreview} className="rounded-md" alt="Thumbnail" height={630} width={1200} objectFit="cover" />
+                              <Button
+                                variant="secondary"
+                                size={'icon'}
+                                className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
+                                onClick={() => {
+                                  setSocialPreview(`https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues('title')}&subtitle=${form.getValues('subtitle')}&cover=${form.getValues('coverImage')}&readingTime=${readingTime(form.getValues('content')).text}&authorid=${props.user?.username}`);
+                                }}
+                              >
+                                <RefreshCcw className="h-4 w-4" />
+                              </Button>
                             </AspectRatio>
                           </>
                         </FormControl>
@@ -706,37 +699,37 @@ export function PostEditorForm(props: { post: any, user: any }) {
                     )}
                   />
                   <div className="flex flex-col gap-2.5">
-                  <FormField
-                    control={form.control}
-                    name="commentsOn"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Community</FormLabel>
-                        <FormControl>
-                          <div className="flex items-center space-x-2">
-                            <Switch id="comments-on" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground"  />
-                            <Label htmlFor="comments-on">Allow Comments</Label>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="likesOn"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <div className="flex items-center space-x-2">
-                            <Switch id="likes-on" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground" />
-                            <Label htmlFor="likes-on">Allow Reactions</Label>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="commentsOn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Community</FormLabel>
+                          <FormControl>
+                            <div className="flex items-center space-x-2">
+                              <Switch id="comments-on" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground" />
+                              <Label htmlFor="comments-on">Allow Comments</Label>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="likesOn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="flex items-center space-x-2">
+                              <Switch id="likes-on" checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-foreground" />
+                              <Label htmlFor="likes-on">Allow Reactions</Label>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
               </ScrollArea>
@@ -800,28 +793,27 @@ export function PostEditorForm(props: { post: any, user: any }) {
                 </div>
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button onClick={() => 
-                    {
+                    <Button onClick={() => {
                       if ((!form.getValues('content') || form.getValues('content') === '') && (!form.getValues('title') || form.getValues('title') === '')) {
                         toast.error("Please enter a title and content for your post!");
                       } else if (!form.getValues('title') || form.getValues('title') === '') {
                         toast.error("Please enter a title for your post!");
                       } else if (!form.getValues('content') || form.getValues('content') === '') {
                         toast.error("Please enter a content for your post!");
-                      }else {
+                      } else {
                         saveDraft();
                       }
-                    }  
-                  } className="m-auto" size={"lg"} variant="outline" disabled={isSaving}>{
-                      isSaving ? (
-                        <>
-                          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> Saving
-                        </>
-                      ) : (
-                        <>Save</>
-                      )
+                    }
+                    } className="m-auto" size={"lg"} variant="outline" disabled={isSaving}>{
+                        isSaving ? (
+                          <>
+                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> Saving
+                          </>
+                        ) : (
+                          <>Save</>
+                        )
 
-                    }</Button>
+                      }</Button>
                   </DialogClose>
                 </DialogFooter>
               </DialogContent>
@@ -842,7 +834,24 @@ export function PostEditorForm(props: { post: any, user: any }) {
                 } else if (!form.getValues('content') || form.getValues('content') === '') {
                   toast.error("Please enter a content for your post!");
                   setOpen(false)
-                }else {
+                } else {
+                  // Split the markdown content by sections
+                  const sections = form.getValues('content').split("\n\n");
+
+                  // Convert only the first section to text
+                  const firstSection = sections[0];
+
+                  // If first section is empty or has less than 100 characters, use the second section
+                  if (firstSection.length < 100) {
+                    const secondSection = sections[1] ? sections[0] + ' ' + sections[1] : sections[0];
+                    const description = markdownToText(secondSection);
+
+                    (form.getValues('subtitle') == '' || form.getValues('subtitle') === null) && form.setValue('subtitle', description);
+                  } else {
+                    const description = markdownToText(firstSection);
+
+                    (form.getValues('subtitle') == '' || form.getValues('subtitle') === null) && form.setValue('subtitle', description);
+                  }
                   setOpen(true);
                 }
               }
