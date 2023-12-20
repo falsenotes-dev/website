@@ -15,11 +15,11 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
-  const pathname = usePathname() as string
+  const pathname = usePathname()
 
   const router = useRouter()
   return (
-    <Tabs defaultValue={pathname as string} orientation="vertical" className={cn("flex w-full gap-6 items-start flex-1", className)} {...props}>
+    <Tabs defaultValue={pathname} className={cn("flex w-full gap-6 items-start flex-1", className)}>
       <TabsList
         className={cn(
           "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 md:flex-col md:h-fit w-full bg-transparent",
