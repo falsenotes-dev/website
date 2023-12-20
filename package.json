@@ -68,6 +68,8 @@
     "next-share": "^0.27.0",
     "next-themes": "^0.2.1",
     "nextjs-toploader": "^1.6.4",
+    "novel": "^0.1.22",
+    "openai": "^4.24.0",
     "pg": "^8.11.0",
     "postcss": "^8.4.31",
     "prisma": "^5.7.0",

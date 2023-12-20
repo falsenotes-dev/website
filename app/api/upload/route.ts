@@ -1,35 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
-import { BlobServiceClient } from "@azure/storage-blob";
+import { put } from "@vercel/blob";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-  try {
-    const data = await req.formData(); 
-    const file: File | null = data.get('file') as File;
+export const runtime = "edge";
 
-    if (!file) {
-      return NextResponse.json({ success: false, message: 'No file provided' }, { status: 400 });
-    }
-
-    const postId = req.nextUrl.searchParams.get("postId");
-    const authorId = req.nextUrl.searchParams.get("authorId");
-
-    if (!postId || !authorId) {
-      return NextResponse.json({ success: false, message: 'postId and authorId are required query parameters' }, { status: 400 });
-    }
-
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING!);
-    const containerClient = blobServiceClient.getContainerClient('blogs');
-    const blockBlobClient = containerClient.getBlockBlobClient(`${authorId}/${postId}`);
-
-    await blockBlobClient.upload(buffer, buffer.length);
-
-    const url = `https://falsenotescontent.blob.core.windows.net/blogs/${authorId}/${postId}`;
-
-    return NextResponse.json({ success: true, message: 'File uploaded', data: { url } }, { status: 201 });
-  } catch (error : any) {
-    console.error(error);
-    return NextResponse.json({ success: false, message: error }, { status: 500 });
+export async function POST(req: Request) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return new Response(
+      "Missing BLOB_READ_WRITE_TOKEN. Don't forget to add that to your .env file.",
+      {
+        status: 401,
+      }
+    );
   }
+
+  const file = req.body || "";
+  const filename = req.headers.get("x-vercel-filename") || "file.txt";
+  const contentType = req.headers.get("content-type") || "text/plain";
+  const fileType = `.${contentType.split("/")[1]}`;
+
+  // construct final filename based on content-type if not provided
+  const finalName = filename.includes(fileType)
+    ? filename
+    : `${filename}${fileType}`;
+  const blob = await put(finalName, file, {
+    contentType,
+    access: "public",
+  });
+
+  return NextResponse.json(blob);
 }
