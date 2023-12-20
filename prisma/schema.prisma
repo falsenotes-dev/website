@@ -81,6 +81,7 @@ model Post {
   title         String
   content       String?
   htmlContent   Json?
+  isHtml        Boolean          @default(true)
   subtitle      String?
   cover         String?
   views         Int              @default(0)
@@ -114,16 +115,18 @@ model Post {
 
 //draft post model to store autosave drafts of posts in editor
 model DraftPost {
-  id        String   @id @default(cuid()) @map("_id")
-  title     String
-  content   String
-  subtitle  String?
-  cover     String?
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String
-  url       String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid()) @map("_id")
+  title       String
+  content     String
+  htmlContent Json?
+  isHtml      Boolean  @default(true)
+  subtitle    String?
+  cover       String?
+  post        Post     @relation(fields: [postId], references: [id])
+  postId      String
+  url         String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([createdAt])
   @@map("drafts")
