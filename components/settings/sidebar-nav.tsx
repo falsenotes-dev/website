@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname, useSelectedLayoutSegment } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -15,32 +15,34 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
-  const pathname = usePathname()
-  const segment = useSelectedLayoutSegment()
+  const pathname = usePathname() as string
+
+  const router = useRouter()
   return (
-    <nav
-      className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
-        className
-      )}
-      {...props}
-    >
-      {items.map((item, index) => (
-        <Link
-        key={index}
-        href={item.disabled ? "#" : item.href}
+    <Tabs defaultValue={pathname as string} orientation="vertical" className={cn("flex w-full gap-6 items-start flex-1", className)} {...props}>
+      <TabsList
         className={cn(
-          buttonVariants({ variant: "ghost" }),
-          pathname === item.href
-              ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent hover:underline",
-            "justify-start",
-          item.disabled && "cursor-not-allowed opacity-80"
+          "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 md:flex-col md:h-fit w-full bg-transparent",
+          className
         )}
+        {...props}
       >
-        {item.title}
-      </Link>
-      ))}
-    </nav>
+        {items.map((item, index) => (
+          <TabsTrigger
+            value={item.href}
+            key={index}
+            disabled={item.disabled}
+            onClick={() => {
+              if (item.disabled) return
+              router.push(item.href)
+            }
+            }
+            className="w-full justify-start rounded-md data-[state=active]:bg-muted"
+          >
+            {item.title}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   )
 }

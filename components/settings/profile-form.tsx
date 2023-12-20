@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useFieldArray, useForm } from "react-hook-form"
-import * as z from "zod"
+import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useFieldArray, useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,129 +15,290 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { User } from "lucide-react"
-import { Icons } from "../icon"
-import { useRouter } from "next/navigation"
-import { ToastAction } from "../ui/toast"
-import { toast } from "sonner"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { User } from "lucide-react";
+import { Icons } from "../icon";
+import { useRouter } from "next/navigation";
+import { ToastAction } from "../ui/toast";
+import { toast } from "sonner";
+import { Label } from "../ui/label";
+import { useState } from "react";
 
 const profileFormSchema = z.object({
   id: z.string(),
   username: z.string().nullable().optional(),
-  email: z.string().email().nullable().optional(),
+  image: z.string().nullable().optional(),
   name: z.string().nullable().optional(),
   bio: z.string().max(160).nullable().optional(),
   location: z.string().max(30).nullable().optional(),
 });
-type ProfileFormValues = z.infer<typeof profileFormSchema>
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-
-export function ProfileForm({ data }: { data: Partial<ProfileFormValues>}) {
-  const router = useRouter()
+export function ProfileForm({ data }: { data: Partial<ProfileFormValues> }) {
+  const router = useRouter();
   // This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
+  const defaultValues: Partial<ProfileFormValues> = {
     id: data.id,
     username: data.username,
+    image: data.image,
     name: data.name,
-    email: data.email ?? "",
     bio: data.bio ?? "",
     location: data.location,
-}
+  };
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
-  })
-
+  });
 
   async function onSubmit(data: ProfileFormValues) {
     const response = await fetch(`/api/user/${data.id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
-    })
+    });
 
     if (!response?.ok) {
       return toast.error("Something went wrong.", {
         description: "Your profile could not be updated.",
         action: {
           label: "Try again",
-          onClick: async() => {
+          onClick: async () => {
             //resubmit
-            await onSubmit(data)
+            await onSubmit(data);
           },
-        }
-      })
+        },
+      });
     }
 
     toast.success("Profile updated!", {
       action: {
         label: "View profile",
         onClick: () => {
-          router.push(`/@${data.username}`)
+          router.push(`/@${data.username}`);
         },
-      }
-    })
+      },
+    });
 
-    router.refresh()
+    router.refresh();
+  }
+
+  const [file, setFile] = useState<File | null>(null);
+  const [isValidUsername, setIsValidUsername] = useState<boolean>(true);
+
+  async function upload(file: File) {
+    try {
+      const dataForm = new FormData()
+      dataForm.set('file', file)
+      const requestBody = {
+        id: form.getValues('id'),
+      };
+
+      dataForm.set('body', JSON.stringify(requestBody));
+
+      const res = await fetch(`/api/upload-avatar?id=${form.getValues('id')}`, {
+        method: 'POST',
+        body: dataForm,
+      });
+
+      if (!res.ok) {
+        toast.error("Something went wrong.", {
+          description: "Your image could not be uploaded.",
+          action: {
+            label: "Try again",
+            onClick: async () => {
+              //resubmit
+              await upload(file)
+            },
+          }
+        });
+      }
+      // get the image url
+      const { data: avatarUrl } = await res.json()
+      return avatarUrl.url;
+    } catch (e: any) {
+      // Handle errors here
+      console.error(e);
+      return null
+    }
+  }
+
+  async function checkUsername(username: string) {
+    try {
+      if (!username || username === data.username || username.length < 3) {
+        setIsValidUsername(true);
+        return;
+
+      }
+      const res = await fetch(`/api/users/validate-username?username=${username}`, {
+        method: 'GET',
+      });
+
+      if (!res.ok) {
+        toast.error("Something went wrong.", {
+          description: "Your username could not be validated.",
+          action: {
+            label: "Try again",
+            onClick: async () => {
+              //resubmit
+              await checkUsername(username)
+            },
+          }
+        });
+      }
+
+      const { isValid } = await res.json()
+      setIsValidUsername(isValid);
+      console.log(isValid);
+    } catch (e: any) {
+      // Handle errors here
+      console.error(e);
+      return null
+    }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full justify-between gap-8 flex flex-col items-start">
-      <FormField
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="justify-between gap-8 flex flex-col items-start w-full"
+      >
+        <FormField
           control={form.control}
-          name="name"
+          name="image"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
+            <FormItem className="w-full md:w-96">
+              <FormLabel>Profile photo</FormLabel>
               <FormControl>
-                <Input placeholder="Name" {...field}
-                  value={field.value ?? ''}
-                   />
+                <div className="flex items-center w-full">
+                  <Label htmlFor="avatar" className="flex items-center">
+                    {
+                      file || field.value ? (
+                        <Avatar className="h-20 w-20 border">
+                          <AvatarImage
+                            src={file ? URL.createObjectURL(file) as string : field.value as string}
+                            alt={data.name ?? ""}
+                          />
+                          <AvatarFallback>
+                            {data.name?.charAt(0) || data.username?.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                      ) : (
+                        <Avatar className="h-20 w-20 border bg-muted justify-center items-center">
+                          <Icons.upload className="w-5 h-5" />
+                        </Avatar>
+                      )
+                    }
+                    <Input
+                      id="avatar"
+                      placeholder="Avatar"
+                      accept="image/jpeg, image/png, image/gif"
+                      type="file"
+                      className="sr-only"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          if (file.size > 2 * 1024 * 1024) {
+                            toast.warning("File size must be less than 2MB.");
+                          } else {
+                            const img = new Image();
+                            img.src = URL.createObjectURL(file);
+                            img.onload = async () => {
+                              if (img.width !== img.height) {
+                                toast.warning("Image must be square.");
+                              } else if (
+                                !["image/png", "image/jpeg", "image/gif"].includes(file.type)
+                              ) {
+                                toast.warning("File type must be PNG, JPG, or GIF.");
+                              } else {
+                                setFile(file);
+                                const url = await upload(file);
+                                form.setValue("image", url);
+                              }
+                            };
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      variant={'ghost'}
+                      asChild
+                      className="ml-2"
+                    >
+                      <span>Upload</span>
+                    </Button>
+                  </Label>
+                  <Button
+                    variant="ghost"
+                    className="ml-2"
+                    asChild
+                    disabled={!file && !field.value}
+                    onClick={() => {
+                      setFile(null);
+                      form.setValue("image", null);
+                    }}
+                  >
+                    <span>Remove</span>
+                  </Button>
+                </div>
               </FormControl>
-              <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="email"
+          name="username"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value ?? ''}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className='w-96'>
-                  {field.value && (
-                    <SelectItem value={field.value}>
-                      {field.value}
-                    </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                Your public email address on GitHub.
-              </FormDescription>
+            <FormItem className="w-full md:w-96">
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Username"
+                  {...field}
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    checkUsername(e.target.value);
+                  }}
+                />
+              </FormControl>
+              {!isValidUsername && (
+                <FormMessage className="text-destructive">
+                  Username is already taken.
+                </FormMessage>
+              )}
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="w-full md:w-96">
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Name"
+                  {...field}
+                  onChange={async (e) => {
+                    field.onChange(e);
+                    await checkUsername(e.target.value);
+                  }
+                  }
+                  value={field.value ?? ""}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -146,37 +307,33 @@ const defaultValues: Partial<ProfileFormValues> = {
           control={form.control}
           name="bio"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full md:w-96">
               <FormLabel>Bio</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Tell us a little bit about yourself"
                   {...field}
-                  value={field.value ?? ''}
-                  className="resize-none w-96"
+                  value={field.value ?? ""}
+                  className="resize-none"
                 />
               </FormControl>
-              <FormDescription>
-                Briefly describe yourself in 160 characters or less.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-         <FormField
+        <FormField
           control={form.control}
           name="location"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full md:w-96">
               <FormLabel>Location</FormLabel>
               <FormControl>
-                <Input placeholder="Location" {...field}
-                  value={field.value ?? ''} className='w-96'
-                   />
+                <Input
+                  placeholder="Location"
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
-              <FormDescription>
-                Add your location to your profile.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -213,8 +370,8 @@ const defaultValues: Partial<ProfileFormValues> = {
             Add URL
           </Button>
         </div> */}
-        <Button type="submit">Update profile</Button>
+        <Button type="submit" disabled={!form.formState.isValid || !isValidUsername}>Update profile</Button>
       </form>
     </Form>
-  )
+  );
 }

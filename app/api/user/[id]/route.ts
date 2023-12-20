@@ -43,7 +43,8 @@ export async function PATCH(
     const body = await req.json();
     const profileSchema = z.object({
       id: z.string(),
-      email: z.string().email().optional(),
+      username: z.string(),
+      image: z.string().nullable().optional(),
       name: z.string().nullable().optional(),
       bio: z.string().max(160).nullable().optional(),
       location: z.string().max(30).nullable().optional(),
@@ -56,7 +57,8 @@ export async function PATCH(
         id: session.id,
       },
       data: {
-        email: payload.email,
+        image: payload.image,
+        username: payload.username,
         name: payload.name,
         bio: payload.bio,
         location: payload.location,
