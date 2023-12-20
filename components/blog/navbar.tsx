@@ -77,7 +77,7 @@ export default function PostTabs({
     const checkIsSaved = list.lists?.some((list: any) => list.posts?.some((p: any) => p.postId === post.id)) || list.bookmarks?.some((bookmark: any) => bookmark.postId === post.id);
     setIsSaved(checkIsSaved);
   }, [list, post?.id]);
-  
+
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   return (
     <>
@@ -91,7 +91,7 @@ export default function PostTabs({
           <div className="flex items-center">
             {session ? (
               <Button
-                className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
                 size={"icon"}
                 variant={"ghost"}
                 onClick={() => like(post.id)}
@@ -105,7 +105,7 @@ export default function PostTabs({
             ) : (
               <LoginDialog>
                 <Button
-                  className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                  className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
                   size={"icon"}
                   variant={"ghost"}
                 >
@@ -121,7 +121,7 @@ export default function PostTabs({
           <Separator orientation="vertical" />
           <div className="flex items-center">
             <Button
-              className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+              className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
               size={"icon"}
               variant={"ghost"}
               onClick={onClicked}
@@ -138,23 +138,23 @@ export default function PostTabs({
         <div className="flex items-center gap-1.5">
           {session ? (
             <ListPopover lists={list.lists} session={session} postId={post.id} bookmarks={list.bookmarks} >
-            <Button
-              className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
-              size={"icon"}
-              variant={"ghost"}
-            >
-              {isSaved ? (
-                <Icons.bookmarkFill className="h-5 w-5" />
-              ) : (
-                <Icons.bookmark className="h-5 w-5" />
-              )}
-              <span className="sr-only">Save</span>
-            </Button>
+              <Button
+                className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
+                size={"icon"}
+                variant={"ghost"}
+              >
+                {isSaved ? (
+                  <Icons.bookmarkFill className="h-5 w-5" />
+                ) : (
+                  <Icons.bookmark className="h-5 w-5" />
+                )}
+                <span className="sr-only">Save</span>
+              </Button>
             </ListPopover>
           ) : (
             <LoginDialog>
               <Button
-                className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
                 size={"icon"}
                 variant={"ghost"}
               >
@@ -170,7 +170,7 @@ export default function PostTabs({
             post={post.id}
           >
             <Button
-              className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+              className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
               size={"icon"}
               variant={"ghost"}
             >
@@ -183,7 +183,7 @@ export default function PostTabs({
               <Separator orientation="vertical" />
               <PostAnalyticsDialog
                 post={post}
-                className="rounded-full hover:bg-primary hover:text-primary-foreground text-background-foreground"
+                className="rounded-full hover:!bg-primary hover:text-primary-foreground text-background-foreground"
               />
             </>
           )}
@@ -193,7 +193,7 @@ export default function PostTabs({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                    className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
                     size={"icon"}
                     variant={"ghost"}
                   >

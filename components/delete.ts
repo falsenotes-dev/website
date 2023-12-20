@@ -1,4 +1,4 @@
-'use server'
+"use server";
 import postgres from "@/lib/postgres";
 import { Comment } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -22,9 +22,8 @@ async function verifyCurrentUserHasAccessToPost(postId: string) {
   }
 }
 
-
 // TypeScript
-export async function handleDelete(postid: string, author: any) {
+export async function handleDelete(postid: string) {
   try {
     const post = await postgres.post.findUnique({
       where: {
@@ -42,7 +41,15 @@ export async function handleDelete(postid: string, author: any) {
 
     const postWithRelations = await postgres.post.findUnique({
       where: { id: post.id },
-      include: { comments: true, likes: true, drafts: true, tags: true, readedUsers: true, savedUsers: true, shares: true },
+      include: {
+        comments: true,
+        likes: true,
+        drafts: true,
+        tags: true,
+        readedUsers: true,
+        savedUsers: true,
+        shares: true,
+      },
     });
 
     // Disconnect all connections of the post
@@ -96,59 +103,91 @@ export async function handleDelete(postid: string, author: any) {
     return { status: 500 };
   }
 }
+export async function handleDeleteDraft(postid: string) {
+  try {
+    const post = await postgres.draftPost.findFirst({
+      where: {
+        postId: postid,
+      },
+    });
+
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    if (!(await verifyCurrentUserHasAccessToPost(postid))) {
+      return new Response(null, { status: 403 });
+    }
+
+    // Delete the post.
+    await postgres.draftPost.delete({
+      where: {
+        id: post.id,
+      },
+    });
+
+    return { status: 204 };
+  } catch (error) {
+    console.error(error);
+    return { status: 500 };
+  }
+}
 
 export async function handleDeleteComment(commentid: string, path?: string) {
   try {
-    const replies = await postgres.comment.findMany({
-         where: {
-              parentId: commentid,
-         },
-         select: {
-              id: true,
-         },
-    }).then((comments) => comments.map((comment) => comment.id));
+    const replies = await postgres.comment
+      .findMany({
+        where: {
+          parentId: commentid,
+        },
+        select: {
+          id: true,
+        },
+      })
+      .then((comments) => comments.map((comment) => comment.id));
 
     replies.forEach((reply) => deleteComment(reply));
 
     await deleteComment(commentid);
-    
+
     return { status: 200 };
-} catch (error) {
+  } catch (error) {
     console.error(error);
-    return { status: 500};
-}
+    return { status: 500 };
+  }
 }
 
 async function deleteComment(id: Comment["id"]) {
   await postgres.commentLike.deleteMany({
-       where: {
-            commentId: id,
-       },
-  })
+    where: {
+      commentId: id,
+    },
+  });
   await postgres.commentLike.deleteMany({
-       where: {
-            commentId: {
-                 in: await postgres.comment.findMany({
-                      where: {
-                           parentId: id,
-                      },
-                      select: {
-                           id: true,
-                      },
-                 }).then((comments) => comments.map((comment) => comment.id)),
+    where: {
+      commentId: {
+        in: await postgres.comment
+          .findMany({
+            where: {
+              parentId: id,
             },
-       },
-  })
+            select: {
+              id: true,
+            },
+          })
+          .then((comments) => comments.map((comment) => comment.id)),
+      },
+    },
+  });
   await postgres.comment.deleteMany({
-       where: {
-            parentId: id,
-       },
-  })
-  
-  await postgres.comment.delete({
+    where: {
+      parentId: id,
+    },
+  });
 
-       where: {
-            id: id,
-       },
-  })
+  await postgres.comment.delete({
+    where: {
+      id: id,
+    },
+  });
 }

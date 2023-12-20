@@ -93,7 +93,7 @@ export default function MobilePostTabs({
           <div className="flex items-center justify-center flex-1">
             {session ? (
               <Button
-                className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
                 size={"icon"}
                 variant={"ghost"}
                 onClick={() => like(post.id)}
@@ -110,7 +110,7 @@ export default function MobilePostTabs({
             ) : (
               <LoginDialog>
                 <Button
-                  className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                  className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
                   size={"icon"}
                   variant={"ghost"}
                 >
@@ -126,7 +126,7 @@ export default function MobilePostTabs({
           <Separator orientation="vertical" />
           <div className="flex items-center justify-center flex-1">
             <Button
-              className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+              className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
               size={"icon"}
               variant={"ghost"}
               onClick={onClicked}
@@ -145,23 +145,23 @@ export default function MobilePostTabs({
           <div className="flex items-center justify-center flex-1">
             {session ? (
               <ListPopover lists={list.lists} session={session} postId={post.id} bookmarks={list.bookmarks} >
-              <Button
-                className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
-                size={"icon"}
-                variant={"ghost"}
-              >
-                {isSaved ? (
-                  <Icons.bookmarkFill className="h-5 w-5" />
-                ) : (
-                  <Icons.bookmark className="h-5 w-5" />
-                )}
-                <span className="sr-only">Save</span>
-              </Button>
+                <Button
+                  className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
+                  size={"icon"}
+                  variant={"ghost"}
+                >
+                  {isSaved ? (
+                    <Icons.bookmarkFill className="h-5 w-5" />
+                  ) : (
+                    <Icons.bookmark className="h-5 w-5" />
+                  )}
+                  <span className="sr-only">Save</span>
+                </Button>
               </ListPopover>
             ) : (
               <LoginDialog>
                 <Button
-                  className="h-10 w-10 mr-0.5 rounded-full hover:bg-primary hover:text-primary-foreground"
+                  className="h-10 w-10 mr-0.5 rounded-full hover:!bg-primary hover:text-primary-foreground"
                   size={"icon"}
                   variant={"ghost"}
                 >
@@ -176,7 +176,7 @@ export default function MobilePostTabs({
               <Separator orientation="vertical" />
               <PostAnalyticsDialog
                 post={post}
-                className="rounded-full hover:bg-primary hover:text-primary-foreground text-background-foreground"
+                className="rounded-full hover:!bg-primary hover:text-primary-foreground text-background-foreground"
               />
             </>
           )}

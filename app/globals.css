@@ -58,9 +58,9 @@
     @apply border-border;
   }
 
-  ::selection {
-    @apply bg-primary/50 text-primary-foreground;
-  }
+  /* ::selection {
+  @apply bg-primary/50 text-primary-foreground;
+} */
 
   body {
     @apply bg-background text-foreground;
