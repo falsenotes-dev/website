@@ -239,7 +239,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
   }
 
   const saveDraft = async () => {
-    if (!isPublishing) {
+    if (form.getValues('content') && form.getValues('title')) {
       setIsSaving(true);
       try {
         // Submit the form
@@ -414,7 +414,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Textarea placeholder="Title of the post" className="font-bold text-3xl md:text-4xl md:leading-snug bg-popover" {...field} onChange={handleTitleChange} />
+                  <TextareaAutosize placeholder="Title of the post" className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none" {...field} onChange={handleTitleChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -432,7 +432,7 @@ export function PostEditorForm(props: { post: any, user: any }) {
                 <FormItem>
                   <FormControl>
                     <TextareaAutosize
-                      className="flex rounded-md border border-input bg-popover px-3 py-2 text-sm md:text-base text-foreground ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]"
+                      className="flex text-sm md:text-base text-foreground ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 w-full resize-none appearance-none overflow-hidden bg-transparent focus:outline-none"
                       placeholder="Write your post here..."
                       {...field}
                       onChange={(e) => handleContentChange(e.target.value)}
@@ -765,19 +765,32 @@ export function PostEditorForm(props: { post: any, user: any }) {
       <nav className="menu">
         <div className="menu-container fixed p-3.5 bg-background border-b w-full top-0 left-0">
 
-          <Link href={`/@${props.user?.username}`} className="flex align-items-center">
-            <Avatar className="h-8 w-8 mr-1 border">
-              <AvatarImage src={props.user?.image} alt={props.user?.name || props.user?.username} />
-              <AvatarFallback>{props.user?.name ? props.user?.name.charAt(0) : props.user?.username.charAt(0)}</AvatarFallback>
+          <div className="flex items-center gap-6">
+            <Link href={`/@${props.user?.username}`} className="flex items-center">
+              <Avatar className="h-8 w-8 mr-1 border">
+                <AvatarImage src={props.user?.image} alt={props.user?.name || props.user?.username} />
+                <AvatarFallback>{props.user?.name ? props.user?.name.charAt(0) : props.user?.username.charAt(0)}</AvatarFallback>
 
-            </Avatar>
-            <Button variant="ghost" size={"sm"} className="hidden md:flex" asChild>
-              <div className="font-medium">
-                {props.user?.name || props.user?.username}
-              </div>
-            </Button>
+              </Avatar>
+              <Button variant="ghost" size={"sm"} className="hidden md:flex" asChild>
+                <div className="font-medium">
+                  {props.user?.name || props.user?.username}
+                </div>
+              </Button>
+            </Link>
+            {
+              props.post?.published ? (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm text-muted-foreground">Published</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm text-muted-foreground">Draft</span>
+                </div>
+              )
+            }
+          </div>
 
-          </Link>
           <div className="flex items-center gap-1.5">
             <Dialog>
               <DialogTrigger asChild><Button size={"icon"} variant={"outline"} disabled={isSaving}>{isSaving ? <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" /> : <Save className="h-[1.2rem] w-[1.2rem]" />}</Button></DialogTrigger>

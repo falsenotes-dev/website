@@ -80,6 +80,7 @@ model Post {
   id            String           @id @default(cuid()) @map("_id")
   title         String
   content       String?
+  htmlContent   Json?
   subtitle      String?
   cover         String?
   views         Int              @default(0)
