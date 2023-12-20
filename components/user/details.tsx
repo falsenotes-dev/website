@@ -88,32 +88,32 @@ export default function UserDetails({
         <div className="flex lg:flex-col items-start">
           <div className="user__header flex md:block md:items-start lg:space-y-4 space-y-2 w-full">
             <Link href={`/@${user?.username}`}>
-            <Avatar className="rounded-full mr-3 w-16 h-16 md:w-24 md:h-24 md:mr-0">
-              <AvatarImage src={user?.image} alt={user?.name} />
-              <AvatarFallback className="text-8xl text-foreground">
-                {user?.name ? user?.username?.charAt(0) : user?.name?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
+              <Avatar className="rounded-full mr-3 w-16 h-16 md:w-24 md:h-24 md:mr-0">
+                <AvatarImage src={user?.image} alt={user?.name} />
+                <AvatarFallback className="text-3xl">
+                  {user?.name ? user?.name?.charAt(0) : user?.username?.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
             </Link>
             <div className="flex items-center w-full justify-between">
               {user?.name ? (
                 <Link href={`/@${user?.username}`}>
                   <div className="md:space-y-3 w-full">
-                  <h1 className="font-bold text-lg lg:text-2xl flex items-center">
-                    <span>{user?.name}</span>
-                  </h1>
-                  <span className="text-lg md:text-xl font-light text-muted-foreground">
-                    {user?.username}
-                  </span>
-                </div>
+                    <h1 className="font-bold text-lg lg:text-2xl flex items-center">
+                      <span>{user?.name}</span>
+                    </h1>
+                    <span className="text-lg md:text-xl font-light text-muted-foreground">
+                      {user?.username}
+                    </span>
+                  </div>
                 </Link>
               ) : (
                 <Link href={`/@${user?.username}`}>
                   <div className="md:space-y-3 w-full">
-                  <h1 className="font-bold text-lg lg:text-2xl flex items-center">
-                    <span>{user?.username}</span>
-                  </h1>
-                </div>
+                    <h1 className="font-bold text-lg lg:text-2xl flex items-center">
+                      <span>{user?.username}</span>
+                    </h1>
+                  </div>
                 </Link>
               )}
             </div>
@@ -191,9 +191,8 @@ export default function UserDetails({
           )}
           <ShareList
             url={`${process.env.DOMAIN}/@${user?.username}`}
-            text={`Check ${
-              user.name || user.username
-            }'s profile on @FalseNotesTeam`}
+            text={`Check ${user.name || user.username
+              }'s profile on @FalseNotesTeam`}
           >
             <Button variant={"secondary"} className="px-2">
               <Icons.share className="w-6 h-6 text-muted-foreground" />

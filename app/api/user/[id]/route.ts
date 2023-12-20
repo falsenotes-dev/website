@@ -57,7 +57,7 @@ export async function PATCH(
         id: session.id,
       },
       data: {
-        image: payload.image,
+        image: payload.image || null,
         username: payload.username,
         name: payload.name,
         bio: payload.bio,

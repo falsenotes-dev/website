@@ -58,68 +58,94 @@ export default function CommentCard({
     });
     await validate(pathname);
   };
-  const [comment, setComment] = React.useState<any>(initialComment);
+  const [comment, setComment] = React.useState<any>(null);
   React.useEffect(() => {
-    setComment(initialComment);
-    if (initialComment.parentId) {
-      (async () => {
-        const fetchedComment = await fetchComment(initialComment.id);
-        setComment(fetchedComment);
-      })();
-    }
+    (async () => {
+      const fetchedComment = await fetchComment(initialComment.id);
+
+      setComment(fetchedComment);
+    })()
   }, [initialComment]);
 
   const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false);
-  const isLiked = comment.likes?.find(
-    (like: any) => like.authorId === session?.id
-  );
+  const [isLiked, setIsLiked] = React.useState<boolean>(false);
+  React.useEffect(() => {
+    setIsLiked(comment?.likes?.some((like: any) => like.userId === session?.id));
+  }, [comment, session]);
   const [isReplying, setIsReplying] = React.useState<boolean>(false);
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [openReply, setOpenReply] = React.useState<boolean>(false);
+  if (!comment) return null;
   return (
     <div className="flex flex-col w-full">
       {!isEditing ? (
         <>
           <Card className="article__comments-item-card w-full bg-background border-none shadow-none">
             <CardHeader
-              className={`space-y-0 w-full text-sm flex-row items-center p-4 ${
-                comment.parentId && "pt-0"
-              } px-0`}
+              className={`space-y-0 w-full text-sm flex-row items-center p-4 ${comment.parentId && "pt-0"
+                } px-0`}
             >
               <div className="flex justify-between w-full">
                 <div className="w-full flex">
-                  <UserHoverCard
-                    user={comment.author}
-                    className="h-10 w-10 mr-1 md:mr-1.5"
-                  >
-                    <Link
-                      href={`/@${comment.author?.username}`}
-                      className="inline-block"
-                    >
-                      <Avatar className="border">
-                        <AvatarImage
-                          src={comment.author?.image}
-                          alt={comment.autho?.name}
-                        />
-                        <AvatarFallback>
-                          {comment.author?.name
-                            ? comment.author?.name.charAt(0)
-                            : comment.author?.username.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Link>
-                  </UserHoverCard>
+                  {
+                    comment.author ? (
+                      <UserHoverCard
+                        user={comment.author}
+                        className="h-10 w-10 mr-1 md:mr-1.5"
+                      >
+                        <Link
+                          href={`/@${comment.author?.username}`}
+                          className="inline-block"
+                        >
+                          <Avatar className="border">
+                            <AvatarImage
+                              src={comment.author?.image}
+                              alt={comment.autho?.name}
+                            />
+                            <AvatarFallback>
+                              {comment.author?.name
+                                ? comment.author?.name.charAt(0)
+                                : comment.author?.username.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                        </Link>
+                      </UserHoverCard>
+                    ) : (
+                      <div className="h-10 w-10 mr-1 md:mr-1.5">
+                        <Avatar className="border">
+                          <AvatarImage
+                            src={'/favicon.ico'}
+                            alt={'Deleted User'}
+                          />
+                          <AvatarFallback>
+                            {'D'}
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
+                    )
+                  }
                   <Link
                     href={`/@${comment.author?.username}`}
                     className="flex items-center"
                   >
                     <div className="flex flex-col">
-                      <span className="article__comments-item-author text-sm">
-                        {comment.author?.name || comment.author?.username}{" "}
-                        {comment.author?.verified && (
-                          <Icons.verified className="h-4 w-4 mx-1 inline fill-verified align-middle" />
-                        )}
-                      </span>
+                      {
+                        comment.author ? (
+                          <UserHoverCard user={comment.author}>
+                            <span className="article__comments-item-author-name text-sm">
+                              {comment.author?.name ||
+                                comment.author?.username}
+                              {comment.author?.verified && (
+                                <Icons.verified className="h-4 w-4 mx-1 inline fill-verified align-middle" />
+                              )}
+                            </span>
+                          </UserHoverCard>
+                        ) : (
+                          <span className="article__comments-item-author-name text-sm">
+                            {'Deleted User'}
+                          </span>
+                        )
+                      }
 
                       <span className="article__comments-item-date text-muted-foreground text-sm !mt-0">
                         {dateFormat(comment.createdAt)}
@@ -222,22 +248,22 @@ export default function CommentCard({
                 )}
               </div>
               <div className="flex items-center">
-                  {session ? (
-                    <Button
-                      className=""
-                      variant={"ghost"}
-                      onClick={() => setIsReplying(!isReplying)}
-                    >
+                {session ? (
+                  <Button
+                    className=""
+                    variant={"ghost"}
+                    onClick={() => setIsReplying(!isReplying)}
+                  >
+                    Reply
+                  </Button>
+                ) : (
+                  <LoginDialog>
+                    <Button className="" variant={"ghost"}>
                       Reply
                     </Button>
-                  ) : (
-                    <LoginDialog>
-                      <Button className="" variant={"ghost"}>
-                        Reply
-                      </Button>
-                    </LoginDialog>
-                  )}
-                </div>
+                  </LoginDialog>
+                )}
+              </div>
             </CardFooter>
           </Card>
           {openReply && (
