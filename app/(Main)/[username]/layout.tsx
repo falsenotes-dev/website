@@ -18,13 +18,13 @@ export async function generateMetadata(
     const data = await response.json();
     const user = data.user;
     return {
-      metadataBase: new URL(`${process.env.DOMAIN}/${user.username}`),
+      metadataBase: new URL(`${process.env.DOMAIN}/@${user.username}`),
       title: `${user.name || user.username} - FalseNotes`,
       description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${user?._count.posts} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
       openGraph: {
         title: `${user.username} ${user?.name ? `(` + user?.name + `)` : ``} - FalseNotes`,
         description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(user?.posts.length)} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
-        url: `${process.env.DOMAIN}/${user.username}`,
+        url: `${process.env.DOMAIN}/@${user.username}`,
         images: [
           {
             url: user?.image,
