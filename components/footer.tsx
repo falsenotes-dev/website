@@ -26,7 +26,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
                          <Link target="_blank" href="/instagram">Instagram</Link>
                          <Link target="_blank" href="/donate">Donate</Link>
                     </div>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-inherit">
+                    <div className="flex gap-x-4 gap-y-1 text-inherit items-center">
                          <div className="statuswidget">
                               <StatusWidget slug="falsenotes" />
                          </div>

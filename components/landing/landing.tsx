@@ -103,7 +103,7 @@ export default function Landing({
             <div className="landing_hero-image w-[167vw] xl:w-screen">
               <Image
                 loading="eager"
-                className="dark:hidden block"
+                className="landing_hero-image-light"
                 src="/assets/hero-light.png"
                 sizes="100vw"
                 width={1920}
@@ -118,7 +118,7 @@ export default function Landing({
               />
               <Image
                 loading="eager"
-                className="hidden dark:block"
+                className="landing_hero-image-dark"
                 src="/assets/hero-dark.png"
                 sizes="100vw"
                 width={1920}
@@ -294,7 +294,6 @@ export default function Landing({
           </div>
         </div>
       </main>
-      <SiteFooter />
     </>
   );
 }

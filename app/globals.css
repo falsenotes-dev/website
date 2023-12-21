@@ -634,7 +634,7 @@
 }
 
 .statuswidget a {
-  @apply max-w-fit gap-2 inline-flex items-center justify-center !text-muted-foreground rounded-md text-sm font-medium transition-colors border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2;
+  @apply max-w-fit gap-2 inline-flex items-center justify-center !text-muted-foreground rounded-md font-medium transition-colors border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground py-2 h-8 px-3 text-xs;
 }
 
 *.dark-theme {
@@ -647,4 +647,20 @@
 
 .code-block pre {
   @apply m-0
+}
+
+.dark-theme .landing_hero-image-light {
+  @apply hidden
+}
+
+.dark-theme .landing_hero-image-dark {
+  @apply block
+}
+
+.landing_hero-image-dark {
+  @apply hidden
+}
+
+.landing_hero-image-light {
+  @apply block
 }
