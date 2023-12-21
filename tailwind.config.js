@@ -2,11 +2,12 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "./app/**/*.{tsx,ts,mdx,md}",
+    "./node_modules/@openstatus/react/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -16,16 +17,16 @@ module.exports = {
       },
       extend: {
         aspectRatio: {
-          '4/3': '4 / 3',
-          '2/3': '2 / 3',
-          '3/4': '3 / 4',
-          '3/2': '3 / 2',
-          '2/1': '2 / 1',
-          '8/5': '8 / 5',
+          "4/3": "4 / 3",
+          "2/3": "2 / 3",
+          "3/4": "3 / 4",
+          "3/2": "3 / 2",
+          "2/1": "2 / 1",
+          "8/5": "8 / 5",
         },
         fontFamily: {
-          sans: ['var(--font-geist-sans)'],
-          mono: ['var(--font-geist-mono)'],
+          sans: ["var(--font-geist-sans)"],
+          mono: ["var(--font-geist-mono)"],
         },
       },
     },
@@ -90,5 +91,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"),require('@tailwindcss/typography'),],
-}
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+};

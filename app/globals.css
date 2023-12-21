@@ -632,3 +632,7 @@
     background-position: -200% 0;
   }
 }
+
+.statuswidget a {
+  @apply max-w-fit gap-2 inline-flex items-center justify-center !text-muted-foreground rounded-md text-sm font-medium transition-colors border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2;
+}
