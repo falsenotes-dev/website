@@ -30,7 +30,7 @@
     --verified-foreground: 210 40% 98%;
   }
 
-  .dark {
+  .dark-theme {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
     --card: 224 71.4% 4.1%;
@@ -612,7 +612,7 @@
   background-size: 400px;
 }
 
-.dark .bg-pattern {
+.dark-theme .bg-pattern {
   background-image: url(/assets/dark.png);
 }
 
@@ -635,4 +635,16 @@
 
 .statuswidget a {
   @apply max-w-fit gap-2 inline-flex items-center justify-center !text-muted-foreground rounded-md text-sm font-medium transition-colors border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2;
+}
+
+*.dark-theme {
+  @apply  !border-input
+}
+
+* {
+  border-color: hsl(var(--input)) !important;
+}
+
+.code-block pre {
+  @apply m-0
 }

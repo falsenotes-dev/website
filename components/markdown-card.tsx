@@ -5,7 +5,7 @@ import Markdown from "markdown-to-jsx"
 
 export default function MarkdownCard({ code, className }: { code: string, className?: string }) {
      return (
-          <article className={cn("article__content prose-neutral dark:prose-invert prose-img:rounded-xl prose-a:text-primary prose-code:bg-popover prose-pre:!bg-popover prose-code:text-foreground prose-pre:text-foreground !max-w-full prose lg:prose-xl", className)}>
+          <article className={cn("article__content prose-lg prose-stone dark:prose-invert prose-headings:font-title focus:outline-none max-w-full prose-ul:list-[revert] prose-ol:list-decimal", className)}>
                <Markdown options={{
                     overrides: {
                          pre: PreBlock,

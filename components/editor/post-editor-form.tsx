@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
 
+import '@/app/style.css'
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -73,7 +74,10 @@ import readingTime from "reading-time";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { Editor } from "novel";
-import StarterKit from "@tiptap/starter-kit";
+import { AutoOptions, createLowlight, all } from "lowlight";
+import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
+
+const lowlight = createLowlight(all);
 
 async function fetchSuggestions(query: string) {
   const tagResponse = await fetch(
@@ -483,12 +487,17 @@ export function PostEditorForm(props: { post: any; user: any }) {
                 <FormControl>
                   <Editor
                     className="min-h-[250px]"
-
+                    extensions={
+                      [
+                        CodeBlockLowlight.configure({
+                          lowlight,
+                          languageClassPrefix: "language-",
+                          defaultLanguage: "text",
+                        }),
+                      ]
+                    }
                     editorProps={{
-                      attributes: {
-                        class:
-                          "prose-neutral dark:prose-invert prose-img:rounded-xl prose-a:text-primary prose-code:bg-popover prose-pre:!bg-popover prose-code:text-foreground prose-pre:text-foregroundlg:prose-xl prose prose-headings:font-title font-default focus:outline-none max-w-full",
-                      },
+
                     }}
                     defaultValue={field.value}
                     onUpdate={(editor) => {
