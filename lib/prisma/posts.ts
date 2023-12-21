@@ -1,4 +1,4 @@
-'use server';
+"use server";
 import { getSessionUser } from "@/components/get-session-user";
 import postgres from "../postgres";
 import { Prisma } from "@prisma/client";
@@ -44,22 +44,22 @@ export const getPosts = async ({
       ? [
           {
             readedUsers: {
-              _count: "desc",
+              _count: "desc" as const,
             },
           },
           {
             savedUsers: {
-              _count: "desc",
+              _count: "desc" as const,
             },
           },
           {
             likes: {
-              _count: "desc",
+              _count: "desc" as const,
             },
           },
-          { views: "desc" },
+          { views: "desc" as const },
         ]
-      : {};
+      : { publishedAt: "desc" as const };
   const posts = await postgres.post.findMany({
     ...baseQuery,
     where:
@@ -113,29 +113,29 @@ export const getPost = async ({
           },
         }
       : { ...whereQuery };
-      const posts = await postgres.post.findMany({
-        ...baseQuery,
-        where: { ...mainQuery, authorId: id },
-        take: limit,
-        skip: page * limit,
-        orderBy: {
-          publishedAt: "desc",
-        },
-      });
-      
-      // // Sort the posts in the application code
-      // const sortedPosts = posts.sort((a, b) => {
-      //   // If both posts are published, sort by publishedAt
-      //   if (a.published && b.published) {
-      //     return (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0);
-      //   }
-      //   // If one post is not published, sort by createdAt
-      //   else {
-      //     return b.createdAt.getTime() - a.createdAt.getTime();
-      //   }
-      // });
-      
-      return { posts: JSON.parse(JSON.stringify(posts)) };
+  const posts = await postgres.post.findMany({
+    ...baseQuery,
+    where: { ...mainQuery, authorId: id },
+    take: limit,
+    skip: page * limit,
+    orderBy: {
+      publishedAt: "desc",
+    },
+  });
+
+  // // Sort the posts in the application code
+  // const sortedPosts = posts.sort((a, b) => {
+  //   // If both posts are published, sort by publishedAt
+  //   if (a.published && b.published) {
+  //     return (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0);
+  //   }
+  //   // If one post is not published, sort by createdAt
+  //   else {
+  //     return b.createdAt.getTime() - a.createdAt.getTime();
+  //   }
+  // });
+
+  return { posts: JSON.parse(JSON.stringify(posts)) };
 };
 
 export const getFeaturedPosts = async ({
@@ -152,7 +152,7 @@ export const getFeaturedPosts = async ({
     take: limit,
     skip: page * limit,
     orderBy: {
-      createdAt: "desc",
+      publishedAt: "desc",
     },
   });
 
