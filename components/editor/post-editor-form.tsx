@@ -219,6 +219,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
   const [file, setFile] = useState<File>(); // State for the uploaded file
 
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
 
   async function uploadCover(cover?: File) {
     if (cover) {
@@ -288,6 +289,11 @@ export function PostEditorForm(props: { post: any; user: any }) {
           setIsSaving(false);
         }
         setLastSavedTime(Date.now());
+        setIsSaved(true);
+        //wait 5 seconds and set isSaved to false
+        setTimeout(() => {
+          setIsSaved(false);
+        }, 8000);
         toast.info("Draft Saved!");
       } catch (error) {
         console.error(error);
@@ -453,6 +459,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
     )}&readingTime=${readingTime(form.getValues("content")).text}&authorid=${props.user?.username
     }`
   );
+  const [firstImage, setFirstImage] = useState<string>("");
 
   return (
     <>
@@ -501,6 +508,11 @@ export function PostEditorForm(props: { post: any; user: any }) {
                     }}
                     defaultValue={field.value}
                     onUpdate={(editor) => {
+                      setFirstImage((editor?.view.root as Document)?.images[0]?.src);
+                      if (form.getValues('coverImage') == '') {
+                        form.setValue('coverImage', firstImage);
+                        setCover(firstImage);
+                      }
                       form.setValue("content", editor?.storage.markdown.getMarkdown());
                     }}
                     disableLocalStorage={true}
@@ -661,39 +673,51 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   }}
                                   className="hidden"
                                 />
-                                {(cover || file) && (
-                                  <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
-                                    <Button
-                                      variant="secondary"
-                                      size={"icon"}
-                                      className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
-                                      onClick={async () => {
-                                        const coverUrl = await uploadCover(
-                                          file
-                                        );
-                                        if (coverUrl) {
-                                          form.setValue("coverImage", coverUrl);
-                                        }
-                                      }}
-                                    >
-                                      <Icons.upload className="h-4 w-4" />
-                                      <span className="sr-only">Upload</span>
-                                    </Button>
-                                    <Button
-                                      variant="secondary"
-                                      size={"icon"}
-                                      className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
-                                      onClick={() => {
-                                        form.setValue("coverImage", "");
-                                        setCover("");
-                                        setFile(undefined);
-                                      }}
-                                    >
-                                      <Icons.delete className="h-4 w-4" />
-                                      <span className="sr-only">Remove</span>
-                                    </Button>
-                                  </div>
-                                )}
+                                <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
+                                  <Button
+                                    variant="secondary"
+                                    size={"icon"}
+                                    className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
+                                    onClick={() => {
+                                      form.setValue("coverImage", firstImage);
+                                      setCover(firstImage);
+                                    }}
+                                  >
+                                    <RefreshCcw className="h-4 w-4" />
+                                    <span className="sr-only">Refresh</span>
+                                  </Button>
+                                  <Button
+                                    variant="secondary"
+                                    size={"icon"}
+                                    className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
+                                    onClick={async () => {
+                                      const coverUrl = await uploadCover(
+                                        file
+                                      );
+                                      if (coverUrl) {
+                                        form.setValue("coverImage", coverUrl);
+                                      }
+                                    }}
+                                    disabled={!file && form.getValues('coverImage') == ''}
+                                  >
+                                    <Icons.upload className="h-4 w-4" />
+                                    <span className="sr-only">Upload</span>
+                                  </Button>
+                                  <Button
+                                    variant="secondary"
+                                    size={"icon"}
+                                    className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
+                                    onClick={() => {
+                                      form.setValue("coverImage", "");
+                                      setCover("");
+                                      setFile(undefined);
+                                    }}
+                                    disabled={!file && form.getValues('coverImage') == ''}
+                                  >
+                                    <Icons.delete className="h-4 w-4" />
+                                    <span className="sr-only">Remove</span>
+                                  </Button>
+                                </div>
                               </label>
                             </div>
                           </>
@@ -763,6 +787,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                 }}
                               >
                                 <RefreshCcw className="h-4 w-4" />
+                                <span className="sr-only">Refresh</span>
                               </Button>
                             </AspectRatio>
                           </>
@@ -1013,7 +1038,12 @@ export function PostEditorForm(props: { post: any; user: any }) {
                   {isSaving ? (
                     <Icons.spinner className="h-[1.2rem] w-[1.2rem] animate-spin" />
                   ) : (
-                    <Save className="h-[1.2rem] w-[1.2rem]" />
+
+                    isSaved ? (
+                      <Icons.cloud className="h-[1.2rem] w-[1.2rem]" />
+                    ) : (
+                      <Icons.cloudUpload className="h-[1.2rem] w-[1.2rem]" />
+                    )
                   )}
                 </Button>
               </DialogTrigger>
