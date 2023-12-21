@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import { ModeToggle } from "@/components/mode-toggle"
 import Link from "next/link"
 import { Separator } from "./ui/separator"
+import { StatusWidget } from "@openstatus/react";
 
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
      return (
@@ -25,6 +26,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
                          <Link target="_blank" href="/instagram">Instagram</Link>
                          <Link target="_blank" href="/donate">Donate</Link>
                     </div>
+                    <StatusWidget slug="falsenotes" />
                     <ModeToggle />
                </footer>
           </>
