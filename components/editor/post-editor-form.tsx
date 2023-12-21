@@ -501,7 +501,6 @@ export function PostEditorForm(props: { post: any; user: any }) {
                     }}
                     defaultValue={field.value}
                     onUpdate={(editor) => {
-                      console.log(editor?.storage.markdown.getMarkdown());
                       form.setValue("content", editor?.storage.markdown.getMarkdown());
                     }}
                     disableLocalStorage={true}
