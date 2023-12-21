@@ -22,7 +22,7 @@ export async function generateMetadata(
       title: `${user.name || user.username} - FalseNotes`,
       description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${user?._count.posts} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
       openGraph: {
-        title: `${user.username} ${user?.name ? `(` + user?.name + `)` : ``} - FalseNotes`,
+        title: `${user.name || user.username} - FalseNotes`,
         description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(user?.posts.length)} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
         url: `${process.env.DOMAIN}/@${user.username}`,
         images: [
@@ -33,7 +33,7 @@ export async function generateMetadata(
         ],
       },
       twitter: {
-        title: `${user.username} ${user?.name ? `(` + user?.name + `)` : ``} | FalseNotes`,
+        title: `${user.name || user.username} - FalseNotes`,
         description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${user?.postsnum} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
       },
     }
