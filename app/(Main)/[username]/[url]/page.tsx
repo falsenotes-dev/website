@@ -39,15 +39,8 @@ export default async function PostView({
       comments: {
         where: { parentId: null },
         include: {
-          author: {
-            include: {
-              Followers: true,
-              Followings: true,
-            },
-          },
           replies: {
             include: {
-              author: true,
               _count: { select: { replies: true, likes: true } },
             },
           },

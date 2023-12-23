@@ -2,12 +2,15 @@ import { Separator } from "@/components/ui/separator"
 import { ProfileForm } from "@/components/settings/profile-form"
 import { getSessionUser } from "@/components/get-session-user"
 import postgres from "@/lib/postgres"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 
 export default async function SettingsProfilePage() {
   const user = await getSessionUser()
+  if (!user) {
+    redirect("/signin")
+  }
   const userData = await postgres.user.findFirst({
-    where: { id: user?.id },
+    where: { id: user.id },
   })
   if (!userData) {
     return notFound()

@@ -29,8 +29,8 @@
     --verified: 221 83.2% 53.3%;
     --verified-foreground: 210 40% 98%;
   }
- 
-  .dark {
+
+  .dark-theme {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
     --card: 224 71.4% 4.1%;
@@ -57,6 +57,10 @@
   * {
     @apply border-border;
   }
+
+  /* ::selection {
+  @apply bg-primary/50 text-primary-foreground;
+} */
 
   body {
     @apply bg-background text-foreground;
@@ -313,7 +317,8 @@
   left: -10px;
 }
 
-.prose p, .prose span {
+.prose p,
+.prose span {
   @apply mb-4 text-sm md:text-base text-foreground;
 }
 
@@ -391,7 +396,7 @@
 }
 
 .prose pre {
-  @apply !py-2 !px-4 !rounded-sm !text-card-foreground !my-auto h-fit align-middle !bg-popover text-base;
+  @apply  !py-2 !px-4 !rounded-sm !text-card-foreground !my-auto h-fit align-middle !bg-popover text-base;
 }
 
 .prose code {
@@ -553,14 +558,14 @@
 
 .tab-shadow {
   pointer-events: none;
-    top: 0;
-    position: absolute;
-    height: 100%;
-    right: 0;
-    transition: opacity .3s ease;
-    width: 8%;
-    background: linear-gradient(90deg, rgba(var(--overlay), 0) 0%, rgba(var(--overlay), 0.75) 25%, rgba(var(--overlay), 0.9) 50%, rgb(var(--overlay)) 75%);
-    z-index: 1;
+  top: 0;
+  position: absolute;
+  height: 100%;
+  right: 0;
+  transition: opacity .3s ease;
+  width: 8%;
+  background: linear-gradient(90deg, rgba(var(--overlay), 0) 0%, rgba(var(--overlay), 0.75) 25%, rgba(var(--overlay), 0.9) 50%, rgb(var(--overlay)) 75%);
+  z-index: 1;
 }
 
 .bg-third {
@@ -573,7 +578,7 @@
   }
 } */
 .swiper-wrapper {
-  @apply !h-auto
+  @apply  !h-auto
 }
 
 .swiper-slide {
@@ -596,33 +601,66 @@
   @apply bg-background shadow-md;
 }
 
-@media (max-width: 640px) { 
-  .user__header{
+@media (max-width: 640px) {
+  .user__header {
     min-height: fit-content !important;
   }
- }
+}
 
 .bg-pattern {
   background-image: url(/assets/light.png);
   background-size: 400px;
 }
 
-.dark .bg-pattern {
+.dark-theme .bg-pattern {
   background-image: url(/assets/dark.png);
 }
 
 
 .skeleton {
-	background-image: linear-gradient(270deg, hsl(var(--muted-2)), hsl(var(--muted)), hsl(var(--muted)), hsl(var(--muted-2)));
-	background-size: 400% 100%;
-	animation: loading 8s ease-in-out infinite;
+  background-image: linear-gradient(270deg, hsl(var(--muted-2)), hsl(var(--muted)), hsl(var(--muted)), hsl(var(--muted-2)));
+  background-size: 400% 100%;
+  animation: loading 8s ease-in-out infinite;
 }
 
 @keyframes loading {
-	from {
-		background-position: 200% 0;
-	}
-    to {
-		background-position: -200% 0;
-    }
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.statuswidget a {
+  @apply max-w-fit gap-2 inline-flex items-center justify-center !text-muted-foreground rounded-md font-medium transition-colors border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground py-2 h-8 px-3 text-xs;
+}
+
+*.dark-theme {
+  @apply  !border-input
+}
+
+* {
+  border-color: hsl(var(--input)) !important;
+}
+
+.code-block pre {
+  @apply m-0
+}
+
+.dark-theme .landing_hero-image-light {
+  @apply hidden
+}
+
+.dark-theme .landing_hero-image-dark {
+  @apply block
+}
+
+.landing_hero-image-dark {
+  @apply hidden
+}
+
+.landing_hero-image-light {
+  @apply block
 }

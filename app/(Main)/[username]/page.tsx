@@ -194,12 +194,12 @@ export default async function Page({
     <div className="md:container mx-auto px-4 pt-5">
       <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
         <div
-          className="user__header md:hidden lg:min-w-[352px] lg:border-r lg:max-w-[352px] md:px-8 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"
+          className="user__header md:hidden sm:h-fit lg:min-w-[352px] lg:border-r lg:max-w-[352px] md:px-8 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"
           style={{
             minHeight: "calc(100vh - 125px)",
           }}
         >
-          <div className="md:flex-[1_0_auto]">
+          <div className="lg:flex-[1_0_auto]">
             <UserDetails
               user={user}
               followers={followers}
@@ -280,17 +280,17 @@ export default async function Page({
                                 {bookmarks.filter(
                                   (p: any) => p.post.cover
                                 )[0] && (
-                                  <Image
-                                    src={
-                                      bookmarks.filter(
-                                        (p: any) => p.post.cover
-                                      )[0].post.cover!
-                                    }
-                                    fill
-                                    alt={"Read Later"}
-                                    className="object-cover !relative h-full rounded-bl-lg md:rounded-none"
-                                  />
-                                )}
+                                    <Image
+                                      src={
+                                        bookmarks.filter(
+                                          (p: any) => p.post.cover
+                                        )[0].post.cover!
+                                      }
+                                      fill
+                                      alt={"Read Later"}
+                                      className="object-cover !relative h-full rounded-bl-lg md:rounded-none"
+                                    />
+                                  )}
                               </div>
                             </div>
                             <div className="relative bg-muted self-stretch w-full z-[2] border-r-[3px] border-background pl-2 -ml-20 min-h-[8rem]">
@@ -298,17 +298,17 @@ export default async function Page({
                                 {bookmarks.filter(
                                   (p: any) => p.post.cover
                                 )[1] && (
-                                  <Image
-                                    src={
-                                      bookmarks.filter(
-                                        (p: any) => p.post.cover
-                                      )[1].post.cover!
-                                    }
-                                    fill
-                                    alt={"Read Later"}
-                                    className="object-cover !relative h-full"
-                                  />
-                                )}
+                                    <Image
+                                      src={
+                                        bookmarks.filter(
+                                          (p: any) => p.post.cover
+                                        )[1].post.cover!
+                                      }
+                                      fill
+                                      alt={"Read Later"}
+                                      className="object-cover !relative h-full"
+                                    />
+                                  )}
                               </div>
                             </div>
                             <div className="relative bg-muted self-stretch z-[1] border-none pl-2 -ml-32 w-full rounded-br-lg md:rounded-r-lg min-h-[8rem]">
@@ -316,17 +316,17 @@ export default async function Page({
                                 {bookmarks.filter(
                                   (p: any) => p.post.cover
                                 )[2] && (
-                                  <Image
-                                    src={
-                                      bookmarks.filter(
-                                        (p: any) => p.post.cover
-                                      )[2].post.cover!
-                                    }
-                                    fill
-                                    alt={"Read Later"}
-                                    className="object-cover !relative h-full rounded-br-lg md:rounded-r-lg"
-                                  />
-                                )}
+                                    <Image
+                                      src={
+                                        bookmarks.filter(
+                                          (p: any) => p.post.cover
+                                        )[2].post.cover!
+                                      }
+                                      fill
+                                      alt={"Read Later"}
+                                      className="object-cover !relative h-full rounded-br-lg md:rounded-r-lg"
+                                    />
+                                  )}
                               </div>
                             </div>
                           </div>

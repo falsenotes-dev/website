@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/components/providers/theme-provider'
+import { ThemeProviders } from '@/components/providers/theme-provider'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -74,7 +74,7 @@ export default async function Rootayout({
         <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.GOOGLE_ADSENSE}`} crossOrigin="anonymous" />
       </head>
       <body className={`${GeistSans.className}`}>
-        <ThemeProvider attribute="class" defaultTheme={settings?.appearance || 'system'} enableSystem>
+        <ThemeProviders>
           <AuthProvider>
             <TopLoader />
             {children}
@@ -87,10 +87,9 @@ export default async function Rootayout({
                 gtag('config', '${process.env.GOOGLE_ANALYTICS}');
               `}
             </Script>
-            <Toaster position='bottom-center' closeButton theme='system' />
             <TailwindIndicator />
           </AuthProvider>
-        </ThemeProvider>
+        </ThemeProviders>
       </body>
     </html>
   )

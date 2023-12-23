@@ -16,6 +16,8 @@ export const config = {
   pages: {
     signIn: "/signin",
     signOut: "/signout",
+    error: "/signin",
+    verifyRequest: "/signin",
     newUser: "/get-started",
   },
   theme: {

@@ -34,6 +34,7 @@ import { ToastAction } from "../ui/toast";
 import { toast } from "sonner";
 import { Label } from "../ui/label";
 import { useState } from "react";
+import ProfileDeleteDialog from "./profile-delete-dialog";
 
 const profileFormSchema = z.object({
   id: z.string(),
@@ -95,6 +96,7 @@ export function ProfileForm({ data }: { data: Partial<ProfileFormValues> }) {
 
   const [file, setFile] = useState<File | null>(null);
   const [isValidUsername, setIsValidUsername] = useState<boolean>(true);
+  const [deleteProfile, setDeleteProfile] = useState<boolean>(false);
 
   async function upload(file: File) {
     try {
@@ -168,177 +170,178 @@ export function ProfileForm({ data }: { data: Partial<ProfileFormValues> }) {
   }
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="justify-between gap-8 flex flex-col items-start w-full"
-      >
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem className="w-full md:w-96">
-              <FormLabel>Profile photo</FormLabel>
-              <FormControl>
-                <div className="flex items-center w-full">
-                  <Label htmlFor="avatar" className="flex items-center">
-                    {
-                      file || field.value ? (
-                        <Avatar className="h-20 w-20 border">
-                          <AvatarImage
-                            src={file ? URL.createObjectURL(file) as string : field.value as string}
-                            alt={data.name ?? ""}
-                          />
-                          <AvatarFallback>
-                            {data.name?.charAt(0) || data.username?.charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                      ) : (
-                        <Avatar className="h-20 w-20 border bg-muted justify-center items-center">
-                          <Icons.upload className="w-5 h-5" />
-                        </Avatar>
-                      )
-                    }
-                    <Input
-                      id="avatar"
-                      placeholder="Avatar"
-                      accept="image/jpeg, image/png, image/gif"
-                      type="file"
-                      className="sr-only"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          if (file.size > 2 * 1024 * 1024) {
-                            toast.warning("File size must be less than 2MB.");
-                          } else {
-                            const img = new Image();
-                            img.src = URL.createObjectURL(file);
-                            img.onload = async () => {
-                              if (img.width !== img.height) {
-                                toast.warning("Image must be square.");
-                              } else if (
-                                !["image/png", "image/jpeg", "image/gif"].includes(file.type)
-                              ) {
-                                toast.warning("File type must be PNG, JPG, or GIF.");
-                              } else {
-                                setFile(file);
-                                const url = await upload(file);
-                                form.setValue("image", url);
-                              }
-                            };
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="justify-between gap-8 flex flex-col items-start w-full"
+        >
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem className="w-full md:w-96">
+                <FormLabel>Profile photo</FormLabel>
+                <FormControl>
+                  <div className="flex items-center w-full">
+                    <Label htmlFor="avatar" className="flex items-center">
+                      {
+                        file || field.value ? (
+                          <Avatar className="h-20 w-20 border">
+                            <AvatarImage
+                              src={file ? URL.createObjectURL(file) as string : field.value as string}
+                              alt={data.name ?? ""}
+                            />
+                            <AvatarFallback>
+                              {data.name?.charAt(0) || data.username?.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                        ) : (
+                          <Avatar className="h-20 w-20 border bg-muted justify-center items-center">
+                            <Icons.upload className="w-5 h-5" />
+                          </Avatar>
+                        )
+                      }
+                      <Input
+                        id="avatar"
+                        placeholder="Avatar"
+                        accept="image/jpeg, image/png, image/gif"
+                        type="file"
+                        className="sr-only"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            if (file.size > 2 * 1024 * 1024) {
+                              toast.warning("File size must be less than 2MB.");
+                            } else {
+                              const img = new Image();
+                              img.src = URL.createObjectURL(file);
+                              img.onload = async () => {
+                                if (img.width !== img.height) {
+                                  toast.warning("Image must be square.");
+                                } else if (
+                                  !["image/png", "image/jpeg", "image/gif"].includes(file.type)
+                                ) {
+                                  toast.warning("File type must be PNG, JPG, or GIF.");
+                                } else {
+                                  setFile(file);
+                                  const url = await upload(file);
+                                  form.setValue("image", url);
+                                }
+                              };
+                            }
                           }
-                        }
-                      }}
-                    />
+                        }}
+                      />
+                      <Button
+                        variant={'ghost'}
+                        asChild
+                        className="ml-2"
+                      >
+                        <span>Upload</span>
+                      </Button>
+                    </Label>
                     <Button
-                      variant={'ghost'}
-                      asChild
+                      variant="ghost"
                       className="ml-2"
+                      asChild
+                      disabled={!file && !field.value}
+                      onClick={() => {
+                        setFile(null);
+                        form.setValue("image", null);
+                      }}
                     >
-                      <span>Upload</span>
+                      <span>Remove</span>
                     </Button>
-                  </Label>
-                  <Button
-                    variant="ghost"
-                    className="ml-2"
-                    asChild
-                    disabled={!file && !field.value}
-                    onClick={() => {
-                      setFile(null);
-                      form.setValue("image", null);
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem className="w-full md:w-96">
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Username"
+                    {...field}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      checkUsername(e.target.value);
                     }}
-                  >
-                    <span>Remove</span>
-                  </Button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem className="w-full md:w-96">
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Username"
-                  {...field}
-                  value={field.value ?? ""}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    checkUsername(e.target.value);
-                  }}
-                />
-              </FormControl>
-              {!isValidUsername && (
-                <FormMessage className="text-destructive">
-                  Username is already taken.
-                </FormMessage>
-              )}
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem className="w-full md:w-96">
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Name"
-                  {...field}
-                  onChange={async (e) => {
-                    field.onChange(e);
-                    await checkUsername(e.target.value);
-                  }
-                  }
-                  value={field.value ?? ""}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem className="w-full md:w-96">
-              <FormLabel>Bio</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  {...field}
-                  value={field.value ?? ""}
-                  className="resize-none"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem className="w-full md:w-96">
-              <FormLabel>Location</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Location"
-                  {...field}
-                  value={field.value ?? ""}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* <div>
+                  />
+                </FormControl>
+                {!isValidUsername && (
+                  <FormMessage className="text-destructive">
+                    Username is already taken.
+                  </FormMessage>
+                )}
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="w-full md:w-96">
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Name"
+                    {...field}
+                    onChange={async (e) => {
+                      field.onChange(e);
+                      await checkUsername(e.target.value);
+                    }
+                    }
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem className="w-full md:w-96">
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Tell us a little bit about yourself"
+                    {...field}
+                    value={field.value ?? ""}
+                    className="resize-none"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem className="w-full md:w-96">
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Location"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <div>
           {fields.map((field, index) => (
             <FormField
               control={form.control}
@@ -370,8 +373,23 @@ export function ProfileForm({ data }: { data: Partial<ProfileFormValues> }) {
             Add URL
           </Button>
         </div> */}
-        <Button type="submit" disabled={!form.formState.isValid || !isValidUsername}>Update profile</Button>
-      </form>
-    </Form>
+          <div className="grid items-center gap-2">
+            <Label htmlFor="delete-profile">Delete profile</Label>
+            <Button
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={() => {
+                setDeleteProfile(true);
+              }}
+              asChild
+            >
+              <div>Delete profile</div>
+            </Button>
+          </div>
+          <Button type="submit" disabled={!form.formState.isValid || !isValidUsername || (form.control._formValues == form.formState.defaultValues)}>Update profile</Button>
+        </form>
+      </Form>
+      <ProfileDeleteDialog open={deleteProfile} onOpenChange={setDeleteProfile} session={data} />
+    </>
   );
 }
