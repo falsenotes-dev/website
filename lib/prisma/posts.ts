@@ -40,7 +40,7 @@ export const getPosts = async ({
   limit?: number;
 }) => {
   const orderByQuery =
-    search !== undefined
+    typeof search !== undefined
       ? [
           {
             readedUsers: {
