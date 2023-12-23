@@ -335,9 +335,7 @@ export const config = {
         where: {
           OR: [
             { id: token?.id ?? "" },
-            { email: user?.email ?? "" },
-            { username: user?.name ?? "" },
-            { name: user?.name ?? "" },
+            { email: token?.email ?? "" },
             { githubId: token?.id ?? "" },
             { googleId: token?.id ?? "" },
             { twitterId: token?.id ?? "" },
