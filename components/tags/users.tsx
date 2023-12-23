@@ -7,6 +7,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import UserVerticalCard from "../user-vertical-card";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import {
+     Carousel,
+     CarouselContent,
+     CarouselItem,
+     CarouselNext,
+     CarouselPrevious,
+} from "@/components/ui/carousel";
+
 
 // Import Swiper styles
 import 'swiper/css';
@@ -27,49 +35,24 @@ export default function TagFollowers({ followers: initialFollowers, tag, session
                          <h2 className="text-2xl font-medium tracking-tight w-full">Who to follow</h2>
                     </div>
                     <div className="mt-6 mb-10">
-                         <Swiper
-                              slidesPerView={5}
-                              spaceBetween={24}
-                              breakpoints={{
-                                   1280: {
-                                        slidesPerView: 5,
-                                        spaceBetween: 24,
-                                   },
-                                   1024: {
-                                        slidesPerView: 4,
-                                        spaceBetween: 24,
-                                   },
-                                   768: {
-                                        slidesPerView: 3,
-                                        spaceBetween: 24,
-                                        
-                                   },
-                                   640: {
-                                        slidesPerView: 1,
-                                        spaceBetween: 24,
-                                   },
-                                   320: {
-                                        slidesPerView: 1,
-                                        spaceBetween: 24,
-                                   },
-                              }}
-                              className="mySwiper"
-                         >
+                         <Carousel opts={
                               {
-                                   followers.map((follower: any) => (
-                                        <SwiperSlide key={follower.id}><UserVerticalCard user={follower.follower} session={session} /></SwiperSlide>
-                                   ))
+                                   align: 'start',
+
                               }
-                              
-                         </Swiper>
+                         } >
+                              <CarouselContent>
+                                   {
+                                        followers.map((follower: any) => (
+                                             <CarouselItem className="basis-full md:basis-1/3 lg:basis-1/4 xl:basis-1/5 pl-6" key={follower.id}><UserVerticalCard user={follower.follower} session={session} /></CarouselItem>
+                                        ))
+                                   }
+                              </CarouselContent>
+                              <CarouselPrevious />
+                              <CarouselNext />
+                         </Carousel>
+
                     </div>
-                    {/* <div className="mt-20">
-                         <Button variant={"outline"} size={"lg"} asChild>
-                              <Link href={`/tag/${tag.name}/popular`}>
-                                   See more popular posts
-                              </Link>
-                         </Button>
-                    </div> */}
                </div>
           </div>
      )
