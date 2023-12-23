@@ -148,7 +148,7 @@ export const config = {
           // Check if the user exists in your database based on their email
           const userExists = await postgres.user.findFirst({
             where: {
-              OR: [{ email: email }, { googleId: googleId }],
+              OR: [{ googleId: googleId }, { email: email }],
             },
           });
 
@@ -333,7 +333,15 @@ export const config = {
     async jwt({ token, user }) {
       const dbUser = await postgres.user.findFirst({
         where: {
-          email: token?.email ?? "",
+          OR: [
+            { id: token?.id ?? "" },
+            { email: user?.email ?? "" },
+            { username: user?.name ?? "" },
+            { name: user?.name ?? "" },
+            { githubId: token?.id ?? "" },
+            { googleId: token?.id ?? "" },
+            { twitterId: token?.id ?? "" },
+          ],
         },
       });
 
