@@ -76,6 +76,17 @@ import { Label } from "../ui/label";
 import { Editor } from "novel";
 import { AutoOptions, createLowlight, all } from "lowlight";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+import useWindowDimensions from "../window-dimensions";
 
 const lowlight = createLowlight(all);
 
@@ -129,9 +140,6 @@ export function PostEditorForm(props: { post: any; user: any }) {
     props.post?.published
   );
   const router = useRouter();
-  const [markdownContent, setMarkdownContent] = useState<string>(
-    props.post?.content
-  );
 
   // This can come from your database or API.
   const defaultValues: Partial<PostFormValues> = {
@@ -461,6 +469,12 @@ export function PostEditorForm(props: { post: any; user: any }) {
   );
   const [firstImage, setFirstImage] = useState<string>("");
 
+  const { width } = useWindowDimensions();
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+  useEffect(() => {
+    if (width) setIsDesktop(width > 768);
+  }, [width]);
+
   return (
     <>
       <Form {...form}>
@@ -522,419 +536,624 @@ export function PostEditorForm(props: { post: any; user: any }) {
               </FormItem>
             )}
           />
-          {/* <Tabs defaultValue={"editor"} className="min-h-[250px]">
-            <TabsList className="mb-2 fixed z-30 my-3 top-0 right-36">
-              <TabsTrigger value="editor" ><Pencil className="h-[1.2rem] w-[1.2rem]" /><span className="sr-only">Editor</span></TabsTrigger>
-              <TabsTrigger value="preview"><Eye className="h-[1.2rem] w-[1.2rem]" /> <span className="sr-only">Preview</span></TabsTrigger>
-            </TabsList>
-            <TabsContent value="editor"> <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <TextareaAutosize
-                      className="flex text-sm md:text-base text-foreground ring-offset-background placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 w-full resize-none appearance-none overflow-hidden bg-transparent focus:outline-none"
-                      placeholder="Write your post here..."
-                      {...field}
-                      onChange={(e) => handleContentChange(e.target.value)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /></TabsContent>
-            <TabsContent value="preview" className="pb-5 px-3 bg-popover text-sm rounded-md">
-              <MarkdownCard code={markdownContent} className="w-full" />
-            </TabsContent>
-          </Tabs> */}
 
-          <Dialog onOpenChange={setOpen} open={open}>
-            <DialogContent className="h-full max-h-[70%] md:max-h-[625px] !p-0">
-              <ScrollArea className="h-full w-full px-6">
-                <DialogHeader className="py-6">
-                  <DialogTitle className="font-bold">
-                    Post Settings for publishing
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 pb-4 m-1">
-                  <FormField
-                    control={form.control}
-                    name="url"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>URL-friendly Link</FormLabel>
-                        <FormDescription>
-                          {`falsenotes.dev/@${props.user?.username}/`}
-                        </FormDescription>
-                        <FormControl>
-                          <div className="flex justify-end flex-col">
-                            <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center">
-                              <Input
-                                className="border-none p-0 focus-visible:ring-offset-0 focus-visible:ring-0 bg-transparent"
-                                placeholder="URL"
-                                {...field}
-                                onChange={handleUrlChange}
-                              />
-                              {isValidUrl !== null && !isValidUrl && (
-                                <Icons.xCircle className="text-muted-foreground h-5 w-5" />
-                              )}
-                            </div>
-                            {(!form.getValues("url") ||
-                              form.getValues("url") == "") && (
-                                <Button
-                                  variant="ghost"
-                                  className="mt-1 ml-auto"
-                                  onClick={() => {
-                                    const url = Math.random()
-                                      .toString(36)
-                                      .substring(2, 15);
-                                    form.setValue("url", url);
-                                    setIsValidUrl(true);
-                                  }}
-                                >
-                                  Make Default
-                                </Button>
-                              )}
-                          </div>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="coverImage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>FalseNotes Preview</FormLabel>
-                        <FormDescription>
-                          Manage the image and short description for the post.
-                        </FormDescription>
-                        <FormControl>
-                          <>
-                            <div className="flex items-center justify-center w-full">
-                              <label className="flex flex-col items-center relative justify-center w-full border aspect-video border-dashed rounded-md cursor-pointer bg-popover/50">
-                                {cover ? (
-                                  <AspectRatio
-                                    ratio={16 / 9}
-                                    className="bg-muted rounded-md"
-                                  >
-                                    <div
-                                      className="object-cover rounded-md w-full h-full bg-cover bg-center"
-                                      style={{
-                                        backgroundImage: `url(${file
-                                          ? (URL.createObjectURL(
-                                            file
-                                          ) as string)
-                                          : (field.value as string)
-                                          })`,
-                                      }}
-                                    />
-                                  </AspectRatio>
-                                ) : (
-                                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <Icons.upload className="w-9 h-9 mb-4" />
-                                    <p className="mb-2 text-sm text-secondary-foreground font-medium">
-                                      Click to upload
-                                    </p>
-                                    <p className="text-xs text-secondary-foreground">
-                                      PNG, JPG, GIF (MAX. 2MB)
-                                    </p>
-                                  </div>
-                                )}
+          {isDesktop ? (
+            <Dialog onOpenChange={setOpen} open={open}>
+              <DialogContent className="h-full max-h-[70%] md:max-h-[625px] !p-0">
+                <ScrollArea className="h-full w-full px-6">
+                  <DialogHeader className="py-6">
+                    <DialogTitle className="font-bold">
+                      Post Settings for publishing
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 pb-4 m-1">
+                    <FormField
+                      control={form.control}
+                      name="url"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>URL-friendly Link</FormLabel>
+                          <FormDescription>
+                            {`falsenotes.dev/@${props.user?.username}/`}
+                          </FormDescription>
+                          <FormControl>
+                            <div className="flex justify-end flex-col">
+                              <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center">
                                 <Input
-                                  id="dropzone-file"
-                                  type="file"
-                                  accept="image/jpeg, image/png, image/gif"
-                                  onChange={async (e) => {
-                                    const cover = e.target.files?.[0];
-                                    if (cover) {
-                                      if (cover.size > 2 * 1024 * 1024) {
-                                        toast.warning(
-                                          "File size must be less than 2MB."
-                                        );
-                                      } else if (
-                                        ![
-                                          "image/png",
-                                          "image/jpeg",
-                                          "image/gif",
-                                        ].includes(cover.type)
-                                      ) {
-                                        toast.warning(
-                                          "File type must be PNG, JPG, or GIF."
-                                        );
-                                      } else {
-                                        setFile(cover);
-                                        const url = await uploadCover(cover);
-                                        form.setValue("coverImage", url);
-                                      }
-                                    }
-                                  }}
-                                  className="hidden"
+                                  className="border-none p-0 focus-visible:ring-offset-0 focus-visible:ring-0 bg-transparent"
+                                  placeholder="URL"
+                                  {...field}
+                                  onChange={handleUrlChange}
                                 />
-                                <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
+                                {isValidUrl !== null && !isValidUrl && (
+                                  <Icons.xCircle className="text-muted-foreground h-5 w-5" />
+                                )}
+                              </div>
+                              {(!form.getValues("url") ||
+                                form.getValues("url") == "") && (
                                   <Button
-                                    variant="secondary"
-                                    size={"icon"}
-                                    className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
+                                    variant="ghost"
+                                    className="mt-1 ml-auto"
                                     onClick={() => {
-                                      form.setValue("coverImage", firstImage);
-                                      setCover(firstImage);
+                                      const url = Math.random()
+                                        .toString(36)
+                                        .substring(2, 15);
+                                      form.setValue("url", url);
+                                      setIsValidUrl(true);
                                     }}
                                   >
-                                    <RefreshCcw className="h-4 w-4" />
-                                    <span className="sr-only">Refresh</span>
+                                    Make Default
                                   </Button>
-                                  <Button
-                                    variant="secondary"
-                                    size={"icon"}
-                                    className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
-                                    onClick={async () => {
-                                      const coverUrl = await uploadCover(
-                                        file
-                                      );
-                                      if (coverUrl) {
-                                        form.setValue("coverImage", coverUrl);
-                                      }
-                                    }}
-                                    disabled={!file && form.getValues('coverImage') == ''}
-                                  >
-                                    <Icons.upload className="h-4 w-4" />
-                                    <span className="sr-only">Upload</span>
-                                  </Button>
-                                  <Button
-                                    variant="secondary"
-                                    size={"icon"}
-                                    className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
-                                    onClick={() => {
-                                      form.setValue("coverImage", "");
-                                      setCover("");
-                                      setFile(undefined);
-                                    }}
-                                    disabled={!file && form.getValues('coverImage') == ''}
-                                  >
-                                    <Icons.delete className="h-4 w-4" />
-                                    <span className="sr-only">Remove</span>
-                                  </Button>
-                                </div>
-                              </label>
+                                )}
                             </div>
-                          </>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="subtitle"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <TextareaAutosize
-                            {...field}
-                            className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]"
-                            rows={1}
-                            onChange={handleDescriptionChange}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="coverImage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Social media preview</FormLabel>
-                        <FormDescription>
-                          An image of superior quality enhances the
-                          attractiveness of your post for readers, especially on
-                          social networks.
-                        </FormDescription>
-                        <FormControl>
-                          <>
-                            <AspectRatio
-                              ratio={1200 / 630}
-                              className="bg-muted rounded-md relative"
-                            >
-                              <Image
-                                src={socialPreview}
-                                className="rounded-md"
-                                alt="Thumbnail"
-                                height={630}
-                                width={1200}
-                                objectFit="cover"
-                              />
-                              <Button
-                                variant="secondary"
-                                size={"icon"}
-                                className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
-                                onClick={() => {
-                                  setSocialPreview(
-                                    `https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues(
-                                      "title"
-                                    )}&subtitle=${form.getValues(
-                                      "subtitle"
-                                    )}&cover=${form.getValues(
-                                      "coverImage"
-                                    )}&readingTime=${readingTime(form.getValues("content"))
-                                      .text
-                                    }&authorid=${props.user?.username}`
-                                  );
-                                }}
-                              >
-                                <RefreshCcw className="h-4 w-4" />
-                                <span className="sr-only">Refresh</span>
-                              </Button>
-                            </AspectRatio>
-                          </>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="tags"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tags</FormLabel>
-                        <FormDescription>
-                          Add tags (up to 5) to help readers find your post
-                          easier.
-                        </FormDescription>
-                        <div className="flex-wrap">
-                          {fields.map((field, index) => (
-                            <TagBadge
-                              key={field.id}
-                              className="pr-1.5 text-sm font-medium my-1.5 mr-1.5"
-                            >
-                              {field.value}
-                              <Button
-                                variant={"ghost"}
-                                onClick={() => remove(index)}
-                                className="h-fit w-fit !p-0 ml-2.5 hover:bg-transparent"
-                              >
-                                <Cross2Icon className="h-3 w-3" />
-                              </Button>
-                            </TagBadge>
-                          ))}
-                        </div>
-                        {fields.length < 5 && (
+                    <FormField
+                      control={form.control}
+                      name="coverImage"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>FalseNotes Preview</FormLabel>
+                          <FormDescription>
+                            Manage the image and short description for the post.
+                          </FormDescription>
                           <FormControl>
                             <>
-                              <Popover
-                                open={commandOpen}
-                                onOpenChange={setCommandOpen}
-                              >
-                                <PopoverTrigger className="w-full">
-                                  <Input
-                                    value={newTag}
-                                    onChange={(e) => setNewTag(e.target.value)}
-                                  />
-                                </PopoverTrigger>
-                                <PopoverContent
-                                  className="w-full p-0"
-                                  align="start"
-                                >
-                                  {suggestions.length > 0 && (
-                                    <Command className="w-full">
-                                      <CommandGroup>
-                                        {suggestions?.map((tag: any) => (
-                                          <CommandItem
-                                            key={tag.id}
-                                            value={tag.name}
-                                          >
-                                            <Button
-                                              variant="ghost"
-                                              className="h-fit w-fit !p-0"
-                                              onClick={() => {
-                                                append({ value: tag.name });
-                                                setNewTag("");
-                                                setCommandOpen(false);
-                                              }}
-                                            >
-                                              <Hash className="mr-2 h-4 w-4" />
-                                              <span>
-                                                {tag.name.replace(/-/g, " ")}
-                                              </span>
-                                            </Button>
-                                          </CommandItem>
-                                        ))}
-                                      </CommandGroup>
-                                    </Command>
+                              <div className="flex items-center justify-center w-full">
+                                <label className="flex flex-col items-center relative justify-center w-full border aspect-video border-dashed rounded-md cursor-pointer bg-popover/50">
+                                  {cover ? (
+                                    <AspectRatio
+                                      ratio={16 / 9}
+                                      className="bg-muted rounded-md"
+                                    >
+                                      <div
+                                        className="object-cover rounded-md w-full h-full bg-cover bg-center"
+                                        style={{
+                                          backgroundImage: `url(${file
+                                            ? (URL.createObjectURL(
+                                              file
+                                            ) as string)
+                                            : (field.value as string)
+                                            })`,
+                                        }}
+                                      />
+                                    </AspectRatio>
+                                  ) : (
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                      <Icons.upload className="w-9 h-9 mb-4" />
+                                      <p className="mb-2 text-sm text-secondary-foreground font-medium">
+                                        Click to upload
+                                      </p>
+                                      <p className="text-xs text-secondary-foreground">
+                                        PNG, JPG, GIF (MAX. 2MB)
+                                      </p>
+                                    </div>
                                   )}
-                                </PopoverContent>
-                              </Popover>
+                                  <Input
+                                    id="dropzone-file"
+                                    type="file"
+                                    accept="image/jpeg, image/png, image/gif"
+                                    onChange={async (e) => {
+                                      const cover = e.target.files?.[0];
+                                      if (cover) {
+                                        if (cover.size > 2 * 1024 * 1024) {
+                                          toast.warning(
+                                            "File size must be less than 2MB."
+                                          );
+                                        } else if (
+                                          ![
+                                            "image/png",
+                                            "image/jpeg",
+                                            "image/gif",
+                                          ].includes(cover.type)
+                                        ) {
+                                          toast.warning(
+                                            "File type must be PNG, JPG, or GIF."
+                                          );
+                                        } else {
+                                          setFile(cover);
+                                          const url = await uploadCover(cover);
+                                          form.setValue("coverImage", url);
+                                        }
+                                      }
+                                    }}
+                                    className="hidden"
+                                  />
+                                  <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
+                                    <Button
+                                      variant="secondary"
+                                      size={"icon"}
+                                      className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
+                                      onClick={() => {
+                                        form.setValue("coverImage", firstImage);
+                                        setCover(firstImage);
+                                      }}
+                                    >
+                                      <RefreshCcw className="h-4 w-4" />
+                                      <span className="sr-only">Refresh</span>
+                                    </Button>
+                                    <Button
+                                      variant="secondary"
+                                      size={"icon"}
+                                      className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
+                                      onClick={async () => {
+                                        const coverUrl = await uploadCover(
+                                          file
+                                        );
+                                        if (coverUrl) {
+                                          form.setValue("coverImage", coverUrl);
+                                        }
+                                      }}
+                                      disabled={!file && form.getValues('coverImage') == ''}
+                                    >
+                                      <Icons.upload className="h-4 w-4" />
+                                      <span className="sr-only">Upload</span>
+                                    </Button>
+                                    <Button
+                                      variant="secondary"
+                                      size={"icon"}
+                                      className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
+                                      onClick={() => {
+                                        form.setValue("coverImage", "");
+                                        setCover("");
+                                        setFile(undefined);
+                                      }}
+                                      disabled={!file && form.getValues('coverImage') == ''}
+                                    >
+                                      <Icons.delete className="h-4 w-4" />
+                                      <span className="sr-only">Remove</span>
+                                    </Button>
+                                  </div>
+                                </label>
+                              </div>
                             </>
                           </FormControl>
-                        )}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {fields.length < 5 && (
-                    <Button
-                      variant="outline"
-                      className="mt-2"
-                      onClick={() => {
-                        if (newTag?.trim() !== "" && newTag !== undefined) {
-                          append({ value: newTag.toLowerCase() });
-                          setNewTag("");
-                        }
-                      }}
-                    >
-                      Add Tag
-                    </Button>
-                  )}
-                  <FormField
-                    control={form.control}
-                    name="pinned"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Pin post</FormLabel>
-                        <FormDescription>
-                          Pin this post to the top of your profile. This will
-                          override any other pinned posts.
-                        </FormDescription>
-                        <FormControl>
-                          <div className="flex items-center space-x-2">
-                            <Switch
-                              id="pinned"
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                              className="data-[state=checked]:bg-foreground"
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="subtitle"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <TextareaAutosize
+                              {...field}
+                              className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]"
+                              rows={1}
+                              onChange={handleDescriptionChange}
                             />
-                            <Label htmlFor="pinned">Pin this post</Label>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="coverImage"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Social media preview</FormLabel>
+                          <FormDescription>
+                            An image of superior quality enhances the
+                            attractiveness of your post for readers, especially on
+                            social networks.
+                          </FormDescription>
+                          <FormControl>
+                            <>
+                              <AspectRatio
+                                ratio={1200 / 630}
+                                className="bg-muted rounded-md relative"
+                              >
+                                <Image
+                                  src={socialPreview}
+                                  className="rounded-md"
+                                  alt="Thumbnail"
+                                  height={630}
+                                  width={1200}
+                                  objectFit="cover"
+                                />
+                                <Button
+                                  variant="secondary"
+                                  size={"icon"}
+                                  className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
+                                  onClick={() => {
+                                    setSocialPreview(
+                                      `https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues(
+                                        "title"
+                                      )}&subtitle=${form.getValues(
+                                        "subtitle"
+                                      )}&cover=${form.getValues(
+                                        "coverImage"
+                                      )}&readingTime=${readingTime(form.getValues("content"))
+                                        .text
+                                      }&authorid=${props.user?.username}`
+                                    );
+                                  }}
+                                >
+                                  <RefreshCcw className="h-4 w-4" />
+                                  <span className="sr-only">Refresh</span>
+                                </Button>
+                              </AspectRatio>
+                            </>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="tags"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Tags</FormLabel>
+                          <FormDescription>
+                            Add tags (up to 5) to help readers find your post
+                            easier.
+                          </FormDescription>
+                          <div className="flex-wrap">
+                            {fields.map((field, index) => (
+                              <TagBadge
+                                key={field.id}
+                                className="pr-1.5 text-sm font-medium my-1.5 mr-1.5"
+                              >
+                                {field.value}
+                                <Button
+                                  variant={"ghost"}
+                                  onClick={() => remove(index)}
+                                  className="h-fit w-fit !p-0 ml-2.5 hover:bg-transparent"
+                                >
+                                  <Cross2Icon className="h-3 w-3" />
+                                </Button>
+                              </TagBadge>
+                            ))}
                           </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                          {fields.length < 5 && (
+                            <FormControl>
+                              <>
+                                <Popover
+                                  open={commandOpen}
+                                  onOpenChange={setCommandOpen}
+                                >
+                                  <PopoverTrigger className="w-full">
+                                    <Input
+                                      value={newTag}
+                                      onChange={(e) => setNewTag(e.target.value)}
+                                    />
+                                  </PopoverTrigger>
+                                  <PopoverContent
+                                    className="w-full p-0"
+                                    align="start"
+                                  >
+                                    {suggestions.length > 0 && (
+                                      <Command className="w-full">
+                                        <CommandGroup>
+                                          {suggestions?.map((tag: any) => (
+                                            <CommandItem
+                                              key={tag.id}
+                                              value={tag.name}
+                                            >
+                                              <Button
+                                                variant="ghost"
+                                                className="h-fit w-fit !p-0"
+                                                onClick={() => {
+                                                  append({ value: tag.name });
+                                                  setNewTag("");
+                                                  setCommandOpen(false);
+                                                }}
+                                              >
+                                                <Hash className="mr-2 h-4 w-4" />
+                                                <span>
+                                                  {tag.name.replace(/-/g, " ")}
+                                                </span>
+                                              </Button>
+                                            </CommandItem>
+                                          ))}
+                                        </CommandGroup>
+                                      </Command>
+                                    )}
+                                  </PopoverContent>
+                                </Popover>
+                              </>
+                            </FormControl>
+                          )}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {fields.length < 5 && (
+                      <Button
+                        variant="outline"
+                        className="mt-2"
+                        onClick={() => {
+                          if (newTag?.trim() !== "" && newTag !== undefined) {
+                            append({ value: newTag.toLowerCase() });
+                            setNewTag("");
+                          }
+                        }}
+                      >
+                        Add Tag
+                      </Button>
                     )}
-                  />
-                  <div className="flex flex-col gap-2.5">
                     <FormField
                       control={form.control}
-                      name="commentsOn"
+                      name="pinned"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Community</FormLabel>
+                          <FormLabel>Pin post</FormLabel>
+                          <FormDescription>
+                            Pin this post to the top of your profile. This will
+                            override any other pinned posts.
+                          </FormDescription>
                           <FormControl>
                             <div className="flex items-center space-x-2">
                               <Switch
-                                id="comments-on"
+                                id="pinned"
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
                                 className="data-[state=checked]:bg-foreground"
                               />
-                              <Label htmlFor="comments-on">
-                                Allow Comments
-                              </Label>
+                              <Label htmlFor="pinned">Pin this post</Label>
                             </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex flex-col gap-2.5">
+                      <FormField
+                        control={form.control}
+                        name="commentsOn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Community</FormLabel>
+                            <FormControl>
+                              <div className="flex items-center space-x-2">
+                                <Switch
+                                  id="comments-on"
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                  className="data-[state=checked]:bg-foreground"
+                                />
+                                <Label htmlFor="comments-on">
+                                  Allow Comments
+                                </Label>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="likesOn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="flex items-center space-x-2">
+                                <Switch
+                                  id="likes-on"
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                  className="data-[state=checked]:bg-foreground"
+                                />
+                                <Label htmlFor="likes-on">Allow Reactions</Label>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </ScrollArea>
+                <DialogFooter className="p-6 border-t">
+                  <Button
+                    type="submit"
+                    variant={'default'}
+                    className="ml-auto w-full !bg-primary hover:!bg-primary/90"
+                    size={"lg"}
+                    form="PostForm"
+                    disabled={
+                      isPublishing || isValidUrl === null ? false : !isValidUrl
+                    }
+                    onClick={() => {
+                      form.setValue("published", true);
+                    }}
+                  >
+                    {isPublishing ? (
+                      <>
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
+                        {previousStatus ? "Updating" : "Publishing"}
+                      </>
+                    ) : (
+                      <>{previousStatus ? "Update" : "Publish"}</>
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          ) : (
+            <Drawer
+              open={open}
+              onOpenChange={setOpen}
+            >
+              <DrawerContent className="max-h-[calc(100vh-3rem)] pt-0">
+                <div className="h-full px-6 overflow-x-hidden overflow-y-scroll">
+                  <DrawerHeader className="py-6">
+                    <DrawerTitle className="font-bold">
+                      Post Settings for publishing
+                    </DrawerTitle>
+                  </DrawerHeader>
+                  <div className="space-y-4 pb-4 m-1">
+                    <FormField
+                      control={form.control}
+                      name="url"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>URL-friendly Link</FormLabel>
+                          <FormDescription>
+                            {`falsenotes.dev/@${props.user?.username}/`}
+                          </FormDescription>
+                          <FormControl>
+                            <div className="flex justify-end flex-col">
+                              <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center">
+                                <Input
+                                  className="border-none p-0 focus-visible:ring-offset-0 focus-visible:ring-0 bg-transparent"
+                                  placeholder="URL"
+                                  {...field}
+                                  onChange={handleUrlChange}
+                                />
+                                {isValidUrl !== null && !isValidUrl && (
+                                  <Icons.xCircle className="text-muted-foreground h-5 w-5" />
+                                )}
+                              </div>
+                              {(!form.getValues("url") ||
+                                form.getValues("url") == "") && (
+                                  <Button
+                                    variant="ghost"
+                                    className="mt-1 ml-auto"
+                                    onClick={() => {
+                                      const url = Math.random()
+                                        .toString(36)
+                                        .substring(2, 15);
+                                      form.setValue("url", url);
+                                      setIsValidUrl(true);
+                                    }}
+                                  >
+                                    Make Default
+                                  </Button>
+                                )}
+                            </div>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="coverImage"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>FalseNotes Preview</FormLabel>
+                          <FormDescription>
+                            Manage the image and short description for the post.
+                          </FormDescription>
+                          <FormControl>
+                            <>
+                              <div className="flex items-center justify-center w-full">
+                                <label className="flex flex-col items-center relative justify-center w-full border aspect-video border-dashed rounded-md cursor-pointer bg-popover/50">
+                                  {cover ? (
+                                    <AspectRatio
+                                      ratio={16 / 9}
+                                      className="bg-muted rounded-md"
+                                    >
+                                      <div
+                                        className="object-cover rounded-md w-full h-full bg-cover bg-center"
+                                        style={{
+                                          backgroundImage: `url(${file
+                                            ? (URL.createObjectURL(
+                                              file
+                                            ) as string)
+                                            : (field.value as string)
+                                            })`,
+                                        }}
+                                      />
+                                    </AspectRatio>
+                                  ) : (
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                      <Icons.upload className="w-9 h-9 mb-4" />
+                                      <p className="mb-2 text-sm text-secondary-foreground font-medium">
+                                        Click to upload
+                                      </p>
+                                      <p className="text-xs text-secondary-foreground">
+                                        PNG, JPG, GIF (MAX. 2MB)
+                                      </p>
+                                    </div>
+                                  )}
+                                  <Input
+                                    id="dropzone-file"
+                                    type="file"
+                                    accept="image/jpeg, image/png, image/gif"
+                                    onChange={async (e) => {
+                                      const cover = e.target.files?.[0];
+                                      if (cover) {
+                                        if (cover.size > 2 * 1024 * 1024) {
+                                          toast.warning(
+                                            "File size must be less than 2MB."
+                                          );
+                                        } else if (
+                                          ![
+                                            "image/png",
+                                            "image/jpeg",
+                                            "image/gif",
+                                          ].includes(cover.type)
+                                        ) {
+                                          toast.warning(
+                                            "File type must be PNG, JPG, or GIF."
+                                          );
+                                        } else {
+                                          setFile(cover);
+                                          const url = await uploadCover(cover);
+                                          form.setValue("coverImage", url);
+                                        }
+                                      }
+                                    }}
+                                    className="hidden"
+                                  />
+                                  <div className="flex items-center justify-center absolute top-2 right-2 z-50 gap-1">
+                                    <Button
+                                      variant="secondary"
+                                      size={"icon"}
+                                      className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
+                                      onClick={() => {
+                                        form.setValue("coverImage", firstImage);
+                                        setCover(firstImage);
+                                      }}
+                                    >
+                                      <RefreshCcw className="h-4 w-4" />
+                                      <span className="sr-only">Refresh</span>
+                                    </Button>
+                                    <Button
+                                      variant="secondary"
+                                      size={"icon"}
+                                      className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
+                                      onClick={async () => {
+                                        const coverUrl = await uploadCover(
+                                          file
+                                        );
+                                        if (coverUrl) {
+                                          form.setValue("coverImage", coverUrl);
+                                        }
+                                      }}
+                                      disabled={!file && form.getValues('coverImage') == ''}
+                                    >
+                                      <Icons.upload className="h-4 w-4" />
+                                      <span className="sr-only">Upload</span>
+                                    </Button>
+                                    <Button
+                                      variant="secondary"
+                                      size={"icon"}
+                                      className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
+                                      onClick={() => {
+                                        form.setValue("coverImage", "");
+                                        setCover("");
+                                        setFile(undefined);
+                                      }}
+                                      disabled={!file && form.getValues('coverImage') == ''}
+                                    >
+                                      <Icons.delete className="h-4 w-4" />
+                                      <span className="sr-only">Remove</span>
+                                    </Button>
+                                  </div>
+                                </label>
+                              </div>
+                            </>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -942,53 +1161,269 @@ export function PostEditorForm(props: { post: any; user: any }) {
                     />
                     <FormField
                       control={form.control}
-                      name="likesOn"
+                      name="subtitle"
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
+                            <TextareaAutosize
+                              {...field}
+                              className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]"
+                              rows={1}
+                              onChange={handleDescriptionChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="coverImage"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Social media preview</FormLabel>
+                          <FormDescription>
+                            An image of superior quality enhances the
+                            attractiveness of your post for readers, especially on
+                            social networks.
+                          </FormDescription>
+                          <FormControl>
+                            <>
+                              <AspectRatio
+                                ratio={1200 / 630}
+                                className="bg-muted rounded-md relative"
+                              >
+                                <Image
+                                  src={socialPreview}
+                                  className="rounded-md"
+                                  alt="Thumbnail"
+                                  height={630}
+                                  width={1200}
+                                  objectFit="cover"
+                                />
+                                <Button
+                                  variant="secondary"
+                                  size={"icon"}
+                                  className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
+                                  onClick={() => {
+                                    setSocialPreview(
+                                      `https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues(
+                                        "title"
+                                      )}&subtitle=${form.getValues(
+                                        "subtitle"
+                                      )}&cover=${form.getValues(
+                                        "coverImage"
+                                      )}&readingTime=${readingTime(form.getValues("content"))
+                                        .text
+                                      }&authorid=${props.user?.username}`
+                                    );
+                                  }}
+                                >
+                                  <RefreshCcw className="h-4 w-4" />
+                                  <span className="sr-only">Refresh</span>
+                                </Button>
+                              </AspectRatio>
+                            </>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="tags"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Tags</FormLabel>
+                          <FormDescription>
+                            Add tags (up to 5) to help readers find your post
+                            easier.
+                          </FormDescription>
+                          <div className="flex-wrap">
+                            {fields.map((field, index) => (
+                              <TagBadge
+                                key={field.id}
+                                className="pr-1.5 text-sm font-medium my-1.5 mr-1.5"
+                              >
+                                {field.value}
+                                <Button
+                                  variant={"ghost"}
+                                  onClick={() => remove(index)}
+                                  className="h-fit w-fit !p-0 ml-2.5 hover:bg-transparent"
+                                >
+                                  <Cross2Icon className="h-3 w-3" />
+                                </Button>
+                              </TagBadge>
+                            ))}
+                          </div>
+                          {fields.length < 5 && (
+                            <FormControl>
+                              <>
+                                <Popover
+                                  open={commandOpen}
+                                  onOpenChange={setCommandOpen}
+                                >
+                                  <PopoverTrigger className="w-full">
+                                    <Input
+                                      value={newTag}
+                                      onChange={(e) => setNewTag(e.target.value)}
+                                    />
+                                  </PopoverTrigger>
+                                  <PopoverContent
+                                    className="w-full p-0"
+                                    align="start"
+                                  >
+                                    {suggestions.length > 0 && (
+                                      <Command className="w-full">
+                                        <CommandGroup>
+                                          {suggestions?.map((tag: any) => (
+                                            <CommandItem
+                                              key={tag.id}
+                                              value={tag.name}
+                                            >
+                                              <Button
+                                                variant="ghost"
+                                                className="h-fit w-fit !p-0"
+                                                onClick={() => {
+                                                  append({ value: tag.name });
+                                                  setNewTag("");
+                                                  setCommandOpen(false);
+                                                }}
+                                              >
+                                                <Hash className="mr-2 h-4 w-4" />
+                                                <span>
+                                                  {tag.name.replace(/-/g, " ")}
+                                                </span>
+                                              </Button>
+                                            </CommandItem>
+                                          ))}
+                                        </CommandGroup>
+                                      </Command>
+                                    )}
+                                  </PopoverContent>
+                                </Popover>
+                              </>
+                            </FormControl>
+                          )}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {fields.length < 5 && (
+                      <Button
+                        variant="outline"
+                        className="mt-2"
+                        onClick={() => {
+                          if (newTag?.trim() !== "" && newTag !== undefined) {
+                            append({ value: newTag.toLowerCase() });
+                            setNewTag("");
+                          }
+                        }}
+                      >
+                        Add Tag
+                      </Button>
+                    )}
+                    <FormField
+                      control={form.control}
+                      name="pinned"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Pin post</FormLabel>
+                          <FormDescription>
+                            Pin this post to the top of your profile. This will
+                            override any other pinned posts.
+                          </FormDescription>
+                          <FormControl>
                             <div className="flex items-center space-x-2">
                               <Switch
-                                id="likes-on"
+                                id="pinned"
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
                                 className="data-[state=checked]:bg-foreground"
                               />
-                              <Label htmlFor="likes-on">Allow Reactions</Label>
+                              <Label htmlFor="pinned">Pin this post</Label>
                             </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+                    <div className="flex flex-col gap-2.5">
+                      <FormField
+                        control={form.control}
+                        name="commentsOn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Community</FormLabel>
+                            <FormControl>
+                              <div className="flex items-center space-x-2">
+                                <Switch
+                                  id="comments-on"
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                  className="data-[state=checked]:bg-foreground"
+                                />
+                                <Label htmlFor="comments-on">
+                                  Allow Comments
+                                </Label>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="likesOn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="flex items-center space-x-2">
+                                <Switch
+                                  id="likes-on"
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                  className="data-[state=checked]:bg-foreground"
+                                />
+                                <Label htmlFor="likes-on">Allow Reactions</Label>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                 </div>
-              </ScrollArea>
-              <DialogFooter className="p-6 border-t">
-                <Button
-                  type="submit"
-                  variant={'default'}
-                  className="ml-auto w-full !bg-primary hover:!bg-primary/90"
-                  size={"lg"}
-                  form="PostForm"
-                  disabled={
-                    isPublishing || isValidUrl === null ? false : !isValidUrl
-                  }
-                  onClick={() => {
-                    form.setValue("published", true);
-                  }}
-                >
-                  {isPublishing ? (
-                    <>
-                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
-                      {previousStatus ? "Updating" : "Publishing"}
-                    </>
-                  ) : (
-                    <>{previousStatus ? "Update" : "Publish"}</>
-                  )}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+                <DrawerFooter className="border-t">
+                  <Button
+                    type="submit"
+                    variant={'default'}
+                    className="ml-auto w-full !bg-primary hover:!bg-primary/90"
+                    size={"lg"}
+                    form="PostForm"
+                    disabled={
+                      isPublishing || isValidUrl === null ? false : !isValidUrl
+                    }
+                    onClick={() => {
+                      form.setValue("published", true);
+                    }}
+                  >
+                    {isPublishing ? (
+                      <>
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
+                        {previousStatus ? "Updating" : "Publishing"}
+                      </>
+                    ) : (
+                      <>{previousStatus ? "Update" : "Publish"}</>
+                    )}
+                  </Button>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+          )
+          }
         </form>
       </Form>
       <nav className="menu">
