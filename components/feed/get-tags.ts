@@ -1,4 +1,4 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { getSessionUser } from "../get-session-user";
 import { getPopularTags } from "@/lib/prisma/tags";
 

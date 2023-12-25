@@ -3,55 +3,55 @@ import { getSessionUser } from "@/components/get-session-user";
 import { Icons } from "@/components/icon";
 import ReadLaterPosts from "@/components/read-later-posts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { getLists } from "@/lib/prisma/session";
 import Link from "next/link";
 
 
 export default async function ListPage() {
   const session = await getSessionUser();
-  const list = await postgres.bookmark.findMany({
-     where: {
-       userId: session?.id,
-     },
-     include: {
-       user: true,
+  const list = await db.bookmark.findMany({
+    where: {
+      userId: session?.id,
+    },
+    include: {
+      user: true,
 
-       post: {
-          include: {
-               author: {
-                 include: {
-                   Followers: true,
-                   Followings: true,
-                 },
-               },
-               likes: true,
-               savedUsers: { select: { userId: true } },
-               _count: {
-                 select: {
-                   likes: true,
-                   savedUsers: true,
-                   readedUsers: true,
-                   shares: true,
-                   comments: true,
-                 },
-               },
-               tags: {
-                 take: 1,
-                 select: {
-                   tag: true,
-                 },
-               },
-             },
-       }
-     },
-       });
+      post: {
+        include: {
+          author: {
+            include: {
+              Followers: true,
+              Followings: true,
+            },
+          },
+          likes: true,
+          savedUsers: { select: { userId: true } },
+          _count: {
+            select: {
+              likes: true,
+              savedUsers: true,
+              readedUsers: true,
+              shares: true,
+              comments: true,
+            },
+          },
+          tags: {
+            take: 1,
+            select: {
+              tag: true,
+            },
+          },
+        },
+      }
+    },
+  });
 
-       const user = await postgres.user.findFirst({
-               where: {
-                     id: session?.id
-               },
-           });
+  const user = await db.user.findFirst({
+    where: {
+      id: session?.id
+    },
+  });
 
   if (!list) return null;
   if (!session) return null;
@@ -68,24 +68,24 @@ export default async function ListPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex gap-4">
                     <Link href={`/@${user?.username}`}>
-                    <Avatar className="w-12 h-12">
-                      <AvatarImage
-                        src={user?.image!}
-                        alt={user?.name || user?.username}
-                      />
-                      <AvatarFallback>
-                        {user?.name?.charAt(0) || user?.username.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
+                      <Avatar className="w-12 h-12">
+                        <AvatarImage
+                          src={user?.image!}
+                          alt={user?.name || user?.username}
+                        />
+                        <AvatarFallback>
+                          {user?.name?.charAt(0) || user?.username.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
                     </Link>
                     <div className="flex flex-col">
                       <Link href={`/@${user?.username}`}>
-                      <div className="line-clamp-1 inline-flex items-center">
-                        {user?.name || user?.username}{" "}
-                        {user?.verified && (
-                          <Icons.verified className="h-4 w-4 mx-0.5 fill-verified" />
-                        )}
-                      </div>
+                        <div className="line-clamp-1 inline-flex items-center">
+                          {user?.name || user?.username}{" "}
+                          {user?.verified && (
+                            <Icons.verified className="h-4 w-4 mx-0.5 fill-verified" />
+                          )}
+                        </div>
                       </Link>
                       <div className="flex flex-wrap items-center">
                         <div className="inline-flex items-center text-xs text-muted-foreground">
@@ -104,13 +104,13 @@ export default async function ListPage() {
               </div>
             </div>
             <div>
-            <div className="w-full lg:mx-6">
-                  <div className="pb-6">
-                    <h2 className="text-3xl line-clamp-2 font-bold">
-                      {user?.name || user?.username}&apos;s Read Later
-                    </h2>
-                  </div>
+              <div className="w-full lg:mx-6">
+                <div className="pb-6">
+                  <h2 className="text-3xl line-clamp-2 font-bold">
+                    {user?.name || user?.username}&apos;s Read Later
+                  </h2>
                 </div>
+              </div>
               <ReadLaterPosts list={list} session={session} lists={userLists} />
             </div>
           </div>

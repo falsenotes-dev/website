@@ -1,7 +1,6 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
-import postgres from "@/lib/postgres";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { dateFormat } from "@/lib/format-date";
@@ -13,18 +12,18 @@ export default function NotificationList({ notifications, ...props }: { notifica
      const router = useRouter()
      return (
           <Card className="rounded-lg bg-background border-none shadow-none">
-                    <CardHeader className="py-4 px-0">
-                         <CardTitle className="text-base">Notifications</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                         <div className="flex flex-col items-start justify-between gap-4">
-                              {notifications.length > 0 && (notifications?.map((notification: any) => (
-                                   <div className="flex gap-4 items-center" key={notification.id}  onClick={
-                                        async () => {
-                                             await notificationRead(notification.id)
-                                        }
-                                   
-                                   }>
+               <CardHeader className="py-4 px-0">
+                    <CardTitle className="text-base">Notifications</CardTitle>
+               </CardHeader>
+               <CardContent className="p-0">
+                    <div className="flex flex-col items-start justify-between gap-4">
+                         {notifications.length > 0 && (notifications?.map((notification: any) => (
+                              <div className="flex gap-4 items-center" key={notification.id} onClick={
+                                   async () => {
+                                        await notificationRead(notification.id)
+                                   }
+
+                              }>
                                    <Badge variant={notification?.read ? 'secondary' : 'default'} className="h-2 w-2 p-0" />
                                    <div className="flex gap-4 w-full items-center justify-between" key={notification.id}>
                                         <div className="space-x-3 flex items-center">
@@ -34,29 +33,29 @@ export default function NotificationList({ notifications, ...props }: { notifica
                                                        <AvatarFallback>{notification?.sender?.name?.charAt(0) || notification?.sender?.username?.charAt(0)}</AvatarFallback>
                                                   </Avatar>
                                              </Link>
-                                             <div className="flex flex-col items-start gap-1" onClick={ () =>
-                                                       router.push(notification.url)
-                                                  }>
-                                                       <p className="text-sm font-normal leading-none">{
-                                                            //make bold sender username and if type comment make bold post title from content
-                                                            <span className="font-bold">{notification?.sender?.name || notification?.sender?.username}</span>
-                                                       } {notification?.type === 'comment' && (
-                                                            <>
-                                                                 <span>commented on your post: </span>
-                                                                 <span className="font-bold">{notification.content}</span>
-                                                            </>
-                                                       )} {notification?.type === 'like' && (
-                                                            <span>liked your post</span>
-                                                       )} {notification?.type === 'follow' && (
-                                                            <span>is now following you</span>
-                                                       )}
-                                                       { notification.type === 'reply' && (
+                                             <div className="flex flex-col items-start gap-1" onClick={() =>
+                                                  router.push(notification.url)
+                                             }>
+                                                  <p className="text-sm font-normal leading-none">{
+                                                       //make bold sender username and if type comment make bold post title from content
+                                                       <span className="font-bold">{notification?.sender?.name || notification?.sender?.username}</span>
+                                                  } {notification?.type === 'comment' && (
+                                                       <>
+                                                            <span>commented on your post: </span>
+                                                            <span className="font-bold">{notification.content}</span>
+                                                       </>
+                                                  )} {notification?.type === 'like' && (
+                                                       <span>liked your post</span>
+                                                  )} {notification?.type === 'follow' && (
+                                                       <span>is now following you</span>
+                                                  )}
+                                                       {notification.type === 'reply' && (
                                                             <>
                                                                  <span>replied to your comment: </span>
                                                                  <span className="font-bold">{notification.content}</span>
                                                             </>
                                                        )}
-                                                       { notification.type === 'commentLike' && (
+                                                       {notification.type === 'commentLike' && (
                                                             <>
                                                                  <span>liked your comment: </span>
                                                                  <span className="font-bold">{notification.content}</span>
@@ -70,28 +69,28 @@ export default function NotificationList({ notifications, ...props }: { notifica
                                                                  </>
                                                             )
                                                        }
-                                                       </p>
-                                                       <p className="!text-muted-foreground text-sm">
-                                                            {dateFormat(notification?.createdAt)}
-                                                       </p>
-                                                  </div>
+                                                  </p>
+                                                  <p className="!text-muted-foreground text-sm">
+                                                       {dateFormat(notification?.createdAt)}
+                                                  </p>
+                                             </div>
                                         </div>
                                    </div>
-                                   </div>
-                              )))}
-                              {
-                                   notifications.length === 0 && (
-                                        <EmptyPlaceholder className="w-full">
-                                             <EmptyPlaceholder.Icon name="notification" />
-                                             <EmptyPlaceholder.Title>No notifications</EmptyPlaceholder.Title>
-                                             <EmptyPlaceholder.Description>
-                                                  You don&apos;t have any notifications yet.
-                                             </EmptyPlaceholder.Description>
-                                        </EmptyPlaceholder>
-                                   )
-                              }
-                         </div>
-                    </CardContent>
-               </Card>
+                              </div>
+                         )))}
+                         {
+                              notifications.length === 0 && (
+                                   <EmptyPlaceholder className="w-full">
+                                        <EmptyPlaceholder.Icon name="notification" />
+                                        <EmptyPlaceholder.Title>No notifications</EmptyPlaceholder.Title>
+                                        <EmptyPlaceholder.Description>
+                                             You don&apos;t have any notifications yet.
+                                        </EmptyPlaceholder.Description>
+                                   </EmptyPlaceholder>
+                              )
+                         }
+                    </div>
+               </CardContent>
+          </Card>
      );
 }

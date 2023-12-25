@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator"
 import { ProfileForm } from "@/components/settings/profile-form"
 import { getSessionUser } from "@/components/get-session-user"
-import postgres from "@/lib/postgres"
+import postgres from "@/lib/db"
 import { notFound, redirect } from "next/navigation"
 
 export default async function SettingsProfilePage() {

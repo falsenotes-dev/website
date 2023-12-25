@@ -1,4 +1,4 @@
-import postgres from "../postgres";
+import db from "../db";
 
 type NotificationData = {
      type: string;
@@ -11,7 +11,7 @@ type NotificationData = {
 export const create = async (data: NotificationData) => {
      try {
           console.log(data)
-          await postgres.notification.create({
+          await db.notification.create({
                data: {
                     type: data.type,
                     content: data.content,

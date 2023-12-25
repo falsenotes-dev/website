@@ -1,16 +1,16 @@
 "use server";
 import { config } from "@/app/auth";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { getServerSession } from "next-auth";
 
 export async function getSessionUser() {
   try {
     const session = await getServerSession(config);
-    if (!session || typeof session.user !== 'object') {
+    if (!session || typeof session.user !== "object") {
       return null;
     }
     const { user } = session;
-    const result = await postgres.user.findFirst({
+    const result = await db.user.findFirst({
       where: {
         OR: [
           {
@@ -18,7 +18,7 @@ export async function getSessionUser() {
           },
           {
             image: user?.image,
-          }
+          },
         ],
       },
       select: {

@@ -1,6 +1,6 @@
 import { getSessionUser } from "@/components/get-session-user";
 import { insertTag } from "@/lib/insert-tag";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { Post } from "@prisma/client";
 import readingTime from "reading-time";
 import { z } from "zod";
@@ -49,7 +49,7 @@ export async function PATCH(
       return new Response("No content provided", { status: 400 });
     }
 
-    const oldData = await postgres.post.findFirst({
+    const oldData = await db.post.findFirst({
       where: {
         id: postid,
       },
@@ -60,7 +60,7 @@ export async function PATCH(
 
     //if pinned is true, then we need to unpin all other posts
     if (pinned) {
-      await postgres.post.updateMany({
+      await db.post.updateMany({
         where: {
           authorId: session.id,
         },
@@ -70,7 +70,7 @@ export async function PATCH(
       });
     }
 
-    await postgres.post.update({
+    await db.post.update({
       where: {
         id: postid,
       },
@@ -92,7 +92,7 @@ export async function PATCH(
       },
     });
 
-    await postgres.postTag.deleteMany({
+    await db.postTag.deleteMany({
       where: {
         postId: postid,
       },
@@ -115,18 +115,16 @@ export async function DELETE(
   { params }: { params: { postid: string } }
 ) {
   if (params.postid === "undefined") {
-      return new Response("No postid provided", { status: 400 });
-    }
-    const { postid } = params;
+    return new Response("No postid provided", { status: 400 });
+  }
+  const { postid } = params;
 
-    if (!postid) {
-      return new Response("No postid provided", { status: 400 });
-    }
+  if (!postid) {
+    return new Response("No postid provided", { status: 400 });
+  }
 
   try {
-    
-
-    const post = await postgres.post.findUnique({
+    const post = await db.post.findUnique({
       where: {
         id: postid,
       },
@@ -140,14 +138,22 @@ export async function DELETE(
       return new Response(null, { status: 403 });
     }
 
-    const postWithRelations = await postgres.post.findUnique({
+    const postWithRelations = await db.post.findUnique({
       where: { id: post.id },
-      include: { comments: true, likes: true, drafts: true, tags: true, readedUsers: true, savedUsers: true, shares: true },
+      include: {
+        comments: true,
+        likes: true,
+        drafts: true,
+        tags: true,
+        readedUsers: true,
+        savedUsers: true,
+        shares: true,
+      },
     });
 
     // Disconnect all connections of the post
     if (postWithRelations) {
-      await postgres.post.update({
+      await db.post.update({
         where: { id: post.id },
         data: {
           comments: {
@@ -174,33 +180,32 @@ export async function DELETE(
         },
       });
 
-      await 
-      await postgres.like.deleteMany({
+      await await db.like.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.draftPost.deleteMany({
+      await db.draftPost.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.postTag.deleteMany({
+      await db.postTag.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.readingHistory.deleteMany({
+      await db.readingHistory.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.bookmark.deleteMany({
+      await db.bookmark.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.postShare.deleteMany({
+      await db.postShare.deleteMany({
         where: {
           postId: post.id,
         },
@@ -208,7 +213,7 @@ export async function DELETE(
     }
 
     // Delete the post.
-    await postgres.post.delete({
+    await db.post.delete({
       where: {
         id: post.id,
       },
@@ -227,7 +232,7 @@ export async function DELETE(
 async function verifyCurrentUserHasAccessToPost(postId: string) {
   try {
     const session = await getSessionUser();
-    const count = await postgres.post.count({
+    const count = await db.post.count({
       where: {
         id: postId,
         authorId: session?.id,

@@ -1,12 +1,12 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 // api to execute the top users query by followers and return the result
 export async function GET(request: NextRequest) {
   try {
-    const userid = request.nextUrl.searchParams.get("user")?.toString(); 
-    
-    const topUsers = await postgres.user.findMany({
+    const userid = request.nextUrl.searchParams.get("user")?.toString();
+
+    const topUsers = await db.user.findMany({
       include: {
         Followers: true,
         Followings: true,
@@ -25,11 +25,11 @@ export async function GET(request: NextRequest) {
       },
       orderBy: {
         Followers: {
-          _count: 'desc',
+          _count: "desc",
         },
       },
     });
-    
+
     // return the result
     return NextResponse.json({ topUsers }, { status: 200 });
   } catch (error) {

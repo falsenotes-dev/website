@@ -8,7 +8,7 @@ import LoginDialog from "@/components/login-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { dateFormat } from "@/lib/format-date";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { getLists } from "@/lib/prisma/session";
 import { MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
@@ -20,7 +20,7 @@ export default async function ListPage({
 }) {
   const session = await getSessionUser();
   const decodedUsername = decodeURIComponent(params.username);
-  const list = await postgres.list.findFirst({
+  const list = await db.list.findFirst({
     where: {
       slug: params.slug,
       author: {

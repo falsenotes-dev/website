@@ -1,5 +1,5 @@
 import { config } from "@/app/auth";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { tr } from "date-fns/locale";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     const session = await getServerSession(config);
     if (session) {
       const user = session?.user;
-      const res = await postgres.user.findFirst({
+      const res = await db.user.findFirst({
         where: { image: user?.image },
         select: { id: true },
       });
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
           }
         : {};
 
-    const tags = await postgres.tag.findMany({
+    const tags = await db.tag.findMany({
       where: whereClause,
       take: 10,
       skip: page * 10,

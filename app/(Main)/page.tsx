@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { fetchFollowingTags } from '@/components/get-following-tags';
 import { getSessionUser } from '@/components/get-session-user';
 import Landing from '@/components/landing/landing';
-import postgres from '@/lib/postgres';
+import db from '@/lib/db';
 import { getFeaturedPosts, getPosts } from '@/lib/prisma/posts';
 import { SiteFooter } from '@/components/footer';
 
@@ -22,7 +22,7 @@ export default async function Home() {
   // Use Promise.all to run both fetch operations in parallel
   const [{ posts: latestPosts }, tags, popularPosts] = await Promise.all([
     getFeaturedPosts({ page: 0 }),
-    postgres.tag.findMany({
+    db.tag.findMany({
       select: {
         name: true,
         id: true

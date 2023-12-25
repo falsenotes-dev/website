@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { create } from "@/lib/notifications/create-notification";
 
 export async function GET(request: NextRequest) {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const isFollowed = await postgres.follow.findFirst({
+    const isFollowed = await db.follow.findFirst({
       where: {
         followerId: followerId,
         followingId: followeeId,
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (isFollowed) {
-      await postgres.follow.deleteMany({
+      await db.follow.deleteMany({
         where: {
           followerId: followerId,
           followingId: followeeId,
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       if (isFollowed.createdAt > oneWeekAgo) {
-        const notification = await postgres.notification.findFirst({
+        const notification = await db.notification.findFirst({
           where: {
             senderId: followerId,
             receiverId: followeeId,
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
         });
 
         if (notification) {
-          await postgres.notification.delete({
+          await db.notification.delete({
             where: {
               id: notification.id,
             },
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({ message: "unfollowed" }, { status: 200 });
     } else {
-      await postgres.follow.create({
+      await db.follow.create({
         data: {
           followerId: followerId,
           followingId: followeeId,
@@ -68,13 +68,13 @@ export async function GET(request: NextRequest) {
       // Check if followerId and followeeId are not null
       if (followerId && followeeId) {
         //Create notification
-        const sender = await postgres.user.findUnique({
+        const sender = await db.user.findUnique({
           where: {
             id: followerId,
           },
         });
 
-        const receiver = await postgres.user.findUnique({
+        const receiver = await db.user.findUnique({
           where: {
             id: followeeId,
           },
@@ -82,7 +82,9 @@ export async function GET(request: NextRequest) {
 
         // Check if sender and receiver are not null
         if (sender && receiver) {
-          const message = `${sender?.name || sender?.username} is now following you`;
+          const message = `${
+            sender?.name || sender?.username
+          } is now following you`;
           const type = "follow";
           const url = `/@${sender?.username}`;
           await create({

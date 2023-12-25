@@ -1,5 +1,5 @@
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -13,7 +13,7 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const user = await postgres.user.findUnique({
+  const user = await db.user.findUnique({
     where: {
       id: userId,
     },
@@ -52,7 +52,7 @@ export async function PATCH(
 
     const payload = profileSchema.parse(body);
 
-    await postgres.user.update({
+    await db.user.update({
       where: {
         id: session.id,
       },

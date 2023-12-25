@@ -1,4 +1,4 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import type { NextAuthOptions as NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
@@ -9,7 +9,7 @@ import { equal } from "assert";
 
 export const config = {
   // https://next-auth.js.org/configuration/providers/oauth
-  //adapter: PrismaAdapter(postgres as any),
+  //adapter: PrismaAdapter(db as any),
   session: {
     strategy: "jwt",
   },
@@ -64,7 +64,7 @@ export const config = {
           console.log("GitHub Profile:", profile);
 
           // Check if the user exists in your database based on their email
-          const userExists = await postgres.user.findFirst({
+          const userExists = await db.user.findFirst({
             where: {
               OR: [{ email: email }, { githubId: githubId.toString() }],
             },
@@ -72,7 +72,7 @@ export const config = {
 
           if (!userExists) {
             let username = login;
-            let usernameExists = await postgres.user.findUnique({
+            let usernameExists = await db.user.findUnique({
               where: {
                 username: username,
               },
@@ -82,7 +82,7 @@ export const config = {
             }
             // User doesn't exist, add them to the Users table
             try {
-              const sessionUser = await postgres.user.create({
+              const sessionUser = await db.user.create({
                 data: {
                   username: username,
                   name: name,
@@ -98,13 +98,13 @@ export const config = {
                 },
               });
 
-              const userSettingsExists = await postgres.userSettings.findFirst({
+              const userSettingsExists = await db.userSettings.findFirst({
                 where: {
                   userId: sessionUser.id,
                 },
               });
               if (!userSettingsExists) {
-                await postgres.userSettings.create({
+                await db.userSettings.create({
                   data: {
                     userId: sessionUser.id,
                   },
@@ -117,7 +117,7 @@ export const config = {
           } else {
             // User exists, update their details in the Users table
             try {
-              await postgres.user.update({
+              await db.user.update({
                 where: {
                   id: userExists.id,
                 },
@@ -146,7 +146,7 @@ export const config = {
           }
 
           // Check if the user exists in your database based on their email
-          const userExists = await postgres.user.findFirst({
+          const userExists = await db.user.findFirst({
             where: {
               OR: [{ googleId: googleId }, { email: email }],
             },
@@ -158,7 +158,7 @@ export const config = {
             // remove =s96-c from image url
             const image = picture.replace("=s96-c", "");
             let username = email.split("@")[0];
-            let usernameExists = await postgres.user.findUnique({
+            let usernameExists = await db.user.findUnique({
               where: {
                 username: username,
               },
@@ -167,7 +167,7 @@ export const config = {
               username = username + Math.floor(Math.random() * 10000);
             }
             try {
-              const sessionUser = await postgres.user.create({
+              const sessionUser = await db.user.create({
                 data: {
                   name: name,
                   email: email,
@@ -180,13 +180,13 @@ export const config = {
                 },
               });
 
-              const userSettingsExists = await postgres.userSettings.findFirst({
+              const userSettingsExists = await db.userSettings.findFirst({
                 where: {
                   userId: sessionUser.id,
                 },
               });
               if (!userSettingsExists) {
-                await postgres.userSettings.create({
+                await db.userSettings.create({
                   data: {
                     userId: sessionUser.id,
                     language: locale,
@@ -200,7 +200,7 @@ export const config = {
           } else {
             // User exists, update their details in the Users table
             try {
-              const user = await postgres.user.update({
+              const user = await db.user.update({
                 where: {
                   id: userExists.id,
                 },
@@ -247,7 +247,7 @@ export const config = {
 
           // Check if the user exists in your database based on their email
           try {
-            const userExists = await postgres.user.findFirst({
+            const userExists = await db.user.findFirst({
               where: {
                 OR: [{ email: email }, { twitterId: twitterId.toString() }],
               },
@@ -259,7 +259,7 @@ export const config = {
               // remove =s96-c from image url
               const image = profile_image_url_https.replace("_normal", "");
               let username = screen_name;
-              let usernameExists = await postgres.user.findUnique({
+              let usernameExists = await db.user.findUnique({
                 where: {
                   username: username,
                 },
@@ -268,7 +268,7 @@ export const config = {
                 username = username + Math.floor(Math.random() * 10000);
               }
               try {
-                const sessionUser = await postgres.user.create({
+                const sessionUser = await db.user.create({
                   data: {
                     name: name,
                     email: email,
@@ -284,14 +284,13 @@ export const config = {
                   },
                 });
 
-                const userSettingsExists =
-                  await postgres.userSettings.findFirst({
-                    where: {
-                      userId: sessionUser.id,
-                    },
-                  });
+                const userSettingsExists = await db.userSettings.findFirst({
+                  where: {
+                    userId: sessionUser.id,
+                  },
+                });
                 if (!userSettingsExists) {
-                  await postgres.userSettings.create({
+                  await db.userSettings.create({
                     data: {
                       userId: sessionUser.id,
                       language: locale ? locale : "en",
@@ -305,7 +304,7 @@ export const config = {
             } else {
               // User exists, update their details in the Users table
               try {
-                const user = await postgres.user.update({
+                const user = await db.user.update({
                   where: {
                     id: userExists.id,
                   },
@@ -331,7 +330,7 @@ export const config = {
       return true; // Continue sign-in process
     },
     async jwt({ token, user }) {
-      const dbUser = await postgres.user.findFirst({
+      const dbUser = await db.user.findFirst({
         where: {
           OR: [
             { id: token?.id ?? "" },

@@ -1,5 +1,5 @@
 import { create } from "@/lib/notifications/create-notification";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     //   VALUES (${post}, ${content}, ${author})
     //   RETURNING *
     // `;
-    await postgres.comment.create({
+    await db.comment.create({
       data: {
         content: content,
         authorId: author,
@@ -26,13 +26,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
     });
 
     // Get the author of the post and the post details
-    const authorDetails = await postgres.user.findUnique({
+    const authorDetails = await db.user.findUnique({
       where: {
         id: author,
       },
     });
 
-    const postDetails = await postgres.post.findUnique({
+    const postDetails = await db.post.findUnique({
       where: {
         id: post,
       },

@@ -1,24 +1,10 @@
 import CreateListButton from "@/components/create-list-button";
 import { EmptyPlaceholder } from "@/components/empty-placeholder";
-import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { getSessionUser } from "@/components/get-session-user";
-import { Icons } from "@/components/icon";
 import ListCard from "@/components/list-card";
 import ListsTabs from "@/components/lists-tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { shimmer, toBase64 } from "@/lib/image";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Lists",
@@ -32,7 +18,7 @@ export default async function ListsPage() {
     return null;
   }
 
-  const lists = await postgres.listSaving.findMany({
+  const lists = await db.listSaving.findMany({
     where: {
       userId: session?.id,
     },
@@ -73,7 +59,7 @@ export default async function ListsPage() {
               </div>
               <ListsTabs />
               <div className="flex flex-col gap-10">
-              {lists.map((list) => (
+                {lists.map((list) => (
                   <>
                     <ListCard list={list.list} session={session} />
                   </>
@@ -81,14 +67,14 @@ export default async function ListsPage() {
                 {
                   !lists.length && (
                     <EmptyPlaceholder>
-                  <EmptyPlaceholder.Icon name="list" />
-                  <EmptyPlaceholder.Title>
-                    No lists from other users
-                  </EmptyPlaceholder.Title>
-                  <EmptyPlaceholder.Description>
-                    Save lists from other users to see them here.
-                  </EmptyPlaceholder.Description>
-                </EmptyPlaceholder>
+                      <EmptyPlaceholder.Icon name="list" />
+                      <EmptyPlaceholder.Title>
+                        No lists from other users
+                      </EmptyPlaceholder.Title>
+                      <EmptyPlaceholder.Description>
+                        Save lists from other users to see them here.
+                      </EmptyPlaceholder.Description>
+                    </EmptyPlaceholder>
                   )
                 }
               </div>

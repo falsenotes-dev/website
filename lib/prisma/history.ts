@@ -1,14 +1,14 @@
 "use server";
 
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "../postgres";
+import db from "../db";
 import { Post } from "@prisma/client";
 
 export const clearHistory = async () => {
   const user = await getSessionUser();
   if (!user) return { success: false, message: "Not logged in" };
   try {
-    await postgres.readingHistory.deleteMany({
+    await db.readingHistory.deleteMany({
       where: { userId: user.id },
     });
     return { success: true, message: "History cleared" };
@@ -22,10 +22,10 @@ export const removeHistory = async ({ postId }: { postId: Post["id"] }) => {
   const user = await getSessionUser();
   if (!user) return { success: false, message: "Not logged in" };
   try {
-    const history = await postgres.readingHistory.findFirst({
+    const history = await db.readingHistory.findFirst({
       where: { userId: user.id, postId },
     });
-    await postgres.readingHistory.delete({
+    await db.readingHistory.delete({
       where: { id: history?.id },
     });
     return { success: true, message: "History removed" };

@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import postgres from "../postgres";
+import db from "../db";
 import { getFollowings } from "./session";
 
 export const getTags = async ({
@@ -12,18 +12,23 @@ export const getTags = async ({
   getStarted?: boolean | undefined;
 }) => {
   try {
-    const whereClause = id !== undefined ? {
-      followingtag: {
-        none: {
-          followerId: id,
-        },
-      },
-      posts: getStarted ? {
-        some: {}
-      } : undefined
-    } : {};
+    const whereClause =
+      id !== undefined
+        ? {
+            followingtag: {
+              none: {
+                followerId: id,
+              },
+            },
+            posts: getStarted
+              ? {
+                  some: {},
+                }
+              : undefined,
+          }
+        : {};
 
-    const tags = await postgres.tag.findMany({
+    const tags = await db.tag.findMany({
       where: whereClause,
       take: 10,
       skip: page * 10,
@@ -41,28 +46,31 @@ export const getTags = async ({
     return { tags: JSON.parse(JSON.stringify(tags)) };
   } catch (error) {
     console.error(error);
-    return { error: 'An error occurred while fetching tags.' };
+    return { error: "An error occurred while fetching tags." };
   }
 };
 
 //popular tags which are not followed by the user
 export const getPopularTags = async ({
-  id, 
+  id,
   take = 5,
 }: {
   id?: string | undefined;
   take?: number | undefined;
 }) => {
   try {
-    const whereClause = id !== undefined ? {
-      followingtag: {
-        none: {
-          followerId: id,
-        },
-      },
-    } : {};
+    const whereClause =
+      id !== undefined
+        ? {
+            followingtag: {
+              none: {
+                followerId: id,
+              },
+            },
+          }
+        : {};
 
-    const tags = await postgres.tag.findMany({
+    const tags = await db.tag.findMany({
       where: whereClause,
       take: take,
       orderBy: {
@@ -78,7 +86,7 @@ export const getPopularTags = async ({
     return { tags: JSON.parse(JSON.stringify(tags)) };
   } catch (error) {
     console.error(error);
-    return { error: 'An error occurred while fetching tags.' };
+    return { error: "An error occurred while fetching tags." };
   }
 };
 
@@ -86,14 +94,21 @@ export const searchTags = async ({
   search,
   page = 0,
   limit = 10,
-}: { search: string | undefined; page?: number; limit?: number }) => {
-  const tags = await postgres.tag.findMany({
-    where: search !== undefined ? {
-      name: {
-        contains: search.replace(/\s+/g, '-').toLowerCase(),
-        mode: "insensitive",
-      },
-    } : {},
+}: {
+  search: string | undefined;
+  page?: number;
+  limit?: number;
+}) => {
+  const tags = await db.tag.findMany({
+    where:
+      search !== undefined
+        ? {
+            name: {
+              contains: search.replace(/\s+/g, "-").toLowerCase(),
+              mode: "insensitive",
+            },
+          }
+        : {},
     take: limit,
     skip: page * limit,
     include: {
@@ -102,7 +117,7 @@ export const searchTags = async ({
   });
 
   //sort by number of posts and then by number of followers
-  if(typeof search === 'string') {
+  if (typeof search === "string") {
     tags.sort((a, b) => {
       if (a._count.posts > b._count.posts) {
         return -1;
@@ -121,11 +136,11 @@ export const searchTags = async ({
   }
 
   return { tags: JSON.parse(JSON.stringify(tags)) };
-}
+};
 
 export async function getRelatedTags(tagName: string) {
   // Find all postTags that are related to the specific tag
-  const postTags = await postgres.postTag.findMany({
+  const postTags = await db.postTag.findMany({
     where: {
       tag: {
         name: tagName,
@@ -133,11 +148,11 @@ export async function getRelatedTags(tagName: string) {
     },
     select: {
       postId: true,
-    }
+    },
   });
 
   // Find all postTags that are related to these posts
-  const relatedPostTags = await postgres.postTag.findMany({
+  const relatedPostTags = await db.postTag.findMany({
     where: {
       postId: {
         in: postTags.map((post: any) => post.postId),
@@ -154,7 +169,7 @@ export async function getRelatedTags(tagName: string) {
           id: true,
           name: true,
         },
-      }
+      },
     },
     orderBy: {
       postId: "desc",
@@ -166,11 +181,11 @@ export async function getRelatedTags(tagName: string) {
   let relatedTags = relatedPostTags.map((postTag: any) => postTag.tag);
 
   // Remove duplicates
-  relatedTags = relatedTags.filter((tag, index, self) =>
-    index === self.findIndex(t => t.id === tag.id)
+  relatedTags = relatedTags.filter(
+    (tag, index, self) => index === self.findIndex((t) => t.id === tag.id)
   );
 
-  return { tags: JSON.parse(JSON.stringify(relatedTags))};
+  return { tags: JSON.parse(JSON.stringify(relatedTags)) };
 }
 
 export const getFollowersByUser = async ({
@@ -182,7 +197,7 @@ export const getFollowersByUser = async ({
   page?: number | undefined;
   limit?: number | undefined;
 }) => {
-  const followers = await postgres.tag.findMany({
+  const followers = await db.tag.findMany({
     where: { followingtag: { some: { followerId: id } } },
     take: limit,
     skip: page * limit,
@@ -193,7 +208,7 @@ export const getFollowersByUser = async ({
   });
 
   return { followers: JSON.parse(JSON.stringify(followers)) };
-}
+};
 
 export const getFollowersByTag = async ({
   id,
@@ -206,12 +221,20 @@ export const getFollowersByTag = async ({
   limit?: number | undefined;
   session: User["id"] | undefined;
 }) => {
-  const { followings: sessionFollowings } = await getFollowings({ id: session })
-  const sessionFollowingIds = sessionFollowings 
-  ? [...sessionFollowings.map((following: any) => following.following.id), session]
-  : [session];
-  const followers = await postgres.tagFollow.findMany({
-    where: { tagId: id, ...(session && { followerId: { not: { in: sessionFollowingIds } } }) },
+  const { followings: sessionFollowings } = await getFollowings({
+    id: session,
+  });
+  const sessionFollowingIds = sessionFollowings
+    ? [
+        ...sessionFollowings.map((following: any) => following.following.id),
+        session,
+      ]
+    : [session];
+  const followers = await db.tagFollow.findMany({
+    where: {
+      tagId: id,
+      ...(session && { followerId: { not: { in: sessionFollowingIds } } }),
+    },
     take: limit,
     skip: page * limit,
     select: {
@@ -227,9 +250,9 @@ export const getFollowersByTag = async ({
         Followers: {
           _count: "desc",
         },
-      }
-    }
+      },
+    },
   });
 
   return { followers: JSON.parse(JSON.stringify(followers)) };
-}
+};

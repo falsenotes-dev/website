@@ -1,4 +1,4 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { Metadata } from "next";
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const decodedUsername = decodeURIComponent(params.username);
-    const user = await postgres.user.findFirst({
+    const user = await db.user.findFirst({
       where: {
         username: decodedUsername.substring(1),
       },
@@ -21,16 +21,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     return {
       title: `List: Read Later by ${user?.name || user?.username} - FalseNotes`,
-      description: `A list of posts saved by ${
-        user?.name || user?.username
-      } on FalseNotes.`,
-      openGraph: {
-        title: `List: Read Later by ${
-          user?.name || user?.username
-        } - FalseNotes`,
-        description: `A list of posts saved by ${
-          user?.name || user?.username
+      description: `A list of posts saved by ${user?.name || user?.username
         } on FalseNotes.`,
+      openGraph: {
+        title: `List: Read Later by ${user?.name || user?.username
+          } - FalseNotes`,
+        description: `A list of posts saved by ${user?.name || user?.username
+          } on FalseNotes.`,
       },
     };
   } catch (error) {

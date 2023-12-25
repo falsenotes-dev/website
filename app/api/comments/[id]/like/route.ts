@@ -1,5 +1,5 @@
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
       console.log("No session user");
       return new Response(null, { status: 401 });
     }
-    const comment = await postgres.comment.findUnique({
+    const comment = await db.comment.findUnique({
       where: {
         id: commentId,
       },
@@ -17,23 +17,23 @@ export async function POST(req: Request) {
     if (!comment) {
       return new Response(null, { status: 404 });
     }
-    const isLiked = await postgres.commentLike.findFirst({
+    const isLiked = await db.commentLike.findFirst({
       where: {
         commentId,
         authorId: user.id,
       },
     });
     if (isLiked) {
-      await postgres.commentLike.delete({
+      await db.commentLike.delete({
         where: {
           id: isLiked.id,
         },
       });
-      
+
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       if (isLiked.createdAt > oneWeekAgo) {
-        const notification = await postgres.notification.findFirst({
+        const notification = await db.notification.findFirst({
           where: {
             senderId: user.id,
             receiverId: comment.authorId,
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
         });
 
         if (notification) {
-          await postgres.notification.delete({
+          await db.notification.delete({
             where: {
               id: notification.id,
             },
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
         }
       }
     } else {
-      const commentLike = await postgres.commentLike.create({
+      const commentLike = await db.commentLike.create({
         data: {
           commentId,
           authorId: user.id,
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
                       username: true,
                     },
                   },
-                }
+                },
               },
               content: true,
             },
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
         },
       });
 
-      const sender = await postgres.user.findUnique({
+      const sender = await db.user.findUnique({
         where: {
           id: user.id,
         },
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
         },
       });
 
-      const receiver = await postgres.user.findUnique({
+      const receiver = await db.user.findUnique({
         where: {
           id: comment.authorId,
         },
@@ -102,7 +102,7 @@ export async function POST(req: Request) {
         const message = `"${commentLike.comment.content}"`;
         const type = "commentLike";
         const url = `/@${commentLike.comment.post.author.username}/${commentLike.comment.post.url}?commentsOpen=true`;
-        await postgres.notification.create({
+        await db.notification.create({
           data: {
             content: message,
             type,

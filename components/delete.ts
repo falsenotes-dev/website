@@ -1,5 +1,5 @@
 "use server";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { Comment } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -8,7 +8,7 @@ import { getSessionUser } from "./get-session-user";
 async function verifyCurrentUserHasAccessToPost(postId: string) {
   try {
     const session = await getSessionUser();
-    const count = await postgres.post.count({
+    const count = await db.post.count({
       where: {
         id: postId,
         authorId: session?.id,
@@ -25,7 +25,7 @@ async function verifyCurrentUserHasAccessToPost(postId: string) {
 // TypeScript
 export async function handleDelete(postid: string) {
   try {
-    const post = await postgres.post.findUnique({
+    const post = await db.post.findUnique({
       where: {
         id: postid,
       },
@@ -39,7 +39,7 @@ export async function handleDelete(postid: string) {
       return new Response(null, { status: 403 });
     }
 
-    const postWithRelations = await postgres.post.findUnique({
+    const postWithRelations = await db.post.findUnique({
       where: { id: post.id },
       include: {
         comments: true,
@@ -58,32 +58,32 @@ export async function handleDelete(postid: string) {
         await handleDeleteComment(comment.id);
       }
 
-      await postgres.like.deleteMany({
+      await db.like.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.draftPost.deleteMany({
+      await db.draftPost.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.postTag.deleteMany({
+      await db.postTag.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.readingHistory.deleteMany({
+      await db.readingHistory.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.bookmark.deleteMany({
+      await db.bookmark.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.postShare.deleteMany({
+      await db.postShare.deleteMany({
         where: {
           postId: post.id,
         },
@@ -91,7 +91,7 @@ export async function handleDelete(postid: string) {
     }
 
     // Delete the post.
-    await postgres.post.delete({
+    await db.post.delete({
       where: {
         id: post.id,
       },
@@ -105,7 +105,7 @@ export async function handleDelete(postid: string) {
 }
 export async function handleDeleteDraft(postid: string) {
   try {
-    const post = await postgres.draftPost.findFirst({
+    const post = await db.draftPost.findFirst({
       where: {
         postId: postid,
       },
@@ -120,7 +120,7 @@ export async function handleDeleteDraft(postid: string) {
     }
 
     // Delete the post.
-    await postgres.draftPost.delete({
+    await db.draftPost.delete({
       where: {
         id: post.id,
       },
@@ -135,7 +135,7 @@ export async function handleDeleteDraft(postid: string) {
 
 export async function handleDeleteComment(commentid: string, path?: string) {
   try {
-    const replies = await postgres.comment
+    const replies = await db.comment
       .findMany({
         where: {
           parentId: commentid,
@@ -158,15 +158,15 @@ export async function handleDeleteComment(commentid: string, path?: string) {
 }
 
 async function deleteComment(id: Comment["id"]) {
-  await postgres.commentLike.deleteMany({
+  await db.commentLike.deleteMany({
     where: {
       commentId: id,
     },
   });
-  await postgres.commentLike.deleteMany({
+  await db.commentLike.deleteMany({
     where: {
       commentId: {
-        in: await postgres.comment
+        in: await db.comment
           .findMany({
             where: {
               parentId: id,
@@ -179,13 +179,13 @@ async function deleteComment(id: Comment["id"]) {
       },
     },
   });
-  await postgres.comment.deleteMany({
+  await db.comment.deleteMany({
     where: {
       parentId: id,
     },
   });
 
-  await postgres.comment.delete({
+  await db.comment.delete({
     where: {
       id: id,
     },

@@ -1,8 +1,8 @@
 import { User } from "@prisma/client";
-import postgres from "../postgres";
+import db from "../db";
 
 export const getUser = async (id: User["id"]) => {
-  const user = await postgres.user.findUnique({
+  const user = await db.user.findUnique({
     where: {
       id,
     },

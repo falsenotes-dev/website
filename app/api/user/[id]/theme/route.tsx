@@ -1,5 +1,5 @@
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -31,7 +31,7 @@ export async function PATCH(
 
     const payload = appearanceSchema.parse(body);
 
-    await postgres.userSettings.update({
+    await db.userSettings.update({
       where: { userId },
       data: {
         appearance: payload.option === "system" ? "system" : payload.theme,

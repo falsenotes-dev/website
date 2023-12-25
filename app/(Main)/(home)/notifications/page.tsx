@@ -2,7 +2,6 @@ import { getSessionUser } from "@/components/get-session-user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { dateFormat } from "@/lib/format-date";
-import postgres from "@/lib/postgres"
 import { getNotifications } from "@/lib/prisma/session";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
