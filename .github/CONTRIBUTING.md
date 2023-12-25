@@ -8,11 +8,9 @@ Please take a moment to review our contribution guidelines to ensure a smooth an
 
 - [Getting Started](#getting-started)
 - [How Can You Contribute?](#how-can-you-contribute)
-- [Code of Conduct](#code-of-conduct)
 - [Reporting Issues](#reporting-issues)
 - [Feature Requests](#feature-requests)
 - [Pull Requests](#pull-requests)
-- [Coding Guidelines](#coding-guidelines)
 - [Commit Messages](#commit-messages)
 - [Documentation](#documentation)
 - [Testing](#testing)
@@ -46,10 +44,6 @@ If you'd like to contribute directly to the codebase, you can fork the repositor
 - **Documentation:** Improve our documentation to make it more helpful.
 - **Testing:** Help us ensure the platform is stable and reliable.
 
-## Code of Conduct
-
-Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing. We want everyone to feel safe and respected in our community.
-
 ## Reporting Issues
 
 When reporting issues, please provide as much detail as possible, including your operating system, browser, and steps to reproduce the issue. This helps us address the problem more effectively.
@@ -67,10 +61,6 @@ To submit a pull request:
 3. Make your changes and commit them: `git commit -m 'Add some feature'`.
 4. Push your changes to your fork: `git push origin feature/your-feature-name`.
 5. Open a pull request with a clear title and description.
-
-## Coding Guidelines
-
-Please follow our [Coding Guidelines](CONTRIBUTING.md) when contributing code.
 
 ## Commit Messages
 
