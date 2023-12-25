@@ -70,41 +70,41 @@ export default async function HomeLayout({
                                                   <CardContent className="px-4 pb-0">
                                                        {bookmarks.length !== 0 ? (
                                                             <>
-                                                            <ol className="flex flex-col items-start justify-between space-y-4">
-                                                                 {bookmarks?.map(
-                                                                      (item: any, index: number) => (
-                                                                           <li key={item.id} className="text-sm space-y-2.5">
+                                                                 <ol className="flex flex-col items-start justify-between space-y-4">
+                                                                      {bookmarks?.map(
+                                                                           (item: any, index: number) => (
+                                                                                <li key={item.id} className="text-sm space-y-2.5">
 
-                                                                                <Link href={`/@${item.post?.author.username}`} className="text-xs flex items-center mb-2 font-medium">
-                                                                                     <Avatar className="h-5 w-5 mr-1 md:mr-1.5 ">
-                                                                                          <AvatarImage src={item.post?.author?.image} alt={item.post?.author?.username} />
-                                                                                          <AvatarFallback>{item.post?.author?.name?.charAt(0) || item.post?.author?.username?.charAt(0)}</AvatarFallback>
-                                                                                     </Avatar>
-                                                                                     {item.post?.author.name || item.post?.author.username} {item.post.author?.verified && (
-                                                                                          <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
-                                                                                     )}
-                                                                                </Link>
+                                                                                     <Link href={`/@${item.post?.author.username}`} className="text-xs flex items-center mb-2 font-medium">
+                                                                                          <Avatar className="h-5 w-5 mr-1 md:mr-1.5 ">
+                                                                                               <AvatarImage src={item.post?.author?.image} alt={item.post?.author?.username} />
+                                                                                               <AvatarFallback>{item.post?.author?.name?.charAt(0) || item.post?.author?.username?.charAt(0)}</AvatarFallback>
+                                                                                          </Avatar>
+                                                                                          {item.post?.author.name || item.post?.author.username} {item.post.author?.verified && (
+                                                                                               <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
+                                                                                          )}
+                                                                                     </Link>
 
 
-                                                                                <Link href={`/@${item.post?.author.username}/${item.post?.url}`} className="text-base font-bold line-clamp-2 overflow-hidden">
-                                                                                     {item.post?.title}
-                                                                                </Link>
-                                                                                <div className="text-muted-foreground">
-                                                                                     <span className="text-xs">{item.post?.readingTime}</span>
-                                                                                     <span className="text-xs mx-1">·</span>
-                                                                                     <span className="text-xs">{dateFormat(item.post?.createdAt)}</span>
-                                                                                </div>
-                                                                           </li>
-                                                                      ))}
-                                                                 <li className="text-sm space-y-2.5">
-                                                                      
-                                                                 </li>
-                                                            </ol>
-                                                            <CardFooter className="px-0 py-4">
-                                                                 <Link href={`/@${session.username}/read-later`} className="text-xs flex items-center mb-2 font-medium">
+                                                                                     <Link href={`/@${item.post?.author.username}/${item.post?.url}`} className="text-base font-bold line-clamp-2 overflow-hidden">
+                                                                                          {item.post?.title}
+                                                                                     </Link>
+                                                                                     <div className="text-muted-foreground">
+                                                                                          <span className="text-xs">{item.post?.readingTime}</span>
+                                                                                          <span className="text-xs mx-1">·</span>
+                                                                                          <span className="text-xs">{dateFormat(item.post?.createdAt)}</span>
+                                                                                     </div>
+                                                                                </li>
+                                                                           ))}
+                                                                      <li className="text-sm space-y-2.5">
+
+                                                                      </li>
+                                                                 </ol>
+                                                                 <CardFooter className="px-0 py-4">
+                                                                      <Link href={`/@${session.username}/read-later`} className="text-xs flex items-center mb-2 font-medium">
                                                                            See all ({bookmarksCount})
                                                                       </Link>
-                                                            </CardFooter>
+                                                                 </CardFooter>
                                                             </>
                                                        ) : (
                                                             <EmptyPlaceholder className='min-h-min p-6 mb-4'>
@@ -116,7 +116,7 @@ export default async function HomeLayout({
                                                        )}
                                                   </CardContent>
                                              </Card>
-                                             <SiteFooter className='text-xs flex-col justify-start items-start mb-0' />
+                                             <SiteFooter className='text-xs flex-col justify-start items-start mb-0' size="sm" />
                                         </div>
                                    </div>
                               </div>

@@ -78,7 +78,7 @@ export default async function Layout({ children, params }: Props) {
                 session={sessionUserName}
               />
             </div>
-            <SiteFooter className="text-xs flex-col justify-start items-start mb-0 mt-4 !px-0" />
+            <SiteFooter className="text-xs flex-col justify-start items-start mb-0 mt-4 !px-0" size="sm" />
           </div>
           <Separator className="block md:hidden lg:block h-full" orientation="vertical" />
           <div className="w-full">
