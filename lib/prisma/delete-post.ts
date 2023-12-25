@@ -1,9 +1,9 @@
 "use server";
 import { Post } from "@prisma/client";
-import postgres from "../postgres";
+import db from "../db";
 
 export const deletePost = async ({ id }: { id: Post["id"] }) => {
-  const post = await postgres.post.findUnique({
+  const post = await db.post.findUnique({
     where: { id },
   });
 
@@ -12,7 +12,7 @@ export const deletePost = async ({ id }: { id: Post["id"] }) => {
   }
 
   try {
-    const postWithRelations = await postgres.post.findUnique({
+    const postWithRelations = await db.post.findUnique({
       where: { id: post.id },
       include: {
         comments: true,
@@ -27,7 +27,7 @@ export const deletePost = async ({ id }: { id: Post["id"] }) => {
 
     // Disconnect all connections of the post
     if (postWithRelations) {
-      await postgres.post.update({
+      await db.post.update({
         where: { id: post.id },
         data: {
           comments: {
@@ -54,32 +54,32 @@ export const deletePost = async ({ id }: { id: Post["id"] }) => {
         },
       });
 
-      await postgres.like.deleteMany({
+      await db.like.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.draftPost.deleteMany({
+      await db.draftPost.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.postTag.deleteMany({
+      await db.postTag.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.readingHistory.deleteMany({
+      await db.readingHistory.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.bookmark.deleteMany({
+      await db.bookmark.deleteMany({
         where: {
           postId: post.id,
         },
       });
-      await postgres.postShare.deleteMany({
+      await db.postShare.deleteMany({
         where: {
           postId: post.id,
         },
@@ -87,7 +87,7 @@ export const deletePost = async ({ id }: { id: Post["id"] }) => {
     }
 
     // Delete the post.
-    await postgres.post.delete({
+    await db.post.delete({
       where: {
         id: post.id,
       },

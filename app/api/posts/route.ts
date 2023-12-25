@@ -1,6 +1,6 @@
 import { config } from "@/app/auth";
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
   const limit = 5;
 
   try {
-    const posts = await postgres.post.findMany({
+    const posts = await db.post.findMany({
       ...baseQuery,
       where: search
         ? {
@@ -91,7 +91,7 @@ export async function POST(req: Request) {
 
     const json = await req.json();
 
-    const post = await postgres.post.create({
+    const post = await db.post.create({
       data: {
         title: json.title,
         content: json.content,

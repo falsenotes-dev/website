@@ -7,7 +7,7 @@ import TagLists from "@/components/tags/lists";
 import TagPopularPosts from "@/components/tags/post";
 import TagFollowers from "@/components/tags/users";
 import { Separator } from "@/components/ui/separator";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { getListByTagId } from "@/lib/prisma/list";
 import { getLists } from "@/lib/prisma/session";
 import { getFollowersByTag } from "@/lib/prisma/tags";
@@ -18,7 +18,7 @@ export default async function TagPage({
 }: {
   params: { tagname: string };
 }) {
-  const tag = await postgres.tag.findFirst({
+  const tag = await db.tag.findFirst({
     where: {
       name: params.tagname,
     },
@@ -28,7 +28,7 @@ export default async function TagPage({
     },
   });
 
-  const popularPosts = await postgres.post.findMany({
+  const popularPosts = await db.post.findMany({
     where: {
       published: true,
       tags: {
@@ -59,7 +59,7 @@ export default async function TagPage({
     ],
     take: 8,
   });
-  const latestPosts = await postgres.post.findMany({
+  const latestPosts = await db.post.findMany({
     where: {
       published: true,
       tags: {

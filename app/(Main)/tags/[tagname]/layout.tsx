@@ -1,6 +1,6 @@
 import { SiteFooter } from "@/components/footer";
 import { TagNav } from "@/components/tags/nav";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { getRelatedTags } from "@/lib/prisma/tags";
 import { Metadata } from "next";
 
@@ -15,7 +15,7 @@ export async function generateMetadata(
      { params }: Props
 ): Promise<Metadata> {
      try {
-          const tag = await postgres.tag.findFirst({
+          const tag = await db.tag.findFirst({
                where: {
                     name: params.tagname
                },

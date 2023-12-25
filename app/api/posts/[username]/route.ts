@@ -1,4 +1,4 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -17,14 +17,14 @@ export async function GET(
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
     // Execute a query to fetch the specific user by name
-    const author = await postgres.user.findFirst({
+    const author = await db.user.findFirst({
       where: {
         username: username,
-      }
+      },
     });
     const authorID = author?.id;
 
-    const result = await postgres.post.findFirst({
+    const result = await db.post.findFirst({
       where: {
         url: postUrl,
         authorId: authorID,
@@ -46,10 +46,10 @@ export async function GET(
             posts: {
               take: 4,
             },
-          }
+          },
         },
       },
-    })
+    });
     if (!result) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
@@ -64,8 +64,10 @@ export async function GET(
   }
 }
 
-
-export async function DELETE(req: NextRequest, { params }: { params: { username: string } }){
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { username: string } }
+) {
   const username = params.username;
   const postid = req.nextUrl.searchParams.get("postid");
 
@@ -78,7 +80,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { username:
   }
 
   try {
-    const author = await postgres.user.findFirst({
+    const author = await db.user.findFirst({
       where: {
         username: username,
       },
@@ -89,7 +91,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { username:
     const authorID = author?.id;
 
     //check if the post belongs to the user
-    const result = await postgres.post.findFirst({
+    const result = await db.post.findFirst({
       where: {
         id: postid,
         authorId: authorID,
@@ -100,55 +102,55 @@ export async function DELETE(req: NextRequest, { params }: { params: { username:
     }
 
     //check if the post has comments and tags
-    const comments = await postgres.comment.findMany({
+    const comments = await db.comment.findMany({
       where: {
         postId: postid,
       },
     });
-    const tags = await postgres.postTag.findMany({
+    const tags = await db.postTag.findMany({
       where: {
         postId: postid,
       },
     });
-    const likes = await postgres.like.findMany({
+    const likes = await db.like.findMany({
       where: {
         postId: postid,
       },
     });
-    const saved = await postgres.bookmark.findMany({
+    const saved = await db.bookmark.findMany({
       where: {
         postId: postid,
       },
     });
     if (comments.length !== 0) {
-      await postgres.comment.deleteMany({
+      await db.comment.deleteMany({
         where: {
           postId: postid,
         },
       });
     }
     if (tags.length !== 0) {
-      await postgres.postTag.deleteMany({
+      await db.postTag.deleteMany({
         where: {
           postId: postid,
         },
       });
     }
     if (likes.length !== 0) {
-      await postgres.like.deleteMany({
+      await db.like.deleteMany({
         where: {
           postId: postid,
         },
       });
     }
     if (saved.length !== 0) {
-      await postgres.bookmark.deleteMany({
+      await db.bookmark.deleteMany({
         where: {
           postId: postid,
         },
       });
     }
-    await postgres.post.delete({
+    await db.post.delete({
       where: {
         id: postid,
       },

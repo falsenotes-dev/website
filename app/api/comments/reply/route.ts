@@ -1,5 +1,5 @@
 import { create } from "@/lib/notifications/create-notification";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const { post, content, author, comment } = data;
 
-    await postgres.comment.create({
+    await db.comment.create({
       data: {
         content: content,
         authorId: author,
@@ -20,13 +20,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
     });
     // Get the author of the post and the post details
-    const authorDetails = await postgres.user.findUnique({
+    const authorDetails = await db.user.findUnique({
       where: {
         id: author,
       },
     });
 
-    const receiver = await postgres.comment.findUnique({
+    const receiver = await db.comment.findUnique({
       where: {
         id: comment,
       },
@@ -37,30 +37,30 @@ export async function POST(req: NextRequest, res: NextResponse) {
             author: {
               select: {
                 username: true,
-              }
-            }
+              },
+            },
           },
-          }
+        },
       },
     });
 
     if (author !== receiver?.authorId) {
       // Replace content with converted markdown
-    const commentContent = content.replace(/<[^>]*>?/gm, "");
+      const commentContent = content.replace(/<[^>]*>?/gm, "");
 
-    // Send a notification to the author of the post using api/notifications post method body json
-    const message = `"${commentContent}"`;
-    const type = "reply";
-    const url = `/@${receiver?.post.author.username}/${receiver?.post?.url}?commentsOpen=true`;
-    if (receiver?.authorId && authorDetails?.id) {
-      await create({
-        content: message,
-        type,
-        url,
-        receiverId: receiver.authorId,
-        senderId: authorDetails.id,
-      });
-    }
+      // Send a notification to the author of the post using api/notifications post method body json
+      const message = `"${commentContent}"`;
+      const type = "reply";
+      const url = `/@${receiver?.post.author.username}/${receiver?.post?.url}?commentsOpen=true`;
+      if (receiver?.authorId && authorDetails?.id) {
+        await create({
+          content: message,
+          type,
+          url,
+          receiverId: receiver.authorId,
+          senderId: authorDetails.id,
+        });
+      }
     }
 
     return new NextResponse("Reply created", { status: 201 });

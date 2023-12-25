@@ -1,4 +1,4 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -13,7 +13,7 @@ export async function GET(
     }
 
     // Execute a query to fetch the specific user by name
-    const result = await postgres.user.findFirst({
+    const result = await db.user.findFirst({
       include: {
         posts: {
           where: {

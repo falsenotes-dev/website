@@ -1,7 +1,7 @@
 
 import { getSessionUser } from '@/components/get-session-user';
 import Navbar from '@/components/navbar/navbar';
-import postgres from '@/lib/postgres';
+import db from '@/lib/db';
 import { getNotifications } from '@/lib/prisma/session';
 import { Metadata } from 'next';
 
@@ -15,7 +15,7 @@ export default async function MainLayout({
   children: React.ReactNode
 }) {
   const session = await getSessionUser();
-  const notifications = await postgres.notification.findMany({
+  const notifications = await db.notification.findMany({
     where: {
       receiverId: session?.id,
       read: false
@@ -24,13 +24,13 @@ export default async function MainLayout({
       createdAt: 'desc'
     }
   })
-  
+
   return (
     <div className='min-h-screen'>
       <>
-            <Navbar notifications={notifications} />
-            {children}
-          </>
+        <Navbar notifications={notifications} />
+        {children}
+      </>
     </div>
   )
 }

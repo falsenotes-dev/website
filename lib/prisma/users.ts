@@ -1,11 +1,11 @@
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "../postgres";
+import db from "../db";
 import { Prisma } from "@prisma/client";
 
 const baseQuery = {
   include: {
-     Followers: true,
-     Followings: true,
+    Followers: true,
+    Followings: true,
   },
 };
 
@@ -18,7 +18,7 @@ export const getUsers = async ({
   page?: number;
   limit?: number;
 }) => {
-  const users = await postgres.user.findMany({
+  const users = await db.user.findMany({
     ...baseQuery,
     where:
       search !== undefined
@@ -50,19 +50,19 @@ export const getUsers = async ({
           Followings: true,
           posts: true,
         },
-      }
+      },
     },
   });
-  
+
   // Sort the results in your application code
   if (typeof search !== undefined) {
     users.sort((a, b) => {
       const aCount = a._count.Followers + a._count.posts;
       const bCount = b._count.Followers + b._count.posts;
-    
+
       return bCount - aCount;
     });
   }
-  
+
   return { users: JSON.parse(JSON.stringify(users)) };
-}
+};

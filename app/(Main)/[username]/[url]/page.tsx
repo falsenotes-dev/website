@@ -1,7 +1,7 @@
 "use server";
 import { getSessionUser } from "@/components/get-session-user";
 import { notFound } from "next/navigation";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import Post from "@/components/blog/post";
 import { cookies } from "next/headers";
 import { getLists } from "@/lib/prisma/session";
@@ -19,7 +19,7 @@ export default async function PostView({
       : undefined;
 
   const decodedUsername = decodeURIComponent(params.username);
-  const author = await postgres.user.findFirst({
+  const author = await db.user.findFirst({
     where: {
       username: decodedUsername.substring(1),
     },
@@ -30,7 +30,7 @@ export default async function PostView({
     },
   });
   if (!author) return notFound();
-  const post = await postgres.post.findFirst({
+  const post = await db.post.findFirst({
     where: {
       url: params.url,
       authorId: author?.id,
@@ -95,21 +95,21 @@ export default async function PostView({
   }
   if (sessionUser) {
     //check if the user has readed the post
-    const hasReaded = await postgres.readingHistory.findFirst({
+    const hasReaded = await db.readingHistory.findFirst({
       where: {
         postId: post?.id,
         userId: sessionUser?.id,
       },
     });
     if (!hasReaded) {
-      await postgres.readingHistory.create({
+      await db.readingHistory.create({
         data: {
           postId: post?.id,
           userId: sessionUser?.id,
         },
       });
     } else {
-      await postgres.readingHistory.update({
+      await db.readingHistory.update({
         where: {
           id: hasReaded?.id,
         },

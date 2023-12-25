@@ -1,11 +1,11 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { tr } from "date-fns/locale";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const userId = req.nextUrl.searchParams.get("userId")?.toString();
   try {
-    const user = await postgres.user.findFirst({
+    const user = await db.user.findFirst({
       where: {
         id: userId,
       },
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
         },
         bookmarks: true,
         _count: {
-          select: { tagfollower: true},
+          select: { tagfollower: true },
         },
       },
     });
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const tags = await postgres.tagFollow.findMany({
+    const tags = await db.tagFollow.findMany({
       where: {
         followerId: user.id,
       },
@@ -34,13 +34,13 @@ export async function GET(req: NextRequest) {
         tag: true,
       },
       take: 5,
-          orderBy: {
-          createdAt: "desc",
-          },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     const userJson = JSON.parse(JSON.stringify(user));
-     userJson.tags = tags;
+    userJson.tags = tags;
 
     return NextResponse.json(userJson, { status: 200 });
   } catch (error) {

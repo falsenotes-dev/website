@@ -1,11 +1,11 @@
 "use server";
 import { Post, PostShare } from "@prisma/client";
-import postgres from "../postgres";
+import db from "../db";
 
 export const addShare = async (postId: PostShare["postId"]) => {
   if (!postId) return;
   try {
-    await postgres.postShare.create({
+    await db.postShare.create({
       data: {
         postId,
       },

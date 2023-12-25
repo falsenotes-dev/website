@@ -1,6 +1,6 @@
 "use server";
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "../postgres";
+import postgres from "../db";
 import { Prisma } from "@prisma/client";
 
 const baseQuery = {

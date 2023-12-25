@@ -1,59 +1,59 @@
-'use server';
+"use server";
 import { getSessionUser } from "@/components/get-session-user";
 import { Post } from "@prisma/client";
-import postgres from "../postgres";
+import db from "../db";
 
-export const pin = async (postId: Post['id']) => {
-     const session = await getSessionUser();
+export const pin = async (postId: Post["id"]) => {
+  const session = await getSessionUser();
 
-     if (!session) {
-          return { status: 401 };
-     }
+  if (!session) {
+    return { status: 401 };
+  }
 
-     try {
-          await postgres.post.updateMany({
-               where: {
-                    authorId: session.id,
-               },
-               data: {
-                    pinned: false,
-               },
-          });
-     
-          await postgres.post.update({
-               where: {
-                    id: postId,
-               },
-               data: {
-                    pinned: true,
-               },
-          });
+  try {
+    await db.post.updateMany({
+      where: {
+        authorId: session.id,
+      },
+      data: {
+        pinned: false,
+      },
+    });
 
-          return { status: 200 };
-     } catch (error) {
-          return { status: 500 };
-     }
-}
+    await db.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        pinned: true,
+      },
+    });
 
-export const unPin = async (postId: Post['id']) => {
-     const session = await getSessionUser();
+    return { status: 200 };
+  } catch (error) {
+    return { status: 500 };
+  }
+};
 
-     if (!session) {
-          return { status: 401 };
-     }
+export const unPin = async (postId: Post["id"]) => {
+  const session = await getSessionUser();
 
-     try {
-          await postgres.post.update({
-               where: {
-                    id: postId,
-               },
-               data: {
-                    pinned: false,
-               },
-          });
+  if (!session) {
+    return { status: 401 };
+  }
 
-          return { status: 200 }
-     } catch (error) {
-          return { status: 500 }
-     }
-}
+  try {
+    await db.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        pinned: false,
+      },
+    });
+
+    return { status: 200 };
+  } catch (error) {
+    return { status: 500 };
+  }
+};

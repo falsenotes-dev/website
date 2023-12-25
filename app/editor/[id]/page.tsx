@@ -1,13 +1,13 @@
 import { config } from '@/app/auth';
 import { PostEditorForm as Editor } from '@/components/editor/post-editor-form'
 import { getSessionUser } from '@/components/get-session-user';
-import postgres from '@/lib/postgres';
+import db from '@/lib/db';
 import { Post, User } from '@prisma/client';
 import { notFound, redirect } from 'next/navigation';
 
 async function getPostForUser(postId: Post['id']) {
   // check if post draft exists of post
-  const post =  await postgres.post.findFirst({
+  const post = await db.post.findFirst({
     where: {
       id: postId,
     },
@@ -17,13 +17,13 @@ async function getPostForUser(postId: Post['id']) {
           tag: true,
         },
       }
-      },
+    },
   })
 
   if (!post) {
     return null
   }
-  const draft = await postgres.draftPost.findFirst({
+  const draft = await db.draftPost.findFirst({
     where: {
       postId: post?.id,
     },
@@ -53,9 +53,9 @@ export default async function PostEditor({ params }: { params: { id: string } })
   }
 
   return (
-    
+
     <main className="flex min-h-screen flex-col items-center justify-between px-6 py-14 lg:p-20 editor">
-     <Editor post={post} user={session} />
+      <Editor post={post} user={session} />
     </main>
   )
 }

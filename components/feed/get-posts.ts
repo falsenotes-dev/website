@@ -1,8 +1,8 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 
 export const fetchPosts = async () => {
   try {
-    const popular = await postgres.post.findMany({
+    const popular = await db.post.findMany({
       orderBy: {
         views: "desc",
       },
@@ -20,10 +20,9 @@ export const fetchPosts = async () => {
       },
     });
 
-
     // return json from array
-     return { popular: JSON.parse(JSON.stringify(popular))}
+    return { popular: JSON.parse(JSON.stringify(popular)) };
   } catch (error) {
     return { error };
   }
-}
+};

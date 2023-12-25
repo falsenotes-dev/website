@@ -1,10 +1,10 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { tr } from "date-fns/locale";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { username: string, url: string } }
+  { params }: { params: { username: string; url: string } }
 ) {
   try {
     // Get the 'slug' route parameter from the request object
@@ -18,17 +18,17 @@ export async function GET(
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
     // Execute a query to fetch the specific user by name
-    const author = await postgres.user.findFirst({
+    const author = await db.user.findFirst({
       where: {
         username: username,
-      }
+      },
     });
     if (!author) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
     const authorID = author?.id;
 
-    const result = await postgres.post.findUnique({
+    const result = await db.post.findUnique({
       where: {
         url: postUrl,
         authorId: authorID,
@@ -36,7 +36,7 @@ export async function GET(
       include: {
         author: true,
       },
-    })
+    });
 
     if (!result) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });

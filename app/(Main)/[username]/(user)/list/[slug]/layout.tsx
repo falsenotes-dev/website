@@ -1,9 +1,9 @@
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { Metadata } from "next";
 
 type Props = {
-  params: { username: string; slug: string };
-  children: React.ReactNode;
+     params: { username: string; slug: string };
+     children: React.ReactNode;
 };
 
 export async function generateMetadata(
@@ -18,7 +18,7 @@ export async function generateMetadata(
           const data = await response.json();
           const user = data.user;
 
-          const list = await postgres.list.findFirst({
+          const list = await db.list.findFirst({
                where: {
                     slug: params.slug,
                     authorId: user.id,
@@ -60,5 +60,5 @@ export async function generateMetadata(
 }
 
 export default function Layout({ children }: Props) {
-  return children;
+     return children;
 }

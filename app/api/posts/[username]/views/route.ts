@@ -1,6 +1,6 @@
 import { incrementPostViews } from "@/components/blog/actions";
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -11,7 +11,7 @@ export async function POST(
     // Get the 'slug' route parameter from the request object
     const username = params.username;
     const postUrl = req.nextUrl.searchParams.get("url");
-    const session = await getSessionUser()
+    const session = await getSessionUser();
 
     if (username === undefined || username === null) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -20,22 +20,25 @@ export async function POST(
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    const cookie = await incrementPostViews({ author: username, post: postUrl });
+    const cookie = await incrementPostViews({
+      author: username,
+      post: postUrl,
+    });
 
     req.cookies.set(cookie.name, cookie.value);
 
-    const post = await postgres.post.findUnique({
+    const post = await db.post.findUnique({
       where: {
         url: postUrl,
         author: {
           username,
-        }
+        },
       },
       select: {
         id: true,
-      }
+      },
     });
-    
+
     return NextResponse.json({ message: "View added" }, { status: 200 });
   } catch (error) {
     console.log(error);

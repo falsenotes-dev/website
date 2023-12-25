@@ -1,21 +1,21 @@
-import postgres from '@/lib/postgres';
-import { NextRequest, NextResponse } from 'next/server';
+import db from "@/lib/db";
+import { NextRequest, NextResponse } from "next/server";
 
 const baseQuery = {
   include: {
-     Followers: true,
-     Followings: true,
+    Followers: true,
+    Followings: true,
   },
 };
 
 export async function GET(request: NextRequest) {
-  const pageString = request.nextUrl.searchParams.get('page');
+  const pageString = request.nextUrl.searchParams.get("page");
   const page = pageString ? parseInt(pageString) : 0;
-  const search = request.nextUrl.searchParams.get('search');
-  const limitString = request.nextUrl.searchParams.get('limit');
+  const search = request.nextUrl.searchParams.get("search");
+  const limitString = request.nextUrl.searchParams.get("limit");
   const limit = limitString ? parseInt(limitString) : 10;
   try {
-    const users = (await postgres.user.findMany({
+    const users = await db.user.findMany({
       ...baseQuery,
       where:
         search != undefined
@@ -46,15 +46,15 @@ export async function GET(request: NextRequest) {
             Followers: true,
             posts: true,
           },
-        }
+        },
       },
-    }));
-    
+    });
+
     // Sort the results in your application code
     users.sort((a, b) => {
       const aCount = a._count.Followers + a._count.posts;
       const bCount = b._count.Followers + b._count.posts;
-    
+
       return bCount - aCount;
     });
     return NextResponse.json({ users: users }, { status: 200 });

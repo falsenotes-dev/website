@@ -1,8 +1,8 @@
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "../postgres";
+import db from "../db";
 
 export const getFollowingTags = async ({ id }: { id: string | undefined }) => {
-  const followingTags = await postgres.user.findFirst({
+  const followingTags = await db.user.findFirst({
     where: { id },
     select: {
       tagfollower: {
@@ -53,7 +53,7 @@ export const getFollowings = async ({ id }: { id: string | undefined }) => {
   if (!id) {
     return { followings: [] };
   }
-  const followings = await postgres.follow.findMany({
+  const followings = await db.follow.findMany({
     where: { followerId: id },
     select: {
       following: {
@@ -69,7 +69,7 @@ export const getFollowings = async ({ id }: { id: string | undefined }) => {
 };
 
 export const getFollowers = async ({ id }: { id: string | undefined }) => {
-  const followers = await postgres.user.findFirst({
+  const followers = await db.user.findFirst({
     where: { id },
     select: {
       Followers: {
@@ -84,7 +84,7 @@ export const getFollowers = async ({ id }: { id: string | undefined }) => {
 };
 
 export const getPosts = async ({ id }: { id: string | undefined }) => {
-  const posts = await postgres.user.findFirst({
+  const posts = await db.user.findFirst({
     where: { id },
     select: {
       posts: {
@@ -102,7 +102,7 @@ export const getPosts = async ({ id }: { id: string | undefined }) => {
 };
 
 export const getLikes = async ({ id }: { id: string | undefined }) => {
-  const likes = await postgres.user.findFirst({
+  const likes = await db.user.findFirst({
     where: { id },
     select: {
       likes: {
@@ -118,7 +118,7 @@ export const getLikes = async ({ id }: { id: string | undefined }) => {
 };
 
 export const getComments = async ({ id }: { id: string | undefined }) => {
-  const comments = await postgres.user.findFirst({
+  const comments = await db.user.findFirst({
     where: { id },
     select: {
       comments: {
@@ -134,7 +134,7 @@ export const getComments = async ({ id }: { id: string | undefined }) => {
 };
 
 export const getSettings = async ({ id }: { id: string | undefined }) => {
-  const settings = await postgres.user.findFirst({
+  const settings = await db.user.findFirst({
     where: { id },
     select: {
       settings: {
@@ -165,7 +165,7 @@ export const getBookmarks = async ({
   limit?: number;
   page?: number;
 }) => {
-  const user = await postgres.user.findFirst({
+  const user = await db.user.findFirst({
     where: { id },
     include: {
       bookmarks: {
@@ -211,7 +211,7 @@ export const getHistory = async ({
   limit?: number;
   page?: number;
 }) => {
-  const user = await postgres.user.findFirst({
+  const user = await db.user.findFirst({
     where: { id },
     select: {
       id: true,
@@ -257,7 +257,7 @@ export const getHistory = async ({
 };
 
 export const getNotifications = async ({ id }: { id: string | undefined }) => {
-  const notifications = await postgres.user.findFirst({
+  const notifications = await db.user.findFirst({
     where: { id },
     select: {
       notifications: {
@@ -269,7 +269,7 @@ export const getNotifications = async ({ id }: { id: string | undefined }) => {
     },
   });
 
-  const senderDetails = await postgres.user.findMany({
+  const senderDetails = await db.user.findMany({
     where: {
       id: {
         in: notifications?.notifications
@@ -301,12 +301,12 @@ export const getNotifications = async ({ id }: { id: string | undefined }) => {
 };
 
 export const getLists = async ({ id }: { id: string | undefined }) => {
-  const lists = await postgres.list.findMany({
+  const lists = await db.list.findMany({
     where: { authorId: id },
     include: { posts: true },
   });
 
-  const bookmarks = await postgres.bookmark.findMany({
+  const bookmarks = await db.bookmark.findMany({
     where: { userId: id },
   });
 

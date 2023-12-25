@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/react";
 import { getSessionUser } from "@/components/get-session-user";
 import { notFound, redirect, useRouter } from "next/navigation";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { UserDetails, UserPosts } from "@/components/user";
 import UserTab from "@/components/user/tabs";
 import { getPost } from "@/lib/prisma/posts";
@@ -37,7 +37,7 @@ export default async function Page({
   if (!decodedUsername.startsWith("@")) redirect("/404");
 
   const sessionUserName = await getSessionUser();
-  const user = await postgres.user.findFirst({
+  const user = await db.user.findFirst({
     include: {
       posts: {
         orderBy: {
@@ -111,7 +111,7 @@ export default async function Page({
     return notFound();
   }
 
-  const pinnedPost = await postgres.post.findFirst({
+  const pinnedPost = await db.post.findFirst({
     where: {
       authorId: user?.id,
       pinned: true,
@@ -141,7 +141,7 @@ export default async function Page({
     },
   });
 
-  const lists = await postgres.list.findMany({
+  const lists = await db.list.findMany({
     where:
       sessionUserName?.id === user?.id
         ? { authorId: user?.id }
@@ -163,7 +163,7 @@ export default async function Page({
     },
   });
 
-  const bookmarks = await postgres.bookmark.findMany({
+  const bookmarks = await db.bookmark.findMany({
     where: {
       userId: sessionUserName?.id,
     },

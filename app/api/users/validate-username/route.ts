@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { getSessionUser } from "@/components/get-session-user";
 
 export async function GET(request: NextRequest) {
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
-    const isUsernameValid = await postgres.user.findFirst({
+    const isUsernameValid = await db.user.findFirst({
       where: {
         username: username,
         id: { not: id },

@@ -3,7 +3,7 @@ import RelatedPosts from "@/components/blog/related-posts";
 import { SiteFooter } from "@/components/footer";
 import { getSessionUser } from "@/components/get-session-user";
 import { Separator } from "@/components/ui/separator";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import { getForYou } from "@/lib/prisma/feed";
 import { getListByTags } from "@/lib/prisma/list";
 import { getLists } from "@/lib/prisma/session";
@@ -17,7 +17,7 @@ type Props = {
 
 async function getPostData(username: string, url: string) {
   const decodedUsername = decodeURIComponent(username);
-  const post = await postgres.post.findFirst({
+  const post = await db.post.findFirst({
     where: {
       url: url,
       author: {
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         "max-image-preview": "large",
       },
       alternates: {
-        canonical: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}`), 
+        canonical: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}`),
         types: {
           url: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}?commentsOpen=true`),
           title: `${post.title} - FalseNotes`,
@@ -133,7 +133,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PostLayout({ children, params }: Props) {
   const decodedUsername = decodeURIComponent(params.username);
-  const author = await postgres.user.findFirst({
+  const author = await db.user.findFirst({
     where: {
       username: decodedUsername.substring(1),
     },
@@ -174,7 +174,7 @@ export default async function PostLayout({ children, params }: Props) {
   });
 
   const authorPosts = author?.posts;
-  const post = await postgres.post.findFirst({
+  const post = await db.post.findFirst({
     where: {
       url: params.url,
       authorId: author?.id,
@@ -216,7 +216,7 @@ export default async function PostLayout({ children, params }: Props) {
   if (!post)
     return <div className="md:container mx-auto px-4 pt-5">{children}</div>;
 
-  const relatedPosts = await postgres.post.findMany({
+  const relatedPosts = await db.post.findMany({
     where: {
       tags: {
         some: {
@@ -259,7 +259,7 @@ export default async function PostLayout({ children, params }: Props) {
   posts.length % 2 !== 0 && posts.pop();
 
   const list = await getLists({ id: sessionUser?.id });
-  const { lists: recommenedLists } = await getListByTags({tags: post?.tags.map((tag: any) => tag.tagId), limit: 6});
+  const { lists: recommenedLists } = await getListByTags({ tags: post?.tags.map((tag: any) => tag.tagId), limit: 6 });
   return (
     <>
       <div

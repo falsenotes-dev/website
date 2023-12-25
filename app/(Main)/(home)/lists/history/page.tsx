@@ -1,18 +1,16 @@
 import CreateListButton from "@/components/create-list-button";
 import { getSessionUser } from "@/components/get-session-user";
 import ListsTabs from "@/components/lists-tabs";
-import { Button } from "@/components/ui/button";
 import UserHistory from "@/components/user/history";
-import postgres from "@/lib/postgres";
 import { getHistory } from "@/lib/prisma/session";
 
 export default async function HistoryPage() {
-     const session = await getSessionUser();
+  const session = await getSessionUser();
 
-     const { history } = await getHistory({
-          id: session?.id,
-          limit: 10,
-        });
+  const { history } = await getHistory({
+    id: session?.id,
+    limit: 10,
+  });
 
   return (
     <>

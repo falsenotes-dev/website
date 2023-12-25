@@ -1,5 +1,5 @@
 import { formatNumberWithSuffix } from '@/components/format-numbers';
-import postgres from '@/lib/postgres';
+import db from '@/lib/db';
 import type { Metadata } from 'next'
 
 type Props = {
@@ -12,7 +12,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   try {
     const decodedUsername = decodeURIComponent(params.username);
-    const user = await postgres.user.findUnique({
+    const user = await db.user.findUnique({
       where: {
         username: decodedUsername.substring(1)
       },

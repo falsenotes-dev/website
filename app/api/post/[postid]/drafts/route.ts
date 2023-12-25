@@ -1,13 +1,13 @@
 import { getSessionUser } from "@/components/get-session-user";
 import { insertTag } from "@/lib/insert-tag";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 import readingTime from "reading-time";
 import { z } from "zod";
 
 async function verifyCurrentUserHasAccessToPost(postId: string) {
   try {
     const session = await getSessionUser();
-    const count = await postgres.post.count({
+    const count = await db.post.count({
       where: {
         id: postId,
         authorId: session?.id,
@@ -47,15 +47,15 @@ export async function PATCH(
     if (!content) {
       return new Response("No content provided", { status: 400 });
     }
-    
-    await postgres.postTag.deleteMany({
+
+    await db.postTag.deleteMany({
       where: {
         postId: postid,
       },
     });
 
     //check if draft is existing
-    const draft = await postgres.draftPost.findFirst({
+    const draft = await db.draftPost.findFirst({
       where: {
         postId: postid,
       },
@@ -65,7 +65,7 @@ export async function PATCH(
     });
 
     if (draft) {
-      await postgres.draftPost.update({
+      await db.draftPost.update({
         where: {
           id: draft.id,
         },
@@ -77,7 +77,7 @@ export async function PATCH(
         },
       });
     } else {
-      await postgres.draftPost.create({
+      await db.draftPost.create({
         data: {
           title,
           content,
@@ -89,7 +89,7 @@ export async function PATCH(
       });
     }
 
-    await postgres.postTag.deleteMany({
+    await db.postTag.deleteMany({
       where: {
         postId: postid,
       },

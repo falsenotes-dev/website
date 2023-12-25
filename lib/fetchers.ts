@@ -1,10 +1,10 @@
 import { unstable_cache } from "next/cache";
-import postgres from "./postgres";
+import db from "./db";
 
 export async function getPostsForSite() {
   return await unstable_cache(
     async () => {
-      return postgres.post.findMany({
+      return db.post.findMany({
         where: {
           published: true,
         },
@@ -40,7 +40,7 @@ export async function getPostsForSite() {
 export async function getUsersForSite() {
   return await unstable_cache(
     async () => {
-      return postgres.user.findMany({});
+      return db.user.findMany({});
     },
     [`$users`],
     {
@@ -53,7 +53,7 @@ export async function getUsersForSite() {
 export async function getTagsForSite() {
   return await unstable_cache(
     async () => {
-      return postgres.tag.findMany({
+      return db.tag.findMany({
         where: {
           posts: {
             some: {},
@@ -71,7 +71,7 @@ export async function getTagsForSite() {
 
 export async function getListsForSite() {
   return await unstable_cache(async () => {
-    return postgres.list.findMany({
+    return db.list.findMany({
       where: {
         visibility: "public",
       },

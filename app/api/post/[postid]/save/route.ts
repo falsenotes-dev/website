@@ -1,15 +1,15 @@
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "@/lib/postgres";
+import db from "@/lib/db";
 
 export async function POST(res: Request) {
   try {
     const { postId } = await res.json();
     const user = await getSessionUser();
     if (!user) {
-     console.log("No session user");
+      console.log("No session user");
       return new Response(null, { status: 401 });
     }
-    const post = await postgres.post.findUnique({
+    const post = await db.post.findUnique({
       where: {
         id: postId,
       },
@@ -17,21 +17,21 @@ export async function POST(res: Request) {
     if (!post) {
       return new Response(null, { status: 404 });
     }
-    const isSaved = await postgres.bookmark.findFirst({
+    const isSaved = await db.bookmark.findFirst({
       where: {
         postId,
         userId: user.id,
       },
     });
     if (isSaved) {
-      await postgres.bookmark.delete({
+      await db.bookmark.delete({
         where: {
           id: isSaved.id,
         },
       });
       console.log("Deleted bookmark");
     } else {
-      await postgres.bookmark.create({
+      await db.bookmark.create({
         data: {
           post: {
             connect: {
@@ -45,7 +45,7 @@ export async function POST(res: Request) {
           },
         },
       });
-          console.log("Created bookmark");
+      console.log("Created bookmark");
     }
     return new Response(null, { status: 200 });
   } catch (error) {

@@ -1,6 +1,6 @@
 "use server";
 import { getSessionUser } from "@/components/get-session-user";
-import postgres from "../postgres";
+import db from "../db";
 import { deletePost } from "./delete-post";
 import { Comment } from "@prisma/client";
 
@@ -14,7 +14,7 @@ export const deleteProfile = async () => {
 
     const userId = session.id;
 
-    const userComments = await postgres.comment
+    const userComments = await db.comment
       .findMany({
         where: {
           authorId: userId,
@@ -24,37 +24,37 @@ export const deleteProfile = async () => {
 
     userComments.forEach((comment) => deleteComment(comment));
 
-    await postgres.userSettings.delete({
+    await db.userSettings.delete({
       where: {
         userId: userId,
       },
     });
 
-    await postgres.follow.deleteMany({
+    await db.follow.deleteMany({
       where: {
         followingId: userId,
       },
     });
 
-    await postgres.follow.deleteMany({
+    await db.follow.deleteMany({
       where: {
         followerId: userId,
       },
     });
 
-    const userPosts = await postgres.post.findMany({
+    const userPosts = await db.post.findMany({
       where: {
         authorId: userId,
       },
     });
 
-    await postgres.like.deleteMany({
+    await db.like.deleteMany({
       where: {
         authorId: userId,
       },
     });
 
-    await postgres.commentLike.deleteMany({
+    await db.commentLike.deleteMany({
       where: {
         authorId: userId,
       },
@@ -64,55 +64,55 @@ export const deleteProfile = async () => {
       await deletePost({ id: post.id });
     }
 
-    await postgres.bookmark.deleteMany({
+    await db.bookmark.deleteMany({
       where: {
         userId: userId,
       },
     });
 
-    await postgres.notification.deleteMany({
+    await db.notification.deleteMany({
       where: {
         receiverId: userId,
       },
     });
 
-    await postgres.tagFollow.deleteMany({
+    await db.tagFollow.deleteMany({
       where: {
         followerId: userId,
       },
     });
 
-    await postgres.readingHistory.deleteMany({
+    await db.readingHistory.deleteMany({
       where: {
         userId: userId,
       },
     });
 
-    await postgres.publicationAuthor.deleteMany({
+    await db.publicationAuthor.deleteMany({
       where: {
         authorId: userId,
       },
     });
 
-    await postgres.publicationFollow.deleteMany({
+    await db.publicationFollow.deleteMany({
       where: {
         followerId: userId,
       },
     });
 
-    await postgres.listSaving.deleteMany({
+    await db.listSaving.deleteMany({
       where: {
         userId: userId,
       },
     });
 
-    await postgres.list.deleteMany({
+    await db.list.deleteMany({
       where: {
         authorId: userId,
       },
     });
 
-    await postgres.user.delete({
+    await db.user.delete({
       where: {
         id: userId,
       },
@@ -125,7 +125,7 @@ export const deleteProfile = async () => {
 };
 
 async function deleteComment(id: Comment["id"]) {
-  const replies = await postgres.comment
+  const replies = await db.comment
     .findMany({
       where: {
         parentId: id,
@@ -137,15 +137,15 @@ async function deleteComment(id: Comment["id"]) {
     .then((comments) => comments.map((comment) => comment.id));
 
   replies.forEach((reply) => deleteComment(reply));
-  await postgres.commentLike.deleteMany({
+  await db.commentLike.deleteMany({
     where: {
       commentId: id,
     },
   });
-  await postgres.commentLike.deleteMany({
+  await db.commentLike.deleteMany({
     where: {
       commentId: {
-        in: await postgres.comment
+        in: await db.comment
           .findMany({
             where: {
               parentId: id,
@@ -158,13 +158,13 @@ async function deleteComment(id: Comment["id"]) {
       },
     },
   });
-  await postgres.comment.deleteMany({
+  await db.comment.deleteMany({
     where: {
       parentId: id,
     },
   });
 
-  await postgres.comment.delete({
+  await db.comment.delete({
     where: {
       id: id,
     },

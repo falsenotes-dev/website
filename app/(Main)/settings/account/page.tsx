@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator"
 import { AccountForm } from "@/components/settings/account/account-form"
 import { getSessionUser } from "@/components/get-session-user"
-import postgres from "@/lib/postgres"
+import postgres from "@/lib/db"
 
 export default async function SettingsAccountPage() {
   const user = await getSessionUser()
