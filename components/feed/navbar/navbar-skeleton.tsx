@@ -11,34 +11,25 @@ export default function FeedTabsSkeleton() {
                <div className="bg-background sticky top-[60px] z-10">
                     <Tabs defaultValue={''} className="">
                          <TabsList className="bg-transparent gap-2 flex-nowrap">
-                              <TabsTrigger value="foryou" className="bg-muted data-[state=active]:border data-[state=active]:border-foreground">
-                                   <Skeleton className="h-5 w-16" />
-                              </TabsTrigger>
+                              <Skeleton className="h-5 w-16" />
                          </TabsList>
-                         <TabsList className="bg-transparent gap-2">
-                              <TabsTrigger value="foryou" className="bg-muted data-[state=active]:border data-[state=active]:border-foreground">
-                                   <Skeleton className="h-5 w-16" />
-                              </TabsTrigger>
+                         <TabsList className="bg-transparent gap-2 flex-nowrap">
+                              <Skeleton className="h-5 w-16" />
                          </TabsList>
-                         <TabsList className="bg-transparent gap-2">
-                              <TabsTrigger value="foryou" className="bg-muted data-[state=active]:border data-[state=active]:border-foreground">
-                                   <Skeleton className="h-5 w-16" />
-                              </TabsTrigger>
+                         <TabsList className="bg-transparent gap-2 flex-nowrap">
+                              <Skeleton className="h-5 w-16" />
                          </TabsList>
-                         <TabsList className="bg-transparent gap-2">
-                              <TabsTrigger value="foryou" className="bg-muted data-[state=active]:border data-[state=active]:border-foreground">
-                                   <Skeleton className="h-5 w-16" />
-                              </TabsTrigger>
+                         <TabsList className="bg-transparent gap-2 flex-nowrap">
+                              <Skeleton className="h-5 w-16" />
                          </TabsList>
-                         <TabsList className="bg-transparent gap-2">
-                              <TabsTrigger value="foryou" className="bg-muted data-[state=active]:border data-[state=active]:border-foreground">
-                                   <Skeleton className="h-5 w-16" />
-                              </TabsTrigger>
+                         <TabsList className="bg-transparent gap-2 flex-nowrap">
+                              <Skeleton className="h-5 w-16" />
                          </TabsList>
-                         <TabsList className="bg-transparent gap-2">
-                              <TabsTrigger value="foryou" className="bg-muted data-[state=active]:border data-[state=active]:border-foreground">
-                                   <Skeleton className="h-5 w-16" />
-                              </TabsTrigger>
+                         <TabsList className="bg-transparent gap-2 flex-nowrap">
+                              <Skeleton className="h-5 w-16" />
+                         </TabsList>
+                         <TabsList className="bg-transparent gap-2 flex-nowrap">
+                              <Skeleton className="h-5 w-16" />
                          </TabsList>
                     </Tabs>
 
