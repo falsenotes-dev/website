@@ -1,4 +1,5 @@
 import { formatNumberWithSuffix } from '@/components/format-numbers';
+import postgres from '@/lib/postgres';
 import type { Metadata } from 'next'
 
 type Props = {
@@ -11,30 +12,69 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   try {
     const decodedUsername = decodeURIComponent(params.username);
-    const response = await fetch(`${process.env.DOMAIN}/api/users/${decodedUsername.substring(1)}`);
-    if (!response.ok) {
-      throw new Error(`Error fetching user data: ${response.statusText}`);
+    const user = await postgres.user.findUnique({
+      where: {
+        username: decodedUsername.substring(1)
+      },
+      select: {
+        name: true,
+        username: true,
+        bio: true,
+        image: true,
+        _count: {
+          select: {
+            posts: {
+              where: {
+                published: true
+              }
+            },
+          }
+        }
+      }
+    })
+
+    if (!user) {
+      return {
+        title: `Not Found - FalseNotes`,
+        description: `The page you were looking for doesn't exist.`,
+        openGraph: {
+          title: `Not Found - FalseNotes`,
+          description: `The page you were looking for doesn't exist.`,
+
+        },
+        twitter: {
+          card: 'summary',
+          title: `Not Found - FalseNotes`,
+          description: `The page you were looking for doesn't exist.`,
+        },
+      }
     }
-    const data = await response.json();
-    const user = data.user;
+
     return {
       metadataBase: new URL(`${process.env.DOMAIN}/@${user.username}`),
       title: `${user.name || user.username} - FalseNotes`,
-      description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${user?._count.posts} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
+      description: `Read writing from ${user.name || user.username} on FalseNotes. ${user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(user?._count.posts)} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio}`,
       openGraph: {
+        siteName: 'FalseNotes',
         title: `${user.name || user.username} - FalseNotes`,
-        description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(user?.posts.length)} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
+        description: `Read writing from ${user.name || user.username} on FalseNotes. ${user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(user?._count.posts)} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio}`,
         url: `${process.env.DOMAIN}/@${user.username}`,
-        images: [
-          {
-            url: user?.image,
-            alt: `${user.username} - FalseNotes`,
-          }
-        ],
+        ...user?.image && {
+          images: [
+            {
+              url: user?.image,
+              alt: `${user.username} - FalseNotes`,
+            }
+          ],
+        },
+        type: 'profile',
+        username: user?.username,
+        firstName: user?.name,
       },
       twitter: {
         title: `${user.name || user.username} - FalseNotes`,
-        description: user?.bio === null || user?.bio === "" ? `${user?.username} has ${user?.postsnum} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio,
+        description: `Read writing from ${user.name || user.username} on FalseNotes. ${user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(user?._count.posts)} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio}`,
+        card: 'summary',
       },
     }
   } catch (error) {
