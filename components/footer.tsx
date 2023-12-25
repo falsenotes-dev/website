@@ -21,6 +21,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
                          <Link href="/privacy">Privacy</Link>
                          <Link href="/terms">Terms</Link>
                          <Link href="/beta">Beta</Link>
+                         <Link target="_blank" href="/store">Store</Link>
                          <Link target="_blank" href="/github">GitHub</Link>
                          <Link target="_blank" href="/twitter">Twitter</Link>
                          <Link target="_blank" href="/instagram">Instagram</Link>
