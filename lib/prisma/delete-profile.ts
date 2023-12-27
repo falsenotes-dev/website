@@ -88,18 +88,6 @@ export const deleteProfile = async () => {
       },
     });
 
-    await db.publicationAuthor.deleteMany({
-      where: {
-        authorId: userId,
-      },
-    });
-
-    await db.publicationFollow.deleteMany({
-      where: {
-        followerId: userId,
-      },
-    });
-
     await db.listSaving.deleteMany({
       where: {
         userId: userId,
