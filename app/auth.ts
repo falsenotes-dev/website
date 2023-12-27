@@ -236,7 +236,7 @@ export const config = {
         } else if (account?.provider === "twitter") {
           console.log("Twitter Profile:", profile);
           const {
-            id: twitterId,
+            id_str: twitterId,
             name,
             email,
             picture,
