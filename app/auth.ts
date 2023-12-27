@@ -323,11 +323,24 @@ export const config = {
                   data: {
                     twitterId: twitterId.toString(),
                     name: userExists.name ? userExists.name : name,
-                    twitterProfile: userExists.twitterProfile
-                      ? userExists.twitterProfile
-                      : screen_name,
                   },
                 });
+
+                const urlExists = await db.userWebsite.findFirst({
+                  where: {
+                    userId: userExists.id,
+                    value: `https://twitter.com/${screen_name}`,
+                  },
+                });
+
+                if (!urlExists) {
+                  await db.userWebsite.create({
+                    data: {
+                      userId: userExists.id,
+                      value: `https://twitter.com/${screen_name}`,
+                    },
+                  });
+                }
               } catch (error) {
                 console.error("Error updating user in the database:", error);
                 return false; // Do not continue with the sign-in process
