@@ -1,5 +1,7 @@
 import { getSessionUser } from "@/components/get-session-user";
 import db from "@/lib/db";
+import { insertUrls } from "@/lib/insert-urls";
+import { profileSchema } from "@/lib/profile-schema";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -41,14 +43,6 @@ export async function PATCH(
 
     // Get the request body and validate it.
     const body = await req.json();
-    const profileSchema = z.object({
-      id: z.string(),
-      username: z.string(),
-      image: z.string().nullable().optional(),
-      name: z.string().nullable().optional(),
-      bio: z.string().max(160).nullable().optional(),
-      location: z.string().max(30).nullable().optional(),
-    });
 
     const payload = profileSchema.parse(body);
 
@@ -64,6 +58,44 @@ export async function PATCH(
         location: payload.location,
       },
     });
+
+    //if urls contains github profile and twitter profile, remove them from user and add them to userWebsite
+    const githubUrl = payload.urls?.find((url: any) =>
+      url.value.includes("github.com")
+    );
+    const twitterUrl = payload.urls?.find((url: any) =>
+      url.value.includes("twitter.com")
+    );
+    if (githubUrl) {
+      await db.user.update({
+        where: {
+          id: session.id,
+        },
+        data: {
+          githubprofile: null,
+        },
+      });
+    }
+
+    if (twitterUrl) {
+      await db.user.update({
+        where: {
+          id: session.id,
+        },
+        data: {
+          twitterProfile: null,
+        },
+      });
+    }
+
+    //delete all urls connected to user
+    await db.userWebsite.deleteMany({
+      where: {
+        userId: session.id,
+      },
+    });
+
+    await insertUrls({ urls: payload.urls, userId: session.id });
 
     return new Response(null, { status: 200 });
   } catch (error) {

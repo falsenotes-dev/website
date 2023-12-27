@@ -43,10 +43,17 @@ const profileFormSchema = z.object({
   name: z.string().nullable().optional(),
   bio: z.string().max(160).nullable().optional(),
   location: z.string().max(30).nullable().optional(),
+  urls: z
+    .array(
+      z.object({
+        value: z.string().url({ message: "Please enter a valid URL." }),
+      })
+    )
+    .optional(),
 });
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-export function ProfileForm({ data }: { data: Partial<ProfileFormValues> }) {
+export function ProfileForm({ data }: { data: any }) {
   const router = useRouter();
   // This can come from your database or API.
   const defaultValues: Partial<ProfileFormValues> = {
@@ -56,12 +63,22 @@ export function ProfileForm({ data }: { data: Partial<ProfileFormValues> }) {
     name: data.name,
     bio: data.bio ?? "",
     location: data.location,
+    urls: [
+      data.githubProfile && { value: data.githubProfile },
+      data.twitterProfile && { value: `https://twitter.com/${data.twitterProfile}` },
+      ...data.urls,
+    ].filter(Boolean),
   };
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   });
+
+  const { fields, append, remove } = useFieldArray({
+    name: "urls",
+    control: form.control,
+  })
 
   async function onSubmit(data: ProfileFormValues) {
     const response = await fetch(`/api/user/${data.id}`, {
@@ -341,38 +358,52 @@ export function ProfileForm({ data }: { data: Partial<ProfileFormValues> }) {
               </FormItem>
             )}
           />
-          {/* <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Add links to your website, blog, or social media profiles.
-                  </FormDescription>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => append({ value: "" })}
-          >
-            Add URL
-          </Button>
-        </div> */}
+          <div>
+            {fields.map((field, index) => (
+              <FormField
+                control={form.control}
+                key={field.id}
+                name={`urls.${index}.value`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={cn(index !== 0 && "sr-only")}>
+                      URLs
+                    </FormLabel>
+                    <FormDescription className={cn(index !== 0 && "sr-only")}>
+                      Add links to your website, blog, or social media profiles.
+                    </FormDescription>
+                    <FormControl>
+                      <div className="flex gap-0.5">
+                        <Input {...field} />
+                        <Button
+                          variant="link"
+                          className="ml-2"
+                          asChild
+                          size={'icon'}
+                          onClick={() => remove(index)}
+                        >
+                          <span>
+                            <Icons.xCircle className="w-4 h-4" />
+                            <span className="sr-only">Remove</span>
+                          </span>
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => append({ value: "" })}
+            >
+              Add URL
+            </Button>
+          </div>
           <div className="grid items-center gap-2">
             <Label htmlFor="delete-profile">Delete profile</Label>
             <Button

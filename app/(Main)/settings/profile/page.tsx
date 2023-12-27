@@ -11,6 +11,7 @@ export default async function SettingsProfilePage() {
   }
   const userData = await postgres.user.findFirst({
     where: { id: user.id },
+    include: { urls: true }
   })
   if (!userData) {
     return notFound()

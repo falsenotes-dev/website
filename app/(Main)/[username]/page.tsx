@@ -70,6 +70,7 @@ export default async function Page({
           ],
         },
       },
+      urls: true,
       _count: {
         select: {
           posts: {
