@@ -194,6 +194,57 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                               </div>
                          )
                     }
+                    {
+                         user.urls && user.urls.length > 0 && (
+                              user.urls.map((url: any) => (
+                                   <div key={url.id}>
+                                        <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground" >
+                                             <Link href={url.value} target="_blank" className="flex items-center font-light !text-sm">
+                                                  {
+                                                       //if url.value contains github.com then show github icon if not then show link icon
+                                                       url.value.includes("github.com") ? (
+                                                            <>
+                                                                 <Icons.gitHub className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                 {url.value.replace("https://github.com/", "") || url.value.replace("http://github.com/", "")}
+                                                            </>
+                                                       ) : url.value.includes("twitter.com") ? (
+                                                            <>
+                                                                 <Icons.twitter className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                 {url.value.replace("https://twitter.com/", "") || url.value.replace("http://twitter.com/", "")}
+                                                            </>
+                                                       ) : url.value.includes("facebook.com") ? (
+                                                            <>
+                                                                 <Icons.facebook className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                 {url.value.replace("https://facebook.com/", "") || url.value.replace("http://facebook.com/", "")}
+                                                            </>
+                                                       ) : url.value.includes("fb.com") ? (
+                                                            <>
+                                                                 <Icons.facebook className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                 {url.value.replace("https://fb.com/", "") || url.value.replace("http://fb.com/", "")}
+                                                            </>
+                                                       ) : url.value.includes("instagram.com") ? (
+                                                            <>
+                                                                 <Icons.instagram className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                 {url.value.replace("https://instagram.com/", "") || url.value.replace("http://instagram.com/", "")}
+                                                            </>
+                                                       ) : url.value.includes("linkedin.com") ? (
+                                                            <>
+                                                                 <Icons.linkedIn className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                 {url.value.replace("https://linkedin.com/", "") || url.value.replace("http://linkedin.com/", "")}
+                                                            </>
+                                                       ) : (
+                                                            <>
+                                                                 <Icons.link className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                 {url.value.replace("https://", "") || url.value.replace("http://", "")}
+                                                            </>
+                                                       )
+                                                  }
+                                             </Link>
+                                        </Button>
+                                   </div>
+                              ))
+                         )
+                    }
                     <div>
                          <Button variant={"link"} size={"sm"} asChild className="p-0 !text-sm hover:!no-underline text-foreground" >
                               <span>

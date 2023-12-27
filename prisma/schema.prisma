@@ -11,69 +11,52 @@ datasource db {
 }
 
 model User {
-  id             String              @id @default(cuid()) @map("_id")
-  email          String              @unique
-  username       String              @unique
+  id             String           @id @default(cuid()) @map("_id")
+  email          String           @unique
+  username       String           @unique
   name           String?
   bio            String?
   password       String?
-  emailVerified  DateTime?           @map("email_verified")
+  emailVerified  DateTime?        @map("email_verified")
   image          String?
   githubprofile  String?
   location       String?
-  verified       Boolean             @default(false)
-  falsemember    Boolean             @default(false)
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
+  verified       Boolean          @default(false)
+  falsemember    Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   githubId       String?
-  googleId       String?             @map("google_id")
-  twitterId      String?             @map("twitter_id")
-  twitterProfile String?             @map("twitter_profile")
-  isPublication  Boolean             @default(false)
+  googleId       String?          @map("google_id")
+  twitterId      String?          @map("twitter_id")
+  twitterProfile String?          @map("twitter_profile")
+  isPublication  Boolean          @default(false)
   settings       UserSettings?
   notifications  Notification[]
   posts          Post[]
   comments       Comment[]
   likes          Like[]
   commentlikes   CommentLike[]
-  Followings     Follow[]            @relation("Follower")
-  Followers      Follow[]            @relation("Following")
-  tagfollower    TagFollow[]         @relation("TagFollower")
+  Followings     Follow[]         @relation("Follower")
+  Followers      Follow[]         @relation("Following")
+  tagfollower    TagFollow[]      @relation("TagFollower")
   bookmarks      Bookmark[]
   readinghistory ReadingHistory[]
-  publications   PublicationAuthor[]
-  followingPubs  PublicationFollow[]
   lists          List[]
   savedLists     ListSaving[]
+  urls           UserWebsite[]
 
   @@map("users")
 }
 
-model Publication {
-  id          String              @id @default(cuid()) @map("_id")
-  name        String              @unique
-  url         String              @unique
-  image       String?
-  description String?
-  authors     PublicationAuthor[]
-  posts       Post[]
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
-  followers   PublicationFollow[]
+model UserWebsite {
+  id        String   @id @default(uuid()) @map("_id")
+  value     String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@map("publications")
-}
-
-model PublicationAuthor {
-  id            String      @id @default(cuid()) @map("_id")
-  publication   Publication @relation(fields: [publicationId], references: [id])
-  publicationId String
-  author        User        @relation(fields: [authorId], references: [id])
-  authorId      String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-
-  @@map("publicationauthors")
+  @@map("userwebsites")
 }
 
 model Post {
@@ -103,8 +86,6 @@ model Post {
   shares        PostShare[]
   allowComments Boolean          @default(true)
   allowLikes    Boolean          @default(true)
-  publication   Publication?     @relation(fields: [publicationId], references: [id])
-  publicationId String?
   lists         PostList[]
 
   @@index([createdAt])
@@ -266,18 +247,6 @@ model TagFollow {
   updatedAt  DateTime @updatedAt
 
   @@map("tagfollows")
-}
-
-model PublicationFollow {
-  id            String      @id @default(uuid()) @map("_id")
-  follower      User        @relation(fields: [followerId], references: [id])
-  followerId    String
-  publication   Publication @relation(fields: [publicationId], references: [id])
-  publicationId String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-
-  @@map("publicationfollows")
 }
 
 model Notification {
