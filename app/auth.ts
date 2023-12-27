@@ -88,13 +88,19 @@ export const config = {
                   name: name,
                   email: email,
                   bio: bio,
-                  githubprofile: githubProfileURL,
                   location: location,
                   image: avatar_url,
                   githubId: githubId.toString(),
                 },
                 select: {
                   id: true,
+                },
+              });
+
+              await db.userWebsite.create({
+                data: {
+                  userId: sessionUser.id,
+                  value: githubProfileURL,
                 },
               });
 
@@ -126,6 +132,22 @@ export const config = {
                   email: email,
                 },
               });
+
+              const urlExists = await db.userWebsite.findFirst({
+                where: {
+                  userId: userExists.id,
+                  value: githubProfileURL,
+                },
+              });
+
+              if (!urlExists) {
+                await db.userWebsite.create({
+                  data: {
+                    userId: userExists.id,
+                    value: githubProfileURL,
+                  },
+                });
+              }
             } catch (error) {
               console.error("Error updating user in the database:", error);
               return false; // Do not continue with the sign-in process
@@ -230,7 +252,7 @@ export const config = {
         } else if (account?.provider === "twitter") {
           console.log("Twitter Profile:", profile);
           const {
-            id: twitterId,
+            id_str: twitterId,
             name,
             email,
             picture,
@@ -274,13 +296,19 @@ export const config = {
                     email: email,
                     image: image,
                     twitterId: twitterId,
-                    twitterProfile: screen_name,
                     username: username,
                     bio: description,
                     location: location,
                   },
                   select: {
                     id: true,
+                  },
+                });
+
+                await db.userWebsite.create({
+                  data: {
+                    userId: sessionUser.id,
+                    value: `https://twitter.com/${screen_name}`,
                   },
                 });
 
@@ -311,11 +339,24 @@ export const config = {
                   data: {
                     twitterId: twitterId.toString(),
                     name: userExists.name ? userExists.name : name,
-                    twitterProfile: userExists.twitterProfile
-                      ? userExists.twitterProfile
-                      : screen_name,
                   },
                 });
+
+                const urlExists = await db.userWebsite.findFirst({
+                  where: {
+                    userId: userExists.id,
+                    value: `https://twitter.com/${screen_name}`,
+                  },
+                });
+
+                if (!urlExists) {
+                  await db.userWebsite.create({
+                    data: {
+                      userId: userExists.id,
+                      value: `https://twitter.com/${screen_name}`,
+                    },
+                  });
+                }
               } catch (error) {
                 console.error("Error updating user in the database:", error);
                 return false; // Do not continue with the sign-in process
