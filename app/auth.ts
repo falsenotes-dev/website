@@ -88,13 +88,19 @@ export const config = {
                   name: name,
                   email: email,
                   bio: bio,
-                  githubprofile: githubProfileURL,
                   location: location,
                   image: avatar_url,
                   githubId: githubId.toString(),
                 },
                 select: {
                   id: true,
+                },
+              });
+
+              await db.userWebsite.create({
+                data: {
+                  userId: sessionUser.id,
+                  value: githubProfileURL,
                 },
               });
 
@@ -274,13 +280,19 @@ export const config = {
                     email: email,
                     image: image,
                     twitterId: twitterId,
-                    twitterProfile: screen_name,
                     username: username,
                     bio: description,
                     location: location,
                   },
                   select: {
                     id: true,
+                  },
+                });
+
+                await db.userWebsite.create({
+                  data: {
+                    userId: sessionUser.id,
+                    value: `https://twitter.com/${screen_name}`,
                   },
                 });
 
