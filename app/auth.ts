@@ -132,6 +132,22 @@ export const config = {
                   email: email,
                 },
               });
+
+              const urlExists = await db.userWebsite.findFirst({
+                where: {
+                  userId: userExists.id,
+                  value: githubProfileURL,
+                },
+              });
+
+              if (!urlExists) {
+                await db.userWebsite.create({
+                  data: {
+                    userId: userExists.id,
+                    value: githubProfileURL,
+                  },
+                });
+              }
             } catch (error) {
               console.error("Error updating user in the database:", error);
               return false; // Do not continue with the sign-in process
