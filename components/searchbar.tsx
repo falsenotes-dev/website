@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Input } from "./ui/input";
 import { Check, ChevronsUpDown } from "lucide-react"
- 
+
 import { cn } from "@/lib/utils"
 import {
   Command,
@@ -76,64 +76,64 @@ export default function SearchBar() {
     <>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger className="hidden md:flex" asChild>
-        <div className="flex md:w-40 lg:w-64 h-10 rounded-md border border-input bg-transparent px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center">
-        <Icons.search className="mr-2 h-4 w-4 shrink-0 my-2 opacity-50" />
-        {/* when in input clicked inter it must redirect to /explore?search=[value]*/}
-        <Input
-          type="search"
-          placeholder="Search..."
-          className="w-full px-0 border-none bg-transparent focus:ring-0 focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-transparent"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-      </div>
-      </PopoverTrigger>
-      <PopoverContent className="md:w-40 lg:w-64 p-0">
-        <Command>
-          {suggestions.users?.length === 0 && suggestions.tags?.length === 0 && (
-            <CommandEmpty>No results found.</CommandEmpty>
-          )}
-          {
-            suggestions.users?.length > 0 && (
-              <CommandGroup heading="Users">
-            {suggestions.users?.map((user: any) => (
-                  <CommandItem
-                    key={user.id}
-                    value={user.id}
-                  >
-                    <Link href={`/@${user.username}`} className="flex items-center">
-                    <Avatar className="h-6 w-6 mr-2">
-                      <AvatarImage src={user.image} alt={user.username} />
-                      <AvatarFallback>{user.username}</AvatarFallback>
-                    </Avatar>
-                    <span>{user.name || user.username} {user.verified && <Icons.verified className="h-3 w-3 inline fill-primary align-middle" />}</span>
-                    </Link>
-                  </CommandItem>
-                ))}
-          </CommandGroup>
-            )
-          }
-          {
-            suggestions.tags?.length > 0 && (
-              <CommandGroup heading="Tags">
-            {suggestions.tags?.map((tag: any) => (
-                  <CommandItem
-                    key={tag.id}
-                    value={tag.id}
-                  >
-                    <Link href={`/tags/${tag.name}`} className="flex items-center">
-                    <Icons.hash className="mr-2 h-4 w-4" />
-                    <span>{tag.name.replace(/-/g, " ")}</span>
-                    </Link>
-                  </CommandItem>
-                ))}
-          </CommandGroup>
-            )
-          }
-        </Command>
-      </PopoverContent>
-    </Popover>
+          <div className="flex md:w-40 lg:w-64 h-10 rounded-md border border-input bg-transparent px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center">
+            <Icons.search className="mr-2 h-4 w-4 shrink-0 my-2 opacity-50" />
+            {/* when in input clicked inter it must redirect to /explore?search=[value]*/}
+            <Input
+              type="search"
+              placeholder="Search..."
+              className="w-full px-0 border-none bg-transparent focus:ring-0 focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-transparent"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+        </PopoverTrigger>
+        <PopoverContent className="md:w-40 lg:w-64 p-0">
+          <Command>
+            {suggestions.users?.length === 0 && suggestions.tags?.length === 0 && (
+              <CommandEmpty>No results found.</CommandEmpty>
+            )}
+            {
+              suggestions.users?.length > 0 && (
+                <CommandGroup heading="Users">
+                  {suggestions.users?.map((user: any) => (
+                    <CommandItem
+                      key={user.id}
+                      value={user.id}
+                    >
+                      <Link href={`/@${user.username}`} className="flex items-center">
+                        <Avatar className="h-6 w-6 mr-2">
+                          <AvatarImage src={user.image} alt={user.username} />
+                          <AvatarFallback>{user.username}</AvatarFallback>
+                        </Avatar>
+                        <span>{user.name || user.username} {user.verified && <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />}</span>
+                      </Link>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )
+            }
+            {
+              suggestions.tags?.length > 0 && (
+                <CommandGroup heading="Tags">
+                  {suggestions.tags?.map((tag: any) => (
+                    <CommandItem
+                      key={tag.id}
+                      value={tag.id}
+                    >
+                      <Link href={`/tags/${tag.name}`} className="flex items-center">
+                        <Icons.hash className="mr-2 h-4 w-4" />
+                        <span>{tag.name.replace(/-/g, " ")}</span>
+                      </Link>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )
+            }
+          </Command>
+        </PopoverContent>
+      </Popover>
     </>
   )
 }
