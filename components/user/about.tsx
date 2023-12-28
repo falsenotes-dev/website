@@ -232,12 +232,23 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                                                                  <Icons.linkedIn className="mr-2 h-5 w-5 text-muted-foreground" />
                                                                  {url.value.replace("https://linkedin.com/", "") || url.value.replace("http://linkedin.com/", "")}
                                                             </>
-                                                       ) : (
+                                                       ) : url.value.include('youtube.com') ? (
                                                             <>
-                                                                 <Icons.link className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                 {url.value.replace("https://", "") || url.value.replace("http://", "")}
+                                                                 <Icons.youtube className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                 {url.value.replace("https://youtube.com/", "") || url.value.replace("http://youtube.com/", "")}
                                                             </>
                                                        )
+                                                            : url.value.include('www.youtube.com') ? (
+                                                                 <>
+                                                                      <Icons.youtube className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                      {url.value.replace("https://www.youtube.com/", "") || url.value.replace("http://www.youtube.com/", "")}
+                                                                 </>
+                                                            ) : (
+                                                                 <>
+                                                                      <Icons.link className="mr-2 h-5 w-5 text-muted-foreground" />
+                                                                      {url.value.replace("https://", "") || url.value.replace("http://", "")}
+                                                                 </>
+                                                            )
                                                   }
                                              </Link>
                                         </Button>
