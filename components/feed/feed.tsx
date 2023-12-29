@@ -65,11 +65,24 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }
     </div>
   ) :
     (
-      tag == 'following' && (
+      tag == 'following' ? (
         <EmptyPlaceholder>
           <EmptyPlaceholder.Icon name='post' strokeWidth={1.5} />
           <EmptyPlaceholder.Title>No posts yet</EmptyPlaceholder.Title>
           <EmptyPlaceholder.Description>When you follow someone, their posts will show up here.</EmptyPlaceholder.Description>
+          <Button className="mt-4" onClick={
+            () => {
+              router.push('/feed')
+            }
+          }>Browse recommended posts</Button>
+        </EmptyPlaceholder>
+      ) : (
+        <EmptyPlaceholder>
+          <EmptyPlaceholder.Icon name='post' strokeWidth={1.5} />
+          <EmptyPlaceholder.Title>No posts yet</EmptyPlaceholder.Title>
+          <EmptyPlaceholder.Description>
+            Either posts haven&apos;t been created yet or you don&apos;t have access to them.
+          </EmptyPlaceholder.Description>
           <Button className="mt-4" onClick={
             () => {
               router.push('/feed')
