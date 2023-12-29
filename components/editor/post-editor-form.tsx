@@ -984,9 +984,9 @@ export function PostEditorForm(props: { post: any; user: any }) {
               onOpenChange={setOpen}
             >
               <DrawerContent className="max-h-[calc(100vh-3rem)] pt-0">
-                <div className="h-full px-6 overflow-x-hidden overflow-y-scroll">
+                <ScrollArea className="h-full px-6 overflow-auto">
                   <DrawerHeader className="py-6">
-                    <DrawerTitle className="font-bold">
+                    <DrawerTitle className="font-bold text-center">
                       Post Settings for publishing
                     </DrawerTitle>
                   </DrawerHeader>
@@ -1395,7 +1395,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                       />
                     </div>
                   </div>
-                </div>
+                </ScrollArea>
                 <DrawerFooter className="border-t">
                   <Button
                     type="submit"
