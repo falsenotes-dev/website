@@ -1,5 +1,4 @@
 import { Separator } from "@/components/ui/separator"
-import { ProfileForm } from "@/components/settings/profile-form"
 import { getSessionUser } from "@/components/get-session-user"
 import postgres from "@/lib/db"
 import { notFound, redirect } from "next/navigation"
@@ -22,11 +21,15 @@ export default async function SettingsOrganizationPage() {
      }
      return (
           <div className="space-y-6">
-               <div>
-                    <h3 className="text-lg font-medium">Blogs</h3>
+               <div className="flex w-full justify-between">
+                    <div>
+                         <h3 className="text-lg font-medium">Blogs</h3>
+                         <p className="text-sm text-muted-foreground">
+                              Manage your blogs.
+                         </p>
+                    </div>
                </div>
                <Separator />
-               <ProfileForm data={userData as any} />
           </div>
      )
 }
