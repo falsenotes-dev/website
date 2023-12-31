@@ -63,11 +63,14 @@ model UserWebsite {
 }
 
 model PublicationAuthor {
-  id            String @id @default(cuid()) @map("_id")
-  publication   User   @relation(name: "PublicationAuthor", fields: [publicationId], references: [id])
+  id            String   @id @default(cuid()) @map("_id")
+  publication   User     @relation(name: "PublicationAuthor", fields: [publicationId], references: [id])
   publicationId String
-  author        User   @relation(fields: [authorId], references: [id])
+  author        User     @relation(fields: [authorId], references: [id])
   authorId      String
+  acessLevel    String   @default("writer")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Post {
