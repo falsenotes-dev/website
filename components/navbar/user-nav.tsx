@@ -87,6 +87,14 @@ export function UserNav() {
             </DropdownMenuShortcut>
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href={`/settings/blogs`}
+          >
+            <Icons.blogs className="h-5 mr-2" />
+            Your Blogs
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuGroup>
           <DropdownMenuItem className="px-2.5 py-2" asChild>
             <Link href="/lists">
