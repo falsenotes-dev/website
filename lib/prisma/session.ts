@@ -1,5 +1,6 @@
 import { getSessionUser } from "@/components/get-session-user";
 import db from "../db";
+import { User } from "@prisma/client";
 
 export const getFollowingTags = async ({ id }: { id: string | undefined }) => {
   const followingTags = await db.user.findFirst({
@@ -313,5 +314,22 @@ export const getLists = async ({ id }: { id: string | undefined }) => {
   return {
     lists: JSON.parse(JSON.stringify(lists)),
     bookmarks: JSON.parse(JSON.stringify(bookmarks)),
+  };
+};
+
+export const getPublcations = async ({ id }: { id: User["id"] }) => {
+  const publications = await db.user.findFirst({
+    where: { id },
+    select: {
+      publications: {
+        include: {
+          publication: true,
+        },
+      },
+    },
+  });
+
+  return {
+    publications: JSON.parse(JSON.stringify(publications?.publications)),
   };
 };
