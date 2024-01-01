@@ -333,3 +333,16 @@ export const getPublcations = async ({ id }: { id: User["id"] }) => {
     publications: JSON.parse(JSON.stringify(publications?.publications)),
   };
 };
+
+export const getMembers = async ({ id }: { id: User["id"] }) => {
+  const members = await db.publicationAuthor.findMany({
+    where: { publicationId: id },
+    include: {
+      author: true,
+    },
+  });
+
+  return {
+    members: JSON.parse(JSON.stringify(members)),
+  };
+};
