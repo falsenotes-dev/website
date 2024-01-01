@@ -22,6 +22,7 @@ import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { EmptyPlaceholder } from "@/components/empty-placeholder";
+import UserHoverCard from "@/components/user-hover-card";
 
 export default async function Page({
   params,
@@ -100,6 +101,18 @@ export default async function Page({
           },
         },
       },
+      writers: {
+        where: {
+          visibility: "public",
+        },
+        select: {
+          author: {
+            include: {
+              _count: { select: { Followers: true, Followings: true } },
+            },
+          },
+        }
+      }
     },
     where: {
       username: decodedUsername.substring(1),
@@ -219,6 +232,11 @@ export default async function Page({
             <TabsList className="mb-4">
               <TabsTrigger value="posts">Posts</TabsTrigger>
               <TabsTrigger value="lists">Lists</TabsTrigger>
+              {
+                user?.writers?.length > 0 && (
+                  <TabsTrigger value="writers">Writers</TabsTrigger>
+                )
+              }
               <TabsTrigger value="about">About</TabsTrigger>
             </TabsList>
             <TabsContent value="posts" className="w-full">
@@ -355,6 +373,40 @@ export default async function Page({
                   )
                 }
               </div>
+            </TabsContent>
+            <TabsContent value="writers">
+              <div className="flex flex-col gap-10 my-6">
+                {user?.writers?.map(({ author }) => (
+                  <div className="flex gap-4 w-full items-center" key={author.id}>
+                    <div className="space-y-3">
+                      <UserHoverCard user={author} >
+                        <Link href={`/@${author.username}`} className="flex items-center">
+                          <Avatar className="h-10 w-10 mr-2 md:mr-3">
+                            <AvatarImage src={author.image || ''} alt={author.username} />
+                            <AvatarFallback>{author.name?.charAt(0) || author.username?.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          {
+                            author.name === null ? (
+                              <div>
+                                <p className="text-sm font-medium leading-none">{author.username} {author.verified && (
+                                  <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
+                                )}</p>
+                              </div>
+                            ) : (
+                              <div>
+                                <p className="text-sm font-medium leading-none">{author.name} {author.verified && (
+                                  <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
+                                )}</p>
+                                <p className="text-sm text-muted-foreground">{author.username}</p>
+                              </div>
+                            )
+                          }
+                        </Link>
+                      </UserHoverCard>
+                    </div>
+                  </div>
+                ))}
+              </div >
             </TabsContent>
             <TabsContent value="about">
               <UserAbout user={user} session={sessionUserName} />
