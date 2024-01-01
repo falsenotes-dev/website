@@ -45,6 +45,7 @@ import { Badge } from "../ui/badge"
 import { leaveBlog } from "@/lib/prisma/blog"
 import { toast } from "sonner"
 import { validate } from "@/lib/revalidate"
+import Link from "next/link"
 
 export function BlogsForm({ data }: { data: any }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -76,19 +77,19 @@ export function BlogsForm({ data }: { data: any }) {
       },
       cell: ({ row }) => {
         const blog = row.original.publication
-        return <div className="flex gap-2 items-center" >
-          <Avatar className="border">
-            <AvatarImage src={blog.image || ''} alt={blog.name || blog.username} />
-            <AvatarFallback>
-              {blog?.name?.charAt(0) || blog.username?.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col space-y-1">
+        return <div className="flex gap-2 items-center cursor-pointer" >
+          <Link href={`/@${blog.username}`}>
+            <Avatar className="border">
+              <AvatarImage src={blog.image || ''} alt={blog.name || blog.username} />
+              <AvatarFallback>
+                {blog?.name?.charAt(0) || blog.username?.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+          </Link>
+          <Link className="flex flex-col space-y-1" href={`/@${blog.username}`} >
             <p className="leading-none">{blog.name || blog.username}</p>
-            <p className="text-sm text-muted-foreground leading-none font-normal">
-              {blog.username}
-            </p>
-          </div>
+            <p className="text-sm text-muted-foreground leading-none font-normal">{blog.username}</p>
+          </Link>
         </div>
       },
     },

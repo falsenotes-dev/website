@@ -95,6 +95,9 @@ export function MembersForm({ session }: { session: any }) {
      });
 
      async function onSubmit(data: MembersFormData) {
+          if (data.members.length === 0) {
+               return toast.error("Please add at least one member.");
+          }
           const res = await addAuthors({ data });
           if (res?.success) {
                toast.success("Members added successfully.");
