@@ -57,9 +57,11 @@ import { getAllUsers } from "@/lib/prisma/users";
 import { DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut } from "../ui/dropdown-menu";
 import { Badge } from "../ui/badge";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { addAuthors } from "@/lib/prisma/blog";
+import { validate } from "@/lib/revalidate";
 
 
-const membersFormSchema = z.object({
+export const membersFormSchema = z.object({
      members: z.array(z.object({
           id: z.string(),
      })),
@@ -92,8 +94,14 @@ export function MembersForm({ session }: { session: any }) {
           name: "members",
      });
 
-     async function onSubmit(values: MembersFormData) {
-          console.log(values);
+     async function onSubmit(data: MembersFormData) {
+          const res = await addAuthors({ data });
+          if (res?.success) {
+               toast.success("Members added successfully.");
+               await validate(`/settings/members`);
+          } else {
+               toast.error("Something went wrong.");
+          }
      }
 
      const [open, setOpen] = useState(false);

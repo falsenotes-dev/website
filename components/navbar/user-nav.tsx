@@ -26,6 +26,7 @@ import {
   Settings2,
 } from "lucide-react";
 import { Icons } from "../icon";
+import { Badge } from "../ui/badge";
 
 export function UserNav() {
   const { status } = useSession();
@@ -92,7 +93,7 @@ export function UserNav() {
             href={`/settings/blogs`}
           >
             <Icons.blogs className="h-5 mr-2" />
-            Your Blogs
+            Your Blogs <Badge className="ml-2 font-medium">New</Badge>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuGroup>

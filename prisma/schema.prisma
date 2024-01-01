@@ -68,7 +68,7 @@ model PublicationAuthor {
   publicationId String
   author        User     @relation(fields: [authorId], references: [id])
   authorId      String
-  acessLevel    String   @default("writer")
+  accessLevel   String   @default("writer")
   visibility    String   @default("public")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

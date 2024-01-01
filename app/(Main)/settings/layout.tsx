@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "@/components/settings/sidebar-nav"
 import { Toaster } from "@/components/ui/toaster"
 import { SiteFooter } from "@/components/footer"
+import { getSessionUser } from "@/components/get-session-user";
 
 export const metadata: Metadata = {
   title: "Settings - FalseNotes",
@@ -19,6 +20,7 @@ const sidebarNavItems = [
   {
     title: "Members",
     href: "/settings/members",
+    new: true,
   },
   {
     title: "Account",
@@ -32,6 +34,7 @@ const sidebarNavItems = [
   {
     title: "Blogs",
     href: "/settings/blogs",
+    new: true,
   }
 ]
 
@@ -39,7 +42,11 @@ interface SettingsLayoutProps {
   children: React.ReactNode
 }
 
-export default function SettingsLayout({ children }: SettingsLayoutProps) {
+export default async function SettingsLayout({ children }: SettingsLayoutProps) {
+  const session = await getSessionUser()
+  if (!session) {
+    return null
+  }
   return (
     <div className="flex flex-col flex-auto max-w-screen" style={{ minHeight: "calc(100vh - 64px)" }}>
       <div className="space-y-6 md:p-10 pb-16 flex-1">

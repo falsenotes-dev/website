@@ -69,6 +69,14 @@ export default function NotificationList({ notifications, ...props }: { notifica
                                                                  </>
                                                             )
                                                        }
+                                                       {
+                                                            notification.type === 'blogInvite' && (
+                                                                 <>
+                                                                      <span>invited you to join their blog: </span>
+                                                                      <span className="font-bold">{notification.content}</span>
+                                                                 </>
+                                                            )
+                                                       }
                                                   </p>
                                                   <p className="!text-muted-foreground text-sm">
                                                        {dateFormat(notification?.createdAt)}

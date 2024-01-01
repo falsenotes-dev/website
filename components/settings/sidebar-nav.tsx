@@ -5,12 +5,14 @@ import { usePathname, useRouter } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
+import { Badge } from "../ui/badge"
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
     href: string
     title: string,
     disabled?: boolean
+    new?: boolean
   }[]
 }
 
@@ -39,7 +41,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
             }
             className="w-full justify-start rounded-md data-[state=active]:bg-muted"
           >
-            {item.title}
+            {item.title} {item.new && <Badge className="ml-2">New</Badge>}
           </TabsTrigger>
         ))}
       </TabsList>
