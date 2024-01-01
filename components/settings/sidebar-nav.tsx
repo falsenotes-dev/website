@@ -39,9 +39,9 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
               router.push(item.href)
             }
             }
-            className="w-full justify-start rounded-md data-[state=active]:bg-muted"
+            className="w-full justify-between rounded-md data-[state=active]:bg-muted"
           >
-            {item.title} {item.new && <Badge className="ml-2">New</Badge>}
+            {item.title} {item.new && <Badge>New</Badge>}
           </TabsTrigger>
         ))}
       </TabsList>

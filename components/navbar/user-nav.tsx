@@ -93,7 +93,10 @@ export function UserNav() {
             href={`/settings/blogs`}
           >
             <Icons.blogs className="h-5 mr-2" />
-            Your Blogs <Badge className="ml-2 font-medium">New</Badge>
+            Your Blogs
+            <DropdownMenuShortcut className="opacity-100">
+              <Badge className="font-medium">New</Badge>
+            </DropdownMenuShortcut>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuGroup>
