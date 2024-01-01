@@ -7,6 +7,7 @@ import LoginDialog from "../login-dialog";
 import { validate } from "@/lib/revalidate";
 import { useEffect, useState } from "react";
 import ShareList from "./share";
+import { PostCreateButton } from "./post-create-button";
 
 export function UserCard({ user, session, className }: { user: any, session: any, className?: string }) {
      const [isFollowing, setIsFollowing] = useState<boolean | null>(user.Followers.find((follower: any) => follower.followerId === session?.id));
@@ -35,30 +36,37 @@ export function UserCard({ user, session, className }: { user: any, session: any
                await validate(`/@${user?.username}`)
           }
      }
+     console.log(session.publications.map((publication: any) => publication.publicationId).join(' '), user.id);
      return (
           <div className="md:flex justify-between w-full my-8 hidden">
                <Link href={`/@${user?.username}`} className="font-bold text-3xl flex items-center gap-1">
-                         {user.name || user.username} {user?.verified && (
-                              <Icons.verified className="h-5 lg:h-6 w-5 lg:w-6 inline fill-verified align-middle" />
-                         )} {user?.falsemember && (
-                              <Image src='/assets/falsemember.png' alt="False icon" height={30} width={30} className="h-5 lg:h-6 w-5 lg:w-6 inline rounded border align-middle" />
-                         )}
-                    </Link>
+                    {user.name || user.username} {user?.verified && (
+                         <Icons.verified className="h-5 lg:h-6 w-5 lg:w-6 inline fill-verified align-middle" />
+                    )} {user?.falsemember && (
+                         <Image src='/assets/falsemember.png' alt="False icon" height={30} width={30} className="h-5 lg:h-6 w-5 lg:w-6 inline rounded border align-middle" />
+                    )}
+               </Link>
+               <div className="flex gap-2">
+                    {
+                         ((session?.id === user?.id) || (user?.id === session.publications.map((publication: any) => publication.publicationId).join(' '))) && (
+                              <PostCreateButton />
+                         )
+                    }
                     <div className="md:flex items-center gap-2 lg:hidden hidden">
                          {
                               session ? (
                                    session?.id !== user?.id && (
-                                   <Button onClick={() => {
-                                        handleFollow(user?.id);
-                                   }} disabled={isFollowingLoading} >
-                                        {
-                                             isFollowingLoading ? (
-                                                  <><Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> {isFollowing ? "Following" : "Follow"}</>
-                                             ) : (
-                                                  <>{isFollowing ? "Following" : "Follow"}</>
-                                             )
-                                        }
-                                   </Button>
+                                        <Button onClick={() => {
+                                             handleFollow(user?.id);
+                                        }} disabled={isFollowingLoading} >
+                                             {
+                                                  isFollowingLoading ? (
+                                                       <><Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> {isFollowing ? "Following" : "Follow"}</>
+                                                  ) : (
+                                                       <>{isFollowing ? "Following" : "Follow"}</>
+                                                  )
+                                             }
+                                        </Button>
                                    )
                               ) : (
                                    <LoginDialog>
@@ -72,6 +80,7 @@ export function UserCard({ user, session, className }: { user: any, session: any
                               </Button>
                          </ShareList>
                     </div>
+               </div>
           </div>
      )
 }

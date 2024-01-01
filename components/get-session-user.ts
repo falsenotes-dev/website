@@ -27,6 +27,11 @@ export async function getSessionUser() {
         email: true,
         image: true,
         username: true,
+        publications: {
+          select: {
+            publicationId: true,
+          },
+        },
       },
     });
     return result;
