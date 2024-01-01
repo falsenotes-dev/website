@@ -132,7 +132,7 @@ export default function UserPosts({
               )}
             </EmptyPlaceholder.Description>
             {((sessionUser?.id === user?.id) || (user?.id === sessionUser.publications.map((publication: any) => publication.publicationId).join(' '))) && (
-              <PostCreateButton key={"New Post"} variant={"outline"} />
+              <PostCreateButton key={"New Post"} variant={"outline"} publication={user.id} />
             )}
           </EmptyPlaceholder>
         )}

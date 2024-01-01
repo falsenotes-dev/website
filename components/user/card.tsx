@@ -47,8 +47,8 @@ export function UserCard({ user, session, className }: { user: any, session: any
                </Link>
                <div className="flex gap-2">
                     {
-                         ((session?.id === user?.id) || (user?.id === session.publications.map((publication: any) => publication.publicationId).join(' '))) && (
-                              <PostCreateButton />
+                         session && ((session?.id === user?.id) || (user?.id === session.publications.map((publication: any) => publication.publicationId).join(' '))) && (
+                              <PostCreateButton publication={user.id} />
                          )
                     }
                     <div className="md:flex items-center gap-2 lg:hidden hidden">

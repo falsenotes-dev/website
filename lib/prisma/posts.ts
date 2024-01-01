@@ -27,6 +27,12 @@ const baseQuery = {
         tag: true,
       },
     },
+    publication: {
+      include: {
+        Followers: true,
+        Followings: true,
+      },
+    },
   },
 };
 

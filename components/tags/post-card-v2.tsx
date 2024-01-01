@@ -48,16 +48,16 @@ export default function PostCard(
     await validate(pathname);
   };
   const [isSaved, setIsSaved] = React.useState(false);
-     React.useEffect(() => {
-     const checkIsSaved =
-          props.list?.lists?.some((list: any) =>
-          list.posts?.some((post: any) => post.postId === props.post.id)
-          ) ||
-          props.list?.bookmarks?.some(
-          (bookmark: any) => bookmark.postId === props.post.id
-          );
-     setIsSaved(checkIsSaved);
-     }, [props.list?.lists, props.list?.bookmarks, props.post.id]);
+  React.useEffect(() => {
+    const checkIsSaved =
+      props.list?.lists?.some((list: any) =>
+        list.posts?.some((post: any) => post.postId === props.post.id)
+      ) ||
+      props.list?.bookmarks?.some(
+        (bookmark: any) => bookmark.postId === props.post.id
+      );
+    setIsSaved(checkIsSaved);
+  }, [props.list?.lists, props.list?.bookmarks, props.post.id]);
   return (
     <Card
       {...props}
@@ -108,6 +108,34 @@ export default function PostCard(
                   {props.post.published === false ? "Draft" : "Published"}
                 </Badge>
               )}
+            {
+              props.post.publication && (
+                <>
+                  <Link
+                    href={`/@${props.post.publication?.username}`}
+                    className="flex items-center space-x-0.5"
+                  >
+                    <p className="text-sm font-normal leading-none">
+                      <span className="text-muted-foreground">
+                        {
+                          props.user == "true" && (
+                            "Published "
+                          )
+                        }
+                        {"in "}
+                      </span>
+                      <span>{props.post.publication?.name || props.post.publication?.username}</span>
+                    </p>
+                    {props.post.publication?.verified && (
+                      <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
+                    )}
+                  </Link>
+                  <span className="!text-muted-foreground text-sm mx-1 md:mx-1.5">
+                    ·
+                  </span>
+                </>
+              )
+            }
             <span className="!text-muted-foreground text-sm">
               {props.post.published
                 ? dateFormat(props.post.publishedAt)
@@ -130,9 +158,8 @@ export default function PostCard(
               <div>
                 <div className="pb-2">
                   <h2
-                    className={`text-base md:text-xl font-bold text-ellipsis overflow-hidden ${
-                      props.user == "true" ? "line-clamp-2" : "line-clamp-3"
-                    }`}
+                    className={`text-base md:text-xl font-bold text-ellipsis overflow-hidden ${props.user == "true" ? "line-clamp-2" : "line-clamp-3"
+                      }`}
                   >
                     {props.post.title}
                   </h2>
@@ -224,9 +251,8 @@ export default function PostCard(
                 }
               >
                 <div
-                  className={`h-14 md:h-28 !relative rounded-md bg-muted overflow-hidden !pb-0 ${
-                    props.user == "true" ? "aspect-[8/5]" : "aspect-[8/5]"
-                  }`}
+                  className={`h-14 md:h-28 !relative rounded-md bg-muted overflow-hidden !pb-0 ${props.user == "true" ? "aspect-[8/5]" : "aspect-[8/5]"
+                    }`}
                 >
                   <>
                     <Image
