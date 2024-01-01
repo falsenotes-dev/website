@@ -17,6 +17,10 @@ const sidebarNavItems = [
     href: "/settings/profile",
   },
   {
+    title: "Members",
+    href: "/settings/members",
+  },
+  {
     title: "Account",
     href: "/settings/account",
     disabled: true,
@@ -38,7 +42,7 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <div className="flex flex-col flex-auto max-w-screen" style={{ minHeight: "calc(100vh - 64px)" }}>
-      <div className="space-y-6 p-10 pb-16 flex-1">
+      <div className="space-y-6 md:p-10 pb-16 flex-1">
         <div className="space-y-0.5">
 
         </div>

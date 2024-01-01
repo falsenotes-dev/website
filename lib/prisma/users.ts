@@ -1,3 +1,5 @@
+"use server";
+
 import { getSessionUser } from "@/components/get-session-user";
 import db from "../db";
 import { Prisma } from "@prisma/client";
@@ -63,6 +65,48 @@ export const getUsers = async ({
       return bCount - aCount;
     });
   }
+
+  return { users: JSON.parse(JSON.stringify(users)) };
+};
+
+export const getAllUsers = async ({
+  search,
+}: {
+  search?: string | undefined;
+}) => {
+  const users = await db.user.findMany({
+    ...baseQuery,
+    where:
+      search !== undefined
+        ? {
+            OR: [
+              {
+                name: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                username: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                email: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          }
+        : {},
+    ...(search !== undefined
+      ? {
+          take: 5,
+        }
+      : {}),
+  });
 
   return { users: JSON.parse(JSON.stringify(users)) };
 };
