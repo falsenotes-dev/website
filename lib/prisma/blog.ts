@@ -33,15 +33,6 @@ export const addAuthors = async ({ data }: { data: MembersFormData }) => {
           },
         });
       } else {
-        return db.publicationAuthor.create({
-          data: {
-            accessLevel,
-            authorId,
-            publicationId: session.id,
-          },
-        });
-
-        //create notification for new author
         const data = {
           type: "blogInvite",
           receiverId: authorId,
@@ -49,6 +40,16 @@ export const addAuthors = async ({ data }: { data: MembersFormData }) => {
           url: "/settings/members",
           content: session?.name || session?.username,
         };
+
+        await db.publicationAuthor.create({
+          data: {
+            accessLevel,
+            authorId,
+            publicationId: session.id,
+          },
+        });
+
+        return create(data);
       }
     });
     await Promise.all(authorPromises);
