@@ -26,12 +26,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Icons } from "../icon";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { Icons } from "../../icon";
 import { useRouter } from "next/navigation";
-import { ToastAction } from "../ui/toast";
+import { ToastAction } from "../../ui/toast";
 import { toast } from "sonner";
-import { Label } from "../ui/label";
+import { Label } from "../../ui/label";
 import { useEffect, useState } from "react";
 import {
      Command,
@@ -51,11 +51,11 @@ import {
      PopoverContent,
      PopoverTrigger,
 } from "@/components/ui/popover"
-import useWindowDimensions from "../window-dimensions";
+import useWindowDimensions from "../../window-dimensions";
 import { User } from "@prisma/client";
 import { getAllUsers } from "@/lib/prisma/users";
-import { DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut } from "../ui/dropdown-menu";
-import { Badge } from "../ui/badge";
+import { DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut } from "../../ui/dropdown-menu";
+import { Badge } from "../../ui/badge";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { addAuthors } from "@/lib/prisma/blog";
 import { validate } from "@/lib/revalidate";
@@ -230,7 +230,7 @@ export function MembersForm({ session }: { session: any }) {
                                                   isDesktop ? (
                                                        <Popover open={open} onOpenChange={setOpen}>
                                                             <PopoverTrigger asChild>
-                                                                 <Button variant="ghost" className="justify-start h-[30px]">
+                                                                 <Button variant="outline" className="justify-start h-[30px]">
                                                                       + Add member
                                                                  </Button>
                                                             </PopoverTrigger>

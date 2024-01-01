@@ -1,10 +1,11 @@
 "use server";
 
-import { MembersFormData } from "@/components/settings/members-form";
+import { MembersFormData } from "@/components/settings/members/members-form";
 import db from "../db";
 import { getSessionUser } from "@/components/get-session-user";
 import { User } from "@prisma/client";
 import { create } from "../notifications/create-notification";
+import { el } from "date-fns/locale";
 
 export const addAuthors = async ({ data }: { data: MembersFormData }) => {
   const session = await getSessionUser();
@@ -41,7 +42,7 @@ export const addAuthors = async ({ data }: { data: MembersFormData }) => {
           content: session?.name || session?.username,
         };
 
-        await db.publicationAuthor.create({
+        const isInvited = await db.publicationAuthor.create({
           data: {
             accessLevel,
             authorId,
@@ -49,7 +50,34 @@ export const addAuthors = async ({ data }: { data: MembersFormData }) => {
           },
         });
 
-        return create(data);
+        // if invited during 1 week, delete notification
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        if (isInvited.createdAt > oneWeekAgo) {
+          const notification = await db.notification.findFirst({
+            where: {
+              senderId: data.senderId,
+              receiverId: data.receiverId,
+              type: "blogInvite",
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            select: {
+              id: true,
+            },
+          });
+
+          if (notification) {
+            return db.notification.delete({
+              where: {
+                id: notification.id,
+              },
+            });
+          } else {
+            return create(data);
+          }
+        }
       }
     });
     await Promise.all(authorPromises);
@@ -91,6 +119,129 @@ export const leaveBlog = async ({ id }: { id: User["id"] }) => {
   } catch (error) {
     return {
       message: "There was an error trying to leave the blog",
+      success: false,
+    };
+  }
+};
+
+export const removeAuthor = async ({ id }: { id: User["id"] }) => {
+  const session = await getSessionUser();
+  if (!session) {
+    return;
+  }
+  try {
+    const blog = await db.publicationAuthor.findFirst({
+      where: {
+        authorId: id,
+        publicationId: session.id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    await db.publicationAuthor.delete({
+      where: {
+        id: blog?.id,
+      },
+    });
+
+    return {
+      message: "You have successfully removed the author",
+      success: true,
+    };
+  } catch (error) {
+    return {
+      message: "There was an error trying to remove the author",
+      success: false,
+    };
+  }
+};
+
+export const changeAccessLevel = async ({
+  id,
+  accessLevel,
+}: {
+  id: User["id"];
+  accessLevel: string;
+}) => {
+  const session = await getSessionUser();
+  if (!session) {
+    return;
+  }
+  try {
+    const blog = await db.publicationAuthor.findFirst({
+      where: {
+        authorId: id,
+        publicationId: session.id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    console.log(blog);
+
+    await db.publicationAuthor.update({
+      where: {
+        id: blog?.id,
+      },
+      data: {
+        accessLevel,
+      },
+    });
+
+    return {
+      message: "You have successfully changed the author's access level",
+      success: true,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: "There was an error trying to change the author's access level",
+      success: false,
+    };
+  }
+};
+
+export const changeVisibility = async ({
+  id,
+  visibility,
+}: {
+  id: User["id"];
+  visibility: string;
+}) => {
+  const session = await getSessionUser();
+  if (!session) {
+    return;
+  }
+  try {
+    const blog = await db.publicationAuthor.findFirst({
+      where: {
+        authorId: id,
+        publicationId: session.id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    await db.publicationAuthor.update({
+      where: {
+        id: blog?.id,
+      },
+      data: {
+        visibility,
+      },
+    });
+
+    return {
+      message: "You have successfully changed the author's visibility",
+      success: true,
+    };
+  } catch (error) {
+    return {
+      message: "There was an error trying to change the author's visibility",
       success: false,
     };
   }

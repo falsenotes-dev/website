@@ -1,10 +1,10 @@
 import { Separator } from "@/components/ui/separator"
 import { getSessionUser } from "@/components/get-session-user"
 import { notFound, redirect } from "next/navigation"
-import { getPublcations } from "@/lib/prisma/session"
-import { BlogsForm } from "@/components/settings/blog-form"
+import { getMembers } from "@/lib/prisma/session"
+import { MembersForm } from "@/components/settings/members/members-form"
+import { MembersList } from "@/components/settings/members/members-list"
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
-import { MembersForm } from "@/components/settings/members-form"
 
 export const metadata = {
      title: "Blogs - FalseNotes",
@@ -15,6 +15,7 @@ export default async function SettingsOrganizationPage() {
      if (!user) {
           redirect("/signin")
      }
+     const { members } = await getMembers({ id: user.id })
      return (
           <div className="space-y-6">
                <div className="flex w-full justify-between">
@@ -27,6 +28,19 @@ export default async function SettingsOrganizationPage() {
                </div>
                <Separator />
                <MembersForm session={user} />
+               <Separator className="my-6" />
+               {
+                    members && members.length > 0 ? (
+                         <MembersList data={members} />
+                    ) : (
+                         <EmptyPlaceholder>
+                              <EmptyPlaceholder.Icon name="userGroup" />
+                              <EmptyPlaceholder.Title>
+                                   You don&apos;t have any members.
+                              </EmptyPlaceholder.Title>
+                         </EmptyPlaceholder>
+                    )
+               }
           </div>
      )
 }

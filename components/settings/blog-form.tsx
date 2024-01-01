@@ -67,7 +67,7 @@ export function BlogsForm({ data }: { data: any }) {
         return (
           <Button
             variant="ghost"
-            className="flex p-0 items-center"
+            className="flex p-0 items-center hover:!bg-transparent"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Blogs
@@ -135,8 +135,6 @@ export function BlogsForm({ data }: { data: any }) {
       },
     },
   ]
-
-  console.log(columns)
 
   const table = useReactTable({
     data,
