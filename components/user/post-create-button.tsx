@@ -32,6 +32,7 @@ export function PostCreateButton({
                     title: "Untitled Post",
                     content: "",
                     url: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+                    publicationId: ''
                }),
           })
 
@@ -48,7 +49,7 @@ export function PostCreateButton({
      return (
           <Button
                onClick={onClick}
-               className={cn(className, {"cursor-not-allowed opacity-60": isLoading})}
+               className={cn(className, { "cursor-not-allowed opacity-60": isLoading })}
                disabled={isLoading}
                variant={variant}
                {...props}

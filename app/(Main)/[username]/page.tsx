@@ -112,6 +112,19 @@ export default async function Page({
             },
           },
         }
+      },
+      publications: {
+        where: {
+          visibility: "public",
+        },
+        select: {
+          publication: {
+            include: {
+              _count: { select: { Followers: true, Followings: true } },
+            },
+          },
+        },
+        take: 5,
       }
     },
     where: {

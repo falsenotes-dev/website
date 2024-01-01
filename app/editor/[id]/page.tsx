@@ -16,7 +16,9 @@ async function getPostForUser(postId: Post['id']) {
         include: {
           tag: true,
         },
-      }
+      },
+      author: true,
+      publication: true,
     },
   })
 
@@ -55,7 +57,7 @@ export default async function PostEditor({ params }: { params: { id: string } })
   return (
 
     <main className="flex min-h-screen flex-col items-center justify-between px-6 py-14 lg:p-20 editor">
-      <Editor post={post} user={session} />
+      <Editor post={post} user={post.publication || post.author} />
     </main>
   )
 }
