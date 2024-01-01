@@ -46,11 +46,11 @@ export default function UserPosts({
   async function loadMoreFeed() {
     const next = page + 1;
     const whereQuery =
-    sessionUser?.id === user?.id
-      ? { pinned: false }
-      : { published: true, pinned: false };
+      sessionUser?.id === user?.id
+        ? { pinned: false }
+        : { published: true, pinned: false };
     const { posts } = await getPost({ id: user?.id, search, whereQuery, page: next });
-    
+
     if (posts?.length) {
       setPage(next);
       setPosts((prev) => [...prev, ...posts]);
@@ -131,7 +131,7 @@ export default function UserPosts({
                 <>The user doesn&apos;t have any posts yet.</>
               )}
             </EmptyPlaceholder.Description>
-            {user?.id === sessionUser?.id && (
+            {((sessionUser?.id === user?.id) || (user?.id === sessionUser.publications.map((publication: any) => publication.publicationId).join(' '))) && (
               <PostCreateButton key={"New Post"} variant={"outline"} />
             )}
           </EmptyPlaceholder>
