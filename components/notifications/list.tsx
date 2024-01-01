@@ -72,8 +72,7 @@ export default function NotificationList({ notifications, ...props }: { notifica
                                                        {
                                                             notification.type === 'blogInvite' && (
                                                                  <>
-                                                                      <span>invited you to join their blog: </span>
-                                                                      <span className="font-bold">{notification.content}</span>
+                                                                      <span>invited you to join their blog</span>
                                                                  </>
                                                             )
                                                        }
