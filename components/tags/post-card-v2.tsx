@@ -26,6 +26,7 @@ import { shimmer, toBase64 } from "@/lib/image";
 import { validate } from "@/lib/revalidate";
 import PostAnalyticsDialog from "../blog/post-analytics-dialog";
 import ListPopover from "../list-popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 export default function PostCard(
   props: React.ComponentPropsWithoutRef<typeof Card> & {
@@ -92,9 +93,6 @@ export default function PostCard(
                 )}
               </Link>
             </UserHoverCard>
-            <span className="!text-muted-foreground text-sm mx-1 md:mx-1.5">
-              ·
-            </span>
 
             {
               props.post.publication && (
@@ -105,11 +103,6 @@ export default function PostCard(
                   >
                     <p className="text-sm font-normal leading-none">
                       <span className="text-muted-foreground">
-                        {
-                          props.user == "true" && (
-                            "Published "
-                          )
-                        }
                         {"in "}
                       </span>
                       <span>{props.post.publication?.name || props.post.publication?.username}</span>
@@ -129,7 +122,7 @@ export default function PostCard(
           </div>
           <div className="flex gap-1">
             {props.user == "true" &&
-              props.session?.id === props.post.author?.id && (
+              ((props.session?.id === props.post.author?.id) || (props.session?.id === props.post.publication?.id)) && (
                 <Badge
                   variant={"outline"}
                   className="text-xs font-normal capitalize mr-1"
@@ -138,7 +131,14 @@ export default function PostCard(
                 </Badge>
               )}
             {props.user == "true" && props.post.pinned && (
-              <Icons.pin className="h-4 w-4 inline ml-auto text-muted-foreground align-middle" />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Icons.pin className="h-4 w-4 inline ml-auto text-muted-foreground align-middle" />
+                  </TooltipTrigger>
+                  <TooltipContent>Pinned in {props.post.publication ? (props.post.publication.name || props.post.publication.username) : (props.post.author.name || props.post.author.username)}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
           </div>
         </CardHeader>
