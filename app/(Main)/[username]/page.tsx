@@ -43,6 +43,11 @@ export default async function Page({
               published: true,
             },
           },
+          publicationsPosts: {
+            where: {
+              published: true,
+            },
+          },
         },
       },
       Followers: {
@@ -102,7 +107,7 @@ export default async function Page({
     return notFound();
   }
 
-  const pinnedPost = await db.post.findFirst({
+  let pinnedPost = await db.post.findFirst({
     where: {
       publicationId: user.id,
       pinned: true,
@@ -135,6 +140,44 @@ export default async function Page({
       },
     },
   });
+
+  console.log(pinnedPost);
+
+  if (pinnedPost === null) {
+    pinnedPost = await db.post.findFirst({
+      where: {
+        authorId: user.id,
+        pinned: true,
+      },
+      include: {
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+            savedUsers: true,
+            shares: true,
+          },
+        },
+        savedUsers: true,
+        tags: {
+          take: 1,
+          include: {
+            tag: true,
+          },
+        },
+        author: {
+          include: {
+            _count: { select: { Followers: true, Followings: true } },
+          },
+        },
+        publication: {
+          include: {
+            _count: { select: { Followers: true, Followings: true } },
+          },
+        },
+      },
+    });
+  }
 
   console.log(pinnedPost);
 

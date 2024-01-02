@@ -126,7 +126,7 @@ export default function UserDetails({
             <span className="text-muted-foreground ml-2">Followers</span>
           </div>
           <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-xs">
-            {formatNumberWithSuffix(user._count.posts)}{" "}
+            {formatNumberWithSuffix(user._count.posts + user._count.publicationsPosts)}{" "}
             <span className="text-muted-foreground ml-2">Posts</span>
           </div>
         </div>
@@ -149,8 +149,8 @@ export default function UserDetails({
                 width={20}
                 className="h-5 w-5 inline rounded border align-middle"
               />
-              <span className="text-muted-foreground text-sm font-medium">
-                &quot;The False&quot; Staff
+              <span className="text-sm font-medium">
+                The False <span className="text-muted-foreground">Staff</span>
               </span>
             </div>
           )}
@@ -212,12 +212,14 @@ export default function UserDetails({
               <div className="flex items-center gap-3">
                 {user.publications.map((pub: any) => (
                   <Link href={`/@${pub.publication.username}`} key={pub.id}>
-                    <Avatar>
-                      <AvatarImage src={pub.publication.image} alt={pub.publication.name} />
-                      <AvatarFallback className="text-3xl">
-                        {pub.publication.name ? pub.publication.name?.charAt(0) : pub.publication.username?.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
+                    <UserHoverCard user={pub.publication}>
+                      <Avatar>
+                        <AvatarImage src={pub.publication.image} alt={pub.publication.name} />
+                        <AvatarFallback className="text-3xl">
+                          {pub.publication.name ? pub.publication.name?.charAt(0) : pub.publication.username?.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                    </UserHoverCard>
                   </Link>
                 ))}
               </div>
