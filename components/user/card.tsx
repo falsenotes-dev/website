@@ -36,6 +36,7 @@ export function UserCard({ user, session, className }: { user: any, session: any
                await validate(`/@${user?.username}`)
           }
      }
+
      return (
           <div className="md:flex justify-between w-full my-8 hidden">
                <Link href={`/@${user?.username}`} className="font-bold text-3xl flex items-center gap-1">
@@ -47,7 +48,7 @@ export function UserCard({ user, session, className }: { user: any, session: any
                </Link>
                <div className="flex gap-2">
                     {
-                         session && ((session?.id === user?.id) || (user?.id === session.publications.map((publication: any) => publication.publicationId).join(' '))) && (
+                         session && ((session?.id === user?.id) || (session.publications.map((publication: any) => publication.publicationId === user.id))) && (
                               <PostCreateButton publication={user.id} />
                          )
                     }

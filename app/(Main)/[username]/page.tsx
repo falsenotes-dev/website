@@ -403,7 +403,7 @@ export default async function Page({
               </div>
             </TabsContent>
             <TabsContent value="writers">
-              <div className="flex flex-col gap-10 my-6">
+              <div className="flex flex-col gap-6 my-6">
                 {user?.writers?.map(({ author }) => (
                   <div className="flex gap-4 w-full items-center" key={author.id}>
                     <div className="space-y-3">

@@ -369,7 +369,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
   async function validateUrl(value: string) {
     try {
       const result = await fetch(
-        `/api/posts/validate-url?url=${value}&authorId=${props.user?.id}`,
+        `/api/posts/validate-url?url=${value}&authorId=${props.user?.id}&postId=${form.getValues("id")}`,
         {
           method: "GET",
         }
@@ -522,7 +522,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                     }}
                     defaultValue={field.value}
                     onUpdate={(editor) => {
-                      setFirstImage((editor?.view.root as Document)?.images[0]?.src);
+                      setFirstImage((editor?.view.root as Document)?.images[0]?.src !== props.user?.image ? (editor?.view.root as Document)?.images[0]?.src : "");
                       if (form.getValues('coverImage') == '') {
                         form.setValue('coverImage', firstImage);
                         setCover(firstImage);
@@ -1112,8 +1112,9 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                       size={"icon"}
                                       className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
                                       onClick={() => {
-                                        form.setValue("coverImage", firstImage);
-                                        setCover(firstImage);
+                                        form.setValue("coverImage", firstImage !== props.user?.image ? firstImage : "");
+                                        setCover(firstImage !== props.user?.image ? firstImage : "");
+                                        setFirstImage(firstImage !== props.user?.image ? firstImage : "")
                                       }}
                                     >
                                       <RefreshCcw className="h-4 w-4" />
