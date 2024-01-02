@@ -6,10 +6,6 @@ import { MembersForm } from "@/components/settings/members/members-form"
 import { MembersList } from "@/components/settings/members/members-list"
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
 
-export const metadata = {
-     title: "Blogs - FalseNotes",
-}
-
 export default async function SettingsOrganizationPage() {
      const user = await getSessionUser()
      if (!user) {
