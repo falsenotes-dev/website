@@ -46,6 +46,7 @@ import { leaveBlog } from "@/lib/prisma/blog"
 import { toast } from "sonner"
 import { validate } from "@/lib/revalidate"
 import Link from "next/link"
+import LeaveBlogDialog from "./leave-blog-dialog"
 
 export function BlogsForm({ data }: { data: any }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -59,6 +60,8 @@ export function BlogsForm({ data }: { data: any }) {
   type Blog = PublicationAuthor & {
     publication: User
   }
+
+  const [leaveDialogOpen, setLeaveDialogOpen] = React.useState(false)
 
   const columns: ColumnDef<Blog>[] = [
     {
@@ -107,30 +110,31 @@ export function BlogsForm({ data }: { data: any }) {
         const blog = row.original
 
         return (
-          <div className="flex w-full justify-end">
-            <div className="flex gap-2">
-              {
-                blog.accessLevel === 'admin' && (
-                  <Button variant="ghost" size={'sm'}>
-                    Settings
-                  </Button>
-                )
-              }
-              <Button variant="destructive" size={'sm'}
-                onClick={async () => {
-                  const res = await leaveBlog({ id: blog.publicationId })
-                  if (res?.success) {
-                    toast.success(res.message)
-                    await validate('/settings/blogs')
-                  } else {
-                    toast.error(res?.message)
-                  }
-                }}
-              >
-                Leave
-              </Button>
+          <>
+            <div className="flex w-full justify-end">
+              <div className="flex gap-2">
+                {
+                  blog.accessLevel === 'admin' && (
+                    <Button variant="ghost" size={'sm'}>
+                      Settings
+                    </Button>
+                  )
+                }
+                <Button variant="destructive" size={'sm'}
+                  onClick={() => {
+                    setLeaveDialogOpen(true)
+                  }}
+                >
+                  Leave
+                </Button>
+              </div>
             </div>
-          </div>
+            <LeaveBlogDialog
+              open={leaveDialogOpen}
+              onOpenChange={setLeaveDialogOpen}
+              blog={blog}
+            />
+          </>
         )
       },
     },

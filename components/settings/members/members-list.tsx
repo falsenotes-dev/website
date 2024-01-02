@@ -53,6 +53,7 @@ import {
      SelectTrigger,
      SelectValue,
 } from "@/components/ui/select";
+import RemoveMemberDialog from "./remove-member-dialog"
 
 export function MembersList({ data }: { data: any }) {
      const [sorting, setSorting] = React.useState<SortingState>([])
@@ -66,6 +67,8 @@ export function MembersList({ data }: { data: any }) {
      type Member = PublicationAuthor & {
           author: User
      }
+
+     const [removeMemberDialog, setRemoveMemberDialog] = React.useState<boolean>(false)
 
      const columns: ColumnDef<Member>[] = [
           {
@@ -163,23 +166,24 @@ export function MembersList({ data }: { data: any }) {
                     const blog = row.original
 
                     return (
-                         <div className="flex w-full justify-end">
-                              <div className="flex gap-2">
-                                   <Button variant="destructive" size={'sm'}
-                                        onClick={async () => {
-                                             const res = await removeAuthor({ id: blog.authorId })
-                                             if (res?.success) {
-                                                  toast.success(res.message)
-                                                  await validate('/settings/blogs')
-                                             } else {
-                                                  toast.error(res?.message)
-                                             }
-                                        }}
-                                   >
-                                        Remove
-                                   </Button>
+                         <>
+                              <div className="flex w-full justify-end">
+                                   <div className="flex gap-2">
+                                        <Button variant="destructive" size={'sm'}
+                                             onClick={() => {
+                                                  setRemoveMemberDialog(true)
+                                             }}
+                                        >
+                                             Remove
+                                        </Button>
+                                   </div>
                               </div>
-                         </div>
+                              <RemoveMemberDialog
+                                   open={removeMemberDialog}
+                                   onOpenChange={setRemoveMemberDialog}
+                                   blog={blog}
+                              />
+                         </>
                     )
                },
           },
