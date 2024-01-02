@@ -272,7 +272,7 @@ export function MembersForm({ session }: { session: any }) {
                                    </div>
                               )}
                          />
-                         <FormField
+                         {/* <FormField
                               control={form.control}
                               name="accessLevel"
                               render={({ field }) => (
@@ -291,7 +291,7 @@ export function MembersForm({ session }: { session: any }) {
                                         <FormMessage />
                                    </FormItem>
                               )}
-                         />
+                         /> */}
                          <Button type="submit" className="h-[50px]" size={'lg'}>Add</Button>
                     </form>
                </Form >
