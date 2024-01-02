@@ -85,6 +85,9 @@ export default async function PostView({
   });
 
   //if post has not publicationId or publicationId is equal to authorId
+  if (post?.publicationId && decodedUsername.substring(1) === post?.author?.username) {
+    return notFound();
+  }
 
   if (post?.publicationId === null) {
     post = await await db.post.findFirst({

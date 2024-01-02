@@ -45,6 +45,11 @@ async function getPostData(username: string, url: string) {
     },
   });
 
+  // if post publicationId is not null and username is equal to author username then return null
+  if (post?.publicationId && decodedUsername.substring(1) === post?.author?.username) {
+    return null;
+  }
+
   return post;
 }
 
@@ -145,9 +150,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PostLayout({ children, params }: Props) {
   const decodedUsername = decodeURIComponent(params.username);
   const postData = await getPostData(decodedUsername, params.url);
-  if (!postData) {
-    return notFound();
-  }
+  // if (!postData) {
+  //   return notFound();
+  // }
+
+  if (!postData)
+    return <div className="md:container mx-auto px-4 pt-5">{children}</div>;
   // fetch publisher and author posts
   const [author, publication] = await Promise.all([
     db.user.findUnique({
@@ -228,46 +236,6 @@ export default async function PostLayout({ children, params }: Props) {
     }) : Promise.resolve(null),
   ]);
 
-  const post = await db.post.findFirst({
-    where: {
-      url: params.url,
-      authorId: author?.id,
-    },
-    include: {
-      comments: {
-        include: {
-          author: {
-            include: {
-              Followers: true,
-              Followings: true,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-      likes: true,
-      tags: {
-        include: {
-          tag: true,
-        },
-      },
-      readedUsers: true,
-      author: {
-        include: {
-          Followers: true,
-          Followings: true,
-        },
-      },
-      publication: true,
-      savedUsers: true,
-      _count: {
-        select: { savedUsers: true, likes: true, comments: true, shares: true },
-      },
-    },
-  });
-
   const authorPosts = [...author?.posts || [], ...author?.publicationsPosts || []];
 
   authorPosts.sort((a: any, b: any) => {
@@ -276,22 +244,19 @@ export default async function PostLayout({ children, params }: Props) {
 
   authorPosts.length = 4;
 
-  if (!post)
-    return <div className="md:container mx-auto px-4 pt-5">{children}</div>;
-
   const relatedPosts = await db.post.findMany({
     where: {
       tags: {
         some: {
           tag: {
             name: {
-              in: post?.tags.map((tag: any) => tag.tag.name),
+              in: postData?.tags.map((tag: any) => tag.tag.name),
             },
           },
         },
       },
       url: {
-        not: post?.url,
+        not: postData?.url,
       },
       published: true,
     },
@@ -318,11 +283,11 @@ export default async function PostLayout({ children, params }: Props) {
   const posts =
     relatedPosts.length > 0
       ? relatedPosts
-      : forYou.filter((p: any) => p.id !== post.id);
+      : forYou.filter((p: any) => p.id !== postData.id);
   posts.length % 2 !== 0 && posts.pop();
 
   const list = await getLists({ id: sessionUser?.id });
-  const { lists: recommenedLists } = await getListByTags({ tags: post?.tags.map((tag: any) => tag.tagId), limit: 6 });
+  const { lists: recommenedLists } = await getListByTags({ tags: postData?.tags.map((tag: any) => tag.tagId), limit: 6 });
   return (
     <>
       <div
@@ -334,7 +299,7 @@ export default async function PostLayout({ children, params }: Props) {
         <div className="flex-[1_0_auto] mt-4">
           <div className="md:container mx-auto px-4 pt-5">{children}</div>
 
-          {post && (
+          {postData && (
             <div className="bg-popover flex flex-col gap-16 pt-16 mt-4 border-t">
               <div className="md:container mx-auto px-4 w-full mb-16">
                 <MoreFromAuthor
@@ -349,7 +314,6 @@ export default async function PostLayout({ children, params }: Props) {
                     <Separator className="mt-14 mb-8" />
                     <RelatedPosts
                       posts={posts}
-                      post={post}
                       session={sessionUser}
                       list={list}
                       lists={recommenedLists}
