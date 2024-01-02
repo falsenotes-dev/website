@@ -20,6 +20,14 @@ import { useRouter } from "next/navigation";
 import { PostCreateButton } from "./post-create-button";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
+function numberFormat(number: number) {
+  if (number > 9) {
+    return "9+";
+  } else {
+    return number;
+  }
+}
+
 function Navbar(notifications: any) {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -50,7 +58,7 @@ function Navbar(notifications: any) {
                 <PostCreateButton key={"New Post"} variant="ghost" size={"icon"} className="h-10 w-10" />
                 <Button variant={"ghost"} size={"icon"} className="h-10 w-10" onClick={() => router.replace('/notifications')}>
                   <Icons.notification className="w-5 h-5" />
-                  {notifications.notifications && notifications.notifications.length > 0 && (<Badge className="ml-2 md:ml-6 font-normal px-1 py-0 absolute mb-3 border-[3px] border-solid border-secondary" >{notifications.notifications.length}</Badge>)}
+                  {notifications.notifications && notifications.notifications.length > 0 && (<Badge className="ml-2 md:ml-6 font-normal px-1.5 py-0 absolute mb-3 border-2 h-[22px] border-solid !border-background text-[10px]" >{numberFormat(notifications.notifications.length)}</Badge>)}
                 </Button>
                 <UserNav />
               </>
