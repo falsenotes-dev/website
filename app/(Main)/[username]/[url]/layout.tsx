@@ -20,9 +20,18 @@ async function getPostData(username: string, url: string) {
   const post = await db.post.findFirst({
     where: {
       url: url,
-      author: {
-        username: decodedUsername.substring(1),
-      },
+      OR: [
+        {
+          publication: {
+            username: decodedUsername.substring(1),
+          },
+        },
+        {
+          author: {
+            username: decodedUsername.substring(1),
+          },
+        }
+      ],
       published: true,
     },
     include: {
@@ -31,9 +40,11 @@ async function getPostData(username: string, url: string) {
           tag: true,
         },
       },
+      publication: true,
       author: true,
     },
   });
+
   return post;
 }
 
@@ -133,47 +144,88 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PostLayout({ children, params }: Props) {
   const decodedUsername = decodeURIComponent(params.username);
-  const author = await db.user.findFirst({
-    where: {
-      username: decodedUsername.substring(1),
-    },
-    include: {
-      posts: {
-        where: {
-          url: {
-            not: params.url,
-          },
-          published: true,
-        },
-        include: {
-          _count: {
-            select: {
-              comments: true,
-              savedUsers: true,
-              likes: true,
-              shares: true,
-            },
-          },
-          author: {
-            include: {
-              Followers: true,
-              Followings: true,
-            },
-          },
-          savedUsers: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 4,
+  const postData = await getPostData(decodedUsername, params.url);
+  if (!postData) {
+    return notFound();
+  }
+  // fetch publisher and author posts
+  const [author, publication] = await Promise.all([
+    db.user.findUnique({
+      where: {
+        id: postData.authorId,
       },
-      _count: { select: { posts: true, Followers: true, Followings: true } },
-      Followers: true,
-      Followings: true,
-    },
-  });
+      include: {
+        _count: { select: { posts: true, Followers: true, Followings: true } },
+        posts: {
+          where: {
+            url: {
+              not: params.url,
+            },
+            published: true,
+          },
+          include: {
+            _count: {
+              select: {
+                comments: true,
+                savedUsers: true,
+                likes: true,
+                shares: true,
+              },
+            },
+            author: {
+              include: {
+                _count: { select: { posts: true, Followers: true, Followings: true } },
+              },
+            },
+            savedUsers: true,
+            publication: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 4,
+        },
+      },
+    }),
+    postData.publicationId ? db.user.findUnique({
+      where: {
+        id: postData.publicationId,
+      },
+      include: {
+        _count: { select: { posts: true, Followers: true, Followings: true } },
+        posts: {
+          where: {
+            url: {
+              not: params.url,
+            },
+            published: true,
+          },
+          include: {
+            _count: {
+              select: {
+                comments: true,
+                savedUsers: true,
+                likes: true,
+                shares: true,
+              },
+            },
+            author: {
+              include: {
+                _count: { select: { posts: true, Followers: true, Followings: true } },
+              },
+            },
+            savedUsers: true,
+            publication: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 4,
+        },
+      },
+    }) : Promise.resolve(null),
+  ]);
 
-  const authorPosts = author?.posts;
   const post = await db.post.findFirst({
     where: {
       url: params.url,
@@ -206,12 +258,21 @@ export default async function PostLayout({ children, params }: Props) {
           Followings: true,
         },
       },
+      publication: true,
       savedUsers: true,
       _count: {
         select: { savedUsers: true, likes: true, comments: true, shares: true },
       },
     },
   });
+
+  const authorPosts = [...author?.posts || [], ...publication?.posts || []];
+
+  authorPosts.sort((a: any, b: any) => {
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
+
+  authorPosts.length = 4;
 
   if (!post)
     return <div className="md:container mx-auto px-4 pt-5">{children}</div>;
@@ -277,6 +338,7 @@ export default async function PostLayout({ children, params }: Props) {
                 <MoreFromAuthor
                   post={authorPosts}
                   author={author}
+                  publication={publication}
                   sessionUser={sessionUser}
                   list={list}
                 />

@@ -30,10 +30,17 @@ export default async function PostView({
     },
   });
   if (!author) return notFound();
-  const post = await db.post.findFirst({
+  let post = await db.post.findFirst({
     where: {
       url: params.url,
-      authorId: author?.id,
+      OR: [
+        {
+          authorId: author?.id,
+        },
+        {
+          publicationId: author?.id,
+        },
+      ],
     },
     include: {
       comments: {
@@ -56,8 +63,9 @@ export default async function PostView({
       readedUsers: true,
       author: {
         include: {
-          Followers: true,
-          Followings: true,
+          _count: {
+            select: { posts: true, Followers: true, Followings: true },
+          },
         },
       },
       tags: {
@@ -65,10 +73,65 @@ export default async function PostView({
           tag: true,
         },
       },
+      publication: {
+        include: {
+          Followers: true,
+          Followings: true,
+        },
+      },
       savedUsers: true,
       _count: { select: { savedUsers: true, likes: true, comments: true } },
     },
   });
+
+  //if post has not publicationId or publicationId is equal to authorId
+
+  if (post?.publicationId === null) {
+    post = await await db.post.findFirst({
+      where: {
+        url: params.url,
+        authorId: author?.id,
+      },
+      include: {
+        comments: {
+          where: { parentId: null },
+          include: {
+            replies: {
+              include: {
+                _count: { select: { replies: true, likes: true } },
+              },
+            },
+            _count: { select: { replies: true, likes: true } },
+            likes: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        likes: true,
+
+        readedUsers: true,
+        author: {
+          include: {
+            _count: { select: { posts: true, Followers: true, Followings: true } },
+          },
+        },
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+        publication: {
+          include: {
+            Followers: true,
+            Followings: true,
+          },
+        },
+        savedUsers: true,
+        _count: { select: { savedUsers: true, likes: true, comments: true } },
+      },
+    });
+  }
 
   if (!post) return notFound();
 
@@ -125,7 +188,7 @@ export default async function PostView({
   return (
     <Post
       post={post}
-      author={author}
+      author={post.author}
       sessionUser={sessionUser}
       tags={post.tags}
       comments={Boolean(commentsOpen)}

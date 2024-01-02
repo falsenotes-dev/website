@@ -97,7 +97,9 @@ export async function POST(req: Request) {
         content: json.content,
         authorId: session.id,
         url: json.url,
-        publicationId: json.publicationId,
+        ...(session.id !== json.publicationId && {
+          publicationId: json.publicationId,
+        }),
       },
       select: {
         id: true,

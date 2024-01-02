@@ -1,14 +1,11 @@
 "use server";
-import { getSessionUser } from "@/components/get-session-user";
 import postgres from "../db";
-import { Prisma } from "@prisma/client";
 
 const baseQuery = {
   include: {
     author: {
       include: {
-        Followers: true,
-        Followings: true,
+        _count: { select: { posts: true, Followers: true, Followings: true } },
       },
     },
     savedUsers: true,
@@ -29,8 +26,7 @@ const baseQuery = {
     },
     publication: {
       include: {
-        Followers: true,
-        Followings: true,
+        _count: { select: { posts: true, Followers: true, Followings: true } },
       },
     },
   },

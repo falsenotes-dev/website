@@ -152,7 +152,7 @@ export default function PostCard(
               href={
                 props.post.published === false
                   ? `/editor/${props.post.id}`
-                  : `/@${props.post.author?.username}/${props.post.url}`
+                  : `/@${props.post.publicationId === null ? props.post.author.username : props.post.publication.username}/${props.post.url}`
               }
             >
               <div>
@@ -247,7 +247,7 @@ export default function PostCard(
                 href={
                   props.post.published === false
                     ? `/editor/${props.post.id}`
-                    : `/@${props.post.author?.username}/${props.post.url}`
+                    : `/@${props.post.publicationId === null ? props.post.author.username : props.post.publication.username}/${props.post.url}`
                 }
               >
                 <div

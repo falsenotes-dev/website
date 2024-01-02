@@ -225,8 +225,7 @@ const baseQuery = {
         verified: true,
         falsemember: true,
         createdAt: true,
-        Followers: true,
-        Followings: true,
+        _count: { select: { Followers: true, Followings: true } },
       },
     },
     likes: true,
@@ -244,6 +243,11 @@ const baseQuery = {
       take: 1,
       select: {
         tag: true,
+      },
+    },
+    publication: {
+      include: {
+        _count: { select: { posts: true, Followers: true, Followings: true } },
       },
     },
   },

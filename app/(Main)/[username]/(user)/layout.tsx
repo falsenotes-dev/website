@@ -48,6 +48,19 @@ export default async function Layout({ children, params }: Props) {
           },
         },
       },
+      publications: {
+        where: {
+          visibility: "public",
+        },
+        select: {
+          publication: {
+            include: {
+              _count: { select: { Followers: true, Followings: true } },
+            },
+          },
+        },
+        take: 5,
+      }
     },
     where: {
       username: decodedUsername.substring(1),

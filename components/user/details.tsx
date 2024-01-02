@@ -77,144 +77,6 @@ export default function UserDetails({
       await validate(`/@${user?.username}`);
     }
   }
-  console.log(user.publications)
-  const pub = [
-    {
-      "publication": {
-        "id": "clpg1bler0005ue2z3qgsygqc",
-        "email": "falsetechsupp@gmail.com",
-        "username": "falsetech",
-        "name": "FalseTech",
-        "bio": "Coming Soon, Stay Tuned",
-        "password": null,
-        "emailVerified": null,
-        "image": "https://avatars.githubusercontent.com/u/144859178?v=4",
-        "githubprofile": null,
-        "location": null,
-        "verified": true,
-        "falsemember": false,
-        "createdAt": "2023-11-26T22:11:23.812Z",
-        "updatedAt": "2024-01-01T16:34:56.810Z",
-        "githubId": "144859178",
-        "googleId": "105166380993041310653",
-        "twitterId": null,
-        "twitterProfile": null,
-        "isPublication": false,
-        "_count": {
-          "Followers": 4,
-          "Followings": 4
-        }
-      }
-    },
-    {
-      "publication": {
-        "id": "clpg1bler0005ue2z3qgsygqc",
-        "email": "falsetechsupp@gmail.com",
-        "username": "falsetech",
-        "name": "FalseTech",
-        "bio": "Coming Soon, Stay Tuned",
-        "password": null,
-        "emailVerified": null,
-        "image": "https://avatars.githubusercontent.com/u/144859178?v=4",
-        "githubprofile": null,
-        "location": null,
-        "verified": true,
-        "falsemember": false,
-        "createdAt": "2023-11-26T22:11:23.812Z",
-        "updatedAt": "2024-01-01T16:34:56.810Z",
-        "githubId": "144859178",
-        "googleId": "105166380993041310653",
-        "twitterId": null,
-        "twitterProfile": null,
-        "isPublication": false,
-        "_count": {
-          "Followers": 4,
-          "Followings": 4
-        }
-      }
-    },
-    {
-      "publication": {
-        "id": "clpg1bler0005ue2z3qgsygqc",
-        "email": "falsetechsupp@gmail.com",
-        "username": "falsetech",
-        "name": "FalseTech",
-        "bio": "Coming Soon, Stay Tuned",
-        "password": null,
-        "emailVerified": null,
-        "image": "https://avatars.githubusercontent.com/u/144859178?v=4",
-        "githubprofile": null,
-        "location": null,
-        "verified": true,
-        "falsemember": false,
-        "createdAt": "2023-11-26T22:11:23.812Z",
-        "updatedAt": "2024-01-01T16:34:56.810Z",
-        "githubId": "144859178",
-        "googleId": "105166380993041310653",
-        "twitterId": null,
-        "twitterProfile": null,
-        "isPublication": false,
-        "_count": {
-          "Followers": 4,
-          "Followings": 4
-        }
-      }
-    },
-    {
-      "publication": {
-        "id": "clpg1bler0005ue2z3qgsygqc",
-        "email": "falsetechsupp@gmail.com",
-        "username": "falsetech",
-        "name": "FalseTech",
-        "bio": "Coming Soon, Stay Tuned",
-        "password": null,
-        "emailVerified": null,
-        "image": "https://avatars.githubusercontent.com/u/144859178?v=4",
-        "githubprofile": null,
-        "location": null,
-        "verified": true,
-        "falsemember": false,
-        "createdAt": "2023-11-26T22:11:23.812Z",
-        "updatedAt": "2024-01-01T16:34:56.810Z",
-        "githubId": "144859178",
-        "googleId": "105166380993041310653",
-        "twitterId": null,
-        "twitterProfile": null,
-        "isPublication": false,
-        "_count": {
-          "Followers": 4,
-          "Followings": 4
-        }
-      }
-    },
-    {
-      "publication": {
-        "id": "clpg1bler0005ue2z3qgsygqc",
-        "email": "falsetechsupp@gmail.com",
-        "username": "falsetech",
-        "name": "FalseTech",
-        "bio": "Coming Soon, Stay Tuned",
-        "password": null,
-        "emailVerified": null,
-        "image": "https://avatars.githubusercontent.com/u/144859178?v=4",
-        "githubprofile": null,
-        "location": null,
-        "verified": true,
-        "falsemember": false,
-        "createdAt": "2023-11-26T22:11:23.812Z",
-        "updatedAt": "2024-01-01T16:34:56.810Z",
-        "githubId": "144859178",
-        "googleId": "105166380993041310653",
-        "twitterId": null,
-        "twitterProfile": null,
-        "isPublication": false,
-        "_count": {
-          "Followers": 4,
-          "Followings": 4
-        }
-      }
-    },
-  ]
 
   return (
     <>
@@ -339,21 +201,29 @@ export default function UserDetails({
           </ShareList>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <p className="w-full text-muted-foreground">Blogs</p>
-          <div className="flex gap-3">
-            {user?.publications.map(({ publication }: any) => (
-              <Link href={`/@${publication?.username}`} key={publication.id} className="flex items-center gap-2">
-                <Avatar>
-                  <AvatarImage src={publication?.image} alt={publication?.name} />
-                  <AvatarFallback className="text-3xl">
-                    {publication?.name ? publication?.name?.charAt(0) : publication?.username?.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-              </Link>
-            ))}
-          </div>
-        </div>
+        {
+          user.publications.length > 0 && (
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground text-sm">
+                  Blogs
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                {user.publications.map((pub: any) => (
+                  <Link href={`/@${pub.publication.username}`} key={pub.id}>
+                    <Avatar>
+                      <AvatarImage src={pub.publication.image} alt={pub.publication.name} />
+                      <AvatarFallback className="text-3xl">
+                        {pub.publication.name ? pub.publication.name?.charAt(0) : pub.publication.username?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
     </>
   );
