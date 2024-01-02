@@ -1010,7 +1010,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   onChange={handleUrlChange}
                                 />
                                 {isValidUrl !== null && !isValidUrl && (
-                                  <Icons.xCircle className="text-muted-foreground h-5 w-5" />
+                                  <Icons.xCircle className="text-destructive h-5 w-5" />
                                 )}
                               </div>
                               {(!form.getValues("url") ||
