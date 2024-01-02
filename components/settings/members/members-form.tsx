@@ -101,6 +101,7 @@ export function MembersForm({ session }: { session: any }) {
           const res = await addAuthors({ data });
           if (res?.success) {
                toast.success("Members added successfully.");
+               remove();
                await validate(`/settings/members`);
           } else {
                toast.error("Something went wrong.");
