@@ -11,7 +11,7 @@ export default function NotFound() {
       <h2 className="font-bold text-5xl">404</h2>
       <p className="text-muted-foreground font-light text-center w-full">
         <Balancer>
-          This post cound not be found or has been deleted. If you think this is a mistake, please contact us.
+          This post cound not be found or has been deleted. Please try again.
         </Balancer>
       </p>
       <Button size={"lg"} asChild>
