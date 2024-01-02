@@ -209,9 +209,9 @@ export default function UserDetails({
                   Blogs
                 </span>
               </div>
-              <div className="flex items-center gap-3">
-                {user.publications.map((pub: any) => (
-                  <Link href={`/@${pub.publication.username}`} key={pub.id}>
+              <div className="flex items-center">
+                {user.publications.map((pub: any, index: number) => (
+                  <Link href={`/@${pub.publication.username}`} className={`z-[${index}] border-2 rounded-full !border-background ${index > 0 && '-ml-4'}`} key={pub.id}>
                     <UserHoverCard user={pub.publication}>
                       <Avatar>
                         <AvatarImage src={pub.publication.image} alt={pub.publication.name} />
