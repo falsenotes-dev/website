@@ -47,7 +47,7 @@ export default async function PopularPosts() {
                 <li key={item.id} className="text-sm space-y-2.5">
 
                   <div className="flex items-center">
-                    <Link href={`/@${item.author.username}`} className="text-xs flex items-center mb-2 font-medium">
+                    <Link href={`/@${item.author.username}`} className="text-xs flex items-center font-medium">
                       <Avatar className="h-5 w-5 mr-1 md:mr-1.5 border">
                         <AvatarImage src={item.author?.image} alt={item.author?.username} />
                         <AvatarFallback>{item.author?.name?.charAt(0) || item.author?.username?.charAt(0)}</AvatarFallback>
@@ -57,7 +57,7 @@ export default async function PopularPosts() {
                       )}
                     </Link>
                     {item.publication && (
-                      <Link href={`/@${item.publication.username}`} className="text-xs flex items-center mb-2 font-medium">
+                      <Link href={`/@${item.publication.username}`} className="text-xs flex items-center font-medium">
                         <p>
                           <span className="text-xs text-muted-foreground">in</span>
                           <span>{' ' + item.publication.name || item.publication.username}</span>

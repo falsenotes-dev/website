@@ -76,7 +76,7 @@ export default async function HomeLayout({
                                                                                 <li key={item.id} className="text-sm space-y-2.5">
 
                                                                                      <div className="flex items-center">
-                                                                                          <Link href={`/@${item.post.author.username}`} className="text-xs flex items-center mb-2 font-medium">
+                                                                                          <Link href={`/@${item.post.author.username}`} className="text-xs flex items-center font-medium">
                                                                                                <Avatar className="h-5 w-5 mr-1 md:mr-1.5 border">
                                                                                                     <AvatarImage src={item.post.author?.image} alt={item.post.author?.username} />
                                                                                                     <AvatarFallback>{item.post.author?.name?.charAt(0) || item.post.author?.username?.charAt(0)}</AvatarFallback>
@@ -86,7 +86,7 @@ export default async function HomeLayout({
                                                                                                )}
                                                                                           </Link>
                                                                                           {item.post.publication && (
-                                                                                               <Link href={`/@${item.post.publication.username}`} className="text-xs flex items-center mb-2 font-medium">
+                                                                                               <Link href={`/@${item.post.publication.username}`} className="text-xs flex items-center font-medium">
                                                                                                     <p>
                                                                                                          <span className="text-xs text-muted-foreground">in</span>
                                                                                                          <span>{' ' + item.post.publication.name || item.post.publication.username}</span>
