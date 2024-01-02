@@ -184,7 +184,7 @@ export default async function PostLayout({ children, params }: Props) {
           orderBy: {
             createdAt: "desc",
           },
-          take: 4,
+          take: 5,
         },
         publicationsPosts: {
           where: {
@@ -214,7 +214,7 @@ export default async function PostLayout({ children, params }: Props) {
           orderBy: {
             createdAt: "desc",
           },
-          take: 4,
+          take: 5,
         },
       },
     }),
@@ -224,65 +224,6 @@ export default async function PostLayout({ children, params }: Props) {
       },
       include: {
         _count: { select: { posts: true, Followers: true, Followings: true } },
-        posts: {
-          where: {
-            url: {
-              not: params.url,
-            },
-            published: true,
-          },
-          include: {
-            _count: {
-              select: {
-                comments: true,
-                savedUsers: true,
-                likes: true,
-                shares: true,
-              },
-            },
-            author: {
-              include: {
-                _count: { select: { posts: true, Followers: true, Followings: true } },
-              },
-            },
-            savedUsers: true,
-            publication: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-          take: 4,
-        },
-        publicationsPosts: {
-          where: {
-            url: {
-              not: params.url,
-            },
-            published: true,
-          },
-          include: {
-            _count: {
-              select: {
-                comments: true,
-                savedUsers: true,
-                likes: true,
-                shares: true,
-              },
-            },
-            author: {
-              include: {
-                _count: { select: { posts: true, Followers: true, Followings: true } },
-              },
-            },
-            savedUsers: true,
-            publication: true,
-          },
-
-          orderBy: {
-            createdAt: "desc",
-          },
-          take: 4,
-        },
       },
     }) : Promise.resolve(null),
   ]);
@@ -327,7 +268,7 @@ export default async function PostLayout({ children, params }: Props) {
     },
   });
 
-  const authorPosts = [...author?.posts || [], ...publication?.posts || [], ...publication?.publicationsPosts || [], ...author?.publicationsPosts || []];
+  const authorPosts = [...author?.posts || [], ...author?.publicationsPosts || []];
 
   authorPosts.sort((a: any, b: any) => {
     return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
