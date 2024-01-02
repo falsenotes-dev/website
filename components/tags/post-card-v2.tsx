@@ -68,8 +68,8 @@ export default function PostCard(
       )}
     >
       <CardContent className="md:p-6 p-4">
-        <CardHeader className={cn("pb-4 pt-0 px-0 gap-y-4 flex-row justify-between items-center")}>
-          <div className="flex items-center space-x-1">
+        <CardHeader className={cn("pb-4 pt-0 px-0 gap-2 flex-row justify-between items-center flex-wrap")}>
+          <div className="flex items-center gap-1 flex-wrap">
             <UserHoverCard user={props.post.author}>
               <Link
                 href={`/@${props.post.author?.username}`}
@@ -108,19 +108,19 @@ export default function PostCard(
                       <span>{props.post.publication?.name || props.post.publication?.username}</span>
                     </p>
                   </Link>
-                  <span className="!text-muted-foreground text-sm mx-1 md:mx-1.5">
-                    ·
-                  </span>
                 </>
               )
             }
+            <span className="!text-muted-foreground text-sm mx-0.5 md:mx-1.5">
+              ·
+            </span>
             <span className="!text-muted-foreground text-sm">
               {props.post.published
                 ? dateFormat(props.post.publishedAt)
                 : dateFormat(props.post.createdAt)}
             </span>
           </div>
-          <div className="flex gap-1">
+          <div className="flex gap-0.5 md:gap-1">
             {props.user == "true" &&
               ((props.session?.id === props.post.author?.id) || (props.session?.id === props.post.publication?.id)) && (
                 <Badge
