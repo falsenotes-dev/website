@@ -37,6 +37,12 @@ export function UserCard({ user, session, className }: { user: any, session: any
           }
      }
 
+     const [isWriter, setIsWriter] = useState<boolean | null>(session?.publications.find((publication: any) => publication.publicationId === user.id));
+
+     useEffect(() => {
+          setIsWriter(session?.publications.find((publication: any) => publication.publicationId === user.id));
+     }, [session?.publications, user.id]);
+
      return (
           <div className="md:flex justify-between w-full my-8 hidden">
                <Link href={`/@${user?.username}`} className="font-bold text-3xl flex items-center gap-1">
@@ -48,7 +54,7 @@ export function UserCard({ user, session, className }: { user: any, session: any
                </Link>
                <div className="flex gap-2">
                     {
-                         session && ((session?.id === user?.id) || (session.publications.map((publication: any) => publication.publicationId === user.id))) && (
+                         session && ((session?.id === user?.id) || isWriter) && (
                               <PostCreateButton publication={user.id} />
                          )
                     }
