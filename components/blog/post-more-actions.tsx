@@ -60,7 +60,7 @@ export default function PostMoreActions({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {session?.id === post?.authorId && (
+          {(session?.id === post?.authorId || session?.id === post?.publicationId) && (
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link href={`/editor/${post?.id}`}>
