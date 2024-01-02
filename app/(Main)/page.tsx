@@ -1,3 +1,4 @@
+'use server';
 import { redirect } from 'next/navigation';
 import { fetchFollowingTags } from '@/components/get-following-tags';
 import { getSessionUser } from '@/components/get-session-user';

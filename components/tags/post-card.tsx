@@ -76,7 +76,7 @@ export default function TagPostCard({
       <CardContent className="md:p-6 p-4 h-full">
         <div className="flex flex-col grid-cols-12 gap-y-8 items-start h-full">
           <div className="w-full">
-            <Link href={`/@${props.post.publicationId === null ? props.post.author.username : props.post.publication.username}/${props.post.url}`}>
+            <Link href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`}>
               <div className="w-full h-auto bg-muted rounded-md !relative !pb-0 aspect-[2/1] overflow-hidden">
                 {props.post.cover ? (
                   <>
@@ -141,7 +141,7 @@ export default function TagPostCard({
             <div className="flex">
               <div className="flex-initial w-full">
                 <Link
-                  href={`/@${props.post.publicationId === null ? props.post.author.username : props.post.publication.username}/${props.post.url}`}
+                  href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`}
                 >
                   <div>
                     <div className="pb-2">
@@ -209,7 +209,7 @@ export default function TagPostCard({
                   </div>
                   <div className="flex items-center space-x-1 text-muted-foreground">
                     <Link
-                      href={`/@${props.post.publicationId === null ? props.post.author.username : props.post.publication.username}/${props.post.url}?commentsOpen=true`}
+                      href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}?commentsOpen=true`}
                     >
                       <Button
                         variant="ghost"

@@ -175,6 +175,7 @@ export const getBookmarks = async ({
             include: {
               author: true,
               savedUsers: true,
+              publication: true,
               _count: {
                 select: {
                   likes: true,

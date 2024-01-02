@@ -67,47 +67,35 @@ export default function PostCard(
       )}
     >
       <CardContent className="md:p-6 p-4">
-        <CardHeader className={cn("pb-4 pt-0 px-0 gap-y-4 flex-row")}>
+        <CardHeader className={cn("pb-4 pt-0 px-0 gap-y-4 flex-row justify-between items-center")}>
           <div className="flex items-center space-x-1">
-            {props.user != "true" && (
-              <>
-                <UserHoverCard user={props.post.author}>
-                  <Link
-                    href={`/@${props.post.author?.username}`}
-                    className="flex items-center space-x-0.5"
-                  >
-                    <Avatar className="h-5 w-5 mr-0.5 border">
-                      <AvatarImage
-                        src={props.post.author?.image}
-                        alt={props.post.author?.username}
-                      />
-                      <AvatarFallback>
-                        {props.post.author?.name?.charAt(0) ||
-                          props.post.author?.username?.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <p className="text-sm font-normal leading-none">
-                      {props.post.author?.name || props.post.author?.username}
-                    </p>
-                    {props.post.author?.verified && (
-                      <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
-                    )}
-                  </Link>
-                </UserHoverCard>
-                <span className="!text-muted-foreground text-sm mx-1 md:mx-1.5">
-                  ·
-                </span>
-              </>
-            )}
-            {props.user == "true" &&
-              props.session?.id === props.post.author?.id && (
-                <Badge
-                  variant={"outline"}
-                  className="text-xs font-normal capitalize mr-1"
-                >
-                  {props.post.published === false ? "Draft" : "Published"}
-                </Badge>
-              )}
+            <UserHoverCard user={props.post.author}>
+              <Link
+                href={`/@${props.post.author?.username}`}
+                className="flex items-center space-x-0.5"
+              >
+                <Avatar className="h-5 w-5 mr-0.5 border">
+                  <AvatarImage
+                    src={props.post.author?.image}
+                    alt={props.post.author?.username}
+                  />
+                  <AvatarFallback>
+                    {props.post.author?.name?.charAt(0) ||
+                      props.post.author?.username?.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <p className="text-sm font-normal leading-none">
+                  {props.post.author?.name || props.post.author?.username}
+                </p>
+                {props.post.author?.verified && (
+                  <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
+                )}
+              </Link>
+            </UserHoverCard>
+            <span className="!text-muted-foreground text-sm mx-1 md:mx-1.5">
+              ·
+            </span>
+
             {
               props.post.publication && (
                 <>
@@ -126,9 +114,6 @@ export default function PostCard(
                       </span>
                       <span>{props.post.publication?.name || props.post.publication?.username}</span>
                     </p>
-                    {props.post.publication?.verified && (
-                      <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
-                    )}
                   </Link>
                   <span className="!text-muted-foreground text-sm mx-1 md:mx-1.5">
                     ·
@@ -142,9 +127,20 @@ export default function PostCard(
                 : dateFormat(props.post.createdAt)}
             </span>
           </div>
-          {props.user == "true" && props.post.pinned && (
-            <Icons.pin className="h-4 w-4 inline ml-auto text-muted-foreground align-middle" />
-          )}
+          <div className="flex gap-1">
+            {props.user == "true" &&
+              props.session?.id === props.post.author?.id && (
+                <Badge
+                  variant={"outline"}
+                  className="text-xs font-normal capitalize mr-1"
+                >
+                  {props.post.published === false ? "Draft" : "Published"}
+                </Badge>
+              )}
+            {props.user == "true" && props.post.pinned && (
+              <Icons.pin className="h-4 w-4 inline ml-auto text-muted-foreground align-middle" />
+            )}
+          </div>
         </CardHeader>
         <div className="flex">
           <div className="flex-initial w-full">
@@ -152,7 +148,7 @@ export default function PostCard(
               href={
                 props.post.published === false
                   ? `/editor/${props.post.id}`
-                  : `/@${props.post.publicationId === null ? props.post.author.username : props.post.publication.username}/${props.post.url}`
+                  : `/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`
               }
             >
               <div>
@@ -247,7 +243,7 @@ export default function PostCard(
                 href={
                   props.post.published === false
                     ? `/editor/${props.post.id}`
-                    : `/@${props.post.publicationId === null ? props.post.author.username : props.post.publication.username}/${props.post.url}`
+                    : `/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`
                 }
               >
                 <div

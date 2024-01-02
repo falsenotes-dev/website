@@ -1,22 +1,17 @@
-import { getSession } from "next-auth/react";
 import { getSessionUser } from "@/components/get-session-user";
-import { notFound, redirect, useRouter } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import db from "@/lib/db";
 import { UserDetails, UserPosts } from "@/components/user";
-import UserTab from "@/components/user/tabs";
-import { getPost } from "@/lib/prisma/posts";
-import { getBookmarks, getHistory, getLists } from "@/lib/prisma/session";
+import { getUserPost } from "@/lib/prisma/posts";
+import { getLists } from "@/lib/prisma/session";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
-import UserBookmarks from "@/components/user/bookmark";
 import { SiteFooter } from "@/components/footer";
 import { UserAbout } from "@/components/user/about";
 import { Icons } from "@/components/icon";
 import Image from "next/image";
 import { UserCard } from "@/components/user/card";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import UserHistory from "@/components/user/history";
 import ListCard from "@/components/list-card";
 import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,37 +35,6 @@ export default async function Page({
   const sessionUserName = await getSessionUser();
   const user = await db.user.findFirst({
     include: {
-      posts: {
-        orderBy: {
-          createdAt: "desc",
-        },
-        include: {
-          _count: {
-            select: {
-              likes: true,
-              savedUsers: true,
-            },
-          },
-          savedUsers: true,
-          tags: {
-            take: 1,
-            include: {
-              tag: true,
-            },
-          },
-        },
-        // if user is a session user, show all posts
-        where: {
-          OR: [
-            {
-              published: true,
-            },
-            {
-              authorId: sessionUserName?.id,
-            },
-          ],
-        },
-      },
       urls: true,
       _count: {
         select: {
@@ -140,7 +104,7 @@ export default async function Page({
 
   const pinnedPost = await db.post.findFirst({
     where: {
-      authorId: user?.id,
+      publicationId: user.id,
       pinned: true,
     },
     include: {
@@ -161,12 +125,18 @@ export default async function Page({
       },
       author: {
         include: {
-          Followers: true,
-          Followings: true,
+          _count: { select: { Followers: true, Followings: true } },
+        },
+      },
+      publication: {
+        include: {
+          _count: { select: { Followers: true, Followings: true } },
         },
       },
     },
   });
+
+  console.log(pinnedPost);
 
   const lists = await db.list.findMany({
     where:
@@ -206,10 +176,12 @@ export default async function Page({
 
   const whereQuery =
     sessionUserName?.id === user?.id
-      ? { pinned: false }
-      : { published: true, pinned: false };
+      ? { id: { not: pinnedPost?.id } }
+      : {
+        published: true, id: { not: pinnedPost?.id }
+      };
 
-  const { posts } = await getPost({ id: user?.id, search, whereQuery });
+  const { posts } = await getUserPost({ id: user.id, search, whereQuery });
 
   const followers = user?.Followers;
 

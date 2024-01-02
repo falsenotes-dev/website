@@ -139,6 +139,53 @@ export const getPost = async ({
 
   return { posts: JSON.parse(JSON.stringify(posts)) };
 };
+export const getUserPost = async ({
+  search,
+  page = 0,
+  limit = 10,
+  whereQuery,
+  id,
+}: {
+  search?: string | undefined;
+  page?: number;
+  limit?: number;
+  whereQuery?: any;
+  id: string | undefined;
+}) => {
+  const mainQuery =
+    search !== undefined
+      ? {
+          ...whereQuery,
+          title: {
+            contains: search,
+            mode: "insensitive",
+          },
+        }
+      : { ...whereQuery };
+  const posts = await postgres.post.findMany({
+    ...baseQuery,
+    where: { ...mainQuery, OR: [{ authorId: id }, { publicationId: id }] },
+    take: limit,
+    skip: page * limit,
+    orderBy: {
+      publishedAt: "desc",
+    },
+  });
+
+  // // Sort the posts in the application code
+  // const sortedPosts = posts.sort((a, b) => {
+  //   // If both posts are published, sort by publishedAt
+  //   if (a.published && b.published) {
+  //     return (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0);
+  //   }
+  //   // If one post is not published, sort by createdAt
+  //   else {
+  //     return b.createdAt.getTime() - a.createdAt.getTime();
+  //   }
+  // });
+
+  return { posts: JSON.parse(JSON.stringify(posts)) };
+};
 
 export const getFeaturedPosts = async ({
   limit = 10,
