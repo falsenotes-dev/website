@@ -103,34 +103,34 @@ export function MembersList({ data }: { data: any }) {
                     </div>
                },
           },
-          // {
-          //      accessorKey: "role",
-          //      header: "Role",
-          //      cell: ({ row }) => {
-          //           const member = row.original
-          //           return (
-          //                <Select defaultValue={member.accessLevel} onValueChange={
-          //                     async (value) => {
-          //                          const res = await changeAccessLevel({ id: member.authorId, accessLevel: value })
-          //                          if (res?.success) {
-          //                               toast.success(res.message)
-          //                               await validate('/settings/blogs')
-          //                          } else {
-          //                               toast.error(res?.message)
-          //                          }
-          //                     }
-          //                }>
-          //                     <SelectTrigger className="flex items-center justify-between">
-          //                          <SelectValue className="capitalize" placeholder={member.accessLevel.charAt(0).toUpperCase() + member.accessLevel.slice(1)} />
-          //                     </SelectTrigger>
-          //                     <SelectContent>
-          //                          <SelectItem value="admin">Admin</SelectItem>
-          //                          <SelectItem value="writer">Writer</SelectItem>
-          //                     </SelectContent>
-          //                </Select >
-          //           )
-          //      },
-          // },
+          {
+               accessorKey: "role",
+               header: "Role",
+               cell: ({ row }) => {
+                    const member = row.original
+                    return (
+                         <Select defaultValue={member.accessLevel} onValueChange={
+                              async (value) => {
+                                   const res = await changeAccessLevel({ id: member.authorId, accessLevel: value })
+                                   if (res?.success) {
+                                        toast.success(res.message)
+                                        await validate('/settings/blogs')
+                                   } else {
+                                        toast.error(res?.message)
+                                   }
+                              }
+                         }>
+                              <SelectTrigger className="flex items-center justify-between">
+                                   <SelectValue className="capitalize" placeholder={member.accessLevel.charAt(0).toUpperCase() + member.accessLevel.slice(1)} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                   <SelectItem value="admin">Admin</SelectItem>
+                                   <SelectItem value="writer">Writer</SelectItem>
+                              </SelectContent>
+                         </Select >
+                    )
+               },
+          },
           {
                accessorKey: "visibility",
                header: "Visibility",
