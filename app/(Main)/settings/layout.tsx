@@ -50,19 +50,21 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
   return (
     <div className="flex flex-col flex-auto max-w-screen" style={{ minHeight: "calc(100vh - 64px)" }}>
       <div className="space-y-6 md:p-10 pb-16 flex-1">
-        <div className="space-y-0.5">
+        <div className="space-y-1">
 
         </div>
-        <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-          <aside className="-mx-4">
-            <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-            <p className="text-muted-foreground">
-              Manage your account.
-            </p>
-            <Separator className="my-6" />
-            <SidebarNav items={sidebarNavItems} className="sticky top-24" />
+        <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr] w-full">
+          <aside className="md:-mx-4 flex flex-col gap-6">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
+              <p className="text-muted-foreground">
+                Manage your account.
+              </p>
+            </div>
+            <Separator />
+            <SidebarNav items={sidebarNavItems} />
           </aside>
-          <div className="flex-1">{children}</div>
+          <div className="flex-1 mt-16 md:mt-0">{children}</div>
         </div>
       </div>
       <SiteFooter className="mt-auto" />

@@ -23,7 +23,6 @@ import PostDeleteDialog from "./post-delete-dialog";
 import LoginDialog from "../login-dialog";
 import { Separator } from "../ui/separator";
 import { Post } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { validate } from "@/lib/revalidate";
 import { Icons } from "../icon";
 import PostAnalyticsDialog from "./post-analytics-dialog";
@@ -95,7 +94,7 @@ export default function PostTabs({
                 size={"icon"}
                 variant={"ghost"}
                 onClick={() => like(post.id)}
-                disabled={(session.id == post.authorId) || (post.allowLikes == null ? false : !post.allowLikes)}
+                disabled={(session.id == post.authorId) || (post.allowLikes == null ? false : !post.allowLikes) || (post.publicationId === session.id)}
               >
                 <Icons.like
                   className={`w-6 h-6 ${isLiked && "fill-current"}`}
@@ -178,7 +177,7 @@ export default function PostTabs({
               <span className="sr-only">Share</span>
             </Button>
           </ShareList>
-          {session?.id === post.authorId && (
+          {(session?.id === post.authorId || session.id === post.publication?.id) && (
             <>
               <Separator orientation="vertical" />
               <PostAnalyticsDialog
@@ -187,7 +186,7 @@ export default function PostTabs({
               />
             </>
           )}
-          {session?.id === post?.authorId && (
+          {(session?.id === post.authorId || session.id === post.publication?.id) && (
             <>
               <Separator orientation="vertical" />
               <DropdownMenu>

@@ -21,10 +21,10 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
 
   const router = useRouter()
   return (
-    <Tabs defaultValue={pathname} className={cn("flex w-full gap-6 items-start flex-1", className)}>
+    <Tabs defaultValue={pathname} className={cn("w-full gap-6 items-start mt-16", className)} orientation="vertical">
       <TabsList
         className={cn(
-          "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 md:flex-col md:h-fit w-full bg-transparent",
+          "flex gap-2 flex-col w-full bg-transparent p-0",
           className
         )}
         {...props}
@@ -39,7 +39,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
               router.push(item.href)
             }
             }
-            className="w-full justify-between rounded-md data-[state=active]:bg-muted"
+            className="w-full justify-between rounded-md data-[state=active]:bg-muted gap-2"
           >
             {item.title} {item.new && <Badge>New</Badge>}
           </TabsTrigger>

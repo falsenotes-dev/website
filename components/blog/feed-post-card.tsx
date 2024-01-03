@@ -118,7 +118,7 @@ export default function FeedPostCard(
                   </div>
                   <div className="stats flex items-center justify-around gap-1">
                     {
-                      props.session?.id === props.post.author.id && (
+                      (props.session?.id === props.post.author.id || props.session.id === props.post.publication?.id) && (
                         <div className="flex items-center space-x-1">
                           <PostAnalyticsDialog post={props.post} />
                         </div>
@@ -188,7 +188,7 @@ export default function FeedPostCard(
               </div>
               <div className="stats flex items-center justify-around gap-1">
                 {
-                  props.session?.id === props.post.author.id && (
+                  (props.session?.id === props.post.author.id || props.session.id === props.post.publication?.id) && (
                     <div className="flex items-center space-x-1 text-muted-foreground">
                       <PostAnalyticsDialog post={props.post} />
                     </div>

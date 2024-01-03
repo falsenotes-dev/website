@@ -45,7 +45,7 @@ function Navbar(notifications: any) {
         </Link>
 
         <div className="flex items-center gap-1 md:gap-4">
-          <Button variant="ghost" size={"icon"} className="flex md:hidden h-10 w-10" asChild>
+          <Button variant="ghost" size={"icon"} className="flex md:hidden h-10 w-10 hover:shadow " asChild>
             <Link href="/explore">
               <Icons.search className="h-[1.2rem] w-[1.2rem]" />
               <span className="sr-only">Search</span>
@@ -55,8 +55,8 @@ function Navbar(notifications: any) {
           {
             status == 'authenticated' ? (
               <>
-                <PostCreateButton key={"New Post"} variant="ghost" size={"icon"} className="h-10 w-10" />
-                <Button variant={"ghost"} size={"icon"} className="h-10 w-10 relative" onClick={() => router.replace('/notifications')}>
+                <PostCreateButton key={"New Post"} variant="ghost" size={"icon"} className="h-10 w-10 hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md" />
+                <Button variant={"ghost"} size={"icon"} className="h-10 w-10 relative hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md" onClick={() => router.replace('/notifications')}>
                   <Icons.notification className="w-5 h-5" />
                   {notifications.notifications && notifications.notifications.length > 0 && (<Badge className="left-5 font-normal px-1.5 py-0 absolute top-0 h-5 min-w-[1.25rem] max-w-max" >{numberFormat(notifications.notifications.length)}</Badge>)}
                 </Button>

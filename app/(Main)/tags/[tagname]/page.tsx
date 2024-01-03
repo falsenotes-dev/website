@@ -40,8 +40,7 @@ export default async function TagPage({
     include: {
       author: {
         include: {
-          Followers: true,
-          Followings: true,
+          _count: { select: { posts: true, Followers: true, Followings: true } },
         },
       },
       savedUsers: true,
@@ -49,6 +48,11 @@ export default async function TagPage({
       _count: {
         select: { comments: true, likes: true, savedUsers: true, shares: true },
       },
+      publication: {
+        include: {
+          _count: { select: { posts: true, Followers: true, Followings: true } },
+        },
+      }
     },
     orderBy: [
       { likes: { _count: "desc" } },
@@ -71,14 +75,14 @@ export default async function TagPage({
     include: {
       author: {
         include: {
-          Followers: true,
-          Followings: true,
+          _count: { select: { posts: true, Followers: true, Followings: true } },
         },
       },
       _count: {
         select: { comments: true, likes: true, savedUsers: true, shares: true },
       },
       savedUsers: true,
+      publication: { include: { _count: { select: { posts: true, Followers: true, Followings: true } } } },
     },
     orderBy: {
       createdAt: "desc",

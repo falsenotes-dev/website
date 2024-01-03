@@ -186,7 +186,7 @@ export default async function PostLayout({ children, params }: Props) {
               },
             },
             savedUsers: true,
-            publication: true,
+            publication: { include: { _count: { select: { posts: true, Followers: true, Followings: true } } } },
           },
 
           orderBy: {
@@ -216,7 +216,7 @@ export default async function PostLayout({ children, params }: Props) {
               },
             },
             savedUsers: true,
-            publication: true,
+            publication: { include: { _count: { select: { posts: true, Followers: true, Followings: true } } } },
           },
 
           orderBy: {
@@ -266,10 +266,10 @@ export default async function PostLayout({ children, params }: Props) {
       },
       author: {
         include: {
-          Followers: true,
-          Followings: true,
+          _count: { select: { posts: true, Followers: true, Followings: true } },
         },
       },
+      publication: { include: { _count: { select: { posts: true, Followers: true, Followings: true } } } },
       savedUsers: true,
     },
     orderBy: {
