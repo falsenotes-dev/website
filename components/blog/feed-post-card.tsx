@@ -75,7 +75,7 @@ export default function FeedPostCard(
                     <span>·</span>
                     <span className="text-muted-foreground text-sm"> in </span>
                     <UserHoverCard user={props.post.publication} >
-                      <Link href={`/publication/${props.post.publication?.username}`} className="flex items-center space-x-0.5 text-sm">
+                      <Link href={`/@${props.post.publication?.username}`} className="flex items-center space-x-0.5 text-sm">
                         <p className="text-sm font-normal leading-none">{props.post.publication?.name || props.post.publication?.username}</p>
                       </Link>
                     </UserHoverCard>
