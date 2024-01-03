@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 export default function NotFound() {
   const pathname = usePathname()
   return (
-    <div className="flex flex-col items-center justify-center bg-background gap-6 w-full" style={{ minHeight: 'calc(100vh - 100px)' }}>
+    <div className="flex flex-col items-center justify-center bg-background gap-6 w-full h-screen" >
       <Icons.errorLogo className="-mt-[90px]" />
       <h2 className="font-bold text-5xl">404</h2>
       <p className="text-muted-foreground font-light text-center">
