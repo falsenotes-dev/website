@@ -98,9 +98,9 @@ export default function MobilePostTabs({
                 variant={"ghost"}
                 onClick={() => like(post.id)}
                 disabled={
-                  session.id == post.authorId ||
+                  session?.id == post.authorId ||
                   (post.allowLikes == null ? false : !post.allowLikes) ||
-                  (session.id == post.publicationId)
+                  (session?.id == post.publicationId)
                 }
               >
                 <Icons.like
@@ -172,7 +172,7 @@ export default function MobilePostTabs({
               </LoginDialog>
             )}
           </div>
-          {(session?.id === post.authorId || session.id === post.publication?.id) && (
+          {(session?.id === post.authorId || session?.id === post.publication?.id) && (
             <>
               <Separator orientation="vertical" />
               <PostAnalyticsDialog

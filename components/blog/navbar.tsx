@@ -177,7 +177,7 @@ export default function PostTabs({
               <span className="sr-only">Share</span>
             </Button>
           </ShareList>
-          {(session?.id === post.authorId || session.id === post.publication?.id) && (
+          {(session?.id === post.authorId || session?.id === post.publication?.id) && (
             <>
               <Separator orientation="vertical" />
               <PostAnalyticsDialog
@@ -186,7 +186,7 @@ export default function PostTabs({
               />
             </>
           )}
-          {(session?.id === post.authorId || session.id === post.publication?.id) && (
+          {(session?.id === post.authorId || session?.id === post.publication?.id) && (
             <>
               <Separator orientation="vertical" />
               <DropdownMenu>

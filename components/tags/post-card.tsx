@@ -234,7 +234,7 @@ export default function TagPostCard({
                 </div>
                 <div className="flex items-center justify-around gap-2">
                   {props.post.published &&
-                    (props.session?.id === props.post.authorId || props.session.id === props.post.publicationId) && (
+                    (props.session?.id === props.post.authorId || props.session?.id === props.post.publicationId) && (
                       <div className="flex items-center space-x-1">
                         <PostAnalyticsDialog post={props.post} />
                       </div>
