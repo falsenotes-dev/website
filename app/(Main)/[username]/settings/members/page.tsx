@@ -5,13 +5,21 @@ import { getMembers } from "@/lib/prisma/session"
 import { MembersForm } from "@/components/settings/members/members-form"
 import { MembersList } from "@/components/settings/members/members-list"
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
+import db from "@/lib/db"
 
-export default async function SettingsOrganizationPage() {
+export default async function SettingsOrganizationPage({ params }: { params: { username: string } }) {
      const user = await getSessionUser()
      if (!user) {
           redirect("/signin")
      }
-     const { members } = await getMembers({ id: user.id })
+     const userData = await db.user.findFirst({
+          where: { username: decodeURIComponent(params.username).substring(1) },
+          include: { urls: true }
+     })
+     if (!userData) {
+          return notFound()
+     }
+     const { members } = await getMembers({ id: userData.id })
      return (
           <div className="space-y-6">
                <div className="flex w-full justify-between">

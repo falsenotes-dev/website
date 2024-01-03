@@ -4,13 +4,13 @@ import { getSessionUser } from "@/components/get-session-user"
 import db from "@/lib/db"
 import { notFound, redirect } from "next/navigation"
 
-export default async function SettingsProfilePage() {
+export default async function SettingsProfilePage({ params }: { params: { username: string } }) {
   const user = await getSessionUser()
   if (!user) {
     redirect("/signin")
   }
   const userData = await db.user.findFirst({
-    where: { id: user.id },
+    where: { username: decodeURIComponent(params.username).substring(1) },
     include: { urls: true }
   })
   if (!userData) {

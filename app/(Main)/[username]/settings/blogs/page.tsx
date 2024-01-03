@@ -4,17 +4,25 @@ import { notFound, redirect } from "next/navigation"
 import { getPublcations } from "@/lib/prisma/session"
 import { BlogsForm } from "@/components/settings/blog-form"
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
+import db from "@/lib/db"
 
 export const metadata = {
      title: "Blogs - FalseNotes",
 }
 
-export default async function SettingsOrganizationPage() {
+export default async function SettingsOrganizationPage({ params }: { params: { username: string } }) {
      const user = await getSessionUser()
      if (!user) {
           redirect("/signin")
      }
-     const { publications: blogs } = await getPublcations({ id: user.id })
+     const userData = await db.user.findFirst({
+          where: { username: decodeURIComponent(params.username).substring(1) },
+          include: { urls: true }
+     })
+     if (!userData) {
+          return notFound()
+     }
+     const { publications: blogs } = await getPublcations({ id: userData.id })
      return (
           <div className="space-y-6">
                <div className="flex w-full justify-between">

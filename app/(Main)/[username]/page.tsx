@@ -141,8 +141,6 @@ export default async function Page({
     },
   });
 
-  console.log(pinnedPost);
-
   if (pinnedPost === null) {
     pinnedPost = await db.post.findFirst({
       where: {
@@ -178,8 +176,6 @@ export default async function Page({
       },
     });
   }
-
-  console.log(pinnedPost);
 
   const lists = await db.list.findMany({
     where:
