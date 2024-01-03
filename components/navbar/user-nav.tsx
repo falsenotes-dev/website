@@ -90,7 +90,7 @@ export function UserNav() {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link
-            href={`/settings/blogs`}
+            href={`/@${user.username}/settings/blogs`}
           >
             <Icons.blogs className="h-5 mr-2" />
             Your Blogs
@@ -107,7 +107,7 @@ export function UserNav() {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="px-2.5 py-2" asChild>
-            <Link href="/settings/profile">
+            <Link href={`/@${user.username}/settings/profile`}>
               <Icons.settings className="h-5 w-5 mr-2" />
               Settings
             </Link>

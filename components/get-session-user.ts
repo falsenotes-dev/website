@@ -28,9 +28,8 @@ export async function getSessionUser() {
         image: true,
         username: true,
         publications: {
-          select: {
-            publicationId: true,
-            accessLevel: true,
+          include: {
+            publication: true,
           },
         },
       },
