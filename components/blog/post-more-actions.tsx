@@ -159,7 +159,7 @@ export default function PostMoreActions({
             <DropdownMenuItem
               onClick={() =>
                 copylink(
-                  `${process.env.DOMAIN}/@${post.author.username}/${post.url}`
+                  `${process.env.DOMAIN}/@${!post.publicationId ? post.author.username : post.publication.username}/${post.url}`
                 )
               }
             >
@@ -168,7 +168,7 @@ export default function PostMoreActions({
             </DropdownMenuItem>
             <DropdownMenuItem onClick={async () => await addShare(post?.id)}>
               <TwitterShareButton
-                url={`${process.env.DOMAIN}/@${post.author.username}/${post.url}`}
+                url={`${process.env.DOMAIN}/@${!post.publicationId ? post.author.username : post.publication.username}/${post.url}`}
                 title={post.title}
                 via="FalseNotesTeam"
               >
@@ -180,7 +180,7 @@ export default function PostMoreActions({
             </DropdownMenuItem>
             <DropdownMenuItem onClick={async () => await addShare(post?.id)}>
               <FacebookShareButton
-                url={`${process.env.DOMAIN}/@${post.author.username}/${post.url}`}
+                url={`${process.env.DOMAIN}/@${!post.publicationId ? post.author.username : post.publication.username}/${post.url}`}
                 quote={post.title}
               >
                 <div className="flex">
@@ -191,7 +191,7 @@ export default function PostMoreActions({
             </DropdownMenuItem>
             <DropdownMenuItem onClick={async () => await addShare(post?.id)}>
               <LinkedinShareButton
-                url={`${process.env.DOMAIN}/@${post.author.username}/${post.url}`}
+                url={`${process.env.DOMAIN}/@${!post.publicationId ? post.author.username : post.publication.username}/${post.url}`}
               >
                 <div className="flex">
                   <Linkedin className="mr-2 h-4 w-4 fill-current stroke-none" />

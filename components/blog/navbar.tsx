@@ -164,7 +164,7 @@ export default function PostTabs({
           )}
           <Separator orientation="vertical" />
           <ShareList
-            url={`${process.env.DOMAIN}/@${author?.username}/${post.url}`}
+            url={`${process.env.DOMAIN}/@${!post.publicationId ? post.author.username : post.publication.username}/${post.url}`}
             text={post.title}
             post={post.id}
           >
