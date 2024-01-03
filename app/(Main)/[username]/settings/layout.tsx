@@ -75,10 +75,10 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
 
   return (
     <div className="flex flex-col flex-auto max-w-screen" style={{ minHeight: "calc(100vh - 64px)" }}>
-      <div className="space-y-6 md:p-12 pb-16 flex-1">
+      <div className="space-y-6 pt-12 pb-16 flex-1 px-3">
         <div className="space-y-1">
           <div className="md:-mx-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between flex-wrap gap-4">
               <div className="flex gap-2">
                 <Avatar>
                   <AvatarImage src={user?.image || ''} alt={user?.name || user?.username} />
