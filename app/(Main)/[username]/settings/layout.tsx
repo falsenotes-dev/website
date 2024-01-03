@@ -77,7 +77,7 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
     <div className="flex flex-col flex-auto max-w-screen" style={{ minHeight: "calc(100vh - 64px)" }}>
       <div className="space-y-6 pt-12 pb-16 flex-1 px-3">
         <div className="space-y-1">
-          <div className="md:-mx-4">
+          <div>
             <div className="flex justify-between flex-wrap gap-4">
               <div className="flex gap-2">
                 <Avatar>
@@ -162,7 +162,7 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
 
         </div>
         <div className="grid flex-1 gap-12 md:grid-cols-[200px_1fr] w-full">
-          <aside className="md:-mx-4 flex flex-col gap-6">
+          <aside className="flex flex-col gap-6">
             <SidebarNav items={sidebarNavItems} />
           </aside>
           <div className="flex-1 mt-16 md:mt-0">{children}</div>
