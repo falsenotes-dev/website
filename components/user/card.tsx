@@ -38,10 +38,10 @@ export function UserCard({ user, session, className }: { user: any, session: any
           }
      }
 
-     const [isWriter, setIsWriter] = useState<boolean | null>(session?.publications.find((publication: any) => publication.publicationId === user.id));
+     const [isWriter, setIsWriter] = useState<boolean | null>(session?.publications.some((publication: any) => publication.publicationId === user.id));
 
      useEffect(() => {
-          setIsWriter(session?.publications.find((publication: any) => publication.publicationId === user.id));
+          setIsWriter(session?.publications.some((publication: any) => publication.publicationId === user.id));
      }, [session?.publications, user.id]);
 
      return (
