@@ -39,9 +39,11 @@ export function UserCard({ user, session, className }: { user: any, session: any
      }
 
      const [isWriter, setIsWriter] = useState<boolean | null>(session?.publications.some((publication: any) => publication.publicationId === user.id));
+     const [isAdmin, setIsAdmin] = useState<boolean | null>(session?.publications.some((publication: any) => publication.publicationId === user.id && publication.accessLevel === "admin"));
 
      useEffect(() => {
           setIsWriter(session?.publications.some((publication: any) => publication.publicationId === user.id));
+          setIsAdmin(session?.publications.some((publication: any) => publication.publicationId === user.id && publication.accessLevel === "admin"));
      }, [session?.publications, user.id]);
 
      return (
@@ -71,17 +73,28 @@ export function UserCard({ user, session, className }: { user: any, session: any
                          {
                               session ? (
                                    session?.id !== user?.id && (
-                                        <Button onClick={() => {
-                                             handleFollow(user?.id);
-                                        }} disabled={isFollowingLoading} >
+                                        <>
+                                             <Button onClick={() => {
+                                                  handleFollow(user?.id);
+                                             }} disabled={isFollowingLoading} >
+                                                  {
+                                                       isFollowingLoading ? (
+                                                            <><Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> {isFollowing ? "Following" : "Follow"}</>
+                                                       ) : (
+                                                            <>{isFollowing ? "Following" : "Follow"}</>
+                                                       )
+                                                  }
+                                             </Button>
                                              {
-                                                  isFollowingLoading ? (
-                                                       <><Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> {isFollowing ? "Following" : "Follow"}</>
-                                                  ) : (
-                                                       <>{isFollowing ? "Following" : "Follow"}</>
+                                                  isAdmin && (
+                                                       <Link href={`/admin/${user?.username}`}>
+                                                            <Button variant={"secondary"} className="px-2">
+                                                                 <Icons.settings className="w-6 h-6 text-muted-foreground" />
+                                                            </Button>
+                                                       </Link>
                                                   )
                                              }
-                                        </Button>
+                                        </>
                                    )
                               ) : (
                                    <LoginDialog>

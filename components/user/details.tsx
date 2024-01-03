@@ -78,6 +78,19 @@ export default function UserDetails({
     }
   }
 
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  useEffect(() => {
+    // if session publications includes user id and it is has admin accessLevel then set isAdmin to true
+    setIsAdmin(
+      session?.publications?.some(
+        (publication: any) =>
+          publication.publicationId === user.id &&
+          publication.accessLevel === "admin"
+      )
+    );
+  }, [isAdmin, session?.publications, user.id]);
+
   return (
     <>
       <div
@@ -167,23 +180,30 @@ export default function UserDetails({
                 <Link href="/settings/profile">Edit Profile</Link>
               </Button>
             ) : (
-              <Button
-                className="w-full"
-                variant={isFollowing ? "outline" : "default"}
-                onClick={() => {
-                  handleFollow(user?.id);
-                }}
-                disabled={isFollowingLoading}
-              >
-                {isFollowingLoading ? (
-                  <>
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
-                    {isFollowing ? "Following" : "Follow"}
-                  </>
-                ) : (
-                  <>{isFollowing ? "Following" : "Follow"}</>
+              <>
+                {isAdmin && (
+                  <Button variant={"outline"} className="w-full" asChild>
+                    <Link href="/settings/profile">Edit Profile</Link>
+                  </Button>
                 )}
-              </Button>
+                <Button
+                  className="w-full"
+                  variant={isFollowing ? "outline" : "default"}
+                  onClick={() => {
+                    handleFollow(user?.id);
+                  }}
+                  disabled={isFollowingLoading}
+                >
+                  {isFollowingLoading ? (
+                    <>
+                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
+                      {isFollowing ? "Following" : "Follow"}
+                    </>
+                  ) : (
+                    <>{isFollowing ? "Following" : "Follow"}</>
+                  )}
+                </Button>
+              </>
             )
           ) : (
             <LoginDialog>

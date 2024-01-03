@@ -30,6 +30,7 @@ export async function getSessionUser() {
         publications: {
           select: {
             publicationId: true,
+            accessLevel: true,
           },
         },
       },
