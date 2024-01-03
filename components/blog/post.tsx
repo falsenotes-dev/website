@@ -95,7 +95,7 @@ export default function SinglePost({
     }
   }
   if (openPublishDialog === false && published === true) {
-    router.replace(`/@${author?.username}/${post?.url}`);
+    router.replace(`/@${post.publicationId ? post.publication.username : post.author.username}/${post?.url}`);
   }
   return (
     <>

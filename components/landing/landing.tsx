@@ -66,7 +66,7 @@ export default function Landing({
             <div className="flex flex-col justify-center gap-8">
               <div className="flex flex-col justify-center gap-2">
                 <Link
-                  href="/@falsenotes/exciting-updates-new-rich-text-editor-and-enhanced-settings-page-on-falsenotes"
+                  href="/@falsenotes/introducing-collaborative-writing-build-your-team-on-falsenotes"
                   className="mx-auto"
                 >
                   <Badge
@@ -80,7 +80,7 @@ export default function Landing({
                       alt=""
                     />
                     <Separator orientation="vertical" className="!m-0 h-5" />
-                    Exciting Updates: New Rich Text Editor and more{" "}
+                    Introducing Collaborative Writing{" "}
                     <ArrowRight className="ml-1 h-3.5 w-3.5" />
                   </Badge>
                 </Link>
