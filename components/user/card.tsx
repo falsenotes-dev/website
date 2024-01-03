@@ -87,7 +87,7 @@ export function UserCard({ user, session, className }: { user: any, session: any
                                              </Button>
                                              {
                                                   isAdmin && (
-                                                       <Link href={`/admin/${user?.username}`}>
+                                                       <Link href={`/@${user.username}/settings/profile`}>
                                                             <Button variant={"secondary"} className="px-2">
                                                                  <Icons.settings className="w-6 h-6 text-muted-foreground" />
                                                             </Button>

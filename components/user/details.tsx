@@ -177,13 +177,13 @@ export default function UserDetails({
           {session ? (
             session?.id === user?.id ? (
               <Button variant={"outline"} className="w-full" asChild>
-                <Link href="/settings/profile">Edit Profile</Link>
+                <Link href={`/@${user.username}/settings/profile`}>Edit Profile</Link>
               </Button>
             ) : (
               <>
                 {isAdmin && (
                   <Button variant={"outline"} className="w-full" asChild>
-                    <Link href="/settings/profile">Edit Profile</Link>
+                    <Link href={`/@${user.username}/settings/profile`}>Edit Profile</Link>
                   </Button>
                 )}
                 <Button
