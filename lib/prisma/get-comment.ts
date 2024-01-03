@@ -11,16 +11,18 @@ export const getComment = async (id: Comment["id"]) => {
     include: {
       author: {
         include: {
-          Followers: true,
-          Followings: true,
+          _count: {
+            select: { posts: true, Followers: true, Followings: true },
+          },
         },
       },
       replies: {
         include: {
           author: {
             include: {
-              Followers: true,
-              Followings: true,
+              _count: {
+                select: { posts: true, Followers: true, Followings: true },
+              },
             },
           },
           _count: { select: { replies: true, likes: true } },

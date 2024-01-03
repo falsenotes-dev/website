@@ -31,7 +31,7 @@ const formatDate = (dateString: string | number | Date) => {
 }
 
 export default async function PopularPosts() {
-  const { posts } = await getPosts({limit: 3})
+  const { posts } = await getPosts({ limit: 3 })
   let content = null;
 
   posts ? content = (
@@ -46,15 +46,25 @@ export default async function PopularPosts() {
               (item: any, index: number) => (
                 <li key={item.id} className="text-sm space-y-2.5">
 
-                  <Link href={`/@${item.author.username}`} className="text-xs flex items-center mb-2 font-medium">
-                    <Avatar className="h-5 w-5 mr-1 md:mr-1.5 border">
-                      <AvatarImage src={item.author?.image} alt={item.author?.username} />
-                      <AvatarFallback>{item.author?.name?.charAt(0) || item.author?.username?.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    {item.author.name || item.author.username} {item.author?.verified && (
-                      <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
+                  <div className="flex items-center">
+                    <Link href={`/@${item.author.username}`} className="text-xs flex items-center font-medium">
+                      <Avatar className="h-5 w-5 mr-1 md:mr-1.5 border">
+                        <AvatarImage src={item.author?.image} alt={item.author?.username} />
+                        <AvatarFallback>{item.author?.name?.charAt(0) || item.author?.username?.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      {item.author.name || item.author.username} {item.author?.verified && (
+                        <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
+                      )}
+                    </Link>
+                    {item.publication && (
+                      <Link href={`/@${item.publication.username}`} className="text-xs flex items-center font-medium">
+                        <p>
+                          <span className="text-xs text-muted-foreground">in</span>
+                          <span>{' ' + item.publication.name || item.publication.username}</span>
+                        </p>
+                      </Link>
                     )}
-                  </Link>
+                  </div>
 
 
                   <Link href={`/@${item.author.username}/${item.url}`} className="text-base font-bold line-clamp-2 overflow-hidden leading-tight">

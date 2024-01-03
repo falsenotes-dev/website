@@ -5,6 +5,7 @@ export async function GET(request: NextRequest) {
   try {
     const url = request.nextUrl.searchParams.get("url");
     const authorId = request.nextUrl.searchParams.get("author")?.toString();
+    const postId = request.nextUrl.searchParams.get("postId")?.toString();
 
     if (!url) {
       return NextResponse.json({ message: "url is required" }, { status: 400 });
@@ -13,6 +14,7 @@ export async function GET(request: NextRequest) {
     const isUrlValid = await db.post.findFirst({
       where: {
         url: url,
+        id: { not: postId },
       },
     });
     if (isUrlValid) {

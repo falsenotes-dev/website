@@ -39,8 +39,18 @@ export default function LandingPostCard(
                   )}</p>
                 </Link>
               </UserHoverCard>
+              {
+                props.post.publication && (
+                  <UserHoverCard user={props.post.publication} >
+                    <Link href={`/@${props.post.publication?.username}`} className="flex items-center space-x-0.5">
+                      <span className="text-muted-foreground text-sm"> in </span>
+                      <p className="text-sm font-normal leading-none">{props.post.publication?.name || props.post.publication?.username}</p>
+                    </Link>
+                  </UserHoverCard>
+                )
+              }
             </div>
-            <Link href={`/@${props.post.author?.username}/${props.post.url}`}>
+            <Link href={`/@${props.post.publicationId === null ? props.post.author.username : props.post.publication.username}/${props.post.url}`}>
               <div>
                 <div className="pb-2">
                   <h2 className="text-base md:text-xl font-bold text-ellipsis overflow-hidden post__title">{props.post.title}</h2>
@@ -89,7 +99,7 @@ export default function LandingPostCard(
           </div>
           {props.post.cover && (
             <div className="flex-none">
-              <Link href={`/@${props.post.author?.username}/${props.post.url}`} aria-label={`Link to ${props.post.title} by ${props.post.author?.username}`}>
+              <Link href={`/@${props.post.publicationId === null ? props.post.author.username : props.post.publication.username}/${props.post.url}`} aria-label={`Link to ${props.post.title} by ${props.post.author?.username}`}>
                 <div className="h-[100px] md:h-36 rounded-md bg-muted !relative !pb-0 md:aspect-[4/3] aspect-square overflow-hidden" >
 
                   <>

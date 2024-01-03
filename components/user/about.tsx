@@ -39,6 +39,9 @@ function getRegistrationDateDisplay(date: string) {
 export function UserAbout({ user, className, session }: { user: any, className?: string, session: any }) {
      return (
           <>
+               {user.bio && (
+                    <p className="w-full text-muted-foreground md:inline hidden lg:hidden">{user?.bio}</p>
+               )}
                <div className="py-4 items-center flex gap-2 w-full">
                     <Icons.users className="h-5 w-5 text-muted-foreground" />
                     <Dialog>
@@ -167,7 +170,7 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                     {user?.email && <div>
                          <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground">
                               <Link href={`mailto:${user?.email}`} target="_blank" className="flex items-center font-light !text-sm">
-                                   <Icons.envelope className="mr-2 h-5 w-5 text-muted-foreground" />
+                                   <Icons.at className="mr-2 h-5 w-5 text-muted-foreground" />
                                    {user?.email}
                               </Link>
                          </Button>

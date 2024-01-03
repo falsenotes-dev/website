@@ -16,14 +16,15 @@ import {
 
 import { StatusWidget } from "@openstatus/react";
 import { buttonVariants } from "./ui/button"
+import { Icons } from "./icon"
 
 export function SiteFooter({ className, size }: React.HTMLAttributes<HTMLElement> & { size?: "sm" | "lg" }) {
      return (
           <>
                <footer className={cn("container md:flex items-center gap-4 w-full flex-row justify-between py-6 border-t hidden text-sm text-muted-foreground font-normal", className)}>
                     <div className="copyright">
-                         <p className="!text-inherit  pb-0 mx-auto">
-                              &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+                         <p className="!text-inherit pb-0 mx-auto flex gap-1.5 items-center">
+                              <Icons.logoIcon className="w-5 h-5 text-inherit" /> &copy; {new Date().getFullYear()} {siteConfig.name}.
                          </p>
                     </div>
                     <div className="flex flex-wrap gap-x-4 gap-y-1 !text-inherit">

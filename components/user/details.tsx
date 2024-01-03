@@ -77,6 +77,20 @@ export default function UserDetails({
       await validate(`/@${user?.username}`);
     }
   }
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  useEffect(() => {
+    // if session publications includes user id and it is has admin accessLevel then set isAdmin to true
+    setIsAdmin(
+      session?.publications?.some(
+        (publication: any) =>
+          publication.publicationId === user.id &&
+          publication.accessLevel === "admin"
+      )
+    );
+  }, [isAdmin, session?.publications, user.id]);
+
   return (
     <>
       <div
@@ -125,7 +139,7 @@ export default function UserDetails({
             <span className="text-muted-foreground ml-2">Followers</span>
           </div>
           <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-xs">
-            {formatNumberWithSuffix(user._count.posts)}{" "}
+            {formatNumberWithSuffix(user._count.posts + user._count.publicationsPosts)}{" "}
             <span className="text-muted-foreground ml-2">Posts</span>
           </div>
         </div>
@@ -148,8 +162,8 @@ export default function UserDetails({
                 width={20}
                 className="h-5 w-5 inline rounded border align-middle"
               />
-              <span className="text-muted-foreground text-sm font-medium">
-                &quot;The False&quot; Staff
+              <span className="text-sm font-medium">
+                The False <span className="text-muted-foreground">Staff</span>
               </span>
             </div>
           )}
@@ -163,26 +177,33 @@ export default function UserDetails({
           {session ? (
             session?.id === user?.id ? (
               <Button variant={"outline"} className="w-full" asChild>
-                <Link href="/settings/profile">Edit Profile</Link>
+                <Link href={`/@${user.username}/settings/profile`}>Edit Profile</Link>
               </Button>
             ) : (
-              <Button
-                className="w-full"
-                variant={isFollowing ? "outline" : "default"}
-                onClick={() => {
-                  handleFollow(user?.id);
-                }}
-                disabled={isFollowingLoading}
-              >
-                {isFollowingLoading ? (
-                  <>
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
-                    {isFollowing ? "Following" : "Follow"}
-                  </>
-                ) : (
-                  <>{isFollowing ? "Following" : "Follow"}</>
+              <>
+                {isAdmin && (
+                  <Button variant={"outline"} className="w-full" asChild>
+                    <Link href={`/@${user.username}/settings/profile`}>Edit Profile</Link>
+                  </Button>
                 )}
-              </Button>
+                <Button
+                  className="w-full"
+                  variant={isFollowing ? "outline" : "default"}
+                  onClick={() => {
+                    handleFollow(user?.id);
+                  }}
+                  disabled={isFollowingLoading}
+                >
+                  {isFollowingLoading ? (
+                    <>
+                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
+                      {isFollowing ? "Following" : "Follow"}
+                    </>
+                  ) : (
+                    <>{isFollowing ? "Following" : "Follow"}</>
+                  )}
+                </Button>
+              </>
             )
           ) : (
             <LoginDialog>
@@ -199,6 +220,32 @@ export default function UserDetails({
             </Button>
           </ShareList>
         </div>
+
+        {
+          user.publications.length > 0 && (
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground text-sm">
+                  Blogs
+                </span>
+              </div>
+              <div className="flex items-center">
+                {user.publications.map((pub: any, index: number) => (
+                  <Link href={`/@${pub.publication.username}`} className={`z-[${index}] border-2 rounded-full !border-background ${index > 0 && '-ml-4'}`} key={pub.id}>
+                    <UserHoverCard user={pub.publication}>
+                      <Avatar>
+                        <AvatarImage src={pub.publication.image} alt={pub.publication.name} />
+                        <AvatarFallback className="text-3xl">
+                          {pub.publication.name ? pub.publication.name?.charAt(0) : pub.publication.username?.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                    </UserHoverCard>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
     </>
   );

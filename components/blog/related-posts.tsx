@@ -6,13 +6,11 @@ import ListCard from "../list-card-v2";
 
 export default function RelatedPosts({
   posts,
-  post,
   session,
   list,
   lists,
 }: {
   posts: any;
-  post: any;
   session: any;
   list: any;
   lists: any;

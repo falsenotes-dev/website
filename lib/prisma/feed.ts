@@ -225,8 +225,7 @@ const baseQuery = {
         verified: true,
         falsemember: true,
         createdAt: true,
-        Followers: true,
-        Followings: true,
+        _count: { select: { Followers: true, Followings: true } },
       },
     },
     likes: true,
@@ -244,6 +243,11 @@ const baseQuery = {
       take: 1,
       select: {
         tag: true,
+      },
+    },
+    publication: {
+      include: {
+        _count: { select: { posts: true, Followers: true, Followings: true } },
       },
     },
   },
@@ -331,7 +335,7 @@ export const getForYou = async ({
     where: {
       id: { in: uniquePosts.map((post) => post.id) },
       published: true,
-      authorId: { not: id },
+      OR: [{ authorId: { not: id } }, { publicationId: { not: id } }],
     },
     ...baseQuery,
     take: Number(limit),
@@ -398,7 +402,11 @@ export const getFeed = async ({
       ...baseQuery,
       take: Number(limit),
       skip: page * Number(limit),
-      where: { id: { in: postIds }, published: true, authorId: { not: id } },
+      where: {
+        id: { in: postIds },
+        published: true,
+        OR: [{ authorId: { not: id } }, { publicationId: { not: id } }],
+      },
     });
   }
 };

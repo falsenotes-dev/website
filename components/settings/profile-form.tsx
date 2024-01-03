@@ -365,7 +365,7 @@ export function ProfileForm({ data }: { data: any }) {
                 key={field.id}
                 name={`urls.${index}.value`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full md:w-96">
                     <FormLabel className={cn(index !== 0 && "sr-only")}>
                       URLs
                     </FormLabel>
@@ -373,17 +373,17 @@ export function ProfileForm({ data }: { data: any }) {
                       Add links to your website, blog, or social media profiles.
                     </FormDescription>
                     <FormControl>
-                      <div className="flex gap-0.5">
-                        <Input {...field} />
+                      <div className="flex gap-1">
+                        <Input {...field} className="flex-1" />
                         <Button
-                          variant="link"
-                          className="ml-2"
+                          variant="outline"
                           asChild
+                          className="text-foreground h-10 w-10"
                           size={'icon'}
                           onClick={() => remove(index)}
                         >
                           <span>
-                            <Icons.xCircle className="w-4 h-4" />
+                            <Icons.cancel className="w-4 h-4" />
                             <span className="sr-only">Remove</span>
                           </span>
                         </Button>

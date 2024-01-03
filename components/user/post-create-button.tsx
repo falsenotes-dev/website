@@ -8,6 +8,7 @@ import { Button, ButtonProps, buttonVariants } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icon"
 import { Plus } from "lucide-react"
+import { User } from "@prisma/client"
 
 interface PostCreateButtonProps extends ButtonProps { }
 
@@ -15,8 +16,9 @@ export function PostCreateButton({
      className,
      variant,
      children,
+     publication,
      ...props
-}: PostCreateButtonProps) {
+}: PostCreateButtonProps & { publication?: User['id'] }) {
      const router = useRouter()
      const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
@@ -32,6 +34,7 @@ export function PostCreateButton({
                     title: "Untitled Post",
                     content: "",
                     url: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+                    publicationId: publication,
                }),
           })
 
@@ -48,7 +51,7 @@ export function PostCreateButton({
      return (
           <Button
                onClick={onClick}
-               className={cn(className, {"cursor-not-allowed opacity-60": isLoading})}
+               className={cn(className, { "cursor-not-allowed opacity-60": isLoading })}
                disabled={isLoading}
                variant={variant}
                {...props}

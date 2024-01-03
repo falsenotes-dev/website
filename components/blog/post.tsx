@@ -124,16 +124,32 @@ export default function SinglePost({
             )}
             <h1 className="article__title">{post?.title}</h1>
             <div className="article__meta border-y py-2">
-              <UserHoverCard user={author}>
-                <Link href={`/@${author?.username}`}>
-                  <Avatar className="article__author-avatar border">
-                    <AvatarImage src={author?.image} alt={author?.username} />
-                    <AvatarFallback>
-                      {author?.username.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                </Link>
-              </UserHoverCard>
+              <div className="flex items-baseline">
+                <UserHoverCard user={author}>
+                  <Link href={`/@${author?.username}`}>
+                    <Avatar className="article__author-avatar border h-11 w-11">
+                      <AvatarImage src={author?.image} alt={author?.username} />
+                      <AvatarFallback>
+                        {author?.username.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Link>
+                </UserHoverCard>
+                {
+                  post?.publicationId && (
+                    <UserHoverCard user={post.publication} className="-ml-3">
+                      <Link href={`/@${post.publication?.username}`}>
+                        <Avatar className="article__author-avatar border-2 !border-background h-6 w-6">
+                          <AvatarImage src={post.publication?.image} alt={post.publication?.username} />
+                          <AvatarFallback>
+                            {post.publication?.username.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Link>
+                    </UserHoverCard>
+                  )
+                }
+              </div>
 
               <div className="flex flex-col">
                 <span className="article__author-name md:text-base text-sm">
@@ -171,6 +187,17 @@ export default function SinglePost({
                     ))}
                 </span>
                 <div className="article__date">
+                  {
+                    post.publicationId && (
+                      <>
+                        Published in{" "}
+                        <Link href={`/@${post.publication.username}`} className="text-foreground">
+                          {post?.publication?.name || post?.publication?.username}
+                        </Link>
+                        <span className="mx-1">·</span>
+                      </>
+                    )
+                  }
                   <span className="">{post?.readingTime}</span>
                   <span className=" mx-1">·</span>
                   <span className="">{dateFormat(post?.publishedAt)}</span>

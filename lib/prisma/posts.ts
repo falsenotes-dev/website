@@ -1,14 +1,11 @@
 "use server";
-import { getSessionUser } from "@/components/get-session-user";
 import postgres from "../db";
-import { Prisma } from "@prisma/client";
 
 const baseQuery = {
   include: {
     author: {
       include: {
-        Followers: true,
-        Followings: true,
+        _count: { select: { posts: true, Followers: true, Followings: true } },
       },
     },
     savedUsers: true,
@@ -25,6 +22,11 @@ const baseQuery = {
       take: 1,
       include: {
         tag: true,
+      },
+    },
+    publication: {
+      include: {
+        _count: { select: { posts: true, Followers: true, Followings: true } },
       },
     },
   },
@@ -116,6 +118,53 @@ export const getPost = async ({
   const posts = await postgres.post.findMany({
     ...baseQuery,
     where: { ...mainQuery, authorId: id },
+    take: limit,
+    skip: page * limit,
+    orderBy: {
+      publishedAt: "desc",
+    },
+  });
+
+  // // Sort the posts in the application code
+  // const sortedPosts = posts.sort((a, b) => {
+  //   // If both posts are published, sort by publishedAt
+  //   if (a.published && b.published) {
+  //     return (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0);
+  //   }
+  //   // If one post is not published, sort by createdAt
+  //   else {
+  //     return b.createdAt.getTime() - a.createdAt.getTime();
+  //   }
+  // });
+
+  return { posts: JSON.parse(JSON.stringify(posts)) };
+};
+export const getUserPost = async ({
+  search,
+  page = 0,
+  limit = 10,
+  whereQuery,
+  id,
+}: {
+  search?: string | undefined;
+  page?: number;
+  limit?: number;
+  whereQuery?: any;
+  id: string | undefined;
+}) => {
+  const mainQuery =
+    search !== undefined
+      ? {
+          ...whereQuery,
+          title: {
+            contains: search,
+            mode: "insensitive",
+          },
+        }
+      : { ...whereQuery };
+  const posts = await postgres.post.findMany({
+    ...baseQuery,
+    where: { ...mainQuery, OR: [{ authorId: id }, { publicationId: id }] },
     take: limit,
     skip: page * limit,
     orderBy: {

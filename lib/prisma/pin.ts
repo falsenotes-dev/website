@@ -1,9 +1,12 @@
 "use server";
 import { getSessionUser } from "@/components/get-session-user";
-import { Post } from "@prisma/client";
+import { Post, User } from "@prisma/client";
 import db from "../db";
 
-export const pin = async (postId: Post["id"]) => {
+export const pin = async (
+  postId: Post["id"],
+  publicationId?: User["id"] | undefined
+) => {
   const session = await getSessionUser();
 
   if (!session) {
@@ -13,7 +16,7 @@ export const pin = async (postId: Post["id"]) => {
   try {
     await db.post.updateMany({
       where: {
-        authorId: session.id,
+        ...(publicationId ? { publicationId } : { authorId: session.id }),
       },
       data: {
         pinned: false,

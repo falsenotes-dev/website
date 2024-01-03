@@ -369,7 +369,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
   async function validateUrl(value: string) {
     try {
       const result = await fetch(
-        `/api/posts/validate-url?url=${value}&authorId=${props.user?.id}`,
+        `/api/posts/validate-url?url=${value}&authorId=${props.user?.id}&postId=${form.getValues("id")}`,
         {
           method: "GET",
         }
@@ -480,7 +480,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 w-full lg:w-[800px]"
+          className="w-full lg:w-[800px]"
           id="PostForm"
         >
           <FormField
@@ -491,7 +491,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                 <FormControl>
                   <TextareaAutosize
                     placeholder="Title of the post"
-                    className="w-full px-8 md:px-12 resize-none appearance-none overflow-hidden bg-transparent text-3xl md:text-4xl md:leading-snug font-bold focus:outline-none"
+                    className="w-full px-0 md:px-6 lg:px-12 resize-none appearance-none overflow-hidden bg-transparent text-3xl md:text-4xl md:leading-snug font-bold focus:outline-none"
                     {...field}
                     onChange={handleTitleChange}
                   />
@@ -518,11 +518,11 @@ export function PostEditorForm(props: { post: any; user: any }) {
                       ]
                     }
                     editorProps={{
-
+                      attributes: { class: "novel-prose-lg novel-prose-stone dark:novel-prose-invert prose-headings:novel-font-title novel-font-default focus:novel-outline-none novel-max-w-full !px-0 md:!px-6 lg:!px-12 !p-8" },
                     }}
                     defaultValue={field.value}
                     onUpdate={(editor) => {
-                      setFirstImage((editor?.view.root as Document)?.images[0]?.src);
+                      setFirstImage((editor?.view.root as Document)?.images[0]?.src !== props.user?.image ? (editor?.view.root as Document)?.images[0]?.src : "");
                       if (form.getValues('coverImage') == '') {
                         form.setValue('coverImage', firstImage);
                         setCover(firstImage);
@@ -558,15 +558,15 @@ export function PostEditorForm(props: { post: any; user: any }) {
                           </FormDescription>
                           <FormControl>
                             <div className="flex justify-end flex-col">
-                              <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center">
+                              <div className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center ${isValidUrl !== null && !isValidUrl && "text-destructive !border-destructive"}`}>
                                 <Input
-                                  className="border-none p-0 focus-visible:ring-offset-0 focus-visible:ring-0 bg-transparent"
+                                  className={`border-none p-0 focus-visible:ring-offset-0 focus-visible:ring-0 bg-transparent`}
                                   placeholder="URL"
                                   {...field}
                                   onChange={handleUrlChange}
                                 />
                                 {isValidUrl !== null && !isValidUrl && (
-                                  <Icons.xCircle className="text-muted-foreground h-5 w-5" />
+                                  <Icons.xCircle className="text-destructive h-5 w-5" />
                                 )}
                               </div>
                               {(!form.getValues("url") ||
@@ -1002,7 +1002,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                           </FormDescription>
                           <FormControl>
                             <div className="flex justify-end flex-col">
-                              <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center">
+                              <div className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center ${isValidUrl !== null && !isValidUrl && "text-destructive !border-destructive"}`}>
                                 <Input
                                   className="border-none p-0 focus-visible:ring-offset-0 focus-visible:ring-0 bg-transparent"
                                   placeholder="URL"
@@ -1010,7 +1010,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   onChange={handleUrlChange}
                                 />
                                 {isValidUrl !== null && !isValidUrl && (
-                                  <Icons.xCircle className="text-muted-foreground h-5 w-5" />
+                                  <Icons.xCircle className="text-destructive h-5 w-5" />
                                 )}
                               </div>
                               {(!form.getValues("url") ||
@@ -1112,8 +1112,9 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                       size={"icon"}
                                       className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
                                       onClick={() => {
-                                        form.setValue("coverImage", firstImage);
-                                        setCover(firstImage);
+                                        form.setValue("coverImage", firstImage !== props.user?.image ? firstImage : "");
+                                        setCover(firstImage !== props.user?.image ? firstImage : "");
+                                        setFirstImage(firstImage !== props.user?.image ? firstImage : "")
                                       }}
                                     >
                                       <RefreshCcw className="h-4 w-4" />

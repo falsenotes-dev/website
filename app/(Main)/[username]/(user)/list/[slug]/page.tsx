@@ -57,6 +57,11 @@ export default async function ListPage({
                   tag: true,
                 },
               },
+              publication: {
+                include: {
+                  _count: { select: { Followers: true, Followings: true } },
+                },
+              }
             },
           },
         },

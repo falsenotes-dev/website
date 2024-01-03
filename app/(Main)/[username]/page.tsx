@@ -1,27 +1,23 @@
-import { getSession } from "next-auth/react";
 import { getSessionUser } from "@/components/get-session-user";
-import { notFound, redirect, useRouter } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import db from "@/lib/db";
 import { UserDetails, UserPosts } from "@/components/user";
-import UserTab from "@/components/user/tabs";
-import { getPost } from "@/lib/prisma/posts";
-import { getBookmarks, getHistory, getLists } from "@/lib/prisma/session";
+import { getUserPost } from "@/lib/prisma/posts";
+import { getLists } from "@/lib/prisma/session";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
-import UserBookmarks from "@/components/user/bookmark";
 import { SiteFooter } from "@/components/footer";
 import { UserAbout } from "@/components/user/about";
 import { Icons } from "@/components/icon";
 import Image from "next/image";
 import { UserCard } from "@/components/user/card";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import UserHistory from "@/components/user/history";
 import ListCard from "@/components/list-card";
 import { formatNumberWithSuffix } from "@/components/format-numbers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { EmptyPlaceholder } from "@/components/empty-placeholder";
+import UserHoverCard from "@/components/user-hover-card";
 
 export default async function Page({
   params,
@@ -39,41 +35,15 @@ export default async function Page({
   const sessionUserName = await getSessionUser();
   const user = await db.user.findFirst({
     include: {
-      posts: {
-        orderBy: {
-          createdAt: "desc",
-        },
-        include: {
-          _count: {
-            select: {
-              likes: true,
-              savedUsers: true,
-            },
-          },
-          savedUsers: true,
-          tags: {
-            take: 1,
-            include: {
-              tag: true,
-            },
-          },
-        },
-        // if user is a session user, show all posts
-        where: {
-          OR: [
-            {
-              published: true,
-            },
-            {
-              authorId: sessionUserName?.id,
-            },
-          ],
-        },
-      },
       urls: true,
       _count: {
         select: {
           posts: {
+            where: {
+              published: true,
+            },
+          },
+          publicationsPosts: {
             where: {
               published: true,
             },
@@ -100,6 +70,31 @@ export default async function Page({
           },
         },
       },
+      writers: {
+        where: {
+          visibility: "public",
+        },
+        select: {
+          author: {
+            include: {
+              _count: { select: { Followers: true, Followings: true } },
+            },
+          },
+        }
+      },
+      publications: {
+        where: {
+          visibility: "public",
+        },
+        select: {
+          publication: {
+            include: {
+              _count: { select: { Followers: true, Followings: true } },
+            },
+          },
+        },
+        take: 5,
+      }
     },
     where: {
       username: decodedUsername.substring(1),
@@ -112,9 +107,9 @@ export default async function Page({
     return notFound();
   }
 
-  const pinnedPost = await db.post.findFirst({
+  let pinnedPost = await db.post.findFirst({
     where: {
-      authorId: user?.id,
+      publicationId: user.id,
       pinned: true,
     },
     include: {
@@ -135,12 +130,52 @@ export default async function Page({
       },
       author: {
         include: {
-          Followers: true,
-          Followings: true,
+          _count: { select: { Followers: true, Followings: true } },
+        },
+      },
+      publication: {
+        include: {
+          _count: { select: { Followers: true, Followings: true } },
         },
       },
     },
   });
+
+  if (pinnedPost === null) {
+    pinnedPost = await db.post.findFirst({
+      where: {
+        authorId: user.id,
+        pinned: true,
+      },
+      include: {
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+            savedUsers: true,
+            shares: true,
+          },
+        },
+        savedUsers: true,
+        tags: {
+          take: 1,
+          include: {
+            tag: true,
+          },
+        },
+        author: {
+          include: {
+            _count: { select: { Followers: true, Followings: true } },
+          },
+        },
+        publication: {
+          include: {
+            _count: { select: { Followers: true, Followings: true } },
+          },
+        },
+      },
+    });
+  }
 
   const lists = await db.list.findMany({
     where:
@@ -180,10 +215,12 @@ export default async function Page({
 
   const whereQuery =
     sessionUserName?.id === user?.id
-      ? { pinned: false }
-      : { published: true, pinned: false };
+      ? { id: { not: pinnedPost?.id } }
+      : {
+        published: true, id: { not: pinnedPost?.id }
+      };
 
-  const { posts } = await getPost({ id: user?.id, search, whereQuery });
+  const { posts } = await getUserPost({ id: user.id, search, whereQuery });
 
   const followers = user?.Followers;
 
@@ -195,7 +232,7 @@ export default async function Page({
     <div className="md:container mx-auto px-4 pt-5">
       <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
         <div
-          className="user__header md:hidden sm:h-fit lg:min-w-[352px] lg:border-r lg:max-w-[352px] md:px-8 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"
+          className="user__header md:hidden w-full sm:h-fit lg:min-w-[352px] lg:border-r lg:max-w-[352px] md:px-8 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"
           style={{
             minHeight: "calc(100vh - 125px)",
           }}
@@ -219,6 +256,11 @@ export default async function Page({
             <TabsList className="mb-4">
               <TabsTrigger value="posts">Posts</TabsTrigger>
               <TabsTrigger value="lists">Lists</TabsTrigger>
+              {
+                user?.writers?.length > 0 && (
+                  <TabsTrigger value="writers">Writers</TabsTrigger>
+                )
+              }
               <TabsTrigger value="about">About</TabsTrigger>
             </TabsList>
             <TabsContent value="posts" className="w-full">
@@ -355,6 +397,40 @@ export default async function Page({
                   )
                 }
               </div>
+            </TabsContent>
+            <TabsContent value="writers">
+              <div className="flex flex-col gap-6 my-6">
+                {user?.writers?.map(({ author }) => (
+                  <div className="flex gap-4 w-full items-center" key={author.id}>
+                    <div className="space-y-3">
+                      <UserHoverCard user={author} >
+                        <Link href={`/@${author.username}`} className="flex items-center">
+                          <Avatar className="h-10 w-10 mr-2 md:mr-3">
+                            <AvatarImage src={author.image || ''} alt={author.username} />
+                            <AvatarFallback>{author.name?.charAt(0) || author.username?.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          {
+                            author.name === null ? (
+                              <div>
+                                <p className="text-sm font-medium leading-none">{author.username} {author.verified && (
+                                  <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
+                                )}</p>
+                              </div>
+                            ) : (
+                              <div>
+                                <p className="text-sm font-medium leading-none">{author.name} {author.verified && (
+                                  <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
+                                )}</p>
+                                <p className="text-sm text-muted-foreground">{author.username}</p>
+                              </div>
+                            )
+                          }
+                        </Link>
+                      </UserHoverCard>
+                    </div>
+                  </div>
+                ))}
+              </div >
             </TabsContent>
             <TabsContent value="about">
               <UserAbout user={user} session={sessionUserName} />

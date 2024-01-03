@@ -23,16 +23,25 @@ export default function ExploreComponent({ users, posts, tags, lists, search, cl
                                         (item: any, index: number) => (
                                              <li key={item.id} className="text-sm space-y-2.5">
 
-                                                  <Link href={`/@${item.author.username}`} className="text-xs flex items-center mb-2 font-medium">
-                                                       <Avatar className="h-5 w-5 mr-1 md:mr-1.5 border">
-                                                            <AvatarImage src={item.author?.image} alt={item.author?.username} />
-                                                            <AvatarFallback>{item.author?.name?.charAt(0) || item.author?.username?.charAt(0)}</AvatarFallback>
-                                                       </Avatar>
-                                                       {item.author.name || item.author.username} {item.author?.verified && (
-                                                            <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
+                                                  <div className="flex items-center">
+                                                       <Link href={`/@${item.author.username}`} className="text-xs flex items-center font-medium">
+                                                            <Avatar className="h-5 w-5 mr-1 md:mr-1.5 border">
+                                                                 <AvatarImage src={item.author?.image} alt={item.author?.username} />
+                                                                 <AvatarFallback>{item.author?.name?.charAt(0) || item.author?.username?.charAt(0)}</AvatarFallback>
+                                                            </Avatar>
+                                                            {item.author.name || item.author.username} {item.author?.verified && (
+                                                                 <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
+                                                            )}
+                                                       </Link>
+                                                       {item.publication && (
+                                                            <Link href={`/@${item.publication.username}`} className="text-xs flex items-center font-medium">
+                                                                 <p>
+                                                                      <span className="text-xs text-muted-foreground">in</span>
+                                                                      <span>{' ' + item.publication.name || item.publication.username}</span>
+                                                                 </p>
+                                                            </Link>
                                                        )}
-                                                  </Link>
-
+                                                  </div>
 
                                                   <Link href={`/@${item.author.username}/${item.url}`} className="text-base font-bold line-clamp-2 overflow-hidden leading-tight">
                                                        {item.title}
@@ -129,31 +138,31 @@ export default function ExploreComponent({ users, posts, tags, lists, search, cl
                     <Card>
                          <CardHeader>
                               <CardTitle className="text-base">Lists</CardTitle>
-                              </CardHeader>
-                              <CardContent>
-                                   <div className="flex flex-col divide-y">
-                                        {lists?.map((list: any, index: number) => (
-                                             <div className="flex items-center justify-between py-4" key={list.id}>
-                                                  <Link href={`/@${list.author.username}/${list.slug}`} className="w-full">
-                                                       <div className="flex items-center">
-                                                            <div className="space-y-1">
-                                                                 <p className="text-base line-clamp-1"><Icons.list className="h-5 w-5 mr-1.5 inline" />{list.name}</p>
-                                                                 <p className="text-sm text-muted-foreground">{list._count.posts} posts · {list._count.savedUsers} saves</p>
-                                                            </div>
+                         </CardHeader>
+                         <CardContent>
+                              <div className="flex flex-col divide-y">
+                                   {lists?.map((list: any, index: number) => (
+                                        <div className="flex items-center justify-between py-4" key={list.id}>
+                                             <Link href={`/@${list.author.username}/${list.slug}`} className="w-full">
+                                                  <div className="flex items-center">
+                                                       <div className="space-y-1">
+                                                            <p className="text-base line-clamp-1"><Icons.list className="h-5 w-5 mr-1.5 inline" />{list.name}</p>
+                                                            <p className="text-sm text-muted-foreground">{list._count.posts} posts · {list._count.savedUsers} saves</p>
                                                        </div>
-                                                  </Link>
-                                             </div>
-                                        ))}
-                                   </div>
-                              </CardContent>
-                              <CardFooter className="flex justify-end">
-                                   <Link href={`/explore/lists${(search !== undefined) ? `?search=${search}` : ''}`} className="text-sm font-medium">
-                                        See all lists
-                                   </Link>
-                              </CardFooter>
-                         </Card>
-                    )}
-                    
+                                                  </div>
+                                             </Link>
+                                        </div>
+                                   ))}
+                              </div>
+                         </CardContent>
+                         <CardFooter className="flex justify-end">
+                              <Link href={`/explore/lists${(search !== undefined) ? `?search=${search}` : ''}`} className="text-sm font-medium">
+                                   See all lists
+                              </Link>
+                         </CardFooter>
+                    </Card>
+               )}
+
                {posts.length === 0 && users.length === 0 && tags.length === 0 && (
                     <EmptyPlaceholder className="w-full">
                          <EmptyPlaceholder.Icon name="notfound" strokeWidth={1.25} />
@@ -162,7 +171,7 @@ export default function ExploreComponent({ users, posts, tags, lists, search, cl
                               Try searching for something else.
                          </EmptyPlaceholder.Description>
                     </EmptyPlaceholder>
-                    )}
+               )}
           </div>
      )
 }

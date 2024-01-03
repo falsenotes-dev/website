@@ -177,7 +177,25 @@ export default function Landing({
                               )}
                             </Link>
                           </UserHoverCard>
-                          <Link href={`/@${post.author?.username}/${post.url}`}>
+                          {
+                            post.publication && (
+                              <UserHoverCard user={post.publication}>
+                                <Link
+                                  href={`/@${post.publication?.username}`}
+                                  className="flex items-center space-x-0.5"
+                                >
+                                  <span className="text-muted-foreground text-sm">
+                                    in
+                                  </span>
+                                  <p className="text-sm font-normal leading-none">
+                                    {post.publication?.name ||
+                                      post.publication?.username}
+                                  </p>
+                                </Link>
+                              </UserHoverCard>
+                            )
+                          }
+                          <Link href={`/@${post.publicationId === null ? post.author.username : post.publication.username}/${post.url}`}>
                             <h2 className="font-extrabold line-clamp-2 max-h-10 text-ellipsis leading-tight tracking-normal">
                               {post.title}
                             </h2>

@@ -11,39 +11,42 @@ datasource db {
 }
 
 model User {
-  id             String           @id @default(cuid()) @map("_id")
-  email          String           @unique
-  username       String           @unique
-  name           String?
-  bio            String?
-  password       String?
-  emailVerified  DateTime?        @map("email_verified")
-  image          String?
-  githubprofile  String?
-  location       String?
-  verified       Boolean          @default(false)
-  falsemember    Boolean          @default(false)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  githubId       String?
-  googleId       String?          @map("google_id")
-  twitterId      String?          @map("twitter_id")
-  twitterProfile String?          @map("twitter_profile")
-  isPublication  Boolean          @default(false)
-  settings       UserSettings?
-  notifications  Notification[]
-  posts          Post[]
-  comments       Comment[]
-  likes          Like[]
-  commentlikes   CommentLike[]
-  Followings     Follow[]         @relation("Follower")
-  Followers      Follow[]         @relation("Following")
-  tagfollower    TagFollow[]      @relation("TagFollower")
-  bookmarks      Bookmark[]
-  readinghistory ReadingHistory[]
-  lists          List[]
-  savedLists     ListSaving[]
-  urls           UserWebsite[]
+  id                String              @id @default(cuid()) @map("_id")
+  email             String              @unique
+  username          String              @unique
+  name              String?
+  bio               String?
+  password          String?
+  emailVerified     DateTime?           @map("email_verified")
+  image             String?
+  githubprofile     String?
+  location          String?
+  verified          Boolean             @default(false)
+  falsemember       Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  githubId          String?
+  googleId          String?             @map("google_id")
+  twitterId         String?             @map("twitter_id")
+  twitterProfile    String?             @map("twitter_profile")
+  isPublication     Boolean             @default(false)
+  settings          UserSettings?
+  notifications     Notification[]
+  posts             Post[]
+  publicationsPosts Post[]              @relation("PublicationPost")
+  comments          Comment[]
+  likes             Like[]
+  commentlikes      CommentLike[]
+  Followings        Follow[]            @relation("Follower")
+  Followers         Follow[]            @relation("Following")
+  tagfollower       TagFollow[]         @relation("TagFollower")
+  bookmarks         Bookmark[]
+  readinghistory    ReadingHistory[]
+  lists             List[]
+  savedLists        ListSaving[]
+  urls              UserWebsite[]
+  publications      PublicationAuthor[]
+  writers           PublicationAuthor[] @relation("PublicationAuthor")
 
   @@map("users")
 }
@@ -59,6 +62,18 @@ model UserWebsite {
   @@map("userwebsites")
 }
 
+model PublicationAuthor {
+  id            String   @id @default(cuid()) @map("_id")
+  publication   User     @relation(name: "PublicationAuthor", fields: [publicationId], references: [id])
+  publicationId String
+  author        User     @relation(fields: [authorId], references: [id])
+  authorId      String
+  accessLevel   String   @default("writer")
+  visibility    String   @default("public")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 model Post {
   id            String           @id @default(cuid()) @map("_id")
   title         String
@@ -68,6 +83,8 @@ model Post {
   views         Int              @default(0)
   author        User             @relation(fields: [authorId], references: [id])
   authorId      String
+  publication   User?            @relation("PublicationPost", fields: [publicationId], references: [id])
+  publicationId String?
   url           String           @unique
   readingTime   String?
   createdAt     DateTime         @default(now())

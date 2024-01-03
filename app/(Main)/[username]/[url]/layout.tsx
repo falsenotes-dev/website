@@ -20,9 +20,18 @@ async function getPostData(username: string, url: string) {
   const post = await db.post.findFirst({
     where: {
       url: url,
-      author: {
-        username: decodedUsername.substring(1),
-      },
+      OR: [
+        {
+          publication: {
+            username: decodedUsername.substring(1),
+          },
+        },
+        {
+          author: {
+            username: decodedUsername.substring(1),
+          },
+        }
+      ],
       published: true,
     },
     include: {
@@ -31,9 +40,16 @@ async function getPostData(username: string, url: string) {
           tag: true,
         },
       },
+      publication: true,
       author: true,
     },
   });
+
+  // if post publicationId is not null and username is equal to author username then return null
+  if (post?.publicationId && decodedUsername.substring(1) === post?.author?.username) {
+    return null;
+  }
+
   return post;
 }
 
@@ -133,88 +149,100 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PostLayout({ children, params }: Props) {
   const decodedUsername = decodeURIComponent(params.username);
-  const author = await db.user.findFirst({
-    where: {
-      username: decodedUsername.substring(1),
-    },
-    include: {
-      posts: {
-        where: {
-          url: {
-            not: params.url,
-          },
-          published: true,
-        },
-        include: {
-          _count: {
-            select: {
-              comments: true,
-              savedUsers: true,
-              likes: true,
-              shares: true,
-            },
-          },
-          author: {
-            include: {
-              Followers: true,
-              Followings: true,
-            },
-          },
-          savedUsers: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 4,
-      },
-      _count: { select: { posts: true, Followers: true, Followings: true } },
-      Followers: true,
-      Followings: true,
-    },
-  });
+  const postData = await getPostData(decodedUsername, params.url);
+  // if (!postData) {
+  //   return notFound();
+  // }
 
-  const authorPosts = author?.posts;
-  const post = await db.post.findFirst({
-    where: {
-      url: params.url,
-      authorId: author?.id,
-    },
-    include: {
-      comments: {
-        include: {
-          author: {
-            include: {
-              Followers: true,
-              Followings: true,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-      likes: true,
-      tags: {
-        include: {
-          tag: true,
-        },
-      },
-      readedUsers: true,
-      author: {
-        include: {
-          Followers: true,
-          Followings: true,
-        },
-      },
-      savedUsers: true,
-      _count: {
-        select: { savedUsers: true, likes: true, comments: true, shares: true },
-      },
-    },
-  });
-
-  if (!post)
+  if (!postData)
     return <div className="md:container mx-auto px-4 pt-5">{children}</div>;
+  // fetch publisher and author posts
+  const [author, publication] = await Promise.all([
+    db.user.findUnique({
+      where: {
+        id: postData.authorId,
+      },
+      include: {
+        _count: { select: { posts: true, Followers: true, Followings: true } },
+        posts: {
+          where: {
+            url: {
+              not: params.url,
+            },
+            published: true,
+          },
+          include: {
+            _count: {
+              select: {
+                comments: true,
+                savedUsers: true,
+                likes: true,
+                shares: true,
+              },
+            },
+            author: {
+              include: {
+                _count: { select: { posts: true, Followers: true, Followings: true } },
+              },
+            },
+            savedUsers: true,
+            publication: { include: { _count: { select: { posts: true, Followers: true, Followings: true } } } },
+          },
+
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 5,
+        },
+        publicationsPosts: {
+          where: {
+            url: {
+              not: params.url,
+            },
+            published: true,
+          },
+          include: {
+            _count: {
+              select: {
+                comments: true,
+                savedUsers: true,
+                likes: true,
+                shares: true,
+              },
+            },
+            author: {
+              include: {
+                _count: { select: { posts: true, Followers: true, Followings: true } },
+              },
+            },
+            savedUsers: true,
+            publication: { include: { _count: { select: { posts: true, Followers: true, Followings: true } } } },
+          },
+
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 5,
+        },
+      },
+    }),
+    postData.publicationId ? db.user.findUnique({
+      where: {
+        id: postData.publicationId,
+      },
+      include: {
+        _count: { select: { posts: true, Followers: true, Followings: true } },
+      },
+    }) : Promise.resolve(null),
+  ]);
+
+  const authorPosts = [...author?.posts || [], ...author?.publicationsPosts || []];
+
+  authorPosts.sort((a: any, b: any) => {
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
+
+  authorPosts.length = 4;
 
   const relatedPosts = await db.post.findMany({
     where: {
@@ -222,13 +250,13 @@ export default async function PostLayout({ children, params }: Props) {
         some: {
           tag: {
             name: {
-              in: post?.tags.map((tag: any) => tag.tag.name),
+              in: postData?.tags.map((tag: any) => tag.tag.name),
             },
           },
         },
       },
       url: {
-        not: post?.url,
+        not: postData?.url,
       },
       published: true,
     },
@@ -238,10 +266,10 @@ export default async function PostLayout({ children, params }: Props) {
       },
       author: {
         include: {
-          Followers: true,
-          Followings: true,
+          _count: { select: { posts: true, Followers: true, Followings: true } },
         },
       },
+      publication: { include: { _count: { select: { posts: true, Followers: true, Followings: true } } } },
       savedUsers: true,
     },
     orderBy: {
@@ -255,11 +283,11 @@ export default async function PostLayout({ children, params }: Props) {
   const posts =
     relatedPosts.length > 0
       ? relatedPosts
-      : forYou.filter((p: any) => p.id !== post.id);
+      : forYou.filter((p: any) => p.id !== postData.id);
   posts.length % 2 !== 0 && posts.pop();
 
   const list = await getLists({ id: sessionUser?.id });
-  const { lists: recommenedLists } = await getListByTags({ tags: post?.tags.map((tag: any) => tag.tagId), limit: 6 });
+  const { lists: recommenedLists } = await getListByTags({ tags: postData?.tags.map((tag: any) => tag.tagId), limit: 6 });
   return (
     <>
       <div
@@ -271,12 +299,13 @@ export default async function PostLayout({ children, params }: Props) {
         <div className="flex-[1_0_auto] mt-4">
           <div className="md:container mx-auto px-4 pt-5">{children}</div>
 
-          {post && (
+          {postData && (
             <div className="bg-popover flex flex-col gap-16 pt-16 mt-4 border-t">
               <div className="md:container mx-auto px-4 w-full mb-16">
                 <MoreFromAuthor
                   post={authorPosts}
                   author={author}
+                  publication={publication}
                   sessionUser={sessionUser}
                   list={list}
                 />
@@ -285,7 +314,6 @@ export default async function PostLayout({ children, params }: Props) {
                     <Separator className="mt-14 mb-8" />
                     <RelatedPosts
                       posts={posts}
-                      post={post}
                       session={sessionUser}
                       list={list}
                       lists={recommenedLists}
