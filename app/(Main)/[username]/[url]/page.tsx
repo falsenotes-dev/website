@@ -25,8 +25,6 @@ export default async function PostView({
     },
     include: {
       _count: { select: { posts: true, Followers: true, Followings: true } },
-      Followers: true,
-      Followings: true,
     },
   });
   if (!author) return notFound();
@@ -66,6 +64,7 @@ export default async function PostView({
           _count: {
             select: { posts: true, Followers: true, Followings: true },
           },
+          Followers: true,
         },
       },
       tags: {
@@ -117,6 +116,7 @@ export default async function PostView({
         author: {
           include: {
             _count: { select: { posts: true, Followers: true, Followings: true } },
+            Followers: true,
           },
         },
         tags: {

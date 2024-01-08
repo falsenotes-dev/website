@@ -183,6 +183,7 @@ export default async function PostLayout({ children, params }: Props) {
             author: {
               include: {
                 _count: { select: { posts: true, Followers: true, Followings: true } },
+                Followers: true,
               },
             },
             savedUsers: true,
