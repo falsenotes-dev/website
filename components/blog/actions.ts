@@ -10,19 +10,10 @@ export async function incrementPostViews({
 }) {
   const cookieName = `post_views_${author}_${post}`;
 
-  const authorId = await db.user.findFirst({
-    where: {
-      username: author,
-    },
-    select: {
-      id: true,
-    },
-  });
   // Make an API request to increment the view count
   await db.post.update({
     where: {
       url: post,
-      authorId: authorId?.id,
     },
     data: {
       views: {
