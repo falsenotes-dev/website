@@ -66,7 +66,7 @@ export default function SinglePost({
         (follower: any) => follower.followerId === sessionUser?.id
       )
     );
-  }, [author]);
+  }, [author, sessionUser]);
 
   const router = useRouter();
   const pathname = usePathname();
