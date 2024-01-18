@@ -26,6 +26,11 @@ export default async function Layout({ children, params }: Props) {
               published: true,
             },
           },
+          publicationsPosts: {
+            where: {
+              published: true,
+            },
+          }
         },
       },
       Followers: {
