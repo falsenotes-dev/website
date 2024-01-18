@@ -172,7 +172,7 @@ export default function MobilePostTabs({
               </LoginDialog>
             )}
           </div>
-          {(session?.id === post.authorId || session?.id === post.publication?.id) && (
+          {session && (session?.id === post.authorId || session?.id === post.publication?.id) && (
             <>
               <Separator orientation="vertical" />
               <PostAnalyticsDialog
