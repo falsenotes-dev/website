@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { Separator } from '@radix-ui/react-context-menu';
 import { Button } from '../ui/button';
 import { EmptyPlaceholder } from '../empty-placeholder';
+import { getPosts } from '@/lib/prisma/posts';
 
 export default function Posts({ initialPosts, search, session, list }: { initialPosts: any | undefined, search?: string | undefined, session: any, list: any }) {
      const [posts, setposts] = useState<Array<any>>(initialPosts)
@@ -22,9 +23,8 @@ export default function Posts({ initialPosts, search, session, list }: { initial
      async function loadMorePosts() {
           const next = page + 1
           setIsLoading(true)
-          const result = await fetch(`/api/posts?page=${next}${search ? `&search=${search}` : ''}`).then(res => res.json())
           setIsLoading(false)
-          const fetchedposts = result?.posts
+          const { posts: fetchedposts } = await getPosts({ search, limit: 10, page: next })
           if (fetchedposts?.length) {
                setPage(next)
                setposts(prev => [...prev, ...fetchedposts])
