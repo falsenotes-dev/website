@@ -23,8 +23,8 @@ export default function Posts({ initialPosts, search, session, list }: { initial
      async function loadMorePosts() {
           const next = page + 1
           setIsLoading(true)
-          setIsLoading(false)
           const { posts: fetchedposts } = await getPosts({ search, limit: 10, page: next })
+          setIsLoading(false)
           if (fetchedposts?.length) {
                setPage(next)
                setposts(prev => [...prev, ...fetchedposts])
