@@ -2,7 +2,7 @@
 import { Hash, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDebounce } from "use-debounce";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
@@ -24,7 +24,8 @@ import {
 } from "@/components/ui/popover"
 import Link from "next/link";
 import { Icons } from "./icon";
-import { addSearchHistory } from "@/lib/prisma/search-history";
+import { addSearchHistory, removeSearchHistory } from "@/lib/prisma/search-history";
+import { validate } from "@/lib/revalidate";
 
 
 
@@ -48,7 +49,7 @@ async function fetchSuggestions(query: string) {
   return { users, tags };
 }
 
-export default function SearchBar() {
+export default function SearchBar({ history }: { history: any }) {
   const [open, setOpen] = React.useState(false)
   const router = useRouter()
 
@@ -73,6 +74,7 @@ export default function SearchBar() {
       }
     }
   };
+  const path = usePathname()
 
   return (
     <>
@@ -93,6 +95,32 @@ export default function SearchBar() {
         </PopoverTrigger>
         <PopoverContent className="md:w-40 lg:w-64 p-0">
           <Command>
+            {
+              !query && history?.length > 0 && (
+                <CommandGroup heading="History">
+                  {history?.map((search: any) => (
+                    <CommandItem
+                      key={search.id}
+                      value={search.id}
+                    >
+                      <Link href={`/explore?search=${search.search}`} className="flex items-center">
+                        <Icons.history className="mr-2 h-4 w-4" />
+                        <span>{search.search}</span>
+                      </Link>
+                      <Button variant="ghost" size="sm" className="ml-auto h-fit"
+                        onClick={
+                          async () => {
+                            await removeSearchHistory(query)
+                            await validate(path)
+                          }
+                        }>
+                        <Icons.close className="h-3 w-3" />
+                      </Button>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )
+            }
             {suggestions.users?.length === 0 && suggestions.tags?.length === 0 && (
               <CommandEmpty>No results found.</CommandEmpty>
             )}

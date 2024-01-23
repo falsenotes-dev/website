@@ -19,6 +19,7 @@ import SearchBar from "../searchbar";
 import { useRouter } from "next/navigation";
 import { PostCreateButton } from "./post-create-button";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { UserSearchHistory } from "@prisma/client";
 
 function numberFormat(number: number) {
   if (number > 9) {
@@ -28,10 +29,13 @@ function numberFormat(number: number) {
   }
 }
 
-function Navbar(notifications: any) {
+function Navbar({ notifications, searchHistory }: { notifications: any, searchHistory: UserSearchHistory[] }) {
   const { data: session, status } = useSession();
   const router = useRouter();
-
+  const [history, setHistory] = useState<UserSearchHistory[]>([])
+  useEffect(() => {
+    setHistory(searchHistory)
+  }, [searchHistory])
   return (
     <div className="md:container px-4 sticky top-4 z-20">
       <div className="menu-container py-4 px-8 bg-background/95 backdrop-blur border rounded-2xl shadow-xl xl:mx-8 supports-[backdrop-filter]:bg-background/60">
@@ -51,7 +55,7 @@ function Navbar(notifications: any) {
               <span className="sr-only">Search</span>
             </Link>
           </Button>
-          <SearchBar />
+          <SearchBar history={history} />
           {
             status == 'authenticated' ? (
               <>

@@ -347,3 +347,23 @@ export const getMembers = async ({ id }: { id: User["id"] }) => {
     members: JSON.parse(JSON.stringify(members)),
   };
 };
+
+export const getSearchHistory = async ({
+  id,
+}: {
+  id: User["id"] | undefined;
+}) => {
+  const searchHistory = await db.user.findFirst({
+    where: { id },
+    select: {
+      searchHistory: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+  return {
+    searchHistory: JSON.parse(JSON.stringify(searchHistory?.searchHistory)),
+  };
+};

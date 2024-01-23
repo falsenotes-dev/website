@@ -2,7 +2,8 @@
 import { getSessionUser } from '@/components/get-session-user';
 import Navbar from '@/components/navbar/navbar';
 import db from '@/lib/db';
-import { getNotifications } from '@/lib/prisma/session';
+import { addSearchHistory } from '@/lib/prisma/search-history';
+import { getNotifications, getSearchHistory } from '@/lib/prisma/session';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -25,10 +26,12 @@ export default async function MainLayout({
     }
   })
 
+  const { searchHistory } = await getSearchHistory({ id: session?.id })
+
   return (
     <div className='min-h-screen'>
       <>
-        <Navbar notifications={notifications} />
+        <Navbar notifications={notifications} searchHistory={searchHistory} />
         {children}
       </>
     </div>
