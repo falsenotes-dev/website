@@ -47,6 +47,7 @@ model User {
   urls              UserWebsite[]
   publications      PublicationAuthor[]
   writers           PublicationAuthor[] @relation("PublicationAuthor")
+  searchHistory     UserSearchHistory[]
 
   @@map("users")
 }
@@ -304,6 +305,17 @@ model UserSettings {
   updatedAt  DateTime @updatedAt
 
   @@map("usersettings")
+}
+
+model UserSearchHistory {
+  id        String   @id @default(uuid()) @map("_id")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  search    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("usersearchhistory")
 }
 
 model ReadingHistory {
