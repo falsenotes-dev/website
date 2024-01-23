@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/popover"
 import Link from "next/link";
 import { Icons } from "./icon";
+import { addSearchHistory } from "@/lib/prisma/search-history";
 
 
 
@@ -64,9 +65,10 @@ export default function SearchBar() {
     }
   }, [query]);
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  const handleKeyDown = async (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       if (query) {
+        await addSearchHistory(query)
         router.push(`/explore?search=${query}`)
       }
     }
