@@ -225,7 +225,6 @@ export default async function PostLayout({ children, params }: Props) {
           },
           take: 5,
         },
-        Followers: true,
       },
     }),
     postData.publicationId ? db.user.findUnique({
