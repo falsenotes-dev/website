@@ -22,8 +22,7 @@ export default async function Home() {
   }
 
   // Use Promise.all to run both fetch operations in parallel
-  const [{ posts: latestPosts }, tags, popularPosts] = await Promise.all([
-    getFeaturedPosts({ page: 0 }),
+  const [tags, popularPosts] = await Promise.all([
     db.tag.findMany({
       select: {
         name: true,
@@ -48,7 +47,6 @@ export default async function Home() {
     <>
       <Landing
         tags={tags}
-        latest={latestPosts}
         popular={popular}
         topUsers={topUsers}
       />

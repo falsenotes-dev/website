@@ -32,36 +32,16 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import UserVerticalCard from "../user-vertical-card";
 
 export default function Landing({
-  latest,
   tags,
   popular,
   topUsers,
 }: {
-  latest: any;
   tags: any;
   popular: any;
   topUsers: any;
 }) {
   const { width, height } = useWindowDimensions();
-  const [latestPosts, setFeed] = React.useState(latest);
   const [page, setPage] = React.useState<number>(0);
-  const [ref, inView] = useInView();
-
-  async function loadMoreFeed() {
-    const next = page + 1
-    const result = await getFeaturedPosts({ page: next }).then(res => res.posts)
-    console.log(result)
-    if (result?.length) {
-      setPage(next)
-      setFeed((prev: any) => [...prev, ...result])
-    }
-  }
-
-  React.useEffect(() => {
-    if (inView) {
-      loadMoreFeed()
-    }
-  }, [inView])
 
   return (
     <>
