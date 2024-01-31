@@ -17,8 +17,16 @@ export const fetchUsers = async ({
         select: {
           Followers: true,
           Followings: true,
-          publicationsPosts: true,
-          posts: true,
+          publicationsPosts: {
+            where: {
+              published: true,
+            },
+          },
+          posts: {
+            where: {
+              published: true,
+            },
+          },
         },
       },
     },
