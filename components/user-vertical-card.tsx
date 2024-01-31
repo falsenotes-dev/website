@@ -10,7 +10,7 @@ import React from "react";
 import { Plus } from "lucide-react";
 import LoginDialog from "./login-dialog";
 
-export default function UserVerticalCard({ user, className, session, ...props }: { user: any, session: any } & React.ComponentPropsWithoutRef<typeof Card>) {
+export default function UserVerticalCard({ user, className, session, ...props }: { user: any, session?: any } & React.ComponentPropsWithoutRef<typeof Card>) {
      const [following, setFollowing] = React.useState<boolean>(false)
      const [followersCount, setFollowersCount] = React.useState<number>(user._count.Followers)
 
@@ -27,7 +27,7 @@ export default function UserVerticalCard({ user, className, session, ...props }:
           setFollowersCount(followersCount + (following ? -1 : 1))
           if (!res.ok) {
                setFollowing(!following)
-               setFollowersCount(followersCount + (following ? -1 : 1))  
+               setFollowersCount(followersCount + (following ? -1 : 1))
           }
      }
      return (
@@ -50,7 +50,12 @@ export default function UserVerticalCard({ user, className, session, ...props }:
                                         )}
                                    </div>
                               </Link>
-                              <p className="text-xs text-muted-foreground">{formatNumberWithSuffix(followersCount)} Followers</p>
+                              <p className="text-xs text-muted-foreground">{formatNumberWithSuffix(followersCount)} Followers
+                                   <span className="px-1">·</span>
+                                   {
+                                        formatNumberWithSuffix(user._count.posts + user._count.publicationsPosts) + " Posts"
+                                   }
+                              </p>
                               {
                                    user.bio && (
                                         <div className="max-w-full break-words whitespace-pre-wrap mt-3 mb-6">
@@ -64,7 +69,7 @@ export default function UserVerticalCard({ user, className, session, ...props }:
                     {
                          session ? (
                               <Button onClick={
-                                   session?.id === user.id ? () => {} : follow
+                                   session?.id === user.id ? () => { } : follow
                               } variant={following ? "outline" : "default"} className="w-full">
                                    {following ? "Following" : "Follow"}
                               </Button>

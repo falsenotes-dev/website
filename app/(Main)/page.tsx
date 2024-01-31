@@ -6,6 +6,7 @@ import Landing from '@/components/landing/landing';
 import db from '@/lib/db';
 import { getFeaturedPosts, getPosts } from '@/lib/prisma/posts';
 import { SiteFooter } from '@/components/footer';
+import { fetchUsers } from '@/components/feed/fetch-user';
 
 export default async function Home() {
 
@@ -21,8 +22,7 @@ export default async function Home() {
   }
 
   // Use Promise.all to run both fetch operations in parallel
-  const [{ posts: latestPosts }, tags, popularPosts] = await Promise.all([
-    getFeaturedPosts({ page: 0 }),
+  const [tags, popularPosts] = await Promise.all([
     db.tag.findMany({
       select: {
         name: true,
@@ -40,13 +40,15 @@ export default async function Home() {
 
   //latest post of the day
   const { posts: popular } = popularPosts;
+  const topData = await fetchUsers({ limit: 6 })
+  const topUsers = topData?.users;
 
   return (
     <>
       <Landing
         tags={tags}
-        latest={latestPosts}
         popular={popular}
+        topUsers={topUsers}
       />
       <SiteFooter />
     </>

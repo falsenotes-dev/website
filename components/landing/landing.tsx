@@ -5,6 +5,7 @@ import { Separator } from "../ui/separator";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -27,42 +28,26 @@ import React from "react";
 import { useInView } from "react-intersection-observer";
 import { getFeaturedPosts } from "@/lib/prisma/posts";
 import { signIn } from "next-auth/react";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
+import UserVerticalCard from "../user-vertical-card";
 
 export default function Landing({
-  latest,
   tags,
   popular,
+  topUsers,
 }: {
-  latest: any;
   tags: any;
   popular: any;
+  topUsers: any;
 }) {
   const { width, height } = useWindowDimensions();
-  const [latestPosts, setFeed] = React.useState(latest);
   const [page, setPage] = React.useState<number>(0);
-  const [ref, inView] = useInView();
-
-  async function loadMoreFeed() {
-    const next = page + 1
-    const result = await getFeaturedPosts({ page: next }).then(res => res.posts)
-    console.log(result)
-    if (result?.length) {
-      setPage(next)
-      setFeed((prev: any) => [...prev, ...result])
-    }
-  }
-
-  React.useEffect(() => {
-    if (inView) {
-      loadMoreFeed()
-    }
-  }, [inView])
 
   return (
     <>
-      <main className="landing mx-auto w-full overflow-hidden mb-4">
-        <div className="landing__hero px-6 xl:px-36 2xl:px-64">
-          <div className="landing__hero_content flex flex-col md:mt-28 mt-20 space-y-8 items-center justify-center">
+      <main className="landing mx-auto w-full overflow-hidden mb-4 my-10">
+        <div className="landing__hero px-4 md:container rounded-3xl overflow-hidden mb-4 mx-4 md:mx-auto">
+          <div className="landing__hero_content flex flex-col space-y-8 items-center justify-center p-6 text-primary-foreground">
             <div className="flex flex-col justify-center gap-8">
               <div className="flex flex-col justify-center gap-2">
                 <Link
@@ -100,27 +85,12 @@ export default function Landing({
                 Join Now
               </Button>
             </div>
-            <div className="landing_hero-image w-[167vw] xl:w-screen">
+            <div className="landing_hero-image w-[167vw] xl:w-full">
               <Image
                 loading="eager"
-                className="landing_hero-image-light"
-                src="/assets/hero-light.png"
+                src="/assets/header-img.png"
                 sizes="100vw"
-                width={1920}
-                height={711}
-                layout="responsive"
-                // Make the image display full width
-                style={{
-                  width: "120vw",
-                  height: "auto",
-                }}
-                alt=""
-              />
-              <Image
-                loading="eager"
-                className="landing_hero-image-dark"
-                src="/assets/hero-dark.png"
-                sizes="100vw"
+                className="object-cover mb-14"
                 width={1920}
                 height={711}
                 layout="responsive"
@@ -134,8 +104,8 @@ export default function Landing({
             </div>
           </div>
         </div>
-        <div className="px-3.5 xl:px-36 2xl:px-64 divide-y border-t">
-          <div className="pt-10 pb-4">
+        <div className="px-4 md:container mx-4 md:mx-auto">
+          <div className="pt-10 pb-4 mb-8">
             <div className="flex flex-row items-center">
               <h2 className="font-medium mb-4">Trending on FalseNotes</h2>
             </div>
@@ -215,101 +185,88 @@ export default function Landing({
               </div>
             </div>
           </div>
-          <div className="grid-cols-12 lg:grid flex flex-col-reverse lg:gap-8 gap-4 pt-14 grid-rows-1">
-            <div style={{ gridColumn: "1 / span 8" }} className="mt-10 lg:mt-0">
-              {latestPosts.length > 0 ? (
-                <>
-                  <div className="flex flex-col lg:gap-6 md:gap-5 gap-4">
-                    {latestPosts?.map((post: any) => (
-                      <LandingPostCard post={post} key={post.id} />
-                    ))}
-                    <Card
-                      className={
-                        "rounded-lg feedArticleCard bg-transparent w-full mb-4"
-                      }
-                      ref={ref}
+          <div className="flex flex-col md:flex-row lg:gap-8 gap-4 self-stretch py-6 mb-8">
+            <Card className="self-stretch rounded-lg bg-secondary border-secondary">
+              <CardContent className="p-6 md:p-8 h-full">
+                <CardTitle className="line-clamp-2 mb-4">Explore suggested tags</CardTitle>
+                <CardDescription className="line-clamp-3">
+                  Discover curated tags for tailored content recommendations. Follow suggested tags to stay updated and dive into a world of diverse posts that match your interests
+                </CardDescription>
+              </CardContent>
+            </Card>
+            <Card className="self-stretch main-bg rounded-lg min-h-max">
+              <CardContent className="p-6 md:p-8 pb-0 h-full">
+                <div className="w-full flex-wrap items-center justify-center">
+                  {tags?.map((tag: any) => (
+                    <Link href={`/tags/${tag.name}`} key={tag.id}>
+                      <TagBadge
+                        className="my-1.5 mr-1.5 md:px-3 py-1 text-base font-normal"
+                        variant={"secondary"}
+                      >
+                        <Icons.search className="h-4 w-4 mr-2" /> {tag.name.replace(/-/g, " ")}
+                      </TagBadge>
+                    </Link>
+                  ))}
+                </div>
+                <CardFooter className="py-6 p-0">
+                  <Button variant={"link"} className="px-0" asChild>
+                    <Link
+                      href={`/tags`}
+                      className="text-sm flex items-center my-2.5 font-medium text-primary-foreground"
                     >
-                      <CardContent className="p-4 md:p-6">
-                        <div className="flex items-start justify-between gap-3 md:gap-5">
-                          <div className="flex-initial w-full">
-                            <div className="flex items-center space-x-1 mb-2">
-                              <div className="flex items-center space-x-0.5">
-                                <Skeleton className="w-6 h-6 rounded-full" />
-                                <Skeleton className="w-28 h-3" />
-                              </div>
-                            </div>
-                            <div>
-                              <div className="pb-4 space-y-2">
-                                <Skeleton className="w-4/5 h-5" />
-                                <Skeleton className="w-4/5 h-5" />
-                                <Skeleton className="w-3/5 h-5" />
-                              </div>
-                              <div className="post-subtitle hidden md:block space-y-2">
-                                <Skeleton className="w-full h-4" />
-                                <Skeleton className="w-full h-4" />
-                              </div>
-                            </div>
-                            <div className="mt-4 md:mt-6">
-                              <div className="flex justify-between items-center">
-                                <div className="flex flex-1 items-center space-x-1.5">
-                                  <Skeleton className="w-32 h-4" />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="h-[100px] md:h-36 rounded-md bg-muted md:aspect-[4/3] aspect-square">
-                            <Skeleton className="w-full h-full rounded-md" />
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </>
-              ) : (
-                <EmptyPlaceholder>
-                  <EmptyPlaceholder.Icon name="post" />
-                  <EmptyPlaceholder.Title>No posts yet</EmptyPlaceholder.Title>
-                </EmptyPlaceholder>
-              )}
-            </div>
-            <div style={{ gridColumn: "9 / span 4" }}>
-              <div className="sticky lg:top-20 border-b lg:border-b-0">
-                {tags.length !== 0 && (
-                  <Card className="feed__content_featured_card bg-transparent">
-                    <CardHeader className="p-4 md:p-6">
-                      <CardTitle className="feed__content_featured_card_title text-base">
-                        Discover more of what matchs you
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="px-4 md:px-6 pb-0">
-                      <div className="w-full flex-wrap">
-                        {tags?.map((tag: any) => (
-                          <Link href={`/tags/${tag.name}`} key={tag.id}>
-                            <TagBadge
-                              className="my-1 mr-1 text-sm font-medium"
-                              variant={"secondary"}
-                            >
-                              {tag.name.replace(/-/g, " ")}
-                            </TagBadge>
-                          </Link>
-                        ))}
-                      </div>
-                    </CardContent>
-                    <CardFooter className="px-4 md:px-6">
-                      <Button variant={"link"} className="px-0" asChild>
-                        <Link
-                          href={`/tags`}
-                          className="text-sm flex items-center my-2.5 font-medium"
-                        >
-                          See more tags
-                        </Link>
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                )}
+                      See more tags
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="flex justify-center w-full">
+            <div className="mb-20 w-full">
+              <div className="my-10">
+                <h2 className="text-2xl font-medium tracking-tight w-full">Top level authors</h2>
+              </div>
+              <div className="mt-6 mb-10">
+                <Carousel opts={
+                  {
+                    align: 'start',
+
+                  }
+                } >
+                  <CarouselContent>
+                    {
+                      topUsers.map((follower: any) => (
+                        <CarouselItem className="basis-full md:basis-1/3 pl-6" key={follower.id}><UserVerticalCard user={follower} /></CarouselItem>
+                      ))
+                    }
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
+
               </div>
             </div>
           </div>
+          <Card className="self-stretch rounded-lg main-bg text-primary-foreground mb-10">
+            <CardContent className="p-8 md:p-10 !px-14 h-full flex flex-col md:flex-row md:justify-between md:items-center">
+              <div>
+                <CardTitle className="line-clamp-2 mb-4 text-center md:text-left">Start your journey with FalseNotes now!</CardTitle>
+                <CardDescription className="line-clamp-3 text-primary-foreground text-center md:text-left">
+                  Discover
+                  new ideas, learn new skills, and connect with like-minded
+                  individuals.
+                </CardDescription>
+              </div>
+              <Button
+                size={"lg"}
+                className="mt-6 w-max mx-auto md:mx-0 md:mt-0 md:ml-auto"
+                variant={'secondary'}
+                onClick={() => signIn()}
+              >
+                Start Now
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </>
