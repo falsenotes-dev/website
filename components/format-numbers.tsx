@@ -1,15 +1,11 @@
 export function formatNumberWithSuffix(num: number): string {
-     //if number as 
-     //format number with suffix ex: 1.5K, 2.3M, 4.5B
-     //if number is 0 or NaN return 0
-     if (isNaN(num) || num === 0) {
-       return "0";
-     } else{
-       const suffixes = ["", "K", "M", "B", "T"];
-       const magnitude = Math.floor(Math.log10(num) / 3);
-       const divisor = Math.pow(10, magnitude * 3);
-       const suffix = suffixes[magnitude];
-       const roundedNum = Math.round(num / divisor * 10) / 10;
-       return `${roundedNum}${suffix}`;
-     }
-   }
+  if (num === 0 || isNaN(num)) return "0";
+  const units = ["", "K", "M", "B", "T"];
+  const unitIndex = Math.floor(Math.log(num) / Math.log(1024));
+  const unit = units[unitIndex];
+  const numWith2Decimals = parseFloat((num / Math.pow(1024, unitIndex)).toFixed(2));
+  if (numWith2Decimals === 0) return "0";
+  return numWith2Decimals % 1 === 0
+    ? numWith2Decimals.toString() + unit
+    : numWith2Decimals.toFixed(2) + unit;
+}
