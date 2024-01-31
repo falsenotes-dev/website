@@ -6,6 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "@/components/auth/user-auth-form"
 import { Icons } from "@/components/icon"
 import SigninDialog from "@/components/auth/dialog"
+import Image from "next/image"
 
 // export const metadata: Metadata = {
 //   title: "Authentication",
@@ -31,11 +32,28 @@ export default async function SigninPage({ searchParams }: { searchParams: { [ke
         >
           Go Back
         </Link>
-        <div className="relative hidden h-full flex-col p-10 border-r lg:flex ">
+        <div className="relative hidden h-full flex-col p-10 border-r lg:flex overflow-hidden justify-start">
           <div className="absolute inset-0 main-bg" />
           <Link href="/" className="relative z-20 flex items-center text-lg font-medium">
             <Icons.logo className="text-primary-foreground" />
           </Link>
+          <div className="relative flex justify-center -mx-28 w-[125%]">
+            <Image
+              loading="eager"
+              src="/assets/header-img.png"
+              sizes="125%"
+              className="my-20"
+              width={1920}
+              height={711}
+              layout="responsive"
+              // Make the image display full width
+              style={{
+                width: "120vw",
+                height: "auto",
+              }}
+              alt=""
+            />
+          </div>
           <div className="relative z-20 mt-auto">
             {/* <blockquote className="space-y-2">
               <p className="text-lg">
