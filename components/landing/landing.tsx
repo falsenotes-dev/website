@@ -124,8 +124,8 @@ export default function Landing({
             </div>
           </div>
         </div>
-        <div className="px-3.5 xl:px-36 2xl:px-64">
-          <div className="pt-10 pb-4">
+        <div className="px-4 md:container mx-4 md:mx-auto">
+          <div className="pt-10 pb-4 mb-8">
             <div className="flex flex-row items-center">
               <h2 className="font-medium mb-4">Trending on FalseNotes</h2>
             </div>
@@ -205,8 +205,8 @@ export default function Landing({
               </div>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row lg:gap-8 gap-4 self-stretch py-6">
-            <Card className="self-stretch rounded-lg">
+          <div className="flex flex-col md:flex-row lg:gap-8 gap-4 self-stretch py-6 mb-8">
+            <Card className="self-stretch rounded-lg bg-secondary border-secondary">
               <CardContent className="p-6 md:p-8 h-full">
                 <CardTitle className="line-clamp-2 mb-4">Explore suggested tags</CardTitle>
                 <CardDescription className="line-clamp-3">
@@ -267,6 +267,26 @@ export default function Landing({
               </div>
             </div>
           </div>
+          <Card className="self-stretch rounded-lg main-bg text-primary-foreground mb-10">
+            <CardContent className="p-8 md:p-10 !px-14 h-full flex flex-col md:flex-row md:justify-between md:items-center">
+              <div>
+                <CardTitle className="line-clamp-2 mb-4 text-center md:text-left">Start your journey with FalseNotes now!</CardTitle>
+                <CardDescription className="line-clamp-3 text-primary-foreground text-center md:text-left">
+                  Discover
+                  new ideas, learn new skills, and connect with like-minded
+                  individuals.
+                </CardDescription>
+              </div>
+              <Button
+                size={"lg"}
+                className="mt-6 w-max mx-auto md:mx-0 md:mt-0 md:ml-auto"
+                variant={'secondary'}
+                onClick={() => signIn()}
+              >
+                Start Now
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </>
