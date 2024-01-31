@@ -6,6 +6,7 @@ import Landing from '@/components/landing/landing';
 import db from '@/lib/db';
 import { getFeaturedPosts, getPosts } from '@/lib/prisma/posts';
 import { SiteFooter } from '@/components/footer';
+import { fetchUsers } from '@/components/feed/fetch-user';
 
 export default async function Home() {
 
@@ -40,6 +41,8 @@ export default async function Home() {
 
   //latest post of the day
   const { posts: popular } = popularPosts;
+  const topData = await fetchUsers({ limit: 6 })
+  const topUsers = topData?.users;
 
   return (
     <>
@@ -47,6 +50,7 @@ export default async function Home() {
         tags={tags}
         latest={latestPosts}
         popular={popular}
+        topUsers={topUsers}
       />
       <SiteFooter />
     </>
