@@ -32,9 +32,9 @@ export default async function SigninPage({ searchParams }: { searchParams: { [ke
           Go Back
         </Link>
         <div className="relative hidden h-full flex-col p-10 border-r lg:flex ">
-          <div className="absolute inset-0 bg-pattern" />
+          <div className="absolute inset-0 main-bg" />
           <Link href="/" className="relative z-20 flex items-center text-lg font-medium">
-            <Icons.logo />
+            <Icons.logo className="text-primary-foreground" />
           </Link>
           <div className="relative z-20 mt-auto">
             {/* <blockquote className="space-y-2">
