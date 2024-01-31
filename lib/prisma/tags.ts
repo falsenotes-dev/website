@@ -240,7 +240,9 @@ export const getFollowersByTag = async ({
     select: {
       follower: {
         include: {
-          _count: { select: { posts: true, Followers: true } },
+          _count: {
+            select: { posts: true, Followers: true, publicationsPosts: true },
+          },
           Followers: true,
         },
       },
