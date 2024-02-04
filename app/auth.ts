@@ -123,13 +123,16 @@ export const config = {
           } else {
             // User exists, update their details in the Users table
             try {
-              await db.user.update({
+              // Update the user's details
+              const user = await db.user.update({
                 where: {
                   id: userExists.id,
                 },
                 data: {
                   githubId: githubId.toString(),
-                  email: email,
+                  name: userExists.name ? userExists.name : name,
+                  location: location,
+                  image: avatar_url,
                 },
               });
 
