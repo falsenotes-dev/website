@@ -133,6 +133,7 @@ export const config = {
                   name: userExists.name ? userExists.name : name,
                   location: location,
                   image: avatar_url,
+                  email: userExists.email ? userExists.email : email,
                 },
               });
 
