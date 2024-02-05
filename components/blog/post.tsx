@@ -109,19 +109,23 @@ export default function SinglePost({
       <div className="article max-w-[650px] lg:max-w-[680px] mx-auto">
         <div className="article__container space-y-6">
           <div className="article__header lg:text-xl">
-            {post?.cover && (
-              <div className="article__header-img w-full h-fit">
-                <Image
-                  src={post?.cover}
-                  alt={post?.title}
-                  fill
-                  className="!relative w-full rounded-md hover:scale-105 object-cover"
-                  placeholder={`data:image/svg+xml;base64,${toBase64(
-                    shimmer(1920, 1080)
-                  )}`}
-                />
-              </div>
-            )}
+            {
+              //if first image of content is equal to the cover image, then don't show it
+              //find the first image in the content and compare it with the cover image
+              post?.cover && (post?.content.match(/!\[.*\]\((.*)\)/) && (post?.content.match(/!\[.*\]\((.*)\)/)[1] === post?.cover)) && (
+                <div className="article__header-img w-full h-fit">
+                  <Image
+                    src={post?.cover}
+                    alt={post?.title}
+                    fill
+                    className="!relative w-full rounded-md hover:scale-105 object-cover"
+                    placeholder={`data:image/svg+xml;base64,${toBase64(
+                      shimmer(1920, 1080)
+                    )}`}
+                  />
+                </div>
+              )
+            }
             <h1 className="article__title">{post?.title}</h1>
             <div className="article__meta border-y py-2">
               <div className="flex items-baseline">

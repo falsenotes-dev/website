@@ -12,6 +12,12 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: `ltord0pu249uzgxe.public.blob.vercel-storage.com`,
+        port: "",
+        pathname: `/**`,
+      },
+      {
+        protocol: "https",
         hostname: `falsenotescontent.blob.core.windows.net`,
         port: "",
         pathname: `/**`,
