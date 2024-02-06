@@ -19,7 +19,9 @@ import PostMoreActions from "./post-more-actions";
 import PublishDialog from "./publish-dialog";
 import MarkdownCard from "../markdown-card";
 import { validate } from "@/lib/revalidate";
-import { shimmer, toBase64 } from "@/lib/image";
+import { remark } from 'remark'
+import html from 'remark-html'
+import { shimmer } from "@/lib/image";
 
 export default function SinglePost({
   post: initialPost,
@@ -97,6 +99,34 @@ export default function SinglePost({
   if (openPublishDialog === false && published === true) {
     router.replace(`/@${post.publicationId ? post.publication.username : post.author.username}/${post?.url}`);
   }
+
+  //find first image in the content using remark
+  //if first image in the content is equal to the cover image, then don't show it
+  const processor = remark().use(() => {
+    return (tree: any) => {
+      for (const node of tree.children) {
+        if (node.type === "image") {
+          return node;
+        } else {
+          for (const child of node.children) {
+            if (child.type === "image") {
+              return child;
+            }
+          }
+        }
+      }
+    };
+  });
+  const firstImage = processor.processSync(post?.content).toString();
+  //firstImage is markdown image tag with src and alt, extract src from it
+  const firstImageSrc = firstImage.match(/!\[.*\]\((.*)\)/)?.[1] || "";
+
+  const [isFirstImageCover, setIsFirstImageCover] = useState<boolean>(false);
+  useEffect(() => {
+    if (post?.cover && firstImageSrc) {
+      setIsFirstImageCover(post?.cover === firstImageSrc);
+    }
+  }, [firstImageSrc, post?.cover]);
   return (
     <>
       <PublishDialog
@@ -112,16 +142,18 @@ export default function SinglePost({
             {
               //if first image of content is equal to the cover image, then don't show it
               //find the first image in the content and compare it with the cover image
-              post?.cover && (post?.content.match(/!\[.*\]\((.*)\)/) && (post?.content.match(/!\[.*\]\((.*)\)/)[1] === post?.cover)) && (
-                <div className="article__header-img w-full h-fit">
+              post?.cover && !isFirstImageCover && (
+                <div className="article__cover-image">
                   <Image
                     src={post?.cover}
                     alt={post?.title}
-                    fill
-                    className="!relative w-full rounded-md hover:scale-105 object-cover"
-                    placeholder={`data:image/svg+xml;base64,${toBase64(
-                      shimmer(1920, 1080)
-                    )}`}
+                    layout="responsive"
+                    width={1000}
+                    height={500}
+                    className="rounded-md"
+                    placeholder="blur"
+                    blurDataURL={shimmer(1000, 500)}
+                    priority={true}
                   />
                 </div>
               )
