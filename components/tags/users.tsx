@@ -31,16 +31,21 @@ export default function TagFollowers({ followers: initialFollowers, tag, session
      return (
           <div className="flex justify-center w-full">
                <div className="mb-20 w-full">
-                    <div className="my-10">
-                         <h2 className="text-2xl font-medium tracking-tight w-full">Who to follow</h2>
-                    </div>
-                    <div className="mt-6 mb-10">
-                         <Carousel opts={
-                              {
-                                   align: 'start',
+                    <Carousel opts={
+                         {
+                              align: 'start',
 
-                              }
-                         } >
+                         }
+                    } >
+                         <div className="my-10 flex justify-between items-center">
+                              <h2 className="text-2xl font-medium tracking-tight w-full">Who to follow</h2>
+                              <div className="flex gap-2">
+                                   <CarouselPrevious className="static translate-y-0" />
+                                   <CarouselNext className="static translate-y-0" />
+                              </div>
+                         </div>
+                         <div className="mt-6 mb-10">
+
                               <CarouselContent>
                                    {
                                         followers.map((follower: any) => (
@@ -48,11 +53,8 @@ export default function TagFollowers({ followers: initialFollowers, tag, session
                                         ))
                                    }
                               </CarouselContent>
-                              <CarouselPrevious />
-                              <CarouselNext />
-                         </Carousel>
-
-                    </div>
+                         </div>
+                    </Carousel>
                </div>
           </div>
      )

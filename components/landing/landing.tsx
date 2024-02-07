@@ -232,8 +232,8 @@ export default function Landing({
                 <div className="my-10 flex justify-between items-center">
                   <h2 className="text-2xl font-medium tracking-tight w-full">Top level authors</h2>
                   <div className="flex gap-2">
-                    <CarouselPrevious className="static" />
-                    <CarouselNext className="static" />
+                    <CarouselPrevious className="static translate-y-0" />
+                    <CarouselNext className="static translate-y-0" />
                   </div>
                 </div>
                 <div className="mt-6 mb-10">
