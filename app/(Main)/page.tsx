@@ -40,8 +40,23 @@ export default async function Home() {
 
   //latest post of the day
   const { posts: popular } = popularPosts;
-  const topData = await fetchUsers({ limit: 6 })
+  const topData = await fetchUsers({ limit: 10 })
   const topUsers = topData?.users;
+
+  const usersNumber = await db.user.count();
+  const postsNumber = await db.post.count(
+    {
+      where: {
+        published: true
+      }
+    }
+  );
+  const readNumber = await db.readingHistory.count();
+  const stats = {
+    users: usersNumber,
+    posts: postsNumber,
+    reads: readNumber
+  }
 
   return (
     <>
@@ -49,6 +64,7 @@ export default async function Home() {
         tags={tags}
         popular={popular}
         topUsers={topUsers}
+        stats={stats}
       />
       <SiteFooter />
     </>

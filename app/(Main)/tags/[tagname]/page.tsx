@@ -99,7 +99,7 @@ export default async function TagPage({
 
   const { followers } = await getFollowersByTag({
     id: tag.id,
-    limit: 6,
+    limit: 10,
     session: session?.id,
   });
 
