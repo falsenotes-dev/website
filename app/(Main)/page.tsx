@@ -40,7 +40,7 @@ export default async function Home() {
 
   //latest post of the day
   const { posts: popular } = popularPosts;
-  const topData = await fetchUsers({ limit: 6 })
+  const topData = await fetchUsers({ limit: 10 })
   const topUsers = topData?.users;
 
   return (
