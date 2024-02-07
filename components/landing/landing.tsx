@@ -59,7 +59,7 @@ export default function Landing({
   return (
     <>
       <main className="landing mx-auto w-full overflow-hidden mb-4 my-10">
-        <div className="landing__hero px-4 md:container rounded-3xl overflow-hidden mb-4 mx-4 md:mx-auto">
+        <div className="landing__hero px-4 rounded-3xl overflow-hidden mb-4 !mx-4 xl:!mx-auto md:container !w-auto xl:!w-full">
           <div className="landing__hero_content flex flex-col space-y-8 items-center justify-center p-6 text-primary-foreground">
             <div className="flex flex-col justify-center gap-8">
               <div className="flex flex-col justify-center gap-2">
@@ -255,7 +255,7 @@ export default function Landing({
                   <CountUp start={0} end={stats.users} />
                 </span>
                 <span className="text-sm text-muted-foreground">
-                  Author
+                  Authors
                 </span>
               </div>
               <div className="flex flex-col items-center gap-2 flex-1">
