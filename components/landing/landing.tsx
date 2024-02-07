@@ -189,7 +189,7 @@ export default function Landing({
             <Card className="self-stretch rounded-lg bg-secondary border-secondary">
               <CardContent className="p-6 md:p-8 h-full">
                 <CardTitle className="line-clamp-2 mb-4">Explore suggested tags</CardTitle>
-                <CardDescription className="line-clamp-3">
+                <CardDescription className="line-clamp-3 text-foreground">
                   Discover curated tags for tailored content recommendations. Follow suggested tags to stay updated and dive into a world of diverse posts that match your interests
                 </CardDescription>
               </CardContent>
@@ -223,16 +223,21 @@ export default function Landing({
           </div>
           <div className="flex justify-center w-full">
             <div className="mb-20 w-full">
-              <div className="my-10">
-                <h2 className="text-2xl font-medium tracking-tight w-full">Top level authors</h2>
-              </div>
-              <div className="mt-6 mb-10">
-                <Carousel opts={
-                  {
-                    align: 'start',
+              <Carousel opts={
+                {
+                  align: 'start',
 
-                  }
-                } >
+                }
+              } >
+                <div className="my-10 flex justify-between items-center">
+                  <h2 className="text-2xl font-medium tracking-tight w-full">Top level authors</h2>
+                  <div className="flex gap-2">
+                    <CarouselPrevious className="static" />
+                    <CarouselNext className="static" />
+                  </div>
+                </div>
+                <div className="mt-6 mb-10">
+
                   <CarouselContent>
                     {
                       topUsers.map((follower: any) => (
@@ -240,13 +245,15 @@ export default function Landing({
                       ))
                     }
                   </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </Carousel>
 
-              </div>
+
+                </div>
+              </Carousel>
             </div>
           </div>
+
+
+
           <Card className="self-stretch rounded-lg main-bg text-primary-foreground mb-10">
             <CardContent className="p-8 md:p-10 !px-14 h-full flex flex-col md:flex-row md:justify-between md:items-center">
               <div>
