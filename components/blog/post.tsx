@@ -104,11 +104,11 @@ export default function SinglePost({
   //if first image in the content is equal to the cover image, then don't show it
   const processor = remark().use(() => {
     return (tree: any) => {
-      for (const node of tree.children) {
+      for (const node of tree?.children || []) {
         if (node.type === "image") {
           return node;
         } else {
-          for (const child of node.children) {
+          for (const child of node?.children || []) {
             if (child.type === "image") {
               return child;
             }
