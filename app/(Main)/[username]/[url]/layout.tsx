@@ -61,6 +61,14 @@ function markdownToText(markdown: string) {
     .replace(/<\/?[^>]+(>|$)/g, "");
 }
 
+function formatDate(date: Date | string) {
+  // Format date as Mmm, YYYY
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const post = await getPostData(params.username, params.url);
@@ -71,9 +79,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       metadataBase: new URL(
         `${process.env.DOMAIN}/@${post.author.username}/${post.url}`
       ),
-      title: `${post.title} - FalseNotes`,
+      title: `${post.seoTitle ? post.seoTitle : post.title} - by ${post.author.name} - ${formatDate(post.publishedAt)} - FalseNotes`,
       description:
-        post.subtitle || markdownToText(post.content?.slice(0, 100) || ""),
+        post.seoDescription ? post.seoDescription : (post.subtitle || markdownToText(post.content?.slice(0, 100) || "")),
       keywords: post.tags.map((tag: any) => tag.tag.name).join(", "),
       robots: {
         index: true,
@@ -82,16 +90,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         "max-image-preview": "large",
       },
       alternates: {
-        canonical: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}`),
+        canonical: post.canonicalUrl ? new URL(post.canonicalUrl) : new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}`),
         types: {
           url: new URL(`${process.env.DOMAIN}/@${post.author.username}/${post.url}?commentsOpen=true`),
           title: `${post.title} - FalseNotes`,
         }
       },
       openGraph: {
-        title: `${post.title} - FalseNotes`,
+        title: `${post.seoTitle ? post.seoTitle : post.title} - by ${post.author.name} - ${formatDate(post.publishedAt)} - FalseNotes`,
         description:
-          post.subtitle || markdownToText(post.content?.slice(0, 100) || ""),
+          post.seoDescription ? post.seoDescription : (post.subtitle || markdownToText(post.content?.slice(0, 100) || "")),
         url: new URL(
           `${process.env.DOMAIN}/@${post.author.username}/${post.url}`
         ),
@@ -112,9 +120,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
       twitter: {
         card: "summary_large_image",
-        title: `${post.title} - FalseNotes`,
+        title: `${post.seoTitle ? post.seoTitle : post.title} - by ${post.author.name} - ${formatDate(post.publishedAt)} - FalseNotes`,
         description:
-          post.subtitle || markdownToText(post.content?.slice(0, 100) || ""),
+          post.seoDescription ? post.seoDescription : (post.subtitle || markdownToText(post.content?.slice(0, 100) || "")),
       },
     };
   } catch (error) {
