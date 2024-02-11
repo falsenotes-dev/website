@@ -76,35 +76,38 @@ model PublicationAuthor {
 }
 
 model Post {
-  id            String           @id @default(cuid()) @map("_id")
-  title         String
-  content       String
-  subtitle      String?
-  cover         String?
-  views         Int              @default(0)
-  author        User             @relation(fields: [authorId], references: [id])
-  authorId      String
-  publication   User?            @relation("PublicationPost", fields: [publicationId], references: [id])
-  publicationId String?
-  url           String           @unique
-  readingTime   String?
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  published     Boolean          @default(false)
-  publishedAt   DateTime         @default(now())
-  modifiedAt    DateTime?
-  updated       Boolean          @default(false)
-  pinned        Boolean          @default(false)
-  tags          PostTag[]
-  comments      Comment[]
-  likes         Like[]
-  savedUsers    Bookmark[]
-  readedUsers   ReadingHistory[]
-  drafts        DraftPost[]
-  shares        PostShare[]
-  allowComments Boolean          @default(true)
-  allowLikes    Boolean          @default(true)
-  lists         PostList[]
+  id             String           @id @default(cuid()) @map("_id")
+  title          String
+  content        String
+  subtitle       String?
+  cover          String?
+  views          Int              @default(0)
+  author         User             @relation(fields: [authorId], references: [id])
+  authorId       String
+  publication    User?            @relation("PublicationPost", fields: [publicationId], references: [id])
+  publicationId  String?
+  url            String           @unique
+  readingTime    String?
+  seoTitle       String?
+  seoDescription String?
+  canonicalUrl   String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  published      Boolean          @default(false)
+  publishedAt    DateTime         @default(now())
+  modifiedAt     DateTime?
+  updated        Boolean          @default(false)
+  pinned         Boolean          @default(false)
+  tags           PostTag[]
+  comments       Comment[]
+  likes          Like[]
+  savedUsers     Bookmark[]
+  readedUsers    ReadingHistory[]
+  drafts         DraftPost[]
+  shares         PostShare[]
+  allowComments  Boolean          @default(true)
+  allowLikes     Boolean          @default(true)
+  lists          PostList[]
 
   @@index([createdAt])
   @@map("posts")

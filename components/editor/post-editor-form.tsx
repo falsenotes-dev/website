@@ -131,6 +131,9 @@ const postFormSchema = z.object({
   commentsOn: z.boolean().optional().default(true),
   likesOn: z.boolean().optional().default(true),
   pinned: z.boolean().optional().default(false),
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
+  canonicalUrl: z.string().optional(),
 });
 
 type PostFormValues = z.infer<typeof postFormSchema>;
