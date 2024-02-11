@@ -62,7 +62,7 @@ function Navbar({ notifications, searchHistory }: { notifications: any, searchHi
                 <PostCreateButton key={"New Post"} variant="ghost" size={"icon"} className="h-10 w-10 hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md" />
                 <Button variant={"ghost"} size={"icon"} className="h-10 w-10 relative hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md" onClick={() => router.replace('/notifications')}>
                   <Icons.notification className="w-5 h-5" />
-                  {notifications && notifications?.length > 0 && (<Badge className="left-5 font-normal px-1.5 py-0 absolute top-0 h-5 min-w-[1.25rem] max-w-max" >{numberFormat(notifications?.length)}</Badge>)}
+                  {notifications && notifications > 0 && (<Badge className="left-5 font-normal px-1.5 py-0 absolute top-0 h-5 min-w-[1.25rem] max-w-max" >{numberFormat(notifications)}</Badge>)}
                 </Button>
                 <UserNav />
               </>

@@ -16,14 +16,11 @@ export default async function MainLayout({
   children: React.ReactNode
 }) {
   const session = await getSessionUser();
-  const notifications = await db.notification.findMany({
+  const notifications = await db.notification.count({
     where: {
       receiverId: session?.id,
-      read: false
+      read: false,
     },
-    orderBy: {
-      createdAt: 'desc'
-    }
   })
 
   const { searchHistory } = await getSearchHistory({ id: session?.id })
