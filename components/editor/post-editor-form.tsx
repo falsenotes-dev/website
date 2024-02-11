@@ -132,7 +132,9 @@ const postFormSchema = z.object({
   likesOn: z.boolean().optional().default(true),
   pinned: z.boolean().optional().default(false),
   seoTitle: z.string().optional(),
-  seoDescription: z.string().optional(),
+  seoDescription: z.string().max(156, {
+    message: "Description must not be longer than 156 characters.",
+  }).optional(),
   canonicalUrl: z.string().optional(),
 });
 
@@ -160,6 +162,9 @@ export function PostEditorForm(props: { post: any; user: any }) {
       props.post.allowComments == null ? true : props.post.allowComments,
     likesOn: props.post.allowLikes == null ? true : props.post.allowLikes,
     pinned: props.post.pinned == null ? false : props.post.pinned,
+    seoTitle: props.post.seoTitle ? props.post.seoTitle : props.post.title,
+    seoDescription: props.post.seoDescription ? props.post.seoDescription : props.post.subtitle.slice(0, 150) + "...",
+    canonicalUrl: props.post.canonicalUrl,
   };
 
   const form = useForm<PostFormValues>({
@@ -563,7 +568,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                             <div className="flex justify-end flex-col">
                               <div className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center ${isValidUrl !== null && !isValidUrl && "text-destructive !border-destructive"}`}>
                                 <Input
-                                  className={`border-none p-0 focus-visible:ring-offset-0 focus-visible:ring-0 bg-transparent`}
+                                  className="border-none p-0 focus-visible:ring-offset-0 focus-visible:ring-0 bg-transparent"
                                   placeholder="URL"
                                   {...field}
                                   onChange={handleUrlChange}
@@ -671,8 +676,9 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                       size={"icon"}
                                       className="bg-secondary/60 backdrop-blur-md hover:bg-secondary"
                                       onClick={() => {
-                                        form.setValue("coverImage", firstImage);
-                                        setCover(firstImage);
+                                        form.setValue("coverImage", firstImage !== props.user?.image ? firstImage : "");
+                                        setCover(firstImage !== props.user?.image ? firstImage : "");
+                                        setFirstImage(firstImage !== props.user?.image ? firstImage : "")
                                       }}
                                     >
                                       <RefreshCcw className="h-4 w-4" />
@@ -783,6 +789,79 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                 </Button>
                               </AspectRatio>
                             </>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="seoTitle"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              {...field}
+                              onChange={(e) => {
+                                // if seoTitle is empty, set it to title
+                                if (e.target.value == "" || e.target.value == null) {
+                                  form.setValue("seoTitle", form.getValues("title"));
+                                } else {
+                                  form.setValue("seoTitle", e.target.value);
+                                }
+                              }}
+                              placeholder="SEO Title"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="seoDescription"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <TextareaAutosize
+                              {...field}
+                              className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]"
+                              rows={1}
+                              placeholder="SEO Description"
+                              onChange={(e) => {
+                                // if seoDescription is empty, set it to subtitle
+                                if (e.target.value == "" || e.target.value == null) {
+                                  form.setValue("seoDescription", form.getValues("subtitle")?.slice(0, 150) + "..."); // limit to 156 characters
+                                } else {
+                                  form.setValue("seoDescription", e.target.value);
+                                }
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="canonicalUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Canonical URL</FormLabel>
+                          <FormDescription>
+                            If you have a similar post on another website, you
+                            can add the URL here to avoid duplicate content
+                            issues. This will tell search engines that the post on your website is the original.
+                          </FormDescription>
+                          <FormControl>
+                            <Input
+                              className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              {...field}
+                              placeholder="Canonical URL"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1228,6 +1307,79 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                 </Button>
                               </AspectRatio>
                             </>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="seoTitle"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              {...field}
+                              onChange={(e) => {
+                                // if seoTitle is empty, set it to title
+                                if (e.target.value == "" || e.target.value == null) {
+                                  form.setValue("seoTitle", form.getValues("title"));
+                                } else {
+                                  form.setValue("seoTitle", e.target.value);
+                                }
+                              }}
+                              placeholder="SEO Title"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="seoDescription"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <TextareaAutosize
+                              {...field}
+                              className="flex rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full min-h-[40px]"
+                              rows={1}
+                              placeholder="SEO Description"
+                              onChange={(e) => {
+                                // if seoDescription is empty, set it to subtitle
+                                if (e.target.value == "" || e.target.value == null) {
+                                  form.setValue("seoDescription", form.getValues("subtitle")?.slice(0, 150) + "..."); // limit to 156 characters
+                                } else {
+                                  form.setValue("seoDescription", e.target.value);
+                                }
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="canonicalUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Canonical URL</FormLabel>
+                          <FormDescription>
+                            If you have a similar post on another website, you
+                            can add the URL here to avoid duplicate content
+                            issues. This will tell search engines that the post on your website is the original.
+                          </FormDescription>
+                          <FormControl>
+                            <Input
+                              className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              {...field}
+                              placeholder="Canonical URL"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
