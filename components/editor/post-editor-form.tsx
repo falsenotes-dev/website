@@ -772,7 +772,20 @@ export function PostEditorForm(props: { post: any; user: any }) {
                             attractiveness of your post for readers, especially on
                             social networks.
                           </FormDescription>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={(e) => {
+                            field.onChange;
+                            setSocialPreview(
+                              `https://falsenotes.dev/api/posts/thumbnail${e !== "old" ? `/v${e}` : ""
+                              }?title=${form.getValues(
+                                "title"
+                              )}&subtitle=${form.getValues(
+                                "subtitle"
+                              )}&cover=${form.getValues(
+                                "coverImage"
+                              )}&readingTime=${readingTime(form.getValues("content")).text}&authorid=${props.user?.username
+                              }`
+                            );
+                          }} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue />
