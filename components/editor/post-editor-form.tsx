@@ -168,7 +168,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
     pinned: props.post.pinned == null ? false : props.post.pinned,
     seoTitle: props.post.seoTitle ? props.post.seoTitle : props.post.title,
     seoDescription: props.post.seoDescription ? props.post.seoDescription : props.post.subtitle.slice(0, 150) + "...",
-    canonicalUrl: props.post.canonicalUrl,
+    canonicalUrl: props.post.canonicalUrl || "",
     ogVersion: props.post.ogVersion || "old",
   };
 
