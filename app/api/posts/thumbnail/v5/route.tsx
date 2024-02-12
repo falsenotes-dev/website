@@ -43,14 +43,16 @@ export async function GET(req: Request) {
           return new ImageResponse(
                (
                     <div tw="flex w-full h-full justify-between bg-white p-14 relative gap-10">
-                         <div tw="flex h-full bg-black w-full">
-                              <img
-                                   src={cover || ""}
-                                   alt=""
-                                   tw="object-cover object-center w-full h-full"
-                                   style={{ objectFit: "cover", objectPosition: "center" }}
-                              />
-                         </div>
+                         {cover && (
+                              <div tw="flex h-full bg-black w-full">
+                                   <img
+                                        src={cover || ""}
+                                        alt=""
+                                        tw="object-cover object-center w-full h-full"
+                                        style={{ objectFit: "cover", objectPosition: "center" }}
+                                   />
+                              </div>
+                         )}
                          <div tw="flex flex-col justify-between bg-white/90 absolute left-14 top-14 bottom-14 right-14 m-6">
                               <div tw="flex flex-col justify-between w-2/3 h-full p-6">
                                    <div tw="flex flex-col">

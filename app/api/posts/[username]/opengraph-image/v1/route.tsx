@@ -150,14 +150,16 @@ export async function GET(
                                    </svg>
                               </div>
                          </div>
-                         <div tw="flex aspect-square h-full bg-black w-1/2">
-                              <img
-                                   src={post.cover || ""}
-                                   alt=""
-                                   tw="object-cover object-center w-full h-full"
-                                   style={{ objectFit: "cover", objectPosition: "center" }}
-                              />
-                         </div>
+                         {post.coverImage && (
+                              <div tw="flex aspect-square h-full bg-black w-1/2">
+                                   <img
+                                        src={post.cover || ""}
+                                        alt=""
+                                        tw="object-cover object-center w-full h-full"
+                                        style={{ objectFit: "cover", objectPosition: "center" }}
+                                   />
+                              </div>
+                         )}
                     </div>
                ),
                {
