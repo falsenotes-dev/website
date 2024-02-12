@@ -472,7 +472,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
   }
 
   const [socialPreview, setSocialPreview] = useState<string>(
-    `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/${form.getValues("ogVersion")}` : ""
+    `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
     }?title=${form.getValues(
       "title"
     )}&subtitle=${form.getValues("subtitle")}&cover=${form.getValues(
@@ -483,7 +483,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
 
   useEffect(() => {
     setSocialPreview(
-      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/${form.getValues("ogVersion")}` : ""
+      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
       }?title=${form.getValues(
         "title"
       )}&subtitle=${form.getValues("subtitle")}&cover=${form.getValues(
@@ -817,7 +817,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
                                   onClick={() => {
                                     setSocialPreview(
-                                      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/${form.getValues("ogVersion")}` : ""
+                                      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
                                       }?title=${form.getValues(
                                         "title"
                                       )}&subtitle=${form.getValues(
@@ -1363,7 +1363,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
                                   onClick={() => {
                                     setSocialPreview(
-                                      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/${form.getValues("ogVersion")}` : ""
+                                      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
                                       }?title=${form.getValues(
                                         "title"
                                       )}&subtitle=${form.getValues(
