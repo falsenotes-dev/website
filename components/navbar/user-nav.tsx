@@ -94,9 +94,6 @@ export function UserNav() {
           >
             <Icons.blogs className="h-5 mr-2" />
             Your Blogs
-            <DropdownMenuShortcut className="opacity-100">
-              <Badge className="font-medium">New</Badge>
-            </DropdownMenuShortcut>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuGroup>

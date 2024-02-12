@@ -38,7 +38,7 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
     {
       title: "Members",
       href: `/@${decodeURIComponent(params.username).substring(1)}/settings/members`,
-      new: true,
+      new: false,
     },
     {
       title: "Account",
@@ -52,7 +52,7 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
     {
       title: "Blogs",
       href: `/@${decodeURIComponent(params.username).substring(1)}/settings/blogs`,
-      new: true,
+      new: false,
     }
   ]
 

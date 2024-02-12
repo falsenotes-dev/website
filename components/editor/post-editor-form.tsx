@@ -88,6 +88,7 @@ import {
 } from "@/components/ui/drawer"
 import useWindowDimensions from "../window-dimensions";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Badge } from "../ui/badge";
 
 const lowlight = createLowlight(all);
 
@@ -765,7 +766,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                       name="ogVersion"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Social media preview</FormLabel>
+                          <FormLabel>Social media preview <Badge className="text-[10px] px-2 py-1" >New</Badge></FormLabel>
                           <FormDescription>
                             An image of superior quality enhances the
                             attractiveness of your post for readers, especially on
@@ -845,7 +846,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                       name="seoTitle"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>SEO Settings</FormLabel>
+                          <FormLabel>SEO Settings <Badge className="text-[10px] px-2 py-1" >New</Badge></FormLabel>
                           <FormDescription>
                             Optimize your post for search engines. The title and description will be displayed in search results.
                           </FormDescription>
@@ -900,7 +901,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                       name="canonicalUrl"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Canonical URL</FormLabel>
+                          <FormLabel>Canonical URL <Badge className="text-[10px] px-2 py-1" >New</Badge></FormLabel>
                           <FormDescription>
                             If you have a similar post on another website, you
                             can add the URL here to avoid duplicate content
@@ -1315,7 +1316,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                       name="ogVersion"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Social media preview</FormLabel>
+                          <FormLabel>Social media preview <Badge className="text-[10px] px-2 py-1" >New</Badge></FormLabel>
                           <FormDescription>
                             An image of superior quality enhances the
                             attractiveness of your post for readers, especially on
@@ -1395,7 +1396,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                       name="seoTitle"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>SEO Settings</FormLabel>
+                          <FormLabel>SEO Settings <Badge className="text-[10px] px-2 py-1" >New</Badge></FormLabel>
                           <FormDescription>
                             Optimize your post for search engines. The title and description will be displayed in search results.
                           </FormDescription>
@@ -1450,7 +1451,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                       name="canonicalUrl"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Canonical URL</FormLabel>
+                          <FormLabel>Canonical URL <Badge className="text-[10px] px-2 py-1" >New</Badge></FormLabel>
                           <FormDescription>
                             If you have a similar post on another website, you
                             can add the URL here to avoid duplicate content
