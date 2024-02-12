@@ -38,6 +38,10 @@ export async function PATCH(
       likesOn,
       subtitle,
       pinned,
+      seoTitle,
+      seoDescription,
+      canonicalUrl,
+      ogVersion,
     } = data;
     const stats = readingTime(content);
     const readTime = stats.text;
@@ -85,6 +89,10 @@ export async function PATCH(
         allowComments: commentsOn,
         allowLikes: likesOn,
         pinned: pinned,
+        seoTitle: seoTitle || null,
+        seoDescription: seoDescription || null,
+        canonicalUrl: canonicalUrl || null,
+        ogVersion: ogVersion || null,
         ...(oldData?.published === false &&
           published === true && { publishedAt: new Date() }),
         ...(oldData?.published === true &&

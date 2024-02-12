@@ -91,7 +91,7 @@ export async function POST(req: Request) {
           data: {
             content: message,
             type,
-            url: `/@${sender.username}/${post.url}`,
+            url: `/@${receiver.username}/${post.url}`,
             receiverId: receiver.id,
             senderId: sender.id,
           },
