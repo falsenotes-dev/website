@@ -87,6 +87,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import useWindowDimensions from "../window-dimensions";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 const lowlight = createLowlight(all);
 
@@ -136,6 +137,8 @@ const postFormSchema = z.object({
     message: "Description must not be longer than 156 characters.",
   }).optional(),
   canonicalUrl: z.string().optional(),
+  //og version of the post old, 1-6 select options
+  ogVersion: z.string().optional(),
 });
 
 type PostFormValues = z.infer<typeof postFormSchema>;
@@ -165,6 +168,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
     seoTitle: props.post.seoTitle ? props.post.seoTitle : props.post.title,
     seoDescription: props.post.seoDescription ? props.post.seoDescription : props.post.subtitle.slice(0, 150) + "...",
     canonicalUrl: props.post.canonicalUrl,
+    ogVersion: props.post.ogVersion || "old",
   };
 
   const form = useForm<PostFormValues>({
@@ -468,13 +472,27 @@ export function PostEditorForm(props: { post: any; user: any }) {
   }
 
   const [socialPreview, setSocialPreview] = useState<string>(
-    `https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues(
+    `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/${form.getValues("ogVersion")}` : ""
+    }?title=${form.getValues(
       "title"
     )}&subtitle=${form.getValues("subtitle")}&cover=${form.getValues(
       "coverImage"
     )}&readingTime=${readingTime(form.getValues("content")).text}&authorid=${props.user?.username
     }`
   );
+
+  useEffect(() => {
+    setSocialPreview(
+      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/${form.getValues("ogVersion")}` : ""
+      }?title=${form.getValues(
+        "title"
+      )}&subtitle=${form.getValues("subtitle")}&cover=${form.getValues(
+        "coverImage"
+      )}&readingTime=${readingTime(form.getValues("content")).text}&authorid=${props.user?.username
+      }`
+    );
+  }, [form, props.user?.username]);
+
   const [firstImage, setFirstImage] = useState<string>("");
 
   const { width } = useWindowDimensions();
@@ -741,9 +759,10 @@ export function PostEditorForm(props: { post: any; user: any }) {
                         </FormItem>
                       )}
                     />
+
                     <FormField
                       control={form.control}
-                      name="coverImage"
+                      name="ogVersion"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Social media preview</FormLabel>
@@ -752,6 +771,32 @@ export function PostEditorForm(props: { post: any; user: any }) {
                             attractiveness of your post for readers, especially on
                             social networks.
                           </FormDescription>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="old">Old</SelectItem>
+                              <SelectItem value="1">Version 1</SelectItem>
+                              <SelectItem value="2">Version 2</SelectItem>
+                              <SelectItem value="3">Version 3</SelectItem>
+                              <SelectItem value="4">Version 4</SelectItem>
+                              <SelectItem value="5">Version 5</SelectItem>
+                              <SelectItem value="6">Version 6</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="coverImage"
+                      render={({ field }) => (
+                        <FormItem>
                           <FormControl>
                             <>
                               <AspectRatio
@@ -772,7 +817,8 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
                                   onClick={() => {
                                     setSocialPreview(
-                                      `https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues(
+                                      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/${form.getValues("ogVersion")}` : ""
+                                      }?title=${form.getValues(
                                         "title"
                                       )}&subtitle=${form.getValues(
                                         "subtitle"
@@ -1259,9 +1305,10 @@ export function PostEditorForm(props: { post: any; user: any }) {
                         </FormItem>
                       )}
                     />
+
                     <FormField
                       control={form.control}
-                      name="coverImage"
+                      name="ogVersion"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Social media preview</FormLabel>
@@ -1270,6 +1317,32 @@ export function PostEditorForm(props: { post: any; user: any }) {
                             attractiveness of your post for readers, especially on
                             social networks.
                           </FormDescription>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="old">Old</SelectItem>
+                              <SelectItem value="1">Version 1</SelectItem>
+                              <SelectItem value="2">Version 2</SelectItem>
+                              <SelectItem value="3">Version 3</SelectItem>
+                              <SelectItem value="4">Version 4</SelectItem>
+                              <SelectItem value="5">Version 5</SelectItem>
+                              <SelectItem value="6">Version 6</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="coverImage"
+                      render={({ field }) => (
+                        <FormItem>
                           <FormControl>
                             <>
                               <AspectRatio
@@ -1290,7 +1363,8 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
                                   onClick={() => {
                                     setSocialPreview(
-                                      `https://falsenotes.dev/api/posts/thumbnail?title=${form.getValues(
+                                      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/${form.getValues("ogVersion")}` : ""
+                                      }?title=${form.getValues(
                                         "title"
                                       )}&subtitle=${form.getValues(
                                         "subtitle"
