@@ -41,6 +41,7 @@ export async function PATCH(
       seoTitle,
       seoDescription,
       canonicalUrl,
+      ogVersion,
     } = data;
     const stats = readingTime(content);
     const readTime = stats.text;
@@ -91,6 +92,7 @@ export async function PATCH(
         seoTitle: seoTitle || null,
         seoDescription: seoDescription || null,
         canonicalUrl: canonicalUrl || null,
+        ogVersion: ogVersion || null,
         ...(oldData?.published === false &&
           published === true && { publishedAt: new Date() }),
         ...(oldData?.published === true &&
