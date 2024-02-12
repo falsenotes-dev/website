@@ -149,7 +149,7 @@ export async function GET(
                                    </svg>
                               </div>
                          </div>
-                         {post.coverImage && (
+                         {post.cover && (
                               <div tw="flex h-60 bg-black w-full">
                                    <img
                                         src={post.cover || ""}
