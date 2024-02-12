@@ -51,7 +51,7 @@ export async function GET(
           return new ImageResponse(
                (
                     <div tw="flex w-full h-full justify-between bg-white p-14 relative gap-10">
-                         {post.coverImage && (
+                         {post.cover && (
                               <div tw="flex h-full bg-black w-full">
                                    <img
                                         src={post.cover || ""}
