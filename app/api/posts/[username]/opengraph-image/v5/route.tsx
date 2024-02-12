@@ -55,7 +55,7 @@ export async function GET(
                               <img
                                    src={post.cover || ""}
                                    alt=""
-                                   tw="object-cover object-center w-full h-full opacity-75"
+                                   tw="object-cover object-center w-full h-full"
                                    style={{ objectFit: "cover", objectPosition: "center" }}
                               />
                          </div>
