@@ -167,7 +167,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
     likesOn: props.post.allowLikes == null ? true : props.post.allowLikes,
     pinned: props.post.pinned == null ? false : props.post.pinned,
     seoTitle: props.post.seoTitle ? props.post.seoTitle : props.post.title,
-    seoDescription: props.post.seoDescription ? props.post.seoDescription : props.post.subtitle.slice(0, 150) + "...",
+    seoDescription: props.post.seoDescription ? props.post.seoDescription : props.post.subtitle?.slice(0, 150) + "...",
     canonicalUrl: props.post.canonicalUrl || "",
     ogVersion: props.post.ogVersion || "old",
   };
@@ -773,7 +773,6 @@ export function PostEditorForm(props: { post: any; user: any }) {
                             social networks.
                           </FormDescription>
                           <Select onValueChange={(e) => {
-                            field.onChange;
                             setSocialPreview(
                               `https://falsenotes.dev/api/posts/thumbnail${e !== "old" ? `/v${e}` : ""
                               }?title=${form.getValues(
@@ -785,6 +784,8 @@ export function PostEditorForm(props: { post: any; user: any }) {
                               )}&readingTime=${readingTime(form.getValues("content")).text}&authorid=${props.user?.username
                               }`
                             );
+                            form.setValue("ogVersion", e);
+                            field.onChange;
                           }} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -1335,7 +1336,21 @@ export function PostEditorForm(props: { post: any; user: any }) {
                             attractiveness of your post for readers, especially on
                             social networks.
                           </FormDescription>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={(e) => {
+                            setSocialPreview(
+                              `https://falsenotes.dev/api/posts/thumbnail${e !== "old" ? `/v${e}` : ""
+                              }?title=${form.getValues(
+                                "title"
+                              )}&subtitle=${form.getValues(
+                                "subtitle"
+                              )}&cover=${form.getValues(
+                                "coverImage"
+                              )}&readingTime=${readingTime(form.getValues("content")).text}&authorid=${props.user?.username
+                              }`
+                            );
+                            form.setValue("ogVersion", e);
+                            field.onChange;
+                          }} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue />

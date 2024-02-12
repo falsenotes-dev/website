@@ -51,14 +51,16 @@ export async function GET(
           return new ImageResponse(
                (
                     <div tw="flex w-full h-full justify-between bg-white p-14 relative gap-10">
-                         <div tw="flex h-full bg-black w-full">
-                              <img
-                                   src={post.cover || ""}
-                                   alt=""
-                                   tw="object-cover object-center w-full h-full opacity-75"
-                                   style={{ objectFit: "cover", objectPosition: "center" }}
-                              />
-                         </div>
+                         {post.coverImage && (
+                              <div tw="flex h-full bg-black w-full">
+                                   <img
+                                        src={post.cover || ""}
+                                        alt=""
+                                        tw="object-cover object-center w-full h-full opacity-75"
+                                        style={{ objectFit: "cover", objectPosition: "center" }}
+                                   />
+                              </div>
+                         )}
                          <div tw="flex flex-col justify-between mt-6 w-2/3 h-full pr-10 absolute left-14 p-6 pb-0">
                               <div tw="flex flex-col">
                                    <h1
