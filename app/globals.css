@@ -667,8 +667,7 @@
 
 .landing__hero,
 .main-bg {
-  background-image: url(/assets/hero_bg.png);
+  background-image: url(/assets/hero_bg.jpg);
   background-size: cover;
   background-position: center;
-
 }
