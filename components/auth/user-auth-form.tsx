@@ -27,8 +27,8 @@ export function UserAuthForm({ className, callbackUrl, ...props }: UserAuthFormP
   }
 
   return (
-    <div className={cn("grid gap-6 py-4", className)} {...props}>
-      <Button variant="default" type="button" disabled={isLoading} size={'lg'} onClick={() => signin("google")}>
+    <div className={cn("flex justify-between content-center items-center flex-col flex-[0_0_auto] gap-3.5 h-min md:max-w-[430px] md:w-[430px] max-w-full w-full relative overflow-visible px-6", className)} {...props}>
+      <Button variant="default" type="button" disabled={isLoading} size={'lg'} className="px-4" onClick={() => signin("google")}>
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
