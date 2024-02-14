@@ -7,53 +7,9 @@ const getLikes = async ({ id }: { id: string | undefined }) => {
   const likes = await db.like.findMany({
     where: { authorId: id },
     select: {
-      postId: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 10,
-  });
-
-  return { likes: JSON.parse(JSON.stringify(likes)) };
-};
-
-const getBookmarks = async ({ id }: { id: string | undefined }) => {
-  const bookmarks = await db.bookmark.findMany({
-    where: { userId: id },
-    select: {
-      postId: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 10,
-  });
-
-  return { bookmarks: JSON.parse(JSON.stringify(bookmarks)) };
-};
-
-const getHistory = async ({ id }: { id: string | undefined }) => {
-  const history = await db.readingHistory.findMany({
-    where: { userId: id },
-    select: {
-      postId: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 10,
-  });
-
-  return { history: JSON.parse(JSON.stringify(history)) };
-};
-const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
-  const historyAuthor = await db.readingHistory.findMany({
-    where: { userId: id },
-    select: {
       post: {
         select: {
-          authorId: true,
+          id: true,
         },
       },
     },
@@ -63,12 +19,18 @@ const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
     take: 10,
   });
 
-  const history = await db.post.findMany({
-    where: {
-      authorId: { in: historyAuthor.map((history) => history.post.authorId) },
-    },
+  return { likes: likes.map((like) => like.post.id) };
+};
+
+const getBookmarks = async ({ id }: { id: string | undefined }) => {
+  const bookmarks = await db.bookmark.findMany({
+    where: { userId: id },
     select: {
-      id: true,
+      post: {
+        select: {
+          id: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
@@ -76,19 +38,57 @@ const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
     take: 10,
   });
 
-  return { history: JSON.parse(JSON.stringify(history)) };
+  return { bookmarks: bookmarks.map((bookmark) => bookmark.post.id) };
+};
+
+const getHistory = async ({ id }: { id: string | undefined }) => {
+  const history = await db.readingHistory.findMany({
+    where: { userId: id },
+    select: {
+      post: {
+        select: {
+          id: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 10,
+  });
+
+  return { history: history.map((history) => history.post.id) };
+};
+
+const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
+  const historyAuthor = await db.readingHistory.findMany({
+    where: { userId: id },
+    select: {
+      post: {
+        select: {
+          authorId: true,
+          id: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 10,
+  });
+
+  return { history: historyAuthor.map((history) => history.post.id) };
 };
 
 const getFollowingTags = async ({ id }: { id: string | undefined }) => {
   const followingTags = await db.tagFollow.findMany({
     where: { followerId: id },
     select: {
-      tagId: true,
       tag: {
-        include: {
+        select: {
           posts: {
             select: {
-              createdAt: true,
+              id: true,
             },
             orderBy: {
               createdAt: "desc",
@@ -100,36 +100,11 @@ const getFollowingTags = async ({ id }: { id: string | undefined }) => {
     },
   });
 
-  const followingTagsWithLatestPostDate = followingTags?.map((tagFollower) => {
-    const latestPostDate = tagFollower.tag.posts[0]?.createdAt;
-
-    return {
-      ...tagFollower,
-      latestPostDate,
-    };
-  });
-
-  const sortedFollowingTags = followingTagsWithLatestPostDate?.sort(
-    (a, b) =>
-      new Date(b.latestPostDate).getTime() -
-      new Date(a.latestPostDate).getTime()
-  );
-
-  const tagIds = sortedFollowingTags.map((following) => following.tagId);
-
-  const posts = await db.postTag.findMany({
-    where: { tagId: { in: tagIds } },
-    select: {
-      postId: true,
-    },
-    orderBy: {
-      post: {
-        publishedAt: "desc",
-      },
-    },
-  });
-
-  return { followingTags: JSON.parse(JSON.stringify(posts)) };
+  return {
+    followingTags: followingTags.flatMap((followingTag) =>
+      followingTag.tag.posts.map((post) => post.id)
+    ),
+  };
 };
 
 const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
@@ -145,58 +120,52 @@ const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
       },
     },
     select: {
-      tagId: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 10,
-  });
-
-  const tagIds = followings.map((following) => following.tagId);
-
-  const posts = await db.postTag.findMany({
-    where: { tagId: { in: tagIds } },
-    select: {
-      postId: true,
-    },
-    orderBy: {
-      post: {
-        publishedAt: "desc",
+      tag: {
+        select: {
+          posts: {
+            select: {
+              id: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 1,
+          },
+        },
       },
     },
   });
 
-  return { followings: JSON.parse(JSON.stringify(posts)) };
+  return {
+    followings: followings.flatMap((following) =>
+      following.tag.posts.map((post) => post.id)
+    ),
+  };
 };
 
 const getTags = async ({ id }: { id: string | undefined }) => {
   const tags = await db.tagFollow.findMany({
     where: { followerId: id },
     select: {
-      tagId: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 10,
-  });
-
-  const tagIds = tags.map((tag) => tag.tagId);
-
-  const postTags = await db.postTag.findMany({
-    where: { tagId: { in: tagIds } },
-    select: {
-      postId: true,
-    },
-    orderBy: {
-      post: {
-        publishedAt: "desc",
+      tag: {
+        select: {
+          posts: {
+            select: {
+              id: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 1,
+          },
+        },
       },
     },
   });
 
-  return { postTags: JSON.parse(JSON.stringify(postTags)) };
+  return {
+    postTags: tags.flatMap((tag) => tag.tag.posts.map((post) => post.id)),
+  };
 };
 
 const baseQuery = {
@@ -288,12 +257,12 @@ export const getForYou = async ({
     where: {
       postId: {
         in: [
-          ...userLikes.map((like: any) => like.postId),
-          ...userBookmarks.map((bookmark: any) => bookmark.postId),
-          ...userHistory.map((history: any) => history.postId),
-          ...userTags.map((tag: any) => tag.postId),
-          ...userFollowings.map((following: any) => following.postId),
-          ...userFollowingTags.map((following: any) => following.postId),
+          ...userLikes,
+          ...userBookmarks,
+          ...userHistory,
+          ...userTags,
+          ...userFollowings,
+          ...userFollowingTags,
         ],
       },
     },
@@ -321,7 +290,7 @@ export const getForYou = async ({
   });
 
   const postsByHistory = await db.post.findMany({
-    where: { id: { in: historyAuthor.map((post: any) => post.id) } },
+    where: { id: { in: historyAuthor } },
     select: { id: true },
   });
 
@@ -395,7 +364,7 @@ export const getFeed = async ({
     }
     const postTags = await db.postTag.findMany({
       select: { postId: true },
-      where: { tag: { name: { equals: tab } } },
+      where: { tag: { name: { equals: tab } }, post: { published: true } },
     });
     const postIds = postTags.map((postTag) => postTag.postId);
     return fetchFeed({
