@@ -49,11 +49,11 @@ async function fetchSuggestions(query: string) {
   return { users, tags };
 }
 
-export default function SearchBar({ history }: { history: any }) {
+export default function SearchBar({ history, search }: { history: any, search?: string }) {
   const [open, setOpen] = React.useState(false)
   const router = useRouter()
 
-  const [text, setText] = useState('')
+  const [text, setText] = useState(search || "")
   const [query] = useDebounce(text, 750)
   const [suggestions, setSuggestions] = useState<any>([])
 
