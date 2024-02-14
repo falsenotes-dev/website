@@ -49,8 +49,8 @@ async function fetchSuggestions(query: string) {
   return { users, tags };
 }
 
-export default function SearchBar({ history, search }: { history: any, search?: string }) {
-  const [open, setOpen] = React.useState(false)
+export default function SearchBar({ history, search, className, isOpen, isOpenChange }: { history?: any, search?: string, className?: string, isOpen?: boolean, isOpenChange?: (value: boolean) => void }) {
+  const [open, setOpen] = React.useState(isOpen || false)
   const router = useRouter()
 
   const [text, setText] = useState(search || "")
@@ -80,7 +80,7 @@ export default function SearchBar({ history, search }: { history: any, search?: 
     <>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger className="hidden md:flex" asChild>
-          <div className="flex md:w-40 lg:w-64 h-10 rounded-md border border-input bg-transparent px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center">
+          <div className={cn("flex md:w-40 lg:w-64 h-10 rounded-md border border-input bg-transparent px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 items-center", className)}>
             <Icons.search className="mr-2 h-4 w-4 shrink-0 my-2 opacity-50" />
             {/* when in input clicked inter it must redirect to /explore?search=[value]*/}
             <Input
@@ -93,7 +93,7 @@ export default function SearchBar({ history, search }: { history: any, search?: 
             />
           </div>
         </PopoverTrigger>
-        <PopoverContent className="md:w-40 lg:w-64 p-0">
+        <PopoverContent className="md:w-40 lg:w-64 p-0" align="start">
           <Command>
             {
               !query && history?.length > 0 && (

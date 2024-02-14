@@ -37,6 +37,10 @@ import {
 } from "../ui/carousel";
 import UserVerticalCard from "../user-vertical-card";
 import CountUp from "react-countup";
+import SearchBar from "../searchbar";
+import { Input } from "../ui/input";
+import { useDebounce } from "use-debounce";
+import { useRouter } from "next/navigation";
 
 type Stats = {
   users: number;
@@ -56,221 +60,422 @@ export default function Landing({
   stats: Stats;
 }) {
 
+  const [search, setSearch] = React.useState("");
+  const [query] = useDebounce(search, 750)
+  const router = useRouter();
+  const [open, setOpen] = React.useState(false);
+
+  const handleKeyDown = async (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      if (query) {
+        router.push(`/explore?search=${query}`)
+      }
+    }
+  };
+
   return (
     <>
-      <main className="landing mx-auto w-full overflow-hidden mb-4 my-10">
-        <div className="landing__hero px-4 rounded-3xl overflow-hidden mb-4 !mx-4 xl:!mx-auto md:container !w-auto xl:!w-full">
-          <div className="landing__hero_content flex flex-col space-y-8 items-center justify-center p-6 text-primary-foreground">
-            <div className="flex flex-col justify-center gap-8">
-              <div className="flex flex-col justify-center gap-2">
-                <Link
-                  href="/@falsenotes/introducing-collaborative-writing-build-your-team-on-falsenotes"
-                  className="mx-auto"
-                >
-                  <Badge
-                    variant={"secondary"}
-                    className="text-sm font-normal py-1.5 my-5 px-3 w-fit space-x-2 rounded-sm flex gap-1.5"
-                  >
-                    <Image
-                      src="/assets/rocket.png"
-                      width={20}
-                      height={20}
-                      alt=""
-                    />
-                    <Separator orientation="vertical" className="!m-0 h-5" />
-                    Introducing Collaborative Writing{" "}
-                    <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                  </Badge>
-                </Link>
-                <h1 className="landing__hero_title max-w-[1200px] font-black leading-snug text-3xl lg:text-5xl xl:text-6xl text-center">
-                  <Balancer>
-                    Where Creativity Takes Flight: Unleash Your Ideas
-                  </Balancer>
-                </h1>
-                <p className="landing__hero_description mt-6 mx-auto max-w-[960px] font-medium text-xl leading-relaxed text-center">
-                  <Balancer>
-                    Code, Create, Connect: Elevate Your Dev Journey with
-                    FalseNotes!
-                  </Balancer>
-                </p>
-              </div>
-              <Button
-                size={"lg"}
-                className="mx-auto py-3"
-                onClick={() => signIn()}
-              >
-                Join Now
-              </Button>
+      <main className="landing mx-auto w-full overflow-hidden mb-4 my-10 flex flex-col items-center content-center justify-start lg:px-6 px-2 xl:p-0">
+        <div className="hero flex justify-between content-center items-center flex-col flex-[0_0_auto] rounded-3xl gap-11 h-min max-w-[1140px] min-w-[280px] overflow-hidden p-[74px] lg:px-6 px-2 pb-0 relative w-full">
+          <div className="flex place-content-center items-center flex-col flex-[0_0_auto] gap-3.5 h-min overflow-visible p-0 relative lg:w-[70%] w-11/12 z-10 perspective-1200">
+            <div className="flex outline-0 flex-col justify-start shrink-0 transform-none flex-[0_0_auto] h-auto relative w-full">
+              <h1 className="text-3xl lg:text-5xl xl:text-6xl font-black text-primary-foreground text-center">
+                <Balancer>
+                  Where Creativity Takes Flight: Unleash Your Ideas
+                </Balancer>
+              </h1>
             </div>
-            <div className="landing_hero-image w-[167vw] xl:w-full">
+            <div className="flex outline-0 flex-col justify-start shrink-0 transform-none flex-[0_0_auto] h-12 relative w-full">
+              <p className="text-lg text-center text-primary-foreground">
+                <Balancer>
+                  Code, Create, Connect: Elevate Your Dev Journey with FalseNotes!
+                </Balancer>
+              </p>
+            </div>
+          </div>
+          <div className="relative justify-center hidden md:block flex-[0_0_auto] h-[220px] w-[960px] z-10 overflow-visible">
+            <div className="aspect-square flex-[0_0_auto] h-[96px] w-[96px] absolute left-[863px] top-10">
+              <div className="contents">
+                <div className="h-full w-full opacity-100 rounded-full bg-secondary/5 overflow-visible relative">
+                  <div className="outline-none flex flex-col justify-start transform -translate-x-1/2 -translate-y-1/2 opacity-100 absolute top-1/2 left-1/2 h-auto w-auto">
+                    <p>
+                      <span></span>
+                    </p>
+                  </div>
+                  <div className="rounded-full opacity-100 absolute overflow-visible inset-0">
+                    <div className="absolute inset-0">
+                      <Image
+                        src="/assets/o4xrO7nhHYLJ3IVqDNmF0Jbd89Q.jpg"
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center"
+                        className="rounded-full h-full w-full "
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="aspect-square flex-[0_0_auto] h-[148px] w-[148px] absolute left-0 top-3">
+              <div className="contents">
+                <div className="h-full w-full opacity-100 rounded-full bg-secondary/5 overflow-visible relative">
+                  <div className="outline-none flex flex-col justify-start transform -translate-x-1/2 -translate-y-1/2 opacity-100 absolute top-1/2 left-1/2 h-auto w-auto">
+                    <p>
+                      <span></span>
+                    </p>
+                  </div>
+                  <div className="rounded-full opacity-100 absolute overflow-visible inset-0">
+                    <div className="absolute inset-0">
+                      <Image
+                        src="/assets/qoV043xuWjRQQbibvoyjoBlaE4.webp"
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center"
+                        className="rounded-full h-full w-full "
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="aspect-square flex-[0_0_auto] h-[96px] w-[96px] absolute left-[302px] top-0">
+              <div className="contents">
+                <div className="h-full w-full opacity-100 rounded-full bg-secondary/5 overflow-visible relative">
+                  <div className="outline-none flex flex-col justify-start transform -translate-x-1/2 -translate-y-1/2 opacity-100 absolute top-1/2 left-1/2 h-auto w-auto">
+                    <p>
+                      <span></span>
+                    </p>
+                  </div>
+                  <div className="rounded-full opacity-100 absolute overflow-visible inset-0">
+                    <div className="absolute inset-0">
+                      <Image
+                        src="/assets/TpLrCpid6UuGjOkmgtZL4.webp"
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center"
+                        className="rounded-full h-full w-full "
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="aspect-square flex-[0_0_auto] h-[120px] w-[120px] absolute left-[186px] top-[100px]">
+              <div className="contents">
+                <div className="h-full w-full opacity-100 rounded-full bg-secondary/5 overflow-visible relative">
+                  <div className="outline-none flex flex-col justify-start transform -translate-x-1/2 -translate-y-1/2 opacity-100 absolute top-1/2 left-1/2 h-auto w-auto">
+                    <p>
+                      <span></span>
+                    </p>
+                  </div>
+                  <div className="rounded-full opacity-100 absolute overflow-visible inset-0">
+                    <div className="absolute inset-0">
+                      <Image
+                        src="/assets/uDMfrAhga7lhY02vLr4Av0oihY.webp"
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center"
+                        className="rounded-full h-full w-full "
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="aspect-square flex-[0_0_auto] h-[162px] w-[162px] absolute left-[417px] top-[55px]">
+              <div className="contents">
+                <div className="h-full w-full opacity-100 rounded-full bg-secondary/5 overflow-visible relative">
+                  <div className="outline-none flex flex-col justify-start transform -translate-x-1/2 -translate-y-1/2 opacity-100 absolute top-1/2 left-1/2 h-auto w-auto">
+                    <p>
+                      <span></span>
+                    </p>
+                  </div>
+                  <div className="rounded-full opacity-100 absolute overflow-visible inset-0">
+                    <div className="absolute inset-0">
+                      <Image
+                        src="/assets/SCLaExdmiXrn32AxMUnFpE5KBE.webp"
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center"
+                        className="rounded-full h-full w-full "
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="aspect-square flex-[0_0_auto] h-[90px] w-[90px] absolute left-[616px] top-3">
+              <div className="contents">
+                <div className="h-full w-full opacity-100 rounded-full bg-secondary/5 overflow-visible relative">
+                  <div className="outline-none flex flex-col justify-start transform -translate-x-1/2 -translate-y-1/2 opacity-100 absolute top-1/2 left-1/2 h-auto w-auto">
+                    <p>
+                      <span></span>
+                    </p>
+                  </div>
+                  <div className="rounded-full opacity-100 absolute overflow-visible inset-0">
+                    <div className="absolute inset-0">
+                      <Image
+                        src="/assets/5AR5WjJxyvJ43labZsGKHxyRNaw.webp"
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center"
+                        className="rounded-full h-full w-full "
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="aspect-square flex-[0_0_auto] h-[120px] w-[120px] absolute left-[726px] top-[87px]">
+              <div className="contents">
+                <div className="h-full w-full opacity-100 rounded-full bg-secondary/5 overflow-visible relative">
+                  <div className="outline-none flex flex-col justify-start transform -translate-x-1/2 -translate-y-1/2 opacity-100 absolute top-1/2 left-1/2 h-auto w-auto">
+                    <p>
+                      <span></span>
+                    </p>
+                  </div>
+                  <div className="rounded-full opacity-100 absolute overflow-visible inset-0">
+                    <div className="absolute inset-0">
+                      <Image
+                        src="/assets/u7pCeAYdJq6jB9fzr069s5YUaC4.webp"
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center"
+                        className="rounded-full h-full w-full "
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="relative flex-[0_0_auto] h-[62px] max-w-[90%] min-w-[60%] w-full z-10">
+            <div className="bg-background h-full max-w-full w-full rounded-full shadow-lg justify-between items-center flex overflow-hidden p-3 relative">
+              <div className="flex justify-start content-center items-center flex-[0_0_auto] gap-3.5 h-[54px] p-0 overflow-hidden relative w-max z-10">
+                <div className="relative h-auto w-auto flex-[0_0_auto] z-10">
+                  <Button size={"icon"} variant={"secondary"} disabled className="p-[13px] h-auto w-auto rounded-full">
+                    <Icons.search className="h-5 w-5" />
+                  </Button>
+                </div>
+                <div className="flex outline-0 justify-start shrink-0 transform-none h-auto flex-[0_0_auto] relative w-full">
+                  <Input
+                    type="search"
+                    placeholder="Search..."
+                    className="w-full px-0 border-none bg-transparent focus:ring-0 focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-transparent"
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      setOpen(true);
+                    }}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+              </div>
+              <div className="relative h-auto w-auto flex-[0_0_auto]">
+                <div className="contents">
+                  <Button className="py-2.5 px-5 h-auto w-auto rounded-full" onClick={
+                    async () => {
+                      if (query) {
+                        router.push(`/explore?search=${query}`)
+                      }
+                    }
+
+                  }>
+                    Search
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col outline-none justify-start shrink-0 relative flex-[0_0_auto] h-auto w-auto z-10">
+            <p className="text-muted-foreground">
+              Search for posts, authors, and tags to discover new ideas and connect with like-minded individuals.
+            </p>
+          </div>
+          <div className="background rounded-3xl bottom-[100px] flex-[0_0_auto] h-full left-0 overflow-hidden absolute w-full z-[1]">
+            <div className="absolute inset-0">
               <Image
-                loading="eager"
-                src="/assets/header-img.png"
-                sizes="100vw"
-                className="object-cover mb-14"
-                width={1920}
-                height={711}
-                layout="responsive"
-                // Make the image display full width
-                style={{
-                  width: "120vw",
-                  height: "auto",
-                }}
+                src="/assets/hero_bg.jpg"
+                layout="fill"
+                objectFit="cover"
+                objectPosition="center"
+                className="rounded-3xl h-full w-full "
                 alt=""
               />
             </div>
           </div>
         </div>
-        <div className="px-4 md:container mx-4 md:mx-auto">
-          <div className="pt-10 pb-4 mb-8">
-            <div className="flex flex-row items-center">
-              <h2 className="font-medium mb-4">Trending on FalseNotes</h2>
-            </div>
+        <div className="flex justify-between content-center items-center flex-col flex-[0_0_auto] pt-[74px] h-min max-w-[1140px] min-w-[280px] overflow-hidden relative w-full">
+          <div className="flex justify-center w-full">
             <div className="w-full">
-              <div className="grid grid-cols-6 w-full">
-                {popular?.map((post: any, index: number) => (
-                  <div
-                    className="col-span-6 md:col-span-3 lg:col-span-2 px-4"
-                    key={post.id}
-                  >
-                    <div className="h-full w-full">
-                      <div className="flex items-start mb-6 w-full h-full">
-                        <div className="w-10 flex-none relative -top-1.5 mr-4">
-                          <span className="font-medium text-3xl text-muted-foreground">
-                            {index < 9 ? `0${index + 1}` : index + 1}
-                          </span>
-                        </div>
-                        <div className="flex flex-col space-y-2">
-                          <UserHoverCard user={post.author}>
+              <Carousel
+                opts={{
+                  align: "start",
+                }}
+              >
+                <div className="flex flex-col gap-8">
+                  <div className="flex justify-between items-center mx-2">
+                    <h2 className="text-2xl font-medium tracking-tight w-full">
+                      Trending posts
+                    </h2>
+                    <div className="flex gap-2">
+                      <CarouselPrevious className="static translate-y-0" />
+                      <CarouselNext className="static translate-y-0" />
+                    </div>
+                  </div>
+                  <CarouselContent>
+                    {popular?.map((post: any, index: number) => (
+                      <CarouselItem
+                        className="basis-full lg:basis-1/2 xl:basis-1/3 pl-6"
+                        key={post.id}
+                      >
+                        <Card className="p-8 gap-6 flex flex-col hover:shadow-lg mb-3">
+                          <CardHeader className="p-0">
                             <Link
-                              href={`/@${post.author?.username}`}
-                              className="flex items-center space-x-0.5"
+                              href={`/@${post.author.username}`}
+                              className="flex items-center space-x-2"
                             >
-                              <Avatar className="h-5 w-5 border">
+                              <Avatar>
                                 <AvatarImage
-                                  src={post.author?.image}
-                                  alt={post.author?.username}
+                                  src={post.author.image}
+                                  alt={post.author.username}
                                 />
                                 <AvatarFallback>
-                                  {post.author?.name?.charAt(0) ||
-                                    post.author?.username?.charAt(0)}
+                                  {post.author.name.charAt(0) ||
+                                    post.author.username.charAt(0)}
                                 </AvatarFallback>
                               </Avatar>
-                              <p className="text-sm font-normal leading-none mr-2">
-                                {post.author?.name || post.author?.username}
-                              </p>
-                              {post.author?.verified && (
-                                <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
-                              )}
-                            </Link>
-                          </UserHoverCard>
-                          {post.publication && (
-                            <UserHoverCard user={post.publication}>
-                              <Link
-                                href={`/@${post.publication?.username}`}
-                                className="flex items-center space-x-0.5"
-                              >
-                                <span className="text-muted-foreground text-sm">
-                                  in
-                                </span>
-                                <p className="text-sm font-normal leading-none">
-                                  {post.publication?.name ||
-                                    post.publication?.username}
+                              <div className="flex gap-0.5">
+                                <p className="text-base font-normal leading-none">
+                                  {post.author.name || post.author.username}
                                 </p>
-                              </Link>
-                            </UserHoverCard>
-                          )}
+                                {post.author.verified && (
+                                  <Icons.verified className="h-4 w-4 inline fill-verified align-middle" />
+                                )}
+                              </div>
+                            </Link>
+                          </CardHeader>
                           <Link
                             href={`/@${post.publicationId === null
                               ? post.author.username
                               : post.publication.username
                               }/${post.url}`}
                           >
-                            <h2 className="font-extrabold line-clamp-2 max-h-10 text-ellipsis leading-tight tracking-normal">
-                              {post.title}
-                            </h2>
+                            <CardContent className="p-0 gap-2 flex flex-col">
+                              <h2 className="font-extrabold line-clamp-2 text-lg text-ellipsis leading-tight tracking-normal">
+                                {post.title}
+                              </h2>
+                              <span className="text-sm text-muted-foreground">
+                                <div className="flex items-center">
+                                  <span>{dateFormat(post.createdAt)}</span>
+                                  <div className="px-1">·</div>
+                                  <span>{post.readingTime}</span>
+                                </div>
+                              </span>
+                            </CardContent>
                           </Link>
-                          <span className="text-sm text-muted-foreground">
-                            <div className="flex items-center">
-                              <span>{dateFormat(post.createdAt)}</span>
-                              <div className="px-1">·</div>
-                              <span>{post.readingTime}</span>
-                            </div>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                        </Card>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </div>
+              </Carousel>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row lg:gap-8 gap-4 self-stretch py-6 mb-8">
-            <Card className="self-stretch rounded-lg bg-secondary border-secondary">
-              <CardContent className="p-6 md:p-8 h-full">
-                <CardTitle className="line-clamp-2 mb-4">
-                  Explore suggested tags
-                </CardTitle>
-                <CardDescription className="line-clamp-3 text-foreground">
-                  Discover curated tags for tailored content recommendations.
-                  Follow suggested tags to stay updated and dive into a world of
-                  diverse posts that match your interests
-                </CardDescription>
+          <div className="flex flex-col lg:flex-row lg:gap-8 gap-4 self-stretch py-[74px] mb-8 ">
+            <Card className="self-stretch rounded-3xl lg:flex-[1_0_0px] flex-none h-[400px] lg:h-[464px] w-full lg:w-[1px] relative bg-secondary border-secondary">
+              <div className="absolute left-0 bottom-0 overflow-hidden w-full h-96 rounded-b-3xl">
+                <div className="absolute inset-0">
+                  <Image
+                    src="/assets/photo-1602035971641-b5ba4900bdb4.jpg"
+                    layout="fill"
+                    objectFit="cover"
+                    objectPosition="center"
+                    className="rounded-b-3xl h-full w-full"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div className="absolute left-0 bottom-0 overflow-hidden w-full h-96 rounded-b-3xl bg-gradient-to-b from-secondary via-secondary to-transparent" />
+              <CardContent className="flex lg:items-start items-center flex-col flex-nowrap lg:gap-3.5 gap-2.5 justify-start left-0 overflow-hidden lg:p-12 p-10 absolute top-0 w-full">
+                <div className="flex flex-col shrink-0 transform-none justify-start outline-none">
+                  <p className="text-xs font-semibold text-primary lg:text-left text-center">
+                    Recommended tags
+                  </p>
+                </div>
+                <div className="flex flex-col shrink-0 transform-none justify-start outline-none">
+                  <CardTitle className="line-clamp-2 text-4xl font-extrabold lg:text-left text-center">
+                    Explore suggested tags
+                  </CardTitle>
+                </div>
+                <div className="flex flex-col shrink-0 transform-none justify-start outline-none">
+                  <CardDescription className="line-clamp-3 text-foreground font-light text-sm lg:text-left text-center">
+                    Discover curated tags for tailored content recommendations.
+                    Follow suggested tags to stay updated and dive into a world of
+                    diverse posts that match your interests
+                  </CardDescription>
+                </div>
               </CardContent>
             </Card>
-            <Card className="self-stretch main-bg rounded-lg min-h-max">
-              <CardContent className="p-6 md:p-8 pb-0 h-full">
-                <div className="w-full flex-wrap items-center justify-center">
-                  {tags?.map((tag: any) => (
-                    <Link href={`/tags/${tag.name}`} key={tag.id}>
-                      <TagBadge
-                        className="my-1.5 mr-1.5 md:px-3 py-1 text-base font-normal"
-                        variant={"secondary"}
-                      >
-                        <Icons.search className="h-4 w-4 mr-2" />{" "}
-                        {tag.name.replace(/-/g, " ")}
-                      </TagBadge>
-                    </Link>
-                  ))}
+            <Card className="self-stretch rounded-3xl lg:flex-[1_0_0px] flex-none md:flex-nowrap md:gap-2.5 md:py-6 md:px-2 md:flex justify-center items-center h-min lg:h-[464px] w-full lg:w-[1px] overflow-hidden relative bg-secondary border-secondary">
+              <div className="static md:absolute lg:bottom-0 bottom-auto left-0 md:order-1 lg:-left-5 overflow-visible top-0 w-[110%] md:h-[110%] lg:w-[600px] z-[1]">
+                <div className="absolute inset-0">
+                  <Image
+                    src="/assets/hero_bg.jpg"
+                    layout="fill"
+                    objectFit="cover"
+                    objectPosition="center"
+                    className="h-full w-full"
+                    alt=""
+                  />
                 </div>
-                <CardFooter className="py-6 p-0">
-                  <Button variant={"link"} className="px-0" asChild>
-                    <Link
-                      href={`/tags`}
-                      className="text-sm flex items-center my-2.5 font-medium text-primary-foreground"
+              </div>
+              <CardContent className="flex content-center items-center flex-wrap gap-1.5 lg:gap-2.5 h-auto lg:h-full justify-center lg:left-0 left-auto overflow-hidden p-3 lg:p-8 relative lg:absolute z-10 w-full md:top-auto">
+                {tags?.map((tag: any) => (
+                  <Link href={`/tags/${tag.name}`} key={tag.id}>
+                    <TagBadge
+                      className="my-1.5 mr-1.5 lg:px-5 md:px-3.5 py-2 lg:py-2.5 h-min gap-2 text-base font-normal"
+                      variant={"secondary"}
                     >
-                      See more tags
-                    </Link>
-                  </Button>
-                </CardFooter>
+                      <Icons.search className="h-4 w-4" />{" "}
+                      {tag.name.replace(/-/g, " ")}
+                    </TagBadge>
+                  </Link>
+                ))}
               </CardContent>
             </Card>
           </div>
 
           {/* stats */}
-          <Card className="self-stretch rounded-lg mb-10">
+          <Card className="self-stretch rounded-lg mb-10 main-bg text-primary-foreground">
             <CardContent className="p-8 md:p-10 h-full flex flex-col md:flex-row md:justify-between md:items-center">
               <div className="flex flex-col items-center gap-2 flex-1">
-                <span className="text-4xl font-bold">
+                <span className="text-6xl font-extrabold">
                   <CountUp start={0} end={stats.users} />
                 </span>
-                <span className="text-sm text-muted-foreground">
+                <span>
                   Authors
                 </span>
               </div>
               <div className="flex flex-col items-center gap-2 flex-1">
-                <span className="text-4xl font-bold">
+                <span className="text-6xl font-extrabold">
                   <CountUp start={0} end={stats.posts} />
                 </span>
-                <span className="text-sm text-muted-foreground">
+                <span>
                   Posts published
                 </span>
               </div>
               <div className="flex flex-col items-center gap-2 flex-1">
-                <span className="text-4xl font-bold">
+                <span className="text-6xl font-extrabold">
                   <CountUp start={0} end={stats.reads} />
                 </span>
-                <span className="text-sm text-muted-foreground">
+                <span>
                   Total article reads
                 </span>
               </div>
@@ -297,10 +502,10 @@ export default function Landing({
                   <CarouselContent>
                     {topUsers.map((follower: any) => (
                       <CarouselItem
-                        className="basis-full md:basis-1/3 pl-6"
+                        className="basis-full lg:basis-1/2 xl:basis-1/3 pl-6 mb-3"
                         key={follower.id}
                       >
-                        <UserVerticalCard user={follower} />
+                        <UserVerticalCard user={follower} className="hover:shadow-lg" />
                       </CarouselItem>
                     ))}
                   </CarouselContent>
