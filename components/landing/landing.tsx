@@ -262,6 +262,7 @@ export default function Landing({
                 <div className="relative h-auto w-auto flex-[0_0_auto] z-10">
                   <Button size={"icon"} variant={"secondary"} disabled className="p-[13px] h-auto w-auto rounded-full">
                     <Icons.search className="h-5 w-5" />
+                    <span className="sr-only">Search</span>
                   </Button>
                 </div>
                 <div className="flex outline-0 justify-start shrink-0 transform-none h-auto flex-[0_0_auto] relative w-full">
@@ -277,7 +278,7 @@ export default function Landing({
                   />
                 </div>
               </div>
-              <div className="relative h-auto w-auto flex-[0_0_auto]">
+              <div className="relative h-auto w-auto flex-[0_0_auto] md:block hidden">
                 <div className="contents">
                   <Button className="py-2.5 px-5 h-auto w-auto rounded-full" onClick={
                     async () => {
