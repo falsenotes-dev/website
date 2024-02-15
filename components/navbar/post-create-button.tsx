@@ -73,6 +73,7 @@ export function PostCreateButton({
                ) : (
                     <Icon className={cn("h-[1.2rem] w-[1.2rem]", iconCLassName)} strokeWidth={1.75} />
                )}
+               <span className="sr-only">Post Create</span>
           </Button>
      )
 }
