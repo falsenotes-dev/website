@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-     title: 'Home - FalseNotes',
+  title: 'Home - FalseNotes',
 }
 
 export default function FeedLayout({
@@ -10,10 +10,10 @@ export default function FeedLayout({
   children: React.ReactNode
 }) {
   return (
-     <>
+    <>
       <div className="mx-auto">
-          {children}
-        </div>
-     </>
+        {children}
+      </div>
+    </>
   )
 }

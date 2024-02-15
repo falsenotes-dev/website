@@ -28,8 +28,8 @@ export default async function Feed({
 
   return (
     <>
-      <FeedTabs tabs={userFollowingsTags} activeTab={tab} />
-      <div className="pt-10">
+      <FeedTabs activeTab={tab} />
+      <div className="px-4">
         <InfinitiveScrollFeed initialFeed={feed} tag={tab} session={session} list={userLists} />
       </div>
     </>
