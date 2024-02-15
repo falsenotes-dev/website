@@ -111,13 +111,7 @@ function Navbar({
                   )}
                 </motion.div>
               </Button>
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <UserNav />
-              </motion.div>
+              <UserNav />
             </>
           ) : (
             <motion.div

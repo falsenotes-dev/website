@@ -60,7 +60,7 @@ export function SiteFooter({ className, size }: React.HTMLAttributes<HTMLElement
                          <div className="statuswidget">
                               <StatusWidget slug="falsenotes" />
                          </div>
-                         <ModeToggle />
+
                     </div>
                </footer>
           </>
