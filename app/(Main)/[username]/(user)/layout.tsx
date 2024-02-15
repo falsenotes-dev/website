@@ -82,7 +82,7 @@ export default async function Layout({ children, params }: Props) {
 
   return (
     <>
-      <div className="md:container mx-auto px-4 mb-20">
+      <div className="md:container mx-auto px-4 md:mb-0 mb-20">
         <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4">
           <div
             className="user__header hidden lg:min-w-[352px] border-r lg:max-w-[352px] md:px-8 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"

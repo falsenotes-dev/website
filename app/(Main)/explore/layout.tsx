@@ -14,7 +14,7 @@ export default function ExploreLayout({
 }) {
   return (
     <>
-      <div className="mx-auto px-4 pt-5 mb-20">
+      <div className="mx-auto px-4 pt-5 md:mb-0 mb-20">
         {children}
       </div>
       <MobileBottomNavbar />

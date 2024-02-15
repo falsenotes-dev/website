@@ -6,6 +6,10 @@ import { Icons } from "../icon";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
+import { Avatar } from "../ui/avatar";
+import { ModeToggle } from "../mode-toggle";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
 function numberFormat(number: number) {
      if (number > 9) {
@@ -21,11 +25,42 @@ export function MobileHeaderNavbar({ notification }: { notification: number }) {
 
      return (<div className="max-w-[1140px] min-w-[280px] block md:hidden mx-auto w-full sticky top-0 md:top-4 z-20 lg:px-6 md:px-2 xl:p-0">
           <div className="menu-container py-2 px-4 bg-background/95 backdrop-blur border md:rounded-2xl shadow-xl xl:mx-8 supports-[backdrop-filter]:bg-background/60">
-               <Button variant={"ghost"} size={"icon"} className="h-10 w-10 relative hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md">
-                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}>
-                         <Icons.menu className="w-6 h-6" />
-                    </motion.div>
-               </Button>
+               {
+                    status == "authenticated" && (
+                         <Drawer>
+                              <DrawerTrigger asChild>
+                                   <Button variant={"ghost"} size={"icon"} className="h-10 w-10 relative hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md">
+                                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.9 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}>
+                                             <Icons.menu className="w-6 h-6" />
+                                        </motion.div>
+                                   </Button>
+                              </DrawerTrigger>
+                              <DrawerContent className="p-5">
+                                   <div className="flex justify-between items-center my-2">
+                                        <ModeToggle />
+                                   </div>
+                                   <Link
+                                        href={`/@${session?.user.username}/settings/blogs`}
+                                        className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                                   >
+                                        <Icons.blogs className="h-5 mr-2" />
+                                        Your Blogs
+                                   </Link>
+                                   <div>
+                                        <Link href={`/@${session?.user.username}/settings/profile`} className="relative flex cursor-default select-none items-center rounded-sm px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                                             <Icons.settings className="h-5 w-5 mr-2" />
+                                             Settings
+                                        </Link>
+                                        <Separator className="my-2" />
+                                        <Link href="/signout" className="relative flex cursor-default text-destructive select-none items-center rounded-sm px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                                             <Icons.logOut className="h-5 w-5 mr-2 text-destructive" />
+                                             Log out
+                                        </Link>
+                                   </div>
+                              </DrawerContent>
+                         </Drawer>
+                    )
+               }
 
                <Link href={session ? "/feed" : "/"}>
                     <motion.div whileHover={{ scale: 1.02 }} className="flex items-center" whileTap={{ scale: 0.9 }}>

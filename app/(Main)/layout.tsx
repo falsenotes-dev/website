@@ -29,7 +29,7 @@ export default async function MainLayout({
 
   return (
     <>
-      <div className='min-h-screen mb-20'>
+      <div className='min-h-screen'>
         <>
           <Navbar notifications={notifications} searchHistory={searchHistory} />
           <MobileHeaderNavbar notification={notifications} />
