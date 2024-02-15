@@ -516,19 +516,19 @@ export default function Landing({
           </div>
 
           <Card className="self-stretch rounded-lg main-bg text-primary-foreground mb-10">
-            <CardContent className="p-8 md:p-10 !px-14 h-full flex flex-col md:flex-row md:justify-between md:items-center">
+            <CardContent className="xl:p-12 lg:p-11 p-10 gap-6 xl:gap-0 h-full flex flex-col xl:flex-row justify-between items-center">
               <div>
-                <CardTitle className="line-clamp-2 mb-4 text-center md:text-left">
+                <CardTitle className="line-clamp-2 mb-4 text-center font-extrabold text-4xl xl:text-left">
                   Start your journey with FalseNotes now!
                 </CardTitle>
-                <CardDescription className="line-clamp-3 text-primary-foreground text-center md:text-left">
+                <CardDescription className="line-clamp-3 text-primary-foreground font-medium text-sm text-center xl:text-left">
                   Discover new ideas, learn new skills, and connect with
                   like-minded individuals.
                 </CardDescription>
               </div>
               <Button
                 size={"lg"}
-                className="mt-6 w-max mx-auto md:mx-0 md:mt-0 md:ml-auto"
+                className="mt-6 w-max mx-auto xl:mx-0 xl:mt-0 xl:ml-auto"
                 variant={"secondary"}
                 onClick={() => signIn()}
               >
