@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icon";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 
 export default function FeedTabs({ activeTab = 'foryou', children }: { activeTab?: string, children?: React.ReactNode }) {
@@ -43,11 +44,17 @@ export default function FeedTabs({ activeTab = 'foryou', children }: { activeTab
                               router.replace('/feed')
                          }
                     }
-               } className="py-5 cursor-pointer fixed bottom-10 left-10 z-50 shadow-lg hidden md:inline-flex">
-                    {
-                         tab == 'foryou' ? 'For You' : 'Following'
-                    }
-                    <Icons.arrowDataTransferHorizontal className="h-5 w-5 ml-1.5" />
+               } className="py-5 cursor-pointer fixed bottom-10 left-10 z-50 shadow-lg hidden md:inline-flex" asChild>
+                    <motion.div
+                         whileHover={{ scale: 1.1 }}
+                         whileTap={{ scale: 0.9 }}
+                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    >
+                         {
+                              tab == 'foryou' ? 'For You' : 'Following'
+                         }
+                         <Icons.arrowDataTransferHorizontal className="h-5 w-5 ml-1.5" />
+                    </motion.div>
                </Button>
           </>
      );
