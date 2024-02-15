@@ -8,6 +8,7 @@ import { useDebounce } from 'use-debounce'
 import { Icons } from "../icon";
 import { addSearchHistory } from "@/lib/prisma/search-history";
 import { Button } from "../ui/button";
+import { motion } from "framer-motion";
 
 export default function Search({ search, tab }: { search: string | undefined, tab?: string }) {
      const router = useRouter()
@@ -49,7 +50,9 @@ export default function Search({ search, tab }: { search: string | undefined, ta
                               </div>
                          </div>
                          <div className="relative h-auto w-auto flex-[0_0_auto] md:block hidden">
-                              <div className="contents">
+                              <motion.div whileHover={{ scale: 1.05 }}
+                                   whileTap={{ scale: 0.9 }}
+                                   transition={{ type: "spring", stiffness: 400, damping: 17 }}>
                                    <Button className="py-2.5 px-5 h-auto w-auto rounded-full" onClick={
                                         async () => {
                                              if (query) {
@@ -60,7 +63,7 @@ export default function Search({ search, tab }: { search: string | undefined, ta
                                    }>
                                         Search
                                    </Button>
-                              </div>
+                              </motion.div>
                          </div>
                     </div>
                </div>

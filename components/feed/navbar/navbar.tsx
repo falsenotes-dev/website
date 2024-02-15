@@ -5,62 +5,57 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useInView } from "react-intersection-observer";
 import { Plus } from "lucide-react";
 import { useRouter } from 'next/navigation'
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/icon";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 
-export default function FeedTabs({ tabs, activeTab = 'foryou', children }: { tabs: any, activeTab?: string, children?: React.ReactNode }) {
-     const [firstTab, inFView] = useInView();
-     const [lastTab, inLView] = useInView();
+export default function FeedTabs({ activeTab = 'foryou', children }: { activeTab?: string, children?: React.ReactNode }) {
      const router = useRouter()
+     const [tab, setTab] = useState(activeTab)
+
+     useEffect(() => {
+          setTab(activeTab)
+     }, [activeTab])
 
      return (
           <>
-
-               <div className="bg-background sticky top-[90px] z-10 py-2 border-b">
-                    <div className="w-full h-full absolute insert-0 top-0">
-                         <div className={`tab-shadow right-auto left-0 ${inFView && 'opacity-0'}`} style={
-                              {
-                                   transform: "scaleX(-1)",
-                                   left: "-3%"
+               <Tabs defaultValue={tab} className="w-full left-0 sticky top-[74px] z-20 md:hidden mb-3">
+                    <TabsList className="grid w-full grid-cols-2 rounded-none bg-muted/95 backdrop-blur supports-[backdrop-filter]:bg-muted/60 h-auto">
+                         <TabsTrigger onClick={
+                              async () => {
+                                   router.replace('/feed')
                               }
-                         }></div>
-                         <div className={`tab-shadow ${inLView && 'opacity-0'}`} style={{ right: "-3%" }}></div>
-                    </div>
-                    <div className="inline-flex h-10 items-center justify-center rounded-md bg-background p-1 text-muted-foreground w-full">
-                         <ScrollArea className="w-full py-2">
-                              <div className="inline-flex h-10 items-center justify-center rounded-md p-1 text-muted-foreground bg-transparent gap-2">
-                                   <div ref={firstTab} className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm bg-transparent">
-                                        <Link href={`/explore`}><Plus className="h-5 w-5" /></Link>
-                                   </div>
-                                   <div className={`cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${activeTab == 'foryou' ? 'bg-secondary-foreground shadow-sm text-secondary' : 'bg-muted'}`} onClick={() => {
-                                        router.replace('/feed')
-                                   }}>
-                                        For You
-                                   </div>
-                                   <div className={`cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${activeTab == 'following' ? 'bg-secondary-foreground shadow-sm text-secondary' : 'bg-muted'}`} onClick={() => {
-                                        router.replace('/feed?tab=following')
-                                   }}>
-                                        Following
-                                   </div>
-                                   {tabs?.map((item: any, index: number) => (
+                         } className="py-3 rounded-lg" value="foryou">For You</TabsTrigger>
+                         <TabsTrigger onClick={
+                              async () => {
+                                   router.replace('/feed?tab=following')
+                              }
+                         } className="py-3 rounded-lg" value="following">Following</TabsTrigger>
+                    </TabsList>
+               </Tabs>
 
-                                        <div className={`cursor-pointer inline-flex capitalize items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${activeTab == item.tag.name ? 'bg-secondary-foreground shadow-sm text-secondary' : 'bg-muted'}`} onClick={() => {
-                                             router.replace(`/feed?tab=${item.tag.name}`)
-                                        }} key={item.tag.id}>
-
-                                             {item.tag.name.replace(/-/g, " ")}
-
-                                        </div>
-
-                                   ))}
-                                   <div ref={lastTab} className="bg-transparent w-3" />
-                              </div>
-                              <ScrollBar orientation="horizontal" />
-                         </ScrollArea>
-
-                         {children}
-                    </div>
-
-               </div>
+               <Button variant={'secondary'} onClick={
+                    async () => {
+                         if (tab == 'foryou') {
+                              router.replace('/feed?tab=following')
+                         } else {
+                              router.replace('/feed')
+                         }
+                    }
+               } className="py-5 cursor-pointer fixed bottom-10 left-10 z-50 shadow-lg hidden md:inline-flex" asChild>
+                    <motion.div
+                         whileHover={{ scale: 1.1 }}
+                         whileTap={{ scale: 0.9 }}
+                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    >
+                         {
+                              tab == 'foryou' ? 'For You' : 'Following'
+                         }
+                         <Icons.arrowDataTransferHorizontal className="h-5 w-5 ml-1.5" />
+                    </motion.div>
+               </Button>
           </>
      );
 }

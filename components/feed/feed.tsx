@@ -43,7 +43,7 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }
   return safeFeed.length > 0 ? (
     <div className="feed__list">
 
-      <div className="flex flex-col lg:gap-6 md:gap-5 gap-4 my-4">
+      <div className="flex flex-col lg:gap-6 md:gap-5 gap-4">
         {feed?.map((post: any) => (
           <React.Fragment key={post.id}>
             <FeedPostCard
@@ -57,7 +57,7 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }
         {
           feed.length >= 10 && (
             <div className="feed__list_loadmore !py-0 h-max" ref={ref}>
-              <PostCardSkeleton className="rounded-lg bg-backgreound max-h-72 w-full" />
+              <PostCardSkeleton className="rounded-lg bg-backgreound max-h-72 w-full mt-0" />
             </div>
           )
         }

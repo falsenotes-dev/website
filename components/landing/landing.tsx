@@ -41,6 +41,7 @@ import SearchBar from "../searchbar";
 import { Input } from "../ui/input";
 import { useDebounce } from "use-debounce";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 type Stats = {
   users: number;
@@ -279,7 +280,9 @@ export default function Landing({
                 </div>
               </div>
               <div className="relative h-auto w-auto flex-[0_0_auto] md:block hidden">
-                <div className="contents">
+                <motion.div whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}>
                   <Button className="py-2.5 px-5 h-auto w-auto rounded-full" onClick={
                     async () => {
                       if (query) {
@@ -290,7 +293,7 @@ export default function Landing({
                   }>
                     Search
                   </Button>
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>
