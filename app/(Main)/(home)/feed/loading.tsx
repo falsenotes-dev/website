@@ -5,18 +5,15 @@ import PostCardSkeleton from '@/components/skeletons/feed-post-card';
 export default async function Loading() {
   return (
     <div className='w-full'>
-      <FeedTabsSkeleton />
-            <div className="pt-10">
-              <div className="feed__list">
-                <div className="flex flex-col lg:gap-6 md:gap-5 gap-4 flex-nowrap">
-                  <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
-                  <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
-                  <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
-                  <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
-                  <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
-                </div>
-              </div>
-            </div>
+      <div className="feed__list px-4">
+        <div className="flex flex-col lg:gap-6 md:gap-5 gap-4 flex-nowrap">
+          <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
+          <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
+          <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
+          <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
+          <PostCardSkeleton className="rounded-lg bg-backgraound max-h-72 w-full" />
+        </div>
+      </div>
     </div>
   )
 }

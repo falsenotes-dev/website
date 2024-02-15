@@ -37,8 +37,8 @@ function Navbar({ notifications, searchHistory }: { notifications: any, searchHi
     setHistory(searchHistory)
   }, [searchHistory])
   return (
-    <div className="max-w-[1140px] min-w-[280px] mx-auto w-full sticky top-4 z-20 lg:px-6 px-2 xl:p-0">
-      <div className="menu-container py-4 px-8 bg-background/95 backdrop-blur border rounded-2xl shadow-xl xl:mx-8 supports-[backdrop-filter]:bg-background/60">
+    <div className="max-w-[1140px] min-w-[280px] mx-auto w-full sticky top-0 md:top-4 z-20 lg:px-6 md:px-2 xl:p-0">
+      <div className="menu-container py-4 px-8 bg-background/95 backdrop-blur border md:rounded-2xl shadow-xl xl:mx-8 supports-[backdrop-filter]:bg-background/60">
         <Link href={session ? "/feed" : "/"} className="flex items-center">
           <Icons.logo className="md:block hidden h-7" />
           <Icons.logoIcon className="md:hidden block h-7" />
