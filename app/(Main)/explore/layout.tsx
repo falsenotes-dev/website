@@ -1,5 +1,6 @@
 import ExploreTabs from "@/components/explore/navbar/navbar"
 import { SiteFooter } from "@/components/footer"
+import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -13,9 +14,10 @@ export default function ExploreLayout({
 }) {
   return (
     <>
-      <div className="mx-auto px-4 pt-5">
+      <div className="mx-auto px-4 pt-5 mb-20">
         {children}
       </div>
+      <MobileBottomNavbar />
     </>
   )
 }

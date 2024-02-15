@@ -25,7 +25,7 @@ export default async function HomeLayout({
      const popularTags = await fetchTags();
      return (
           <>
-               <div className="md:container mx-auto">
+               <div className="md:container mx-auto mb-20">
                     <main className="flex flex-col items-center justify-between feed xl:px-4">
                          <div className="md:flex lg:flex-nowrap flex-wrap justify-center w-full xl:gap-8 md:pt-8">
                               <div className="w-full lg:w-2/3">

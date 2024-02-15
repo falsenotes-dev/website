@@ -28,12 +28,15 @@ export default async function MainLayout({
   const { searchHistory } = await getSearchHistory({ id: session?.id })
 
   return (
-    <div className='min-h-screen'>
-      <>
-        <Navbar notifications={notifications} searchHistory={searchHistory} />
-        <MobileHeaderNavbar notification={notifications} />
-        {children}
-      </>
-    </div>
+    <>
+      <div className='min-h-screen mb-20'>
+        <>
+          <Navbar notifications={notifications} searchHistory={searchHistory} />
+          <MobileHeaderNavbar notification={notifications} />
+          {children}
+        </>
+      </div>
+      <MobileBottomNavbar />
+    </>
   )
 }

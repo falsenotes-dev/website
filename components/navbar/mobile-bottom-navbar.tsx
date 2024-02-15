@@ -14,7 +14,7 @@ export function MobileBottomNavbar() {
      const router = useRouter();
      const pathname = usePathname();
      return (
-          <div className="sticky py-4 border shadow-xl flex md:hidden w-full bottom-0 bg-muted/95 backdrop-blur supports-[backdrop-filter]:bg-muted/80 z-50">
+          <div className="fixed py-4 border shadow-xl flex md:hidden w-full bottom-0 bg-muted/95 backdrop-blur supports-[backdrop-filter]:bg-muted/80 z-40">
                <div className="flex items-center justify-between w-full gap-4 px-4">
                     <div className="flex items-center justify-center flex-1">
                          <Button
@@ -45,7 +45,7 @@ export function MobileBottomNavbar() {
                          >
                               <div className="flex items-center">
                                    <Icons.search
-                                        className={`w-6 h-6 ${pathname == "/explore" ? "text-primary" : ""
+                                        className={`w-6 h-6 ${pathname.slice(0, 8) == "/explore" ? "text-primary" : ""
                                              }`}
                                    />
                                    <span className="text-sm font-normal text-inherit sr-only">
@@ -74,7 +74,7 @@ export function MobileBottomNavbar() {
                          >
                               <div className="flex items-center">
                                    <Icons.collection
-                                        className={`w-6 h-6 ${pathname == "/lists" ? "text-primary" : ""
+                                        className={`w-6 h-6 ${pathname.slice(0, 6) == "/lists" ? "text-primary" : ""
                                              }`}
                                    />
                                    <span className="text-sm font-normal text-inherit sr-only">
@@ -87,23 +87,21 @@ export function MobileBottomNavbar() {
                          <Button
                               variant={"ghost"}
                               size={"icon"}
+                              className={`p-0 h-7 w-7 relative ${pathname == `/@${session?.user?.username}` ? `!border-primary border-[1.75px]` : ''}`}
                               onClick={() => {
                                    router.push(`/@${session?.user?.username}`);
                               }}
                          >
-                              <div className="flex items-center gap-1.5">
+                              <div className="flex items-center">
                                    <Avatar
-                                        className={`h-7 w-7 ${pathname == `/@${session?.user?.username}`
-                                             ? "border-primary border-2"
-                                             : ""
-                                             }`}
+                                        className={`h-full w-full`}
                                    >
                                         <AvatarImage
                                              src={session?.user?.image || ""}
                                              alt={session?.user?.name || ""}
                                         />
                                         <AvatarFallback>
-                                             <Icons.user className="w-6 h-6" />
+                                             <Icons.user className="w-4 h-4" />
                                         </AvatarFallback>
                                    </Avatar>
                                    <span className="text-sm font-normal text-inherit sr-only">

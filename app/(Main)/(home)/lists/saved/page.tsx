@@ -45,7 +45,7 @@ export default async function ListsPage() {
 
   return (
     <>
-      <div className="flex-auto w-full">
+      <div className="flex-auto w-full px-4">
         <div className="pb-14">
           <div className="flex justify-center">
             <div className="my-6 w-full">
