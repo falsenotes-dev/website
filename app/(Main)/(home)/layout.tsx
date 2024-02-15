@@ -5,13 +5,8 @@ import { fetchTags } from "@/components/feed/get-tags";
 import PopularPosts from "@/components/feed/popular-posts"
 import { SiteFooter } from "@/components/footer";
 import { getSessionUser } from "@/components/get-session-user";
-import { Icons } from "@/components/icon";
 import TagBadge from "@/components/tags/tag";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { dateFormat } from "@/lib/format-date";
-import { getBookmarks } from "@/lib/prisma/session";
-import { Metadata } from "next"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -27,8 +22,6 @@ export default async function HomeLayout({
      const topData = await fetchUsers({ id: session.id })
      const topUsers = topData?.users;
      const popularTags = await fetchTags();
-
-     const { bookmarks, bookmarksCount } = await getBookmarks({ id: session.id, limit: 3 })
      return (
           <>
                <div className="md:container mx-auto">
