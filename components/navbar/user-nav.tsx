@@ -34,7 +34,6 @@ import { ModeToggle } from "../mode-toggle";
 export function UserNav() {
   const { status } = useSession();
   const user = useSession().data?.user as any;
-  const [username, setUsername] = useState<string | null>(null);
   const { width } = useWindowDimensions();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -45,8 +44,6 @@ export function UserNav() {
       setIsMobile(false);
     }
   }, [width]);
-
-  console.log(isMobile);
 
   if (!isMobile) {
     return (

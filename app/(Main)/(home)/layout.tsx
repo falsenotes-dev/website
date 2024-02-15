@@ -5,6 +5,7 @@ import { fetchTags } from "@/components/feed/get-tags";
 import PopularPosts from "@/components/feed/popular-posts"
 import { SiteFooter } from "@/components/footer";
 import { getSessionUser } from "@/components/get-session-user";
+import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar";
 import TagBadge from "@/components/tags/tag";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
@@ -61,6 +62,7 @@ export default async function HomeLayout({
                          </div>
                     </main>
                </div>
+               <MobileBottomNavbar />
           </>
      )
 }

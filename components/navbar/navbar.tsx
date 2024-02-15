@@ -44,7 +44,7 @@ function Navbar({
     setHistory(searchHistory);
   }, [searchHistory]);
   return (
-    <div className="max-w-[1140px] min-w-[280px] mx-auto w-full sticky top-0 md:top-4 z-20 lg:px-6 md:px-2 xl:p-0">
+    <div className="max-w-[1140px] min-w-[280px] hidden md:block mx-auto w-full sticky top-0 md:top-4 z-20 lg:px-6 md:px-2 xl:p-0">
       <div className="menu-container py-4 px-8 bg-background/95 backdrop-blur border md:rounded-2xl shadow-xl xl:mx-8 supports-[backdrop-filter]:bg-background/60">
         <Link href={session ? "/feed" : "/"}>
           <motion.div whileHover={{ scale: 1.02 }} className="flex items-center" whileTap={{ scale: 0.9 }}>
@@ -60,23 +60,6 @@ function Navbar({
         </Link>
 
         <div className="flex items-center gap-1 md:gap-4">
-          <Button
-            variant="ghost"
-            size={"icon"}
-            className="flex md:hidden h-10 w-10 hover:shadow "
-            asChild
-          >
-            <Link href="/explore">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Icons.search className="h-[1.2rem] w-[1.2rem]" />
-                <span className="sr-only">Search</span>
-              </motion.div>
-            </Link>
-          </Button>
           <SearchBar history={history} />
           {status == "authenticated" ? (
             <>

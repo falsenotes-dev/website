@@ -21,7 +21,7 @@ export default function FeedTabs({ activeTab = 'foryou', children }: { activeTab
 
      return (
           <>
-               <Tabs defaultValue={tab} className="w-full left-0 sticky top-[74px] z-20 md:hidden mb-3">
+               <Tabs defaultValue={tab} className="w-full left-0 sticky top-[58px] z-20 md:hidden mb-3">
                     <TabsList className="grid w-full grid-cols-2 rounded-none bg-muted/95 backdrop-blur supports-[backdrop-filter]:bg-muted/60 h-auto">
                          <TabsTrigger onClick={
                               async () => {
