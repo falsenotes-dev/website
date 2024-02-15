@@ -69,7 +69,7 @@ export function PostCreateButton({
                {...props}
           >
                {isLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                    <Icons.spinner className="h-4 w-4 animate-spin" />
                ) : (
                     <Icon className={cn("h-[1.2rem] w-[1.2rem]", iconCLassName)} strokeWidth={1.75} />
                )}
