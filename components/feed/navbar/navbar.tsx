@@ -43,7 +43,7 @@ export default function FeedTabs({ activeTab = 'foryou', children }: { activeTab
                               router.replace('/feed')
                          }
                     }
-               } className="py-4 cursor-pointer fixed bottom-10 left-10 z-50 shadow-lg hidden md:inline-flex">
+               } className="py-5 cursor-pointer fixed bottom-10 left-10 z-50 shadow-lg hidden md:inline-flex">
                     {
                          tab == 'foryou' ? 'For You' : 'Following'
                     }
