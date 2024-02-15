@@ -32,25 +32,25 @@ export default function UserVerticalCard({ user, className, session, ...props }:
      }
      return (
           <Card className={cn("rounded-lg feedArticleCard !bg-background h-full flex-[1_1_20%] self-stretch", className)} {...props}>
-               <CardContent className="flex flex-col w-full justify-between p-4 gap-6 h-full">
+               <CardContent className="flex flex-col w-full justify-between p-5 gap-6 h-full">
                     <div className="block">
                          <Link href={`/@${user.username}`}>
-                              <Avatar className="h-12 w-12 mr-2">
+                              <Avatar className="w-16 h-16 mr-2">
                                    <AvatarImage src={user.image} alt={user.username} />
                                    <AvatarFallback>{user.name?.charAt(0) || user.username?.charAt(0)}</AvatarFallback>
                               </Avatar>
                          </Link>
                          <div className="w-full flex flex-col">
                               <Link href={`/@${user.username}`}>
-                                   <div className="flex items-end pt-3 pb-1 w-full">
-                                        <h2 className="line-clamp-1 max-h-5 text-ellipsis font-medium">{user.name || user.username}
+                                   <div className="flex items-center pt-3 pb-1 w-full">
+                                        <h2 className="line-clamp-1 text-ellipsis font-semibold text-lg">{user.name || user.username}
                                         </h2>
                                         {user.verified && (
                                              <Icons.verified className="h-4 w-4 mx-0.5 inline fill-verified align-middle" />
                                         )}
                                    </div>
                               </Link>
-                              <p className="text-xs text-muted-foreground">{formatNumberWithSuffix(followersCount)} Followers
+                              <p className="text-sm text-muted-foreground">{formatNumberWithSuffix(followersCount)} Followers
                                    <span className="px-1">·</span>
                                    {
                                         formatNumberWithSuffix(user._count.posts + user._count.publicationsPosts) + " Posts"
@@ -59,7 +59,7 @@ export default function UserVerticalCard({ user, className, session, ...props }:
                               {
                                    user.bio && (
                                         <div className="max-w-full break-words whitespace-pre-wrap mt-3 mb-6">
-                                             <p className="text-sm text-muted-foreground line-clamp-3 text-ellipsis">{user.bio}</p>
+                                             <p className="text-muted-foreground line-clamp-3 text-ellipsis">{user.bio}</p>
                                         </div>
                                    )
                               }

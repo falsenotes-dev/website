@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDebounce } from 'use-debounce'
 import { Icons } from "../icon";
 import { addSearchHistory } from "@/lib/prisma/search-history";
+import { Button } from "../ui/button";
 
 export default function Search({ search, tab }: { search: string | undefined, tab?: string }) {
      const router = useRouter()
@@ -34,14 +35,31 @@ export default function Search({ search, tab }: { search: string | undefined, ta
      }, [query])
      return (
           <>
-               <div className="search feed__empty_search">
-                    <div className="search-container">
-                         <div className="search__form mx-auto md:w-[540px]">
-                              <div className="input w-full h-14 rounded-full">
-                                   <div className="input__icon ml-3">
-                                        <Icons.search className='search__form_icon' />
-                                   </div>
+               <div className="relative flex-[0_0_auto] h-[62px] max-w-[90%] min-w-[60%] w-full z-10">
+                    <div className="bg-background h-full max-w-full w-full rounded-full shadow-lg justify-between items-center flex overflow-hidden p-3 relative">
+                         <div className="flex justify-start content-center items-center flex-[0_0_auto] gap-3.5 h-[54px] p-0 overflow-hidden relative w-max z-10">
+                              <div className="relative h-auto w-auto flex-[0_0_auto] z-10">
+                                   <Button size={"icon"} variant={"secondary"} disabled className="p-[13px] h-auto w-auto rounded-full">
+                                        <Icons.search className="h-5 w-5" />
+                                        <span className="sr-only">Search</span>
+                                   </Button>
+                              </div>
+                              <div className="flex outline-0 justify-start shrink-0 transform-none h-auto flex-[0_0_auto] relative w-full">
                                    <Input value={text} type="search" onChange={e => setText(e.target.value)} placeholder="Search for people or tags" className="input__field !foucs-visible:ring-0 !focus-visible:ring-offset-0 !focus-visible:outline-none" />
+                              </div>
+                         </div>
+                         <div className="relative h-auto w-auto flex-[0_0_auto] md:block hidden">
+                              <div className="contents">
+                                   <Button className="py-2.5 px-5 h-auto w-auto rounded-full" onClick={
+                                        async () => {
+                                             if (query) {
+                                                  router.push(`/explore?search=${query}`)
+                                             }
+                                        }
+
+                                   }>
+                                        Search
+                                   </Button>
                               </div>
                          </div>
                     </div>

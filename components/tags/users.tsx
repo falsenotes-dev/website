@@ -49,7 +49,7 @@ export default function TagFollowers({ followers: initialFollowers, tag, session
                               <CarouselContent>
                                    {
                                         followers.map((follower: any) => (
-                                             <CarouselItem className="basis-full md:basis-1/3 lg:basis-1/4 xl:basis-1/5 pl-6" key={follower.id}><UserVerticalCard user={follower.follower} session={session} /></CarouselItem>
+                                             <CarouselItem className="basis-full lg:basis-1/2 xl:basis-1/3 pl-6" key={follower.id}><UserVerticalCard user={follower.follower} session={session} /></CarouselItem>
                                         ))
                                    }
                               </CarouselContent>

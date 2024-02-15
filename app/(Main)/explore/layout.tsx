@@ -13,10 +13,8 @@ export default function ExploreLayout({
 }) {
   return (
     <>
-      <div className="md:container mx-auto px-4 pt-5">
-        <main className="flex flex-col items-center justify-between">
-          {children}
-        </main>
+      <div className="mx-auto px-4 pt-5">
+        {children}
       </div>
     </>
   )
