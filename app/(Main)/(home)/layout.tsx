@@ -26,7 +26,7 @@ export default async function HomeLayout({
           <>
                <div className="md:container mx-auto">
                     <main className="flex flex-col items-center justify-between feed xl:px-4">
-                         <div className="md:flex lg:flex-nowrap flex-wrap justify-center w-full xl:gap-8 pt-8">
+                         <div className="md:flex lg:flex-nowrap flex-wrap justify-center w-full xl:gap-8 md:pt-8">
                               <div className="w-full lg:w-2/3">
                                    {children}
                               </div>
