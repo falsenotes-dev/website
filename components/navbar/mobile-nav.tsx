@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
 import { Avatar } from "../ui/avatar";
 import { ModeToggle } from "../mode-toggle";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 
 function numberFormat(number: number) {
      if (number > 9) {
@@ -36,9 +36,16 @@ export function MobileHeaderNavbar({ notification }: { notification: number }) {
                                    </Button>
                               </DrawerTrigger>
                               <DrawerContent className="px-5 pb-5">
-                                   <div className="flex justify-between items-center my-2">
-                                        <ModeToggle />
-                                   </div>
+                                   <Link href={`/@${session?.user.username}/settings/profile`} className="relative flex cursor-default select-none items-center rounded-sm px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                                        <Icons.settings className="h-5 w-5 mr-2" />
+                                        Settings
+                                   </Link>
+                                   <Separator className="my-2" />
+                                   <Link href={`/@${session?.user.username}/list/read-later/`} className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                                        <Icons.bookmarks className="h-5 mr-2" />
+                                        You saved posts
+                                   </Link>
+                                   <Separator className="my-2" />
                                    <Link
                                         href={`/@${session?.user.username}/settings/blogs`}
                                         className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
@@ -46,11 +53,12 @@ export function MobileHeaderNavbar({ notification }: { notification: number }) {
                                         <Icons.blogs className="h-5 mr-2" />
                                         Your Blogs
                                    </Link>
+                                   <Separator className="my-2" />
+                                   <div className="flex justify-between items-center my-2">
+                                        <ModeToggle />
+                                   </div>
                                    <div>
-                                        <Link href={`/@${session?.user.username}/settings/profile`} className="relative flex cursor-default select-none items-center rounded-sm px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-                                             <Icons.settings className="h-5 w-5 mr-2" />
-                                             Settings
-                                        </Link>
+
                                         <Separator className="my-2" />
                                         <Link href="/signout" className="relative flex cursor-default text-destructive select-none items-center rounded-sm px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
                                              <Icons.logOut className="h-5 w-5 mr-2 text-destructive" />
