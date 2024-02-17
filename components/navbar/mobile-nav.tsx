@@ -35,7 +35,7 @@ export function MobileHeaderNavbar({ notification }: { notification: number }) {
                                         </motion.div>
                                    </Button>
                               </DrawerTrigger>
-                              <DrawerContent className="p-5">
+                              <DrawerContent className="px-5 pb-5">
                                    <div className="flex justify-between items-center my-2">
                                         <ModeToggle />
                                    </div>
