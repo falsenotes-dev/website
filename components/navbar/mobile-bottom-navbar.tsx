@@ -16,7 +16,7 @@ export function MobileBottomNavbar() {
 
      if (session) {
           return (
-               <div className="fixed py-4 border shadow-xl flex md:hidden w-full bottom-0 bg-muted/95 backdrop-blur supports-[backdrop-filter]:bg-muted/80 z-40">
+               <div className="fixed py-2 border shadow-xl flex md:hidden w-full bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 z-40">
                     <div className="flex items-center justify-between w-full gap-4 px-4">
                          <div className="flex items-center justify-center flex-1">
                               <Button
@@ -25,6 +25,7 @@ export function MobileBottomNavbar() {
                                         router.push("/feed");
                                    }}
                                    size={"icon"}
+                                   className="h-10 w-10"
                               >
                                    <div className="flex items-center">
                                         <Icons.home
@@ -44,6 +45,7 @@ export function MobileBottomNavbar() {
                                         router.push("/explore");
                                    }}
                                    size={"icon"}
+                                   className="h-10 w-10"
                               >
                                    <div className="flex items-center">
                                         <Icons.search
@@ -62,6 +64,7 @@ export function MobileBottomNavbar() {
                                    variant={"ghost"}
                                    iconName="plusSquare"
                                    size={"icon"}
+                                   className="h-10 w-10"
                                    iconCLassName="h-6 w-6"
                               />
                          </div>
@@ -72,6 +75,7 @@ export function MobileBottomNavbar() {
                                    onClick={() => {
                                         router.push("/lists");
                                    }}
+                                   className="h-10 w-10"
                                    size={"icon"}
                               >
                                    <div className="flex items-center">
@@ -89,7 +93,7 @@ export function MobileBottomNavbar() {
                               <Button
                                    variant={"ghost"}
                                    size={"icon"}
-                                   className={`p-0 h-7 w-7 relative ${pathname == `/@${session?.user?.username}` ? `!border-primary border-[1.75px]` : ''}`}
+                                   className={`p-0 h-8 w-8 rounded-full relative ${pathname == `/@${session?.user?.username}` ? `!border-primary border-[1.75px]` : ''}`}
                                    onClick={() => {
                                         router.push(`/@${session?.user?.username}`);
                                    }}

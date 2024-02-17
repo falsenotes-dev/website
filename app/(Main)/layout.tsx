@@ -36,7 +36,6 @@ export default async function MainLayout({
           {children}
         </>
       </div>
-      <MobileBottomNavbar />
     </>
   )
 }

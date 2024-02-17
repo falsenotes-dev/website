@@ -85,7 +85,7 @@ export default function MobilePostTabs({
     <>
       <div
         className={cn(
-          "py-3 border-t rounded-full shadow-xl flex md:hidden mx-auto w-full left-0 sticky bottom-1 bg-background/95 backdrop-blur-md z-50",
+          "py-2 border-t shadow-2xl flex md:hidden mx-auto w-full left-0 fixed bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 z-50",
           className
         )}
       >
