@@ -160,8 +160,9 @@ export const getUserPost = async ({
             contains: search,
             mode: "insensitive",
           },
+          published: true,
         }
-      : { ...whereQuery };
+      : { ...whereQuery, published: true };
   const posts = await postgres.post.findMany({
     ...baseQuery,
     where: { ...mainQuery, OR: [{ authorId: id }, { publicationId: id }] },

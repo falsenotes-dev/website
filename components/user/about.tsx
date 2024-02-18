@@ -8,7 +8,7 @@ import Link from "next/link";
 import { formatNumberWithSuffix } from "../format-numbers";
 import { EmptyPlaceholder } from "../empty-placeholder";
 
-function getRegistrationDateDisplay(date: string) {
+export function getRegistrationDateDisplay(date: string) {
      const dateObj = new Date(date);
      const day = dateObj.getDate();
      const month = dateObj.toLocaleString("default", { month: "short" });

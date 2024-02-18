@@ -7,7 +7,7 @@ import { getLists } from "@/lib/prisma/session";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { SiteFooter } from "@/components/footer";
-import { UserAbout } from "@/components/user/about";
+import { UserAbout, getRegistrationDateDisplay } from "@/components/user/about";
 import { Icons } from "@/components/icon";
 import Image from "next/image";
 import { UserCard } from "@/components/user/card";
@@ -19,6 +19,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { EmptyPlaceholder } from "@/components/empty-placeholder";
 import UserHoverCard from "@/components/user-hover-card";
 import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import PostCard from "@/components/blog/post-card-v3";
 
 export default async function Page({
   params,
@@ -49,6 +52,7 @@ export default async function Page({
               published: true,
             },
           },
+          Followers: true,
         },
       },
       Followers: {
@@ -214,14 +218,9 @@ export default async function Page({
     },
   });
 
-  const whereQuery =
-    sessionUserName?.id === user?.id
-      ? { id: { not: pinnedPost?.id } }
-      : {
-        published: true, id: { not: pinnedPost?.id }
-      };
+  const limit = pinnedPost ? 11 : 12;
 
-  const { posts } = await getUserPost({ id: user.id, search, whereQuery });
+  const { posts } = await getUserPost({ id: user.id, search, limit });
 
   const followers = user?.Followers;
 
@@ -229,9 +228,165 @@ export default async function Page({
     typeof searchParams.tab === "string" ? searchParams.tab : undefined;
 
   const list = await getLists({ id: sessionUserName?.id });
+  const firstPost = pinnedPost || posts[0];
+  const restPosts = !pinnedPost ? posts.slice(1, 12) : posts;
   return (
-    <>
-      <div className="md:container mx-auto px-4 pt-5 md:mb-0 mb-20">
+    <div className="flex flex-col justify-start items-center w-auto xl:px-0 px-3 py-8">
+      <div className="relative flex-[0_0_auto] h-max max-w-[1140px] min-w-[280px] w-full overflow-visible">
+        <div className="flex flex-col justify-center items-start bottom-0 gap-3 left-1/2 h-min max-w-5xl min-w-[280px] relative overflow-hidden w-[94%] -translate-x-1/2">
+          <Avatar className="h-28 w-28">
+            <AvatarImage src={user?.image!} />
+            <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col w-full">
+            <div className="flex items-center gap-1.5"><h1 className="text-4xl font-extrabold line-clamp-1">{user.name}</h1>
+              {
+                user.verified && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger><Icons.verified className="h-7 w-7 text-muted-foreground fill-verified" /></TooltipTrigger>
+                      <TooltipContent>Verified Author</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )
+              }
+              {
+                user.falsemember && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger><Image src="/assets/falsemember.png" alt="False Member" width={28} height={28} /></TooltipTrigger>
+                      <TooltipContent>The False Staff</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )
+              }
+            </div>
+            <div className="items-center flex gap-2 w-full">
+              <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-sm">
+                {formatNumberWithSuffix(user._count.Followers)}{" "}
+                <span className="text-muted-foreground ml-2">Followers</span>
+              </div>
+              <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-sm">
+                {formatNumberWithSuffix(user._count.posts + user._count.publicationsPosts)}{" "}
+                <span className="text-muted-foreground ml-2">Posts</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between md:items-center w-full flex-col md:flex-row gap-2">
+            <div className="flex gap-3 h-4 text-sm relative text-muted-foreground items-center">
+              {
+                user.location && (
+                  <div className="flex items-center gap-1">
+                    <Icons.location className="h-4 w-4" />
+                    {user.location}
+                  </div>
+                )
+              }
+              <div className="flex items-center gap-1">
+                <Icons.calendarDays className="h-4 w-4" />
+                Joined {getRegistrationDateDisplay(user.createdAt.toISOString())}
+              </div>
+            </div>
+            <div className="flex gap-4 items-center">
+              {/* user social links */}
+              <div className="flex gap-4 items-center">
+                {
+                  user.urls && user.urls.length > 0 && (
+                    user.urls.map((url: any) => (
+                      <>
+                        <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground" key={url.id}>
+                          <Link href={url.value} target="_blank" className="flex items-center font-light !text-sm">
+                            {
+                              //if url.value contains github.com then show github icon if not then show link icon
+                              url.value.includes("github.com") ? (
+                                <>
+                                  <Icons.gitHub className="h-5 w-5 text-muted-foreground" />
+                                </>
+                              ) : url.value.includes("twitter.com") ? (
+                                <>
+                                  <Icons.twitter className="h-5 w-5 text-muted-foreground" />
+                                </>
+                              ) : url.value.includes("facebook.com") ? (
+                                <>
+                                  <Icons.facebook className="h-5 w-5 text-muted-foreground" />
+                                </>
+                              ) : url.value.includes("fb.com") ? (
+                                <>
+                                  <Icons.facebook className="h-5 w-5 text-muted-foreground" />
+                                </>
+                              ) : url.value.includes("instagram.com") ? (
+                                <>
+                                  <Icons.instagram className="h-5 w-5 text-muted-foreground" />
+                                </>
+                              ) : url.value.includes("linkedin.com") ? (
+                                <>
+                                  <Icons.linkedIn className="h-5 w-5 text-muted-foreground" />
+                                </>
+                              ) : url.value.includes('youtube.com') ? (
+                                <>
+                                  <Icons.youtube className="h-5 w-5 text-muted-foreground" />
+                                </>
+                              )
+                                : url.value.includes('www.youtube.com') ? (
+                                  <>
+                                    <Icons.youtube className="h-5 w-5 text-muted-foreground" />
+                                  </>
+                                ) : url.value.includes('t.me') ? (
+                                  <>
+                                    <Icons.telegram className="h-5 w-5 text-muted-foreground" />
+                                  </>
+                                ) : (
+                                  <>
+                                    <Icons.link className="mr-1 h-5 w-5 text-muted-foreground" />
+                                    {
+                                      // display only the domain name
+                                      new URL(url.value).hostname.replace("www.", "")
+                                    }
+                                  </>
+                                )
+                            }
+                          </Link>
+                        </Button>
+                      </>
+                    ))
+                  )
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col max-w-5xl min-w-[280px] w-full py-10">
+        <Tabs defaultValue="home">
+          <TabsList className="mb-8">
+            <TabsTrigger value="home">Home</TabsTrigger>
+            <TabsTrigger value="posts">Posts</TabsTrigger>
+            <TabsTrigger value="lists">Lists</TabsTrigger>
+            {
+              user?.writers?.length > 0 && (
+                <TabsTrigger value="writers">Writers</TabsTrigger>
+              )
+            }
+            <TabsTrigger value="about">About</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <div
+          className="grid 
+      grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <div className="md:col-span-2 md:row-span-2">
+            <PostCard post={firstPost} author={firstPost.author} list={list} session={sessionUserName} isFirst isPinned={firstPost.pinned} />
+          </div>
+          {restPosts.map((post: any) => {
+            return (
+              <>
+                <PostCard post={post} author={post.author} list={list} session={sessionUserName} isPinned={post.pinned} />
+              </>
+            );
+          })}
+        </div>
+      </div>
+      {/* <div className="md:container mx-auto px-4 pt-5 md:mb-0 mb-20">
         <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
           <div
             className="user__header md:hidden w-full sm:h-fit lg:min-w-[352px] lg:border-r lg:max-w-[352px] md:px-8 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"
@@ -440,8 +595,8 @@ export default async function Page({
             </Tabs>
           </div>
         </div>
-      </div>
+      </div> */}
       <MobileBottomNavbar />
-    </>
+    </div>
   );
 }

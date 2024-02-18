@@ -19,6 +19,7 @@ model User {
   password          String?
   emailVerified     DateTime?           @map("email_verified")
   image             String?
+  cover             String?
   githubprofile     String?
   location          String?
   verified          Boolean             @default(false)
