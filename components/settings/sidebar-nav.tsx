@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
 import { Badge } from "../ui/badge"
+import { Icons } from "../icon"
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -13,6 +14,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
     title: string,
     disabled?: boolean
     new?: boolean
+    icon: keyof typeof Icons
   }[]
 }
 
@@ -29,21 +31,25 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
         )}
         {...props}
       >
-        {items.map((item, index) => (
-          <TabsTrigger
-            value={item.href}
-            key={index}
-            disabled={item.disabled}
-            onClick={() => {
-              if (item.disabled) return
-              router.push(item.href)
-            }
-            }
-            className="w-full justify-between rounded-md data-[state=active]:bg-muted gap-2"
-          >
-            {item.title} {item.new && <Badge>New</Badge>}
-          </TabsTrigger>
-        ))}
+        {items.map((item, index) => {
+          const Icon = Icons[item.icon]
+          return (
+            <TabsTrigger
+              value={item.href}
+              key={index}
+              disabled={item.disabled}
+              onClick={() => {
+                if (item.disabled) return
+                router.push(item.href)
+              }
+              }
+              className="w-full justify-between rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground gap-2 py-2.5 px-5"
+            >
+              <div className="flex items-center gap-2">
+                <Icon className="h-5 w-5" />  {item.title}</div> {item.new && <Badge>New</Badge>}
+            </TabsTrigger>
+          )
+        })}
       </TabsList>
     </Tabs>
   )

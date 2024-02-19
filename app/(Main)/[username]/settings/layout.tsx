@@ -14,6 +14,7 @@ import Link from "next/link"
 import { ChevronRight } from "lucide-react"
 import { Icons } from "@/components/icon"
 import { Button } from "@/components/ui/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export const metadata: Metadata = {
   title: "Settings - FalseNotes",
@@ -30,31 +31,34 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
     return redirect(`/`)
   }
 
-  const sidebarNavItems = [
-    {
-      title: "Profile",
-      href: `/@${decodeURIComponent(params.username).substring(1)}/settings/profile`,
-    },
-    {
-      title: "Members",
-      href: `/@${decodeURIComponent(params.username).substring(1)}/settings/members`,
-      new: false,
-    },
-    {
-      title: "Account",
-      href: `/@${decodeURIComponent(params.username).substring(1)}/settings/account`,
-      disabled: true,
-    },
-    // {
-    //   title: "Appearance",
-    //   href: `/@${decodeURIComponent(params.username).substring(1)}/settings/appearance`,
-    // },
-    {
-      title: "Blogs",
-      href: `/@${decodeURIComponent(params.username).substring(1)}/settings/blogs`,
-      new: false,
-    }
-  ]
+  const sidebarNavItems: {
+    title: string;
+    href: string;
+    new?: boolean;
+    icon: keyof typeof Icons;
+  }[] = [
+      {
+        title: "Profile",
+        href: `/@${decodeURIComponent(params.username).substring(1)}/settings/profile`,
+        icon: 'user',
+      },
+      {
+        title: "Members",
+        href: `/@${decodeURIComponent(params.username).substring(1)}/settings/members`,
+        new: false,
+        icon: "users",
+      },
+      // {
+      //   title: "Appearance",
+      //   href: `/@${decodeURIComponent(params.username).substring(1)}/settings/appearance`,
+      // },
+      {
+        title: "Blogs",
+        href: `/@${decodeURIComponent(params.username).substring(1)}/settings/blogs`,
+        new: false,
+        icon: "blogs",
+      }
+    ]
 
   const user = await db.user.findFirst({
     where: { username: decodeURIComponent(params.username).substring(1) },
@@ -74,98 +78,95 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
   }
 
   return (
-    <div className="flex flex-col flex-auto max-w-screen" style={{ minHeight: "calc(100vh - 64px)" }}>
-      <div className="space-y-6 pt-12 pb-16 flex-1 px-3">
-        <div className="space-y-1">
-          <div>
-            <div className="flex justify-between flex-wrap gap-4">
-              <div className="flex gap-2">
-                <Avatar>
+    <div className="flex flex-col flex-auto items-center justify-center overflow-hidden" style={{ minHeight: "calc(100vh - 64px)" }}>
+      <div className="flex flex-col flex-[1_0_auto] max-w-[1140px] min-w-[280px] w-full xl:px-0 px-3 py-8 relative">
+        <div className="flex gap-6 flex-col-reverse md:flex-row w-full">
+          <div className="flex-1 mt-16 w-full md:mt-0 md:w-max">{children}</div>
+          <aside className="flex flex-col gap-6 w-full md:w-64">
+            <div className="flex gap-2 flex-col items-center">
+              <div className="relative">
+                <Avatar className="h-32 w-32">
                   <AvatarImage src={user?.image || ''} alt={user?.name || user?.username} />
                   <AvatarFallback>
                     {user?.name?.charAt(0) || user?.username?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-xl font-bold leading-none">{user?.name || user?.username} <span className="text-sm text-muted-foreground leading-none font-normal">
-                    ({user?.username})
-                  </span></p>
-                  <div className="flex gap-2 items-start">
-                    <p className="text-sm text-muted-foreground leading-none font-normal">
-                      {session.id === user?.id ? 'Your personal account' : 'Blog'}
-                    </p>
-                    {
-                      session.publications.some((publication: any) => publication.accessLevel === 'admin') && (
-                        <DropdownMenu>
-                          <DropdownMenuTrigger className="text-sm text-primary leading-none font-normal p-0 flex gap-1 items-center"><Icons.arrowDataTransferHorizontal className="h-4 w-4" /> <span>Switch settings context</span> </DropdownMenuTrigger>
-                          <DropdownMenuContent align="start" className="min-w-[250px]">
-                            {
-                              session.id !== user?.id && (
-                                <DropdownMenuItem asChild>
-                                  <Link href={`/@${session?.username}/settings/profile`} className="flex items-center">
+                <div className="absolute bottom-0 right-0">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button size="icon" variant="secondary" className="h-8 w-8 bg-secondary/60 backdrop-blur-md hover:bg-secondary" asChild><Link href={`/@${user?.username}`} ><Icons.eye className="w-4 h-4" /></Link></Button>
+                      </TooltipTrigger>
+                      <TooltipContent>View Profile</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <p className="text-xl font-bold leading-none flex flex-col justify-center items-center gap-1">{user?.name || user?.username} <span className="text-sm text-muted-foreground leading-none font-normal">
+                  ({user?.username})
+                </span></p>
+                <div className="flex flex-col items-center gap-2">
+                  <p className="text-sm text-muted-foreground leading-none font-normal">
+                    {session.id === user?.id ? 'Your personal account' : 'Blog'}
+                  </p>
+                  {
+                    session.publications.some((publication: any) => publication.accessLevel === 'admin') && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className="text-sm text-primary leading-none font-normal p-0 flex gap-1 items-center"><Icons.arrowDataTransferHorizontal className="h-4 w-4" /> <span>Switch settings context</span> </DropdownMenuTrigger>
+                        <DropdownMenuContent className="min-w-[250px]">
+                          {
+                            session.id !== user?.id && (
+                              <DropdownMenuItem asChild>
+                                <Link href={`/@${session?.username}/settings/profile`} className="flex items-center">
+                                  <Avatar className="h-6 w-6 mr-2 border">
+                                    <AvatarImage src={session?.image || ''} alt={session?.name || session?.username} />
+                                    <AvatarFallback>
+                                      {session?.name?.charAt(0) || session?.username?.charAt(0)}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className="flex flex-col space-y-1">
+                                    <p className="leading-none">@{session?.username}</p>
+                                  </div>
+                                  <DropdownMenuShortcut>
+                                    <ChevronRight className="h-5 w-5" />
+                                  </DropdownMenuShortcut>
+                                </Link>
+                              </DropdownMenuItem>
+                            )}
+                          {session.publications.map((publication: any, index) => (
+                            publication.accessLevel === 'admin' && (
+                              publication.publicationId !== user.id && (
+                                <DropdownMenuItem asChild key={publication.id}>
+                                  <Link href={`/@${publication.publication.username}/settings/profile`} className="flex items-center">
                                     <Avatar className="h-6 w-6 mr-2 border">
-                                      <AvatarImage src={session?.image || ''} alt={session?.name || session?.username} />
+                                      <AvatarImage src={publication.publication.image} alt={publication.publication.name} />
                                       <AvatarFallback>
-                                        {session?.name?.charAt(0) || session?.username?.charAt(0)}
+                                        {publication.publication.name?.charAt(0) || publication.publication.username?.charAt(0)}
                                       </AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col space-y-1">
-                                      <p className="leading-none">@{session?.username}</p>
+                                      <p className="leading-none">@{publication.publication.username}</p>
                                     </div>
                                     <DropdownMenuShortcut>
                                       <ChevronRight className="h-5 w-5" />
                                     </DropdownMenuShortcut>
                                   </Link>
                                 </DropdownMenuItem>
-                              )}
-                            {session.publications.map((publication: any, index) => (
-                              publication.accessLevel === 'admin' && (
-                                publication.publicationId !== user.id && (
-                                  <DropdownMenuItem asChild key={publication.id}>
-                                    <Link href={`/@${publication.publication.username}/settings/profile`} className="flex items-center">
-                                      <Avatar className="h-6 w-6 mr-2 border">
-                                        <AvatarImage src={publication.publication.image} alt={publication.publication.name} />
-                                        <AvatarFallback>
-                                          {publication.publication.name?.charAt(0) || publication.publication.username?.charAt(0)}
-                                        </AvatarFallback>
-                                      </Avatar>
-                                      <div className="flex flex-col space-y-1">
-                                        <p className="leading-none">@{publication.publication.username}</p>
-                                      </div>
-                                      <DropdownMenuShortcut>
-                                        <ChevronRight className="h-5 w-5" />
-                                      </DropdownMenuShortcut>
-                                    </Link>
-                                  </DropdownMenuItem>
-                                )
                               )
-                            ))
+                            )
+                          ))
 
-                            }
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      )
-                    }
-                  </div>
+                          }
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )
+                  }
                 </div>
               </div>
-              <Button variant="outline" size={'sm'} asChild >
-                <Link href={`/@${user.username}`} className="flex items-center">
-                  <span>
-                    {session.id === user?.id ? 'View your personal profile' : 'View blog profile'}
-                  </span>
-                </Link>
-              </Button>
             </div>
-            <Separator className="my-6" />
-          </div>
-
-        </div>
-        <div className="grid flex-1 gap-12 md:grid-cols-[200px_1fr] w-full">
-          <aside className="flex flex-col gap-6">
             <SidebarNav items={sidebarNavItems} />
           </aside>
-          <div className="flex-1 mt-16 md:mt-0">{children}</div>
         </div>
       </div>
       <SiteFooter className="mt-auto" />
