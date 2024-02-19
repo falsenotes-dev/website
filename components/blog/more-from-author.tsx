@@ -87,7 +87,7 @@ export default function MoreFromAuthor({ author: initialAuthor, post: initialPos
                                         <div className="flex">
                                              <Link href={`/@${author?.username}`} className="flex items-center">
                                                   <h2 className="text-2xl font-medium">
-                                                       {author?.name || author?.username} {author?.verified &&
+                                                       Written by {author?.name || author?.username} {author?.verified &&
                                                             (
                                                                  <Icons.verified className="h-5 w-5 inline fill-verified align-middle" />
                                                             )}
@@ -99,7 +99,7 @@ export default function MoreFromAuthor({ author: initialAuthor, post: initialPos
                                              <span className="text-muted-foreground">{formatNumberWithSuffix(author?._count.Followers || 0)} Followers</span>
                                              {
                                                   publication && (
-                                                       <><span className="text-muted-foreground"> • Writer of</span> {publication.name || publication.username}</>
+                                                       <><span className="text-muted-foreground"> • Written for</span> {publication.name || publication.username}</>
                                                   )
                                              }
                                         </div>
