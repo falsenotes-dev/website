@@ -3,14 +3,15 @@ import { notFound, redirect } from "next/navigation";
 import db from "@/lib/db";
 import { getUserPost } from "@/lib/prisma/posts";
 import { getLists } from "@/lib/prisma/session";
-import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar";
 import PostCard from "@/components/blog/post-card-v3";
 import Tabs from "@/components/user/tab";
 import { suggestedUsers } from "@/lib/prisma/suggestion";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import UserVerticalCard from "@/components/user-vertical-card";
 import SuggestedUsers from "@/components/user/suggested-user";
 import { EmptyPlaceholder } from "@/components/empty-placeholder";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
 
 export default async function Page({
   params,
@@ -171,56 +172,14 @@ export default async function Page({
     });
   }
 
-  const lists = await db.list.findMany({
-    where:
-      sessionUserName?.id === user?.id
-        ? { authorId: user?.id }
-        : { authorId: user?.id, visibility: "public" },
-    include: {
-      _count: { select: { posts: true } },
-      posts: {
-        include: {
-          post: {
-            select: {
-              cover: true,
-            },
-          },
-        },
-        take: 3,
-      },
-      author: true,
-      savedUsers: true,
-    },
-  });
-
-  const bookmarks = await db.bookmark.findMany({
-    where: {
-      userId: sessionUserName?.id,
-    },
-    include: {
-      post: {
-        select: {
-          cover: true,
-        },
-      },
-      user: true,
-    },
-  });
-
   const limit = pinnedPost ? 11 : 12;
 
   const { posts } = await getUserPost({ id: user.id, search, limit });
-
-  const followers = user?.Followers;
-
-  const tab =
-    typeof searchParams.tab === "string" ? searchParams.tab : undefined;
 
   const list = await getLists({ id: sessionUserName?.id });
   const firstPost = pinnedPost || posts[0];
   const restPosts = !pinnedPost ? posts.slice(1, 12) : posts;
   const { users: whoToFollow } = await suggestedUsers({ id: user.id, limit: 10 });
-  console.log(whoToFollow);
   return (
     <>
       <Tabs user={user} />
@@ -253,6 +212,10 @@ export default async function Page({
           </EmptyPlaceholder>
         )
       }
+      <Button variant="outline" className="w-full md:w-max mt-10" size="lg" asChild>
+        <Link href={`/@${user.username}/posts`}>See all posts</Link>
+      </Button>
+      <Separator className="my-10" />
       <SuggestedUsers users={whoToFollow} session={sessionUserName} />
     </>
   );
