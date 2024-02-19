@@ -67,7 +67,7 @@ export default function PostCard({ post, author, session, isPinned, isFirst, cla
                                                        placeholder={`data:image/svg+xml;base64,${toBase64(
                                                             shimmer(1920, 1080)
                                                        )}`}
-                                                       className="object-cover max-w-full h-auto z-[1] rounded-md"
+                                                       className="object-cover max-w-full h-auto z-[1] hover:opacity-90 transition-all rounded-md"
                                                   />
                                                   <Skeleton className="w-full h-full rounded-md" />
                                              </>
