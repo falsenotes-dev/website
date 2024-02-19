@@ -23,6 +23,7 @@ module.exports = {
           "3/2": "3 / 2",
           "2/1": "2 / 1",
           "8/5": "8 / 5",
+          "114/25": "114 / 25",
         },
         fontFamily: {
           sans: ["var(--font-geist-sans)"],

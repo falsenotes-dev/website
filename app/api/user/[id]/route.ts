@@ -56,6 +56,7 @@ export async function PATCH(
         name: payload.name,
         bio: payload.bio,
         location: payload.location,
+        cover: payload.cover || null,
       },
     });
 
