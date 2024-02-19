@@ -37,6 +37,7 @@ import { useState } from "react";
 import ProfileDeleteDialog from "./profile-delete-dialog";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { log } from "console";
+import { Badge } from "../ui/badge";
 
 const profileFormSchema = z.object({
   id: z.string(),
@@ -197,8 +198,6 @@ export function ProfileForm({ data }: { data: any }) {
     }
   }
 
-  console.log(form.getValues('cover'));
-
   async function checkUsername(username: string) {
     try {
       if (!username || username === data.username || username.length < 3) {
@@ -329,9 +328,9 @@ export function ProfileForm({ data }: { data: any }) {
             name="cover"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>FalseNotes Preview</FormLabel>
+                <FormLabel>Cover Image <Badge>New</Badge></FormLabel>
                 <FormDescription>
-                  Manage the image and short description for the post.
+                  Add a cover image to give your profile a personal touch.
                 </FormDescription>
                 <FormControl>
                   <>
