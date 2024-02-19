@@ -29,7 +29,7 @@ export default function UserPosts({
   sessionUser?: any;
   children?: React.ReactNode;
   query?: any;
-  search: string | undefined;
+  search?: string | undefined;
   pinned?: any;
   list?: any;
 }) {
