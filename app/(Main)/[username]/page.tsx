@@ -234,34 +234,38 @@ export default async function Page({
   return (
     <div className="flex flex-col justify-start items-center w-auto xl:px-0 px-3 py-8">
       <Header user={user} session={sessionUserName} followers={user.Followers} />
-      <div className="flex flex-col max-w-5xl min-w-[280px] w-full py-10">
-        <Tabs defaultValue="home">
-          <TabsList className="mb-8">
-            <TabsTrigger value="home">Home</TabsTrigger>
-            <TabsTrigger value="posts">Posts</TabsTrigger>
-            <TabsTrigger value="lists">Lists</TabsTrigger>
-            {
-              user?.writers?.length > 0 && (
-                <TabsTrigger value="writers">Writers</TabsTrigger>
-              )
-            }
-            <TabsTrigger value="about">About</TabsTrigger>
-          </TabsList>
-        </Tabs>
-        <div
-          className="grid 
+      <div style={{
+        minHeight: "calc(100vh - 530px)"
+      }}>
+        <div className="flex flex-col max-w-5xl min-w-[280px] w-full py-10 flex-[1_0_auto]">
+          <Tabs defaultValue="home">
+            <TabsList className="mb-8">
+              <TabsTrigger value="home">Home</TabsTrigger>
+              <TabsTrigger value="posts">Posts</TabsTrigger>
+              <TabsTrigger value="lists">Lists</TabsTrigger>
+              {
+                user?.writers?.length > 0 && (
+                  <TabsTrigger value="writers">Writers</TabsTrigger>
+                )
+              }
+              <TabsTrigger value="about">About</TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <div
+            className="grid 
       grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          <div className="md:col-span-2 md:row-span-2">
-            <PostCard post={firstPost} author={firstPost.author} list={list} session={sessionUserName} isFirst isPinned={firstPost.pinned} />
+          >
+            <div className="md:col-span-2 md:row-span-2">
+              <PostCard post={firstPost} author={firstPost.author} list={list} session={sessionUserName} isFirst isPinned={firstPost.pinned} />
+            </div>
+            {restPosts.map((post: any) => {
+              return (
+                <>
+                  <PostCard post={post} author={post.author} list={list} session={sessionUserName} isPinned={post.pinned} />
+                </>
+              );
+            })}
           </div>
-          {restPosts.map((post: any) => {
-            return (
-              <>
-                <PostCard post={post} author={post.author} list={list} session={sessionUserName} isPinned={post.pinned} />
-              </>
-            );
-          })}
         </div>
       </div>
       {/* <div className="md:container mx-auto px-4 pt-5 md:mb-0 mb-20">
