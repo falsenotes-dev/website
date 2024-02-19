@@ -8,17 +8,32 @@ import { Button, ButtonProps, buttonVariants } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icon"
 import { Plus } from "lucide-react"
+import PostCreateDialog from "./post-create-dialog"
 
 interface PostCreateButtonProps extends ButtonProps { }
+
+interface IconProps
+     extends Partial<Omit<React.SVGProps<SVGSVGElement>, 'ref'>> {
+     iconName?: keyof typeof Icons
+}
 
 export function PostCreateButton({
      className,
      variant,
      children,
+     iconName,
+     session,
+     iconCLassName,
      ...props
-}: PostCreateButtonProps) {
+}: PostCreateButtonProps & { iconName?: keyof typeof Icons, iconCLassName?: string, session: any }) {
      const router = useRouter()
      const [isLoading, setIsLoading] = React.useState<boolean>(false)
+     const [open, setOpen] = React.useState<boolean>(false)
+     const [hasBlogs, setHasBlogs] = React.useState<boolean>(false)
+
+     React.useEffect(() => {
+          setHasBlogs(session?.publications?.length > 0)
+     }, [session])
 
      async function onClick() {
           setIsLoading(true)
@@ -45,19 +60,40 @@ export function PostCreateButton({
           router.push(`/editor/${post.id}`)
      }
 
+     let Icon
+
+     if (!iconName) {
+          Icon = Plus
+     } else {
+          Icon = Icons[iconName]
+     }
+
      return (
-          <Button
-               onClick={onClick}
-               className={cn(className, { "cursor-not-allowed opacity-60": isLoading })}
-               disabled={isLoading}
-               variant={variant}
-               {...props}
-          >
-               {isLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-               ) : (
-                    <Plus className="h-[1.2rem] w-[1.2rem]" strokeWidth={1.75} />
-               )}
-          </Button>
+          <>
+               <Button
+                    onClick={async () => {
+                         if (!hasBlogs) {
+                              await onClick()
+                              return
+                         } else {
+                              setOpen(true)
+                              return
+                         }
+                    }
+                    }
+                    className={cn(className, { "cursor-not-allowed opacity-60": isLoading })}
+                    disabled={isLoading}
+                    variant={variant}
+                    {...props}
+               >
+                    {isLoading ? (
+                         <Icons.spinner className="h-4 w-4 animate-spin" />
+                    ) : (
+                         <Icon className={cn("h-[1.2rem] w-[1.2rem]", iconCLassName)} strokeWidth={1.75} />
+                    )}
+                    <span className="sr-only">Post Create</span>
+               </Button>
+               <PostCreateDialog open={open} onOpenChange={setOpen} publications={session.publications} session={session} />
+          </>
      )
 }

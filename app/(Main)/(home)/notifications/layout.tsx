@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-     title: 'Notifications - FalseNotes',
+  title: 'Notifications - FalseNotes',
 }
 
 export default function NotificationLayout({
@@ -10,8 +10,8 @@ export default function NotificationLayout({
   children: React.ReactNode
 }) {
   return (
-     <>
+    <div className="px-4">
       {children}
-     </>
+    </div>
   )
 }

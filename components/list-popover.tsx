@@ -13,6 +13,7 @@ import ListCreateDialog from "./list-create-dialog";
 import { add } from "lodash";
 import { addPostToList } from "@/lib/prisma/list";
 import { toast } from "sonner";
+import useWindowDimensions from "./window-dimensions";
 
 export default function ListPopover({
   lists,
@@ -31,19 +32,27 @@ export default function ListPopover({
   );
 
   React.useEffect(() => {
-     setIsSavedInBookmarks(
-       bookmarks?.some((bookmark: any) => bookmark.postId === postId)
-     );
-       }, [bookmarks, postId]);
+    setIsSavedInBookmarks(
+      bookmarks?.some((bookmark: any) => bookmark.postId === postId)
+    );
+  }, [bookmarks, postId]);
 
   const [createList, setCreateList] = React.useState(false);
 
   const pathname = usePathname();
+  const { width } = useWindowDimensions();
+
+  const [isDesktop, setIsDesktop] = React.useState(false);
+  React.useEffect(() => {
+    if (width && width > 768) setIsDesktop(true);
+    else setIsDesktop(false);
+  }, [width]);
+
   return (
     <>
       <Popover {...props}>
         <PopoverTrigger asChild>{props.children}</PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent align={isDesktop ? 'center' : 'end'}>
           <div className="flex flex-col gap-4">
             <div className="flex justify-between">
               <div className="flex items-center space-x-2 w-full">
@@ -77,11 +86,11 @@ export default function ListPopover({
                 <div className="flex justify-between" key={list.id}>
                   <div className="flex items-center space-x-2">
                     <Checkbox id={list.slug} checked={list.posts?.some((post: any) => post.postId === postId)} onCheckedChange={
-                         async () => {
-                              const res = await addPostToList({ listId: list.id, postId });
-                              await validate(pathname);
-                              if (!res.success) toast.error(res.message);
-                         }
+                      async () => {
+                        const res = await addPostToList({ listId: list.id, postId });
+                        await validate(pathname);
+                        if (!res.success) toast.error(res.message);
+                      }
                     } />
                     <Label
                       htmlFor={list.slug}

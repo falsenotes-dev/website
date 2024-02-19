@@ -8,7 +8,7 @@ import Link from "next/link";
 import { formatNumberWithSuffix } from "../format-numbers";
 import { EmptyPlaceholder } from "../empty-placeholder";
 
-function getRegistrationDateDisplay(date: string) {
+export function getRegistrationDateDisplay(date: string) {
      const dateObj = new Date(date);
      const day = dateObj.getDate();
      const month = dateObj.toLocaleString("default", { month: "short" });
@@ -39,9 +39,14 @@ function getRegistrationDateDisplay(date: string) {
 export function UserAbout({ user, className, session }: { user: any, className?: string, session: any }) {
      return (
           <>
-               {user.bio && (
-                    <p className="w-full text-muted-foreground md:inline hidden lg:hidden">{user?.bio}</p>
-               )}
+               <div className="flex flex-col gap-2.5 w-full">
+                    <h5 className="text-xl font-semibold">About me</h5>
+                    {
+                         user.bio && (
+                              <p className="font-light text-sm">{user.bio}</p>
+                         )
+                    }
+               </div>
                <div className="py-4 items-center flex gap-2 w-full">
                     <Icons.users className="h-5 w-5 text-muted-foreground" />
                     <Dialog>
@@ -156,117 +161,6 @@ export function UserAbout({ user, className, session }: { user: any, className?:
                          </DialogContent>
                     </Dialog>
 
-               </div>
-
-               <div className="details list-none grid md:grid-cols-2">
-                    {user?.location && <div>
-                         <Button variant={"link"} size={"sm"} asChild className="p-0 !text-sm hover:!no-underline text-foreground">
-                              <span>
-                                   <Icons.location className="mr-2 h-5 w-5 text-muted-foreground" />
-                                   {user?.location}
-                              </span>
-                         </Button>
-                    </div>}
-                    {user?.email && <div>
-                         <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground">
-                              <Link href={`mailto:${user?.email}`} target="_blank" className="flex items-center font-light !text-sm">
-                                   <Icons.at className="mr-2 h-5 w-5 text-muted-foreground" />
-                                   {user?.email}
-                              </Link>
-                         </Button>
-                    </div>}
-                    {user?.githubprofile && (<div>
-                         <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground" >
-                              <Link href={user?.githubprofile} target="_blank" className="flex items-center font-light !text-sm">
-                                   <Github className="mr-2 h-5 w-5 text-muted-foreground" />
-                                   {user?.githubprofile?.replace("https://github.com/", "")}
-                              </Link>
-                         </Button>
-                    </div>
-                    )
-                    }
-                    {
-                         user?.twitterProfile && (
-                              <div>
-                                   <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground" >
-                                        <Link href={`https://twitter.com/${user?.twitterProfile}`} target="_blank" className="flex items-center font-light !text-sm">
-                                             <Icons.twitter className="mr-2 h-5 w-5 text-muted-foreground" />
-                                             {user?.twitterProfile}
-                                        </Link>
-                                   </Button>
-                              </div>
-                         )
-                    }
-                    {
-                         user.urls && user.urls.length > 0 && (
-                              user.urls.map((url: any) => (
-                                   <div key={url.id}>
-                                        <Button variant={"link"} size={"sm"} asChild className="p-0 text-foreground" >
-                                             <Link href={url.value} target="_blank" className="flex items-center font-light !text-sm">
-                                                  {
-                                                       //if url.value contains github.com then show github icon if not then show link icon
-                                                       url.value.includes("github.com") ? (
-                                                            <>
-                                                                 <Icons.gitHub className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                 {url.value.replace("https://github.com/", "") || url.value.replace("http://github.com/", "")}
-                                                            </>
-                                                       ) : url.value.includes("twitter.com") ? (
-                                                            <>
-                                                                 <Icons.twitter className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                 {url.value.replace("https://twitter.com/", "") || url.value.replace("http://twitter.com/", "")}
-                                                            </>
-                                                       ) : url.value.includes("facebook.com") ? (
-                                                            <>
-                                                                 <Icons.facebook className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                 {url.value.replace("https://facebook.com/", "") || url.value.replace("http://facebook.com/", "")}
-                                                            </>
-                                                       ) : url.value.includes("fb.com") ? (
-                                                            <>
-                                                                 <Icons.facebook className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                 {url.value.replace("https://fb.com/", "") || url.value.replace("http://fb.com/", "")}
-                                                            </>
-                                                       ) : url.value.includes("instagram.com") ? (
-                                                            <>
-                                                                 <Icons.instagram className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                 {url.value.replace("https://instagram.com/", "") || url.value.replace("http://instagram.com/", "")}
-                                                            </>
-                                                       ) : url.value.includes("linkedin.com") ? (
-                                                            <>
-                                                                 <Icons.linkedIn className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                 {url.value.replace("https://linkedin.com/", "") || url.value.replace("http://linkedin.com/", "")}
-                                                            </>
-                                                       ) : url.value.includes('youtube.com') ? (
-                                                            <>
-                                                                 <Icons.youtube className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                 {url.value.replace("https://youtube.com/", "") || url.value.replace("http://youtube.com/", "")}
-                                                            </>
-                                                       )
-                                                            : url.value.includes('www.youtube.com') ? (
-                                                                 <>
-                                                                      <Icons.youtube className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                      {url.value.replace("https://www.youtube.com/", "") || url.value.replace("http://www.youtube.com/", "")}
-                                                                 </>
-                                                            ) : (
-                                                                 <>
-                                                                      <Icons.link className="mr-2 h-5 w-5 text-muted-foreground" />
-                                                                      {url.value.replace("https://", "") || url.value.replace("http://", "")}
-                                                                 </>
-                                                            )
-                                                  }
-                                             </Link>
-                                        </Button>
-                                   </div>
-                              ))
-                         )
-                    }
-                    <div>
-                         <Button variant={"link"} size={"sm"} asChild className="p-0 !text-sm hover:!no-underline text-foreground" >
-                              <span>
-                                   <Icons.calendarDays className="mr-2 h-5 w-5 text-muted-foreground" />
-                                   Joined {getRegistrationDateDisplay(user?.createdAt)}
-                              </span>
-                         </Button>
-                    </div>
                </div>
           </>
      )

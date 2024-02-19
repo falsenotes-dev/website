@@ -31,10 +31,8 @@ import useWindowDimensions from "../window-dimensions";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
 import { ModeToggle } from "../mode-toggle";
 
-export function UserNav() {
+export function UserNav({ session: user }: { session: any }) {
   const { status } = useSession();
-  const user = useSession().data?.user as any;
-  const [username, setUsername] = useState<string | null>(null);
   const { width } = useWindowDimensions();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -45,8 +43,6 @@ export function UserNav() {
       setIsMobile(false);
     }
   }, [width]);
-
-  console.log(isMobile);
 
   if (!isMobile) {
     return (
@@ -109,6 +105,14 @@ export function UserNav() {
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
+              href={`/drafts`}
+            >
+              <Icons.draft className="h-5 mr-2" />
+              Your Drafts
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link
               href={`/@${user.username}/settings/blogs`}
             >
               <Icons.blogs className="h-5 mr-2" />
@@ -138,87 +142,5 @@ export function UserNav() {
         </DropdownMenuContent>
       </DropdownMenu>
     );
-  } else {
-    return (
-      <Drawer>
-        <DrawerTrigger asChild>
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-            <Avatar className="h-8 w-8 border">
-              <AvatarImage src={user.image} alt={user.name} />
-              <AvatarFallback>
-                {user.name?.charAt(0) || user.username?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent className="p-5">
-          <div className="flex items-center px-2 py-1.5 text-sm font-semibold mt-4">
-            <Avatar className="mr-2 border">
-              <AvatarImage src={user.image} alt={user.name} />
-              <AvatarFallback>
-                {user.name?.charAt(0) || user.username?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            {user.name ? (
-              <div className="flex flex-col space-y-1">
-                <p className="text-xl font-bold leading-none">{user.name}</p>
-                <p className="text-sm text-muted-foreground leading-none font-normal">
-                  {user.username}
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-col space-y-1">
-                <p className="text-xl font-bold leading-none">{user.username}</p>
-              </div>
-            )}
-          </div>
-          <div className="flex justify-between items-center my-2">
-            <div className="text-muted-foreground font-medium mt-4 mb-3.5 px-2.5">
-              Profile
-            </div>
-            <ModeToggle />
-          </div>
-
-          <Link
-            href={user.name !== null ? `/@${user.username}` : `/`}
-            className="px-2.5 mb-4 py-2 border relative flex cursor-default select-none items-center rounded-sm text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-          >
-            <Avatar className="h-6 w-6 mr-2 border">
-              <AvatarImage src={user.image} alt={user.name} />
-              <AvatarFallback>
-                {user.name?.charAt(0) || user.username?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col space-y-1">
-              <p className="leading-none">{user.name}</p>
-            </div>
-            <div className="ml-auto text-xs tracking-widest opacity-60">
-              <ChevronRight className="h-5 w-5" />
-            </div>
-          </Link>
-          <Link
-            href={`/@${user.username}/settings/blogs`}
-            className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-          >
-            <Icons.blogs className="h-5 mr-2" />
-            Your Blogs
-          </Link>
-          <div>
-            <Link href="/lists" className="relative flex cursor-default select-none items-center rounded-sm px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-              <Icons.collection className="h-5 w-5 mr-2" />
-              Library
-            </Link>
-            <Link href={`/@${user.username}/settings/profile`} className="relative flex cursor-default select-none items-center rounded-sm px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-              <Icons.settings className="h-5 w-5 mr-2" />
-              Settings
-            </Link>
-            <Link href="/signout" className="relative flex cursor-default select-none items-center rounded-sm px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-              <Icons.logOut className="h-5 w-5 mr-2" />
-              Log out
-            </Link>
-          </div>
-        </DrawerContent>
-      </Drawer>
-    )
   }
 }

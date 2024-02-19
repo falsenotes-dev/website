@@ -1,5 +1,7 @@
 
 import { getSessionUser } from '@/components/get-session-user';
+import { MobileBottomNavbar } from '@/components/navbar/mobile-bottom-navbar';
+import { MobileHeaderNavbar } from '@/components/navbar/mobile-nav';
 import Navbar from '@/components/navbar/navbar';
 import db from '@/lib/db';
 import { addSearchHistory } from '@/lib/prisma/search-history';
@@ -26,11 +28,14 @@ export default async function MainLayout({
   const { searchHistory } = await getSearchHistory({ id: session?.id })
 
   return (
-    <div className='min-h-screen'>
-      <>
-        <Navbar notifications={notifications} searchHistory={searchHistory} />
-        {children}
-      </>
-    </div>
+    <>
+      <div className='min-h-screen'>
+        <>
+          <Navbar notifications={notifications} searchHistory={searchHistory} session={session} />
+          <MobileHeaderNavbar notification={notifications} />
+          {children}
+        </>
+      </div>
+    </>
   )
 }

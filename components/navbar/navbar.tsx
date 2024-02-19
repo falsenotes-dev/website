@@ -32,19 +32,21 @@ function numberFormat(number: number) {
 
 function Navbar({
   notifications,
+  session,
   searchHistory,
 }: {
   notifications: any;
+  session: any;
   searchHistory: UserSearchHistory[];
 }) {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const [history, setHistory] = useState<UserSearchHistory[]>([]);
   useEffect(() => {
     setHistory(searchHistory);
   }, [searchHistory]);
   return (
-    <div className="max-w-[1140px] min-w-[280px] mx-auto w-full sticky top-0 md:top-4 z-20 lg:px-6 md:px-2 xl:p-0">
+    <div className="max-w-[1140px] min-w-[280px] hidden md:block mx-auto w-full sticky top-0 md:top-4 z-20 lg:px-6 md:px-2 xl:p-0">
       <div className="menu-container py-4 px-8 bg-background/95 backdrop-blur border md:rounded-2xl shadow-xl xl:mx-8 supports-[backdrop-filter]:bg-background/60">
         <Link href={session ? "/feed" : "/"}>
           <motion.div whileHover={{ scale: 1.02 }} className="flex items-center" whileTap={{ scale: 0.9 }}>
@@ -60,23 +62,6 @@ function Navbar({
         </Link>
 
         <div className="flex items-center gap-1 md:gap-4">
-          <Button
-            variant="ghost"
-            size={"icon"}
-            className="flex md:hidden h-10 w-10 hover:shadow "
-            asChild
-          >
-            <Link href="/explore">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Icons.search className="h-[1.2rem] w-[1.2rem]" />
-                <span className="sr-only">Search</span>
-              </motion.div>
-            </Link>
-          </Button>
           <SearchBar history={history} />
           {status == "authenticated" ? (
             <>
@@ -87,31 +72,33 @@ function Navbar({
               >
                 <PostCreateButton
                   key={"New Post"}
+                  session={session}
                   variant="ghost"
                   size={"icon"}
                   className="h-10 w-10 hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md"
                 />
               </motion.div>
-              <Button
-                variant={"ghost"}
-                size={"icon"}
-                className="h-10 w-10 relative hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md"
-                onClick={() => router.replace("/notifications")}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.9 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                <Button
+                  variant={"ghost"}
+                  size={"icon"}
+                  className="h-10 w-10 relative hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md"
+                  onClick={() => router.replace("/notifications")}
                 >
+
                   <Icons.notification className="w-5 h-5" />
                   {notifications > 0 && (
                     <Badge className="left-5 font-normal px-1.5 py-0 absolute top-0 h-5 min-w-[1.25rem] max-w-max">
                       {numberFormat(notifications)}
                     </Badge>
                   )}
-                </motion.div>
-              </Button>
-              <UserNav />
+                </Button>
+              </motion.div>
+              <UserNav session={session} />
             </>
           ) : (
             <motion.div
