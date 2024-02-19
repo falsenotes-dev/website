@@ -7,98 +7,98 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation';
 
 type Props = {
-     params: { username: string }
-     children: React.ReactNode
+  params: { username: string }
+  children: React.ReactNode
 }
 
 
 export default async function UserLayout(
-     { children, params }: Props
+  { children, params }: Props
 ) {
-     const decodedUsername = decodeURIComponent(params.username);
-     const session = await getSessionUser()
-     const user = await db.user.findFirst({
-          include: {
-               urls: true,
-               _count: {
-                    select: {
-                         posts: {
-                              where: {
-                                   published: true,
-                              },
-                         },
-                         publicationsPosts: {
-                              where: {
-                                   published: true,
-                              },
-                         },
-                         Followers: true,
-                    },
-               },
-               Followers: {
-                    include: {
-                         follower: {
-                              include: {
-                                   Followers: true,
-                                   Followings: true,
-                              },
-                         },
-                    },
-               },
-               Followings: {
-                    include: {
-                         following: {
-                              include: {
-                                   Followers: true,
-                                   Followings: true,
-                              },
-                         },
-                    },
-               },
-               writers: {
-                    where: {
-                         visibility: "public",
-                    },
-                    select: {
-                         author: {
-                              include: {
-                                   _count: { select: { Followers: true, Followings: true } },
-                              },
-                         },
-                    }
-               },
-               publications: {
-                    where: {
-                         visibility: "public",
-                    },
-                    select: {
-                         publication: {
-                              include: {
-                                   _count: { select: { Followers: true, Followings: true } },
-                              },
-                         },
-                    },
-                    take: 5,
-               }
+  const decodedUsername = decodeURIComponent(params.username);
+  const session = await getSessionUser()
+  const user = await db.user.findFirst({
+    include: {
+      urls: true,
+      _count: {
+        select: {
+          posts: {
+            where: {
+              published: true,
+            },
           },
-          where: {
-               username: decodedUsername.substring(1),
+          publicationsPosts: {
+            where: {
+              published: true,
+            },
           },
-     });
+          Followers: true,
+        },
+      },
+      Followers: {
+        include: {
+          follower: {
+            include: {
+              Followers: true,
+              Followings: true,
+            },
+          },
+        },
+      },
+      Followings: {
+        include: {
+          following: {
+            include: {
+              Followers: true,
+              Followings: true,
+            },
+          },
+        },
+      },
+      writers: {
+        where: {
+          visibility: "public",
+        },
+        select: {
+          author: {
+            include: {
+              _count: { select: { Followers: true, Followings: true } },
+            },
+          },
+        }
+      },
+      publications: {
+        where: {
+          visibility: "public",
+        },
+        select: {
+          publication: {
+            include: {
+              _count: { select: { Followers: true, Followings: true } },
+            },
+          },
+        },
+        take: 5,
+      }
+    },
+    where: {
+      username: decodedUsername.substring(1),
+    },
+  });
 
-     if (!user) return notFound()
+  if (!user) return notFound()
 
-     return (
-          <div className="flex flex-col justify-start items-center w-auto xl:px-0 px-3 py-8">
-               <Header user={user} session={session} followers={user.Followers} />
-               <div style={{
-                    minHeight: "calc(100vh - 530px)"
-               }}>
-                    <div className="flex flex-col max-w-5xl min-w-[280px] w-full py-10 flex-[1_0_auto]">
-                         {children}
-                    </div>
-               </div>
-               {/* <div className="md:container mx-auto px-4 pt-5 md:mb-0 mb-20">
+  return (
+    <div className="flex flex-col justify-start items-center w-full xl:px-0 px-3 py-8 relative">
+      <Header user={user} session={session} followers={user.Followers} />
+      <div className='flex' style={{
+        minHeight: "calc(100vh - 530px)"
+      }}>
+        <div className="flex flex-col max-w-5xl min-w-[280px] w-full py-10 flex-[1_0_auto] absolute -translate-x-1/2">
+          {children}
+        </div>
+      </div>
+      {/* <div className="md:container mx-auto px-4 pt-5 md:mb-0 mb-20">
         <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
           <div
             className="user__header md:hidden w-full sm:h-fit lg:min-w-[352px] lg:border-r lg:max-w-[352px] md:px-8 xl:min-w-[368px] xl:max-w-[368px] lg:pl-10 lg:flex flex-col md:sticky top-[115px]"
@@ -308,7 +308,7 @@ export default async function UserLayout(
           </div>
         </div>
       </div> */}
-               <MobileBottomNavbar />
-          </div>
-     );
+      <MobileBottomNavbar />
+    </div>
+  );
 }
