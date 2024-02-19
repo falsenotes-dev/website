@@ -14,6 +14,72 @@ import { formatNumberWithSuffix } from "@/components/format-numbers";
 import Image from "next/image";
 import ListCard from "@/components/list-card-v3";
 import { EmptyPlaceholder } from "@/components/empty-placeholder";
+import { Metadata } from "next";
+
+export async function generateMetadata(
+     {
+          params,
+     }: {
+          params: {
+               username: string;
+          };
+     }
+): Promise<Metadata> {
+     const decodedUsername = decodeURIComponent(params.username);
+     const user = await db.user.findUnique({
+          where: {
+               username: decodedUsername.substring(1),
+          },
+          select: {
+               name: true,
+               username: true,
+               bio: true,
+               image: true,
+               lists: {
+                    select: { name: true },
+                    take: 3,
+               },
+          },
+     });
+     if (!user) {
+          return {
+               title: `Not Found - FalseNotes`,
+               description: `The page you were looking for doesn't exist.`,
+               openGraph: {
+                    title: `Not Found - FalseNotes`,
+                    description: `The page you were looking for doesn't exist.`,
+               },
+               twitter: {
+                    card: "summary",
+                    title: `Not Found - FalseNotes`,
+                    description: `The page you were looking for doesn't exist.`,
+               },
+          };
+     }
+
+     return {
+          title: `${user.name || user.username} on FalseNotes assembled some lists`,
+          description: `Explore ${user.lists.map((list) => list.name).join(", ")} and more on FalseNotes.`,
+          openGraph: {
+               siteName: "FalseNotes",
+               title: `${user.name || user.username} on FalseNotes assembled some lists`,
+               description: `Explore ${user.lists.map((list) => list.name).join(", ")} and more on FalseNotes.`,
+               ...user?.image && {
+                    images: [
+                         {
+                              url: user?.image,
+                              alt: `${user.username} - FalseNotes`,
+                         }
+                    ],
+               },
+          },
+          twitter: {
+               card: "summary",
+               title: `${user.name || user.username} on FalseNotes assembled some lists`,
+               description: `Explore ${user.lists.map((list) => list.name).join(", ")} and more on FalseNotes.`,
+          },
+     };
+}
 
 export default async function Page({
      params,

@@ -7,6 +7,84 @@ import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar";
 import PostCard from "@/components/blog/post-card-v3";
 import Tabs from "@/components/user/tab";
 import { UserAbout } from "@/components/user/about";
+import { Metadata } from "next";
+import { formatNumberWithSuffix } from "@/components/format-numbers";
+
+export async function generateMetadata(
+     {
+          params,
+     }: {
+          params: {
+               username: string;
+          };
+     }
+): Promise<Metadata> {
+     const decodedUsername = decodeURIComponent(params.username);
+     const user = await db.user.findUnique({
+          where: {
+               username: decodedUsername.substring(1),
+          },
+          select: {
+               name: true,
+               username: true,
+               bio: true,
+               image: true,
+               _count: {
+                    select: {
+                         posts: {
+                              where: {
+                                   published: true,
+                              },
+                         },
+                    },
+               }
+          },
+     });
+     if (!user) {
+          return {
+               title: `Not Found - FalseNotes`,
+               description: `The page you were looking for doesn't exist.`,
+               openGraph: {
+                    title: `Not Found - FalseNotes`,
+                    description: `The page you were looking for doesn't exist.`,
+               },
+               twitter: {
+                    card: "summary",
+                    title: `Not Found - FalseNotes`,
+                    description: `The page you were looking for doesn't exist.`,
+               },
+          };
+     }
+
+     return {
+          title: `About - ${user.name || user.username} - FalseNotes`,
+          description: `Read writing from ${user.name || user.username} on FalseNotes. ${user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(
+               user?._count.posts
+          )} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio}`,
+          openGraph: {
+               siteName: "FalseNotes",
+               title: `About - ${user.name || user.username} - FalseNotes`,
+               description: `Read writing from ${user.name || user.username} on FalseNotes. ${user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(
+                    user?._count.posts
+               )} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio}`,
+               ...user?.image && {
+                    images: [
+                         {
+                              url: user?.image,
+                              alt: `${user.username} - FalseNotes`,
+                         },
+                    ],
+               }
+          },
+          twitter: {
+               card: "summary",
+               title: `About - ${user.name || user.username} - FalseNotes`,
+               description: `Read writing from ${user.name || user.username} on FalseNotes. ${user?.bio === null || user?.bio === "" ? `${user?.username} has ${formatNumberWithSuffix(
+                    user?._count.posts
+               )} posts. Follow their to keep up with their activity on FalseNotes.` : user?.bio}`,
+          },
+     };
+}
 
 export default async function Page({
      params,
