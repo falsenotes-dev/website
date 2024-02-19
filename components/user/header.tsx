@@ -92,7 +92,7 @@ export default function Header({ user, session, followers }: { user: any; sessio
                     </Avatar>
                     <div className="flex justify-between w-full gap-2">
                          <div className="flex flex-col">
-                              <div className="flex items-center gap-1.5"><h1 className="text-4xl font-extrabold line-clamp-1">{user.name}</h1>
+                              <div className="flex items-center gap-1.5"><h1 className="text-3xl md:text-4xl font-extrabold line-clamp-1">{user.name}</h1>
                                    {
                                         user.verified && (
                                              <TooltipProvider>

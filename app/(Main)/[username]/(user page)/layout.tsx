@@ -94,7 +94,7 @@ export default async function UserLayout(
       <div className="flex flex-col justify-start items-center w-full xl:px-0 px-3 py-8 relative">
         <Header user={user} session={session} followers={user.Followers} />
         <div className='flex max-w-5xl min-w-[280px] w-full py-10' style={{
-          minHeight: "calc(100vh - 530px)"
+          minHeight: "calc(100vh - 643px)"
         }}>
           <div className="flex flex-col flex-[1_0_auto] max-w-5xl min-w-[280px] w-full relative xl:px-0 px-3">
             {children}

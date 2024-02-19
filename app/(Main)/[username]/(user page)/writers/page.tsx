@@ -15,6 +15,7 @@ import Image from "next/image";
 import ListCard from "@/components/list-card-v3";
 import { EmptyPlaceholder } from "@/components/empty-placeholder";
 import { Metadata } from "next";
+import UserHoverCard from "@/components/user-hover-card";
 
 export async function generateMetadata(
      {
@@ -192,27 +193,39 @@ export default async function Page({
 
      return (
           <>
-               <Tabs user={user} defaultValue="lists" />
-               <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
-                    {lists.map((list) => (
-                         <div key={list.id}>
-                              <ListCard list={list} session={sessionUserName} className="w-full" />
+               <Tabs user={user} defaultValue="writers" />
+               <div className="flex flex-col gap-6 my-6">
+                    {user?.writers?.map(({ author }) => (
+                         <div className="flex gap-4 w-full items-center" key={author.id}>
+                              <div className="space-y-3">
+                                   <UserHoverCard user={author} >
+                                        <Link href={`/@${author.username}`} className="flex items-center">
+                                             <Avatar className="h-10 w-10 mr-2 md:mr-3">
+                                                  <AvatarImage src={author.image || ''} alt={author.username} />
+                                                  <AvatarFallback>{author.name?.charAt(0) || author.username?.charAt(0)}</AvatarFallback>
+                                             </Avatar>
+                                             {
+                                                  author.name === null ? (
+                                                       <div>
+                                                            <p className="text-sm font-medium leading-none">{author.username} {author.verified && (
+                                                                 <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
+                                                            )}</p>
+                                                       </div>
+                                                  ) : (
+                                                       <div>
+                                                            <p className="text-sm font-medium leading-none">{author.name} {author.verified && (
+                                                                 <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
+                                                            )}</p>
+                                                            <p className="text-sm text-muted-foreground">{author.username}</p>
+                                                       </div>
+                                                  )
+                                             }
+                                        </Link>
+                                   </UserHoverCard>
+                              </div>
                          </div>
                     ))}
-                    {
-                         sessionUserName?.id !== user.id && lists.length === 0 && (
-                              <EmptyPlaceholder className="w-full">
-                                   <EmptyPlaceholder.Icon name="list" />
-                                   <EmptyPlaceholder.Title>
-                                        No lists yet
-                                   </EmptyPlaceholder.Title>
-                                   <EmptyPlaceholder.Description>
-                                        When user creates a list, it will show up here.
-                                   </EmptyPlaceholder.Description>
-                              </EmptyPlaceholder>
-                         )
-                    }
-               </div>
+               </div >
           </>
      );
 }
