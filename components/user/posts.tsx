@@ -52,7 +52,7 @@ export default function UserPosts({
     const next = page + 1;
     const whereQuery =
       sessionUser?.id === user?.id
-        ? { id: { not: pinned?.id } }
+        ? { id: { not: pinned?.id }, published: true }
         : { published: true, id: { not: pinned?.id } };
     const { posts } = await getPost({ id: user?.id, search, whereQuery, page: next });
 

@@ -134,7 +134,7 @@ export default async function Page({
     });
   }
 
-  const limit = pinnedPost ? 9 : 10;
+  const limit = pinnedPost ? 10 : 11;
 
   const { posts } = await getUserPost({ id: user.id, search, limit });
   const list = await getLists({ id: sessionUserName?.id });
