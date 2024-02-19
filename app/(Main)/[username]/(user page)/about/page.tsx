@@ -1,12 +1,12 @@
 import { getSessionUser } from "@/components/get-session-user";
 import { notFound, redirect } from "next/navigation";
 import db from "@/lib/db";
-import { UserDetails, UserPosts } from "@/components/user";
 import { getUserPost } from "@/lib/prisma/posts";
 import { getLists } from "@/lib/prisma/session";
 import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar";
 import PostCard from "@/components/blog/post-card-v3";
 import Tabs from "@/components/user/tab";
+import { UserAbout } from "@/components/user/about";
 
 export default async function Page({
      params,
@@ -40,6 +40,26 @@ export default async function Page({
                          Followers: true,
                     },
                },
+               Followers: {
+                    include: {
+                         follower: {
+                              include: {
+                                   Followers: true,
+                                   Followings: true,
+                              },
+                         },
+                    },
+               },
+               Followings: {
+                    include: {
+                         following: {
+                              include: {
+                                   Followers: true,
+                                   Followings: true,
+                              },
+                         },
+                    },
+               },
                writers: {
                     where: {
                          visibility: "public",
@@ -52,6 +72,19 @@ export default async function Page({
                          },
                     }
                },
+               publications: {
+                    where: {
+                         visibility: "public",
+                    },
+                    select: {
+                         publication: {
+                              include: {
+                                   _count: { select: { Followers: true, Followings: true } },
+                              },
+                         },
+                    },
+                    take: 5,
+               }
           },
           where: {
                username: decodedUsername.substring(1),
@@ -134,22 +167,10 @@ export default async function Page({
           });
      }
 
-     const limit = pinnedPost ? 11 : 12;
-
-     const { posts } = await getUserPost({ id: user.id, search, limit });
-     const list = await getLists({ id: sessionUserName?.id });
      return (
           <>
-               <Tabs user={user} defaultValue="posts" />
-               <UserPosts
-                    pinned={pinnedPost}
-                    posts={posts}
-                    user={user}
-                    sessionUser={sessionUserName}
-                    search={search}
-                    list={list}
-                    className="w-full mt-6"
-               />
+               <Tabs user={user} defaultValue="about" />
+               <UserAbout user={user} session={sessionUserName} />
                {/* <div className="md:container mx-auto px-4 pt-5 md:mb-0 mb-20">
         <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
           <div

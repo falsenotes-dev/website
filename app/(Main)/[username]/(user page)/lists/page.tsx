@@ -98,80 +98,8 @@ export default async function Page({
           },
      });
 
-     const search =
-          typeof searchParams.search === "string" ? searchParams.search : undefined;
      if (!user) {
           return notFound();
-     }
-
-     let pinnedPost = await db.post.findFirst({
-          where: {
-               publicationId: user.id,
-               pinned: true,
-          },
-          include: {
-               _count: {
-                    select: {
-                         comments: true,
-                         likes: true,
-                         savedUsers: true,
-                         shares: true,
-                    },
-               },
-               savedUsers: true,
-               tags: {
-                    take: 1,
-                    include: {
-                         tag: true,
-                    },
-               },
-               author: {
-                    include: {
-                         _count: { select: { Followers: true, Followings: true } },
-                    },
-               },
-               publication: {
-                    include: {
-                         _count: { select: { Followers: true, Followings: true } },
-                    },
-               },
-          },
-     });
-
-     if (pinnedPost === null) {
-          pinnedPost = await db.post.findFirst({
-               where: {
-                    authorId: user.id,
-                    pinned: true,
-               },
-               include: {
-                    _count: {
-                         select: {
-                              comments: true,
-                              likes: true,
-                              savedUsers: true,
-                              shares: true,
-                         },
-                    },
-                    savedUsers: true,
-                    tags: {
-                         take: 1,
-                         include: {
-                              tag: true,
-                         },
-                    },
-                    author: {
-                         include: {
-                              _count: { select: { Followers: true, Followings: true } },
-                         },
-                    },
-                    publication: {
-                         include: {
-                              _count: { select: { Followers: true, Followings: true } },
-                         },
-                    },
-               },
-          });
      }
 
      const lists = await db.list.findMany({
@@ -196,44 +124,18 @@ export default async function Page({
           },
      });
 
-     const bookmarks = await db.bookmark.findMany({
-          where: {
-               userId: sessionUserName?.id,
-          },
-          include: {
-               post: {
-                    select: {
-                         cover: true,
-                    },
-               },
-               user: true,
-          },
-     });
-
-     const limit = pinnedPost ? 11 : 12;
-
-     const { posts } = await getUserPost({ id: user.id, search, limit });
-
-     const followers = user?.Followers;
-
-     const tab =
-          typeof searchParams.tab === "string" ? searchParams.tab : undefined;
-
-     const list = await getLists({ id: sessionUserName?.id });
-     const firstPost = pinnedPost || posts[0];
-     const restPosts = !pinnedPost ? posts.slice(1, 12) : posts;
      return (
           <>
                <Tabs user={user} defaultValue="lists" />
-               <div className="w-full grid grid-cols-3 grid-flow-row auto-rows-max gap-4">
+               <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-6">
                     {lists.map((list) => (
-                         <>
+                         <div key={list.id}>
                               <ListCard list={list} session={sessionUserName} className="w-full" />
-                         </>
+                         </div>
                     ))}
                     {
                          sessionUserName?.id !== user.id && lists.length === 0 && (
-                              <EmptyPlaceholder>
+                              <EmptyPlaceholder className="w-full">
                                    <EmptyPlaceholder.Icon name="list" />
                                    <EmptyPlaceholder.Title>
                                         No lists yet
