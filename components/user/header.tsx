@@ -79,7 +79,7 @@ export default function Header({ user, session, followers }: { user: any; sessio
                                              className="rounded-3xl"
                                         />
                                    ) : (
-                                        <Icons.noThumbnail className="w-full h-full rounded-3xl bg-secondary" />
+                                        <Icons.noThumbnail className="w-full object-cover h-full rounded-3xl bg-secondary" />
                                    )
                               }
                          </div>
@@ -90,7 +90,7 @@ export default function Header({ user, session, followers }: { user: any; sessio
                          <AvatarImage src={user?.image!} />
                          <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
-                    <div className="flex justify-between md:items-center w-full flex-col md:flex-row gap-2">
+                    <div className="flex justify-between w-full gap-2">
                          <div className="flex flex-col">
                               <div className="flex items-center gap-1.5"><h1 className="text-4xl font-extrabold line-clamp-1">{user.name}</h1>
                                    {
@@ -128,8 +128,11 @@ export default function Header({ user, session, followers }: { user: any; sessio
                          <div className="flex items-center gap-2">
                               {session ? (
                                    session?.id === user?.id ? (
-                                        <Button variant={"outline"} asChild>
-                                             <Link href={`/@${user.username}/settings/profile`}>Edit Profile</Link>
+                                        <Button variant={"outline"} className="h-9 w-9 md:w-auto p-0 md:px-4 md:py-2" asChild>
+                                             <Link href={`/@${user.username}/settings/profile`}>
+                                                  <span className="hidden md:block">Edit Profile</span>
+                                                  <Icons.settings className="md:hidden h-5 w-5" />
+                                             </Link>
                                         </Button>
                                    ) : (
                                         <>

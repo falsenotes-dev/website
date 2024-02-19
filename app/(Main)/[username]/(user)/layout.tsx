@@ -105,7 +105,7 @@ export default async function Layout({ children, params }: Props) {
           </div>
         </div>
       </div>
-      <MobileBottomNavbar />
+      <MobileBottomNavbar session={sessionUserName} />
     </>
   )
 }

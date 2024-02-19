@@ -31,9 +31,8 @@ import useWindowDimensions from "../window-dimensions";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
 import { ModeToggle } from "../mode-toggle";
 
-export function UserNav() {
+export function UserNav({ session: user }: { session: any }) {
   const { status } = useSession();
-  const user = useSession().data?.user as any;
   const { width } = useWindowDimensions();
   const [isMobile, setIsMobile] = useState(false);
 

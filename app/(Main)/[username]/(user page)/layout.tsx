@@ -100,7 +100,7 @@ export default async function UserLayout(
             {children}
           </div>
         </div>
-        <MobileBottomNavbar />
+        <MobileBottomNavbar session={session} />
       </div>
       <SiteFooter />
     </>

@@ -32,12 +32,14 @@ function numberFormat(number: number) {
 
 function Navbar({
   notifications,
+  session,
   searchHistory,
 }: {
   notifications: any;
+  session: any;
   searchHistory: UserSearchHistory[];
 }) {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const [history, setHistory] = useState<UserSearchHistory[]>([]);
   useEffect(() => {
@@ -70,31 +72,33 @@ function Navbar({
               >
                 <PostCreateButton
                   key={"New Post"}
+                  session={session}
                   variant="ghost"
                   size={"icon"}
                   className="h-10 w-10 hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md"
                 />
               </motion.div>
-              <Button
-                variant={"ghost"}
-                size={"icon"}
-                className="h-10 w-10 relative hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md"
-                onClick={() => router.replace("/notifications")}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.9 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                <Button
+                  variant={"ghost"}
+                  size={"icon"}
+                  className="h-10 w-10 relative hover:shadow-md hover:!bg-accent/10 hover:backdrop-blur-md"
+                  onClick={() => router.replace("/notifications")}
                 >
+
                   <Icons.notification className="w-5 h-5" />
                   {notifications > 0 && (
                     <Badge className="left-5 font-normal px-1.5 py-0 absolute top-0 h-5 min-w-[1.25rem] max-w-max">
                       {numberFormat(notifications)}
                     </Badge>
                   )}
-                </motion.div>
-              </Button>
-              <UserNav />
+                </Button>
+              </motion.div>
+              <UserNav session={session} />
             </>
           ) : (
             <motion.div

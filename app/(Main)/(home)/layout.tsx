@@ -74,7 +74,7 @@ export default async function HomeLayout({
                          </div>
                     </main>
                </div>
-               <MobileBottomNavbar />
+               <MobileBottomNavbar session={session} />
           </>
      )
 }

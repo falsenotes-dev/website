@@ -31,7 +31,7 @@ export default async function MainLayout({
     <>
       <div className='min-h-screen'>
         <>
-          <Navbar notifications={notifications} searchHistory={searchHistory} />
+          <Navbar notifications={notifications} searchHistory={searchHistory} session={session} />
           <MobileHeaderNavbar notification={notifications} />
           {children}
         </>

@@ -464,7 +464,7 @@ export default async function Page({
           </div>
         </div>
       </div> */}
-      <MobileBottomNavbar />
+      <MobileBottomNavbar session={sessionUserName} />
     </>
   );
 }

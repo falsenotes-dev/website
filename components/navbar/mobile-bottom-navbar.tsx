@@ -9,8 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { PostCreateButton } from "./post-create-button";
 
-export function MobileBottomNavbar() {
-     const { data: session, status } = useSession() as any;
+export function MobileBottomNavbar({ session }: { session: any }) {
      const router = useRouter();
      const pathname = usePathname();
 
@@ -62,6 +61,7 @@ export function MobileBottomNavbar() {
                          <div className="flex items-center justify-center flex-1">
                               <PostCreateButton
                                    variant={"ghost"}
+                                   session={session}
                                    iconName="plusSquare"
                                    size={"icon"}
                                    className="h-10 w-10"
@@ -93,9 +93,9 @@ export function MobileBottomNavbar() {
                               <Button
                                    variant={"ghost"}
                                    size={"icon"}
-                                   className={`p-0 h-8 w-8 rounded-full relative ${pathname == `/@${session?.user?.username}` ? `!border-primary border-[1.75px]` : ''}`}
+                                   className={`p-0 h-8 w-8 rounded-full relative ${pathname == `/@${session?.username}` ? `!border-primary border-[1.75px]` : ''}`}
                                    onClick={() => {
-                                        router.push(`/@${session?.user?.username}`);
+                                        router.push(`/@${session?.username}`);
                                    }}
                               >
                                    <div className="flex items-center">
@@ -103,8 +103,8 @@ export function MobileBottomNavbar() {
                                              className={`h-full w-full`}
                                         >
                                              <AvatarImage
-                                                  src={session?.user?.image || ""}
-                                                  alt={session?.user?.name || ""}
+                                                  src={session?.image || ""}
+                                                  alt={session?.name || ""}
                                              />
                                              <AvatarFallback>
                                                   <Icons.user className="w-4 h-4" />
