@@ -41,6 +41,11 @@ export function MobileHeaderNavbar({ notification }: { notification: number }) {
                                         Settings
                                    </Link>
                                    <Separator className="my-2" />
+                                   <Link href={`/drafts/`} className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                                        <Icons.draft className="h-5 mr-2" />
+                                        You drafts
+                                   </Link>
+                                   <Separator className="my-2" />
                                    <Link href={`/@${session?.user.username}/list/read-later/`} className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
                                         <Icons.bookmarks className="h-5 mr-2" />
                                         You saved posts
