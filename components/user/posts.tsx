@@ -90,7 +90,7 @@ export default function UserPosts({
               />
             </div>
           ))}
-          {posts.length >= 10 && (
+          {posts.length >= 9 && (
             <div className="feed__list_loadmore !py-0 h-max" ref={ref}>
               <Card className="rounded-lg bg-transparent max-h-72 w-full">
                 <CardContent className="md:p-6 p-4">
