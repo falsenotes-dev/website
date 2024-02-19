@@ -6,6 +6,11 @@ import { getLists } from "@/lib/prisma/session";
 import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar";
 import PostCard from "@/components/blog/post-card-v3";
 import Tabs from "@/components/user/tab";
+import { suggestedUsers } from "@/lib/prisma/suggestion";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import UserVerticalCard from "@/components/user-vertical-card";
+import SuggestedUsers from "@/components/user/suggested-user";
+import { EmptyPlaceholder } from "@/components/empty-placeholder";
 
 export default async function Page({
   params,
@@ -214,24 +219,41 @@ export default async function Page({
   const list = await getLists({ id: sessionUserName?.id });
   const firstPost = pinnedPost || posts[0];
   const restPosts = !pinnedPost ? posts.slice(1, 12) : posts;
+  const { users: whoToFollow } = await suggestedUsers({ id: user.id, limit: 10 });
+  console.log(whoToFollow);
   return (
     <>
       <Tabs user={user} />
-      <div
-        className="grid 
+      {
+        posts.length > 0 ? (
+          <div
+            className="grid 
       grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        <div className="md:col-span-2 md:row-span-2">
-          <PostCard post={firstPost} author={firstPost.author} list={list} session={sessionUserName} isFirst isPinned={firstPost.pinned} />
-        </div>
-        {restPosts.map((post: any) => {
-          return (
-            <>
-              <PostCard post={post} author={post.author} list={list} session={sessionUserName} isPinned={post.pinned} />
-            </>
-          );
-        })}
-      </div>
+          >
+            <div className="md:col-span-2 md:row-span-2">
+              <PostCard post={firstPost} author={firstPost.author} list={list} session={sessionUserName} isFirst isPinned={firstPost.pinned} />
+            </div>
+            {restPosts.map((post: any) => {
+              return (
+                <>
+                  <PostCard post={post} author={post.author} list={list} session={sessionUserName} isPinned={post.pinned} />
+                </>
+              );
+            })}
+          </div>
+        ) : (
+          <EmptyPlaceholder>
+            <EmptyPlaceholder.Icon name="post" />
+            <EmptyPlaceholder.Title>
+              No posts yet
+            </EmptyPlaceholder.Title>
+            <EmptyPlaceholder.Description>
+              When user creates a post, it will show up here.
+            </EmptyPlaceholder.Description>
+          </EmptyPlaceholder>
+        )
+      }
+      <SuggestedUsers users={whoToFollow} session={sessionUserName} />
       {/* <div className="md:container mx-auto px-4 pt-5 md:mb-0 mb-20">
         <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
           <div
