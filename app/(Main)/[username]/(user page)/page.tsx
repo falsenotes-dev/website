@@ -1,28 +1,11 @@
 import { getSessionUser } from "@/components/get-session-user";
 import { notFound, redirect } from "next/navigation";
 import db from "@/lib/db";
-import { UserDetails, UserPosts } from "@/components/user";
 import { getUserPost } from "@/lib/prisma/posts";
 import { getLists } from "@/lib/prisma/session";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Link from "next/link";
-import { SiteFooter } from "@/components/footer";
-import { UserAbout, getRegistrationDateDisplay } from "@/components/user/about";
-import { Icons } from "@/components/icon";
-import Image from "next/image";
-import { UserCard } from "@/components/user/card";
-import { Separator } from "@/components/ui/separator";
-import ListCard from "@/components/list-card";
-import { formatNumberWithSuffix } from "@/components/format-numbers";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { EmptyPlaceholder } from "@/components/empty-placeholder";
-import UserHoverCard from "@/components/user-hover-card";
 import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar";
-import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import PostCard from "@/components/blog/post-card-v3";
-import Header from "@/components/user/header";
+import Tabs from "@/components/user/tab";
 
 export default async function Page({
   params,
@@ -232,41 +215,22 @@ export default async function Page({
   const firstPost = pinnedPost || posts[0];
   const restPosts = !pinnedPost ? posts.slice(1, 12) : posts;
   return (
-    <div className="flex flex-col justify-start items-center w-auto xl:px-0 px-3 py-8">
-      <Header user={user} session={sessionUserName} followers={user.Followers} />
-      <div style={{
-        minHeight: "calc(100vh - 530px)"
-      }}>
-        <div className="flex flex-col max-w-5xl min-w-[280px] w-full py-10 flex-[1_0_auto]">
-          <Tabs defaultValue="home">
-            <TabsList className="mb-8">
-              <TabsTrigger value="home">Home</TabsTrigger>
-              <TabsTrigger value="posts">Posts</TabsTrigger>
-              <TabsTrigger value="lists">Lists</TabsTrigger>
-              {
-                user?.writers?.length > 0 && (
-                  <TabsTrigger value="writers">Writers</TabsTrigger>
-                )
-              }
-              <TabsTrigger value="about">About</TabsTrigger>
-            </TabsList>
-          </Tabs>
-          <div
-            className="grid 
+    <>
+      <Tabs user={user} />
+      <div
+        className="grid 
       grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            <div className="md:col-span-2 md:row-span-2">
-              <PostCard post={firstPost} author={firstPost.author} list={list} session={sessionUserName} isFirst isPinned={firstPost.pinned} />
-            </div>
-            {restPosts.map((post: any) => {
-              return (
-                <>
-                  <PostCard post={post} author={post.author} list={list} session={sessionUserName} isPinned={post.pinned} />
-                </>
-              );
-            })}
-          </div>
+      >
+        <div className="md:col-span-2 md:row-span-2">
+          <PostCard post={firstPost} author={firstPost.author} list={list} session={sessionUserName} isFirst isPinned={firstPost.pinned} />
         </div>
+        {restPosts.map((post: any) => {
+          return (
+            <>
+              <PostCard post={post} author={post.author} list={list} session={sessionUserName} isPinned={post.pinned} />
+            </>
+          );
+        })}
       </div>
       {/* <div className="md:container mx-auto px-4 pt-5 md:mb-0 mb-20">
         <div className="gap-5 lg:gap-6 flex flex-col md:flex-row items-start xl:px-4 pt-5">
@@ -479,6 +443,6 @@ export default async function Page({
         </div>
       </div> */}
       <MobileBottomNavbar />
-    </div>
+    </>
   );
 }
