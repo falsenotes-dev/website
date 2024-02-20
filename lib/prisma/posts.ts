@@ -208,3 +208,79 @@ export const getFeaturedPosts = async ({
 
   return { posts: JSON.parse(JSON.stringify(posts)) };
 };
+
+export const getPopularPostsOfTheWeek = async ({
+  limit = 10,
+  page = 0,
+}: {
+  limit?: number;
+  page?: number;
+}) => {
+  //fetch popular posts of the week, by views and likes which duration is 7 days
+  const posts = await postgres.post.findMany({
+    ...baseQuery,
+    where: {
+      published: true,
+      publishedAt: {
+        gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
+      },
+    },
+    take: limit,
+    skip: page * limit,
+    orderBy: [
+      {
+        views: "desc",
+      },
+      {
+        likes: {
+          _count: "desc",
+        },
+      },
+      {
+        readedUsers: {
+          _count: "desc",
+        },
+      },
+    ],
+  });
+
+  return { posts: JSON.parse(JSON.stringify(posts)) };
+};
+
+export const getPopularPostsOfTheMonth = async ({
+  limit = 10,
+  page = 0,
+}: {
+  limit?: number;
+  page?: number;
+}) => {
+  //fetch popular posts of the month, by views and likes which duration is 30 days
+  const posts = await postgres.post.findMany({
+    ...baseQuery,
+    where: {
+      published: true,
+      publishedAt: {
+        gte: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000),
+      },
+    },
+    take: limit,
+    skip: page * limit,
+    orderBy: [
+      {
+        views: "desc",
+      },
+      {
+        likes: {
+          _count: "desc",
+        },
+      },
+      {
+        readedUsers: {
+          _count: "desc",
+        },
+      },
+    ],
+  });
+
+  return { posts: JSON.parse(JSON.stringify(posts)) };
+};
