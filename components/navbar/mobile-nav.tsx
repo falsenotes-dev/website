@@ -24,7 +24,7 @@ export function MobileHeaderNavbar({ notification }: { notification: number }) {
      const router = useRouter();
 
      return (<div className="max-w-[1140px] min-w-[280px] block md:hidden mx-auto w-full sticky top-0 md:top-4 z-20 lg:px-6 md:px-2 xl:p-0">
-          <div className="menu-container py-2 px-4 bg-background/95 backdrop-blur border md:rounded-2xl shadow-xl xl:mx-8 supports-[backdrop-filter]:bg-background/60">
+          <div className="menu-container py-2 px-4 bg-background/95 backdrop-blur md:rounded-2xl shadow-xl xl:mx-8 supports-[backdrop-filter]:bg-background/60">
                {
                     status == "authenticated" && (
                          <Drawer>
