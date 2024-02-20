@@ -8,8 +8,9 @@ export const clearHistory = async () => {
   const user = await getSessionUser();
   if (!user) return { success: false, message: "Not logged in" };
   try {
-    await db.readingHistory.deleteMany({
+    await db.readingHistory.updateMany({
       where: { userId: user.id },
+      data: { erased: true },
     });
     return { success: true, message: "History cleared" };
   } catch (e) {
@@ -25,8 +26,9 @@ export const removeHistory = async ({ postId }: { postId: Post["id"] }) => {
     const history = await db.readingHistory.findFirst({
       where: { userId: user.id, postId },
     });
-    await db.readingHistory.delete({
+    await db.readingHistory.update({
       where: { id: history?.id },
+      data: { erased: true },
     });
     return { success: true, message: "History removed" };
   } catch (e) {

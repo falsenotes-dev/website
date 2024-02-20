@@ -44,8 +44,7 @@ export default function UserHistory({
   async function loadMoreFeed() {
     const next = page + 1;
     const result = await fetch(
-      `/api/user/${sessionUser.id}/history?page=${next}${
-        search ? `&search=${search}` : ""
+      `/api/user/${sessionUser.id}/history?page=${next}${search ? `&search=${search}` : ""
       }`
     ).then((res) => res.json());
     const fetchedPosts = result.history;
@@ -70,13 +69,13 @@ export default function UserHistory({
               {posts?.length > 0 && (
                 <Card>
                   <CardContent className="flex flex-row p-6 w-full items-center justify-between">
-                    <p className="text-sm">
+                    <p className="text-sm line-clamp-2">
                       You can clear your history for a specific post by clicking
                       the <span className="font-bold">Remove</span> button on
                       the post.
                     </p>
                     <Button
-                      className="ml-4"
+                      className="ml-4 line-clamp-1"
                       variant="destructive"
                       size="sm"
                       onClick={() => setOpen(true)}
