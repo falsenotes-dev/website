@@ -133,10 +133,13 @@ export default async function Page({
       },
     });
   }
-
+  const whereQuery =
+    sessionUserName?.id === user?.id
+      ? { id: { not: pinnedPost?.id }, published: true }
+      : { published: true, id: { not: pinnedPost?.id } };
   const limit = pinnedPost ? 9 : 10;
 
-  const { posts } = await getUserPost({ id: user.id, search, limit });
+  const { posts } = await getUserPost({ id: user.id, search, limit, whereQuery });
   const list = await getLists({ id: sessionUserName?.id });
   return (
     <>
