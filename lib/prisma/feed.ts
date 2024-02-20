@@ -88,12 +88,8 @@ const getFollowingTags = async ({ id }: { id: string | undefined }) => {
         select: {
           posts: {
             select: {
-              id: true,
+              postId: true,
             },
-            orderBy: {
-              createdAt: "desc",
-            },
-            take: 1,
           },
         },
       },
@@ -102,7 +98,7 @@ const getFollowingTags = async ({ id }: { id: string | undefined }) => {
 
   return {
     followingTags: followingTags.flatMap((followingTag) =>
-      followingTag.tag.posts.map((post) => post.id)
+      followingTag.tag.posts.map((post) => post.postId)
     ),
   };
 };
@@ -124,12 +120,11 @@ const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
         select: {
           posts: {
             select: {
-              id: true,
+              postId: true,
             },
             orderBy: {
               createdAt: "desc",
             },
-            take: 1,
           },
         },
       },
@@ -138,7 +133,7 @@ const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
 
   return {
     followings: followings.flatMap((following) =>
-      following.tag.posts.map((post) => post.id)
+      following.tag.posts.map((post) => post.postId)
     ),
   };
 };
@@ -151,12 +146,11 @@ const getTags = async ({ id }: { id: string | undefined }) => {
         select: {
           posts: {
             select: {
-              id: true,
+              postId: true,
             },
             orderBy: {
               createdAt: "desc",
             },
-            take: 1,
           },
         },
       },
@@ -164,7 +158,7 @@ const getTags = async ({ id }: { id: string | undefined }) => {
   });
 
   return {
-    postTags: tags.flatMap((tag) => tag.tag.posts.map((post) => post.id)),
+    postTags: tags.flatMap((tag) => tag.tag.posts.map((post) => post.postId)),
   };
 };
 
@@ -252,18 +246,24 @@ export const getForYou = async ({
     getFollowingTags({ id }),
   ]);
 
+  const interests = [
+    ...userLikes,
+    ...userBookmarks,
+    ...userHistory,
+    ...userTags,
+    ...userFollowings,
+    ...userFollowingTags,
+  ];
+  // rewmove duplicates
+  const uniqueInterests = interests.filter(
+    (interest, index) => interests.indexOf(interest) === index
+  );
+
   // Fetch the tags of the posts in parallel
   const tags = await db.postTag.findMany({
     where: {
       postId: {
-        in: [
-          ...userLikes,
-          ...userBookmarks,
-          ...userHistory,
-          ...userTags,
-          ...userFollowings,
-          ...userFollowingTags,
-        ],
+        in: uniqueInterests,
       },
     },
     select: {
