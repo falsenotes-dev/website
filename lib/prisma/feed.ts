@@ -125,7 +125,6 @@ const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
             orderBy: {
               createdAt: "desc",
             },
-            take: 1,
           },
         },
       },
@@ -152,7 +151,6 @@ const getTags = async ({ id }: { id: string | undefined }) => {
             orderBy: {
               createdAt: "desc",
             },
-            take: 1,
           },
         },
       },
