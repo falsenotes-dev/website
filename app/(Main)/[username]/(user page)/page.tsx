@@ -172,13 +172,17 @@ export default async function Page({
     });
   }
 
-  const limit = pinnedPost ? 11 : 12;
+  const limit = pinnedPost ? 8 : 9;
+  const whereQuery =
+    sessionUserName?.id === user?.id
+      ? { id: { not: pinnedPost?.id }, published: true }
+      : { published: true, id: { not: pinnedPost?.id } };
 
-  const { posts } = await getUserPost({ id: user.id, search, limit });
+  const { posts } = await getUserPost({ id: user.id, search, limit, whereQuery });
 
   const list = await getLists({ id: sessionUserName?.id });
   const firstPost = pinnedPost || posts[0];
-  const restPosts = !pinnedPost ? posts.slice(1, 12) : posts;
+  const restPosts = !pinnedPost ? posts.slice(1, 9) : posts;
   const { users: whoToFollow } = await suggestedUsers({ id: user.id, limit: 10 });
   return (
     <>
