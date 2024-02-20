@@ -118,7 +118,12 @@ export function MobileHeaderNavbar({ notification }: { notification: number }) {
                               whileTap={{ scale: 0.9 }}
                               transition={{ type: "spring", stiffness: 400, damping: 17 }}
                          >
-                              <Button onClick={() => signIn()}>Join</Button>
+                              <Button className="relative inline-flex overflow-hidden rounded-full p-[1px] shadow-sm" onClick={() => signIn()}>
+                                   <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#5D00FF_50%,#E2CBFF_100%)]" />
+                                   <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-background px-3 py-1 text-sm font-medium text-foreground backdrop-blur-3xl">
+                                        Start Writing
+                                   </span>
+                              </Button>
                          </motion.div>
                     )}
                </div>
