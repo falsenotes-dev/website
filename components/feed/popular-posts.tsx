@@ -8,7 +8,7 @@ import UserHoverCard from "../user-hover-card";
 import { Check } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Icons } from "../icon";
-import { getPosts } from "@/lib/prisma/posts";
+import { getPopularPostsOfTheMonth, getPopularPostsOfTheWeek, getPosts } from "@/lib/prisma/posts";
 
 const formatDate = (dateString: string | number | Date) => {
   const date = new Date(dateString)
@@ -31,7 +31,8 @@ const formatDate = (dateString: string | number | Date) => {
 }
 
 export default async function PopularPosts() {
-  const { posts } = await getPosts({ limit: 3 })
+  const popularPostsOfTheWeek = await getPopularPostsOfTheWeek({ limit: 3 });
+  const { posts } = popularPostsOfTheWeek.posts.length < 3 ? await getPopularPostsOfTheMonth({ limit: 3 }) : popularPostsOfTheWeek;
   let content = null;
 
   posts ? content = (
