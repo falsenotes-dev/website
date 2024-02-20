@@ -43,7 +43,7 @@ const getBookmarks = async ({ id }: { id: string | undefined }) => {
 
 const getHistory = async ({ id }: { id: string | undefined }) => {
   const history = await db.readingHistory.findMany({
-    where: { userId: id },
+    where: { userId: id, erased: false },
     select: {
       post: {
         select: {
@@ -62,7 +62,7 @@ const getHistory = async ({ id }: { id: string | undefined }) => {
 
 const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
   const historyAuthor = await db.readingHistory.findMany({
-    where: { userId: id },
+    where: { userId: id, erased: false },
     select: {
       post: {
         select: {
