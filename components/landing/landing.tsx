@@ -80,7 +80,7 @@ export default function Landing({
         <div className="hero flex justify-between content-center items-center flex-col flex-[0_0_auto] rounded-3xl gap-11 h-min max-w-[1140px] min-w-[280px] overflow-hidden p-[74px] lg:px-6 px-2 pb-0 relative w-full">
           <div className="flex place-content-center items-center flex-col flex-[0_0_auto] gap-3.5 h-min overflow-visible p-0 relative lg:w-[70%] w-11/12 z-10 perspective-1200">
             <div className="flex outline-0 flex-col justify-start shrink-0 transform-none flex-[0_0_auto] h-auto relative w-full">
-              <h1 className="text-3xl lg:text-5xl xl:text-6xl font-black text-primary-foreground text-center">
+              <h1 className="text-3xl lg:text-5xl xl:text-6xl font-black text-center bg-clip-text text-transparent bg-gradient-to-b from-primary-foreground to-muted-foreground/50 bg-opacity-50">
                 <Balancer>
                   Where Creativity Takes Flight: Unleash Your Ideas
                 </Balancer>
