@@ -15,7 +15,7 @@ export function MobileBottomNavbar({ session }: { session: any }) {
 
      if (session) {
           return (
-               <div className="fixed py-2 border shadow-xl flex md:hidden w-full bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 z-40">
+               <div className="fixed py-2 shadow-xl flex md:hidden w-full bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 z-40">
                     <div className="flex items-center justify-between w-full gap-4 px-4">
                          <div className="flex items-center justify-center flex-1">
                               <Button

@@ -196,7 +196,7 @@ export default async function SigninPage({
             </blockquote> */}
             </div>
           </div>
-          <div className="form flex justify-between content-center items-center flex-col flex-[0_0_auto] md:w-[538px] h-[700px] relative py-8 overflow-hidden">
+          <div className="form flex justify-between content-center items-center flex-col flex-[0_0_auto] w-full md:w-[538px] h-[700px] relative py-8 overflow-hidden">
             <Link
               href="/"
               className="relative z-20 flex items-center text-lg font-medium"
