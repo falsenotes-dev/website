@@ -99,8 +99,8 @@ export default function Header({ user, session, followers }: { user: any; sessio
                                                   </Button>
                                              )}
                                              <Button
-                                                  className="!bg-secondary/60 backdrop-blur hover:!bg-secondary px-4 rounded-full"
-                                                  variant={'secondary'}
+                                                  className={`${isFollowing ? '!bg-secondary/60 hover:!bg-secondary' : '!bg-primary/60 hover:!bg-primary'} backdrop-blur px-4 rounded-full`}
+                                                  variant={isFollowing ? 'secondary' : 'default'}
                                                   onClick={() => {
                                                        handleFollow(user?.id);
                                                   }}
@@ -120,7 +120,7 @@ export default function Header({ user, session, followers }: { user: any; sessio
                                    )
                               ) : (
                                    <LoginDialog>
-                                        <Button className="!bg-secondary/60 backdrop-blur hover:!bg-secondary px-4 rounded-full" variant={'secondary'} size={'sm'}>Follow</Button>
+                                        <Button className="px-4 rounded-full" variant={'default'} size={'sm'}>Follow</Button>
                                    </LoginDialog>
                               )}
                               <ShareList
@@ -142,7 +142,7 @@ export default function Header({ user, session, followers }: { user: any; sessio
                     </Avatar>
                     <div className="flex lg:justify-between justify-center w-full gap-2">
                          <div className="flex flex-col items-center lg:items-start">
-                              <div className="flex items-center gap-1.5"><h1 className="text-3xl lg:text-4xl font-extrabold line-clamp-1">{user.name}</h1>
+                              <div className="flex items-center gap-1.5"><h1 className="text-3xl lg:text-4xl font-extrabold line-clamp-1">{user.name || user.username}</h1>
                                    {
                                         user.verified && (
                                              <TooltipProvider>
