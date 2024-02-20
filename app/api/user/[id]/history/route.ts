@@ -16,6 +16,7 @@ export async function GET(
     where: { id: id },
     include: {
       readinghistory: {
+        where: { erased: false },
         include: {
           post: {
             include: {

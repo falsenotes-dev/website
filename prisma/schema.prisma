@@ -329,6 +329,7 @@ model ReadingHistory {
   postId    String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
+  erased    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

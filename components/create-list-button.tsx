@@ -8,7 +8,7 @@ export default function CreateListButton() {
 
      return (
           <>
-               <Button size={"lg"} onClick={() => setOpen(true)}>
+               <Button onClick={() => setOpen(true)}>
                     Create List
                </Button>
                <ListCreateDialog open={open} onOpenChange={setOpen} />

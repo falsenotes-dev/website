@@ -218,6 +218,7 @@ export const getHistory = async ({
     select: {
       id: true,
       readinghistory: {
+        where: { erased: false },
         include: {
           post: {
             include: {
