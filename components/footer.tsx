@@ -27,11 +27,11 @@ export function SiteFooter({ className, size }: React.HTMLAttributes<HTMLElement
                               <Icons.logoIcon className="w-5 h-5 text-inherit" /> &copy; {new Date().getFullYear()} {siteConfig.name}.
                          </p>
                     </div>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 !text-inherit">
+                    <div className="flex flex-wrap gap-x-4 justify-center gap-y-1 !text-inherit">
                          <Link href="/about" className={cn(buttonVariants({ variant: 'link', size: size }), 'p-0 !text-inherit h-fit border-none focus-visible:ring-transparent font-normal')} >About</Link>
                          <Link href="/privacy" className={cn(buttonVariants({ variant: 'link', size: size }), 'p-0 !text-inherit h-fit border-none focus-visible:ring-transparent font-normal')} >Privacy</Link>
                          <Link href="/terms" className={cn(buttonVariants({ variant: 'link', size: size }), 'p-0 !text-inherit h-fit border-none focus-visible:ring-transparent font-normal')} >Terms</Link>
-                         <Link href="/beta" className={cn(buttonVariants({ variant: 'link', size: size }), 'p-0 !text-inherit h-fit border-none focus-visible:ring-transparent font-normal')} >Beta</Link>
+                         <Link href="/beta" target="_blank" className={cn(buttonVariants({ variant: 'link', size: size }), 'p-0 !text-inherit h-fit border-none focus-visible:ring-transparent font-normal')} >Beta</Link>
                          <Link target="_blank" href="/store" className={cn(buttonVariants({ variant: 'link', size: size }), 'p-0 !text-inherit h-fit border-none focus-visible:ring-transparent font-normal')} >Store</Link>
                          <Link target="_blank" href="/github" className={cn(buttonVariants({ variant: 'link', size: size }), 'p-0 !text-inherit h-fit border-none focus-visible:ring-transparent font-normal')} >GitHub</Link>
                          <Link target="_blank" href="/twitter" className={cn(buttonVariants({ variant: 'link', size: size }), 'p-0 !text-inherit h-fit border-none focus-visible:ring-transparent font-normal')} >Twitter</Link>
