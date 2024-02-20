@@ -200,7 +200,7 @@ export default async function Page({
                          </div>
                     ))}
                     {
-                         sessionUserName?.id !== user.id && lists.length === 0 && (
+                         lists.length === 0 && (
                               <EmptyPlaceholder className="w-full">
                                    <EmptyPlaceholder.Icon name="list" />
                                    <EmptyPlaceholder.Title>

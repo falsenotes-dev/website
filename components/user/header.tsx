@@ -67,7 +67,7 @@ export default function Header({ user, session, followers }: { user: any; sessio
      return (
           <div className="relative flex-[0_0_auto] h-[424px] max-w-[1140px] min-w-[280px] w-full overflow-visible">
                {
-                    <div className="rounded-3xl bottom-[174px] flex-[0_0_auto] left-0 overflow-visible absolute top-0 w-full">
+                    <div className="rounded-3xl xl:bottom-[174px] bottom-[212px] lg:bottom-0 lg:h-[59%] flex-[0_0_auto] left-0 overflow-visible absolute top-0 w-full">
                          <div className="absolute inset-0">
                               {
                                    user.cover ? (
@@ -83,70 +83,28 @@ export default function Header({ user, session, followers }: { user: any; sessio
                                    )
                               }
                          </div>
-                    </div>
-               }
-               <div className="flex flex-col justify-center items-start bottom-0 gap-3 left-1/2 h-min max-w-5xl min-w-[280px] absolute overflow-hidden w-[94%] -translate-x-1/2">
-                    <Avatar className="h-28 w-28 !border-background border-4">
-                         <AvatarImage src={user?.image!} />
-                         <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex justify-between w-full gap-2">
-                         <div className="flex flex-col">
-                              <div className="flex items-center gap-1.5"><h1 className="text-3xl md:text-4xl font-extrabold line-clamp-1">{user.name}</h1>
-                                   {
-                                        user.verified && (
-                                             <TooltipProvider>
-                                                  <Tooltip>
-                                                       <TooltipTrigger><Icons.verified className="h-7 w-7 text-muted-foreground fill-verified" /></TooltipTrigger>
-                                                       <TooltipContent>Verified Author</TooltipContent>
-                                                  </Tooltip>
-                                             </TooltipProvider>
-                                        )
-                                   }
-                                   {
-                                        user.falsemember && (
-                                             <TooltipProvider>
-                                                  <Tooltip>
-                                                       <TooltipTrigger><Image src="/assets/falsemember.png" alt="False Member" width={28} height={28} /></TooltipTrigger>
-                                                       <TooltipContent>The False Staff</TooltipContent>
-                                                  </Tooltip>
-                                             </TooltipProvider>
-                                        )
-                                   }
-                              </div>
-                              <div className="items-center flex gap-2 w-full">
-                                   <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-sm">
-                                        {formatNumberWithSuffix(followersCount)}{" "}
-                                        <span className="text-muted-foreground ml-2">Followers</span>
-                                   </div>
-                                   <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-sm">
-                                        {formatNumberWithSuffix(user._count.posts + user._count.publicationsPosts)}{" "}
-                                        <span className="text-muted-foreground ml-2">Posts</span>
-                                   </div>
-                              </div>
-                         </div>
-                         <div className="flex items-center gap-2">
+                         <div className="flex items-center gap-1 absolute top-3 right-4">
                               {session ? (
                                    session?.id === user?.id ? (
-                                        <Button variant={"outline"} className="h-9 w-9 md:w-auto p-0 md:px-4 md:py-2" asChild>
+                                        <Button variant={'secondary'} size={'sm'} className="!bg-secondary/60 backdrop-blur hover:!bg-secondary px-4 rounded-full" asChild>
                                              <Link href={`/@${user.username}/settings/profile`}>
-                                                  <span className="hidden md:block">Edit Profile</span>
-                                                  <Icons.settings className="md:hidden h-5 w-5" />
+                                                  Edit Profile
                                              </Link>
                                         </Button>
                                    ) : (
                                         <>
                                              {isAdmin && (
-                                                  <Button variant={"outline"} asChild>
+                                                  <Button variant={'secondary'} className="!bg-secondary/60 backdrop-blur hover:!bg-secondary px-4 rounded-full" size={'sm'} asChild>
                                                        <Link href={`/@${user.username}/settings/profile`}>Edit Profile</Link>
                                                   </Button>
                                              )}
                                              <Button
-                                                  className="w-full"
-                                                  variant={isFollowing ? "outline" : "default"}
+                                                  className={`${isFollowing ? '!bg-secondary/60 hover:!bg-secondary' : '!bg-primary/60 hover:!bg-primary'} backdrop-blur px-4 rounded-full`}
+                                                  variant={isFollowing ? 'secondary' : 'default'}
                                                   onClick={() => {
                                                        handleFollow(user?.id);
                                                   }}
+                                                  size={'sm'}
                                                   disabled={isFollowingLoading}
                                              >
                                                   {isFollowingLoading ? (
@@ -162,7 +120,7 @@ export default function Header({ user, session, followers }: { user: any; sessio
                                    )
                               ) : (
                                    <LoginDialog>
-                                        <Button className="w-full">Follow</Button>
+                                        <Button className="px-4 rounded-full" variant={'default'} size={'sm'}>Follow</Button>
                                    </LoginDialog>
                               )}
                               <ShareList
@@ -170,13 +128,55 @@ export default function Header({ user, session, followers }: { user: any; sessio
                                    text={`Check ${user.name || user.username
                                         }'s profile on @FalseNotesTeam`}
                               >
-                                   <Button variant={"secondary"} className="px-2">
-                                        <Icons.share className="w-6 h-6 text-muted-foreground" />
+                                   <Button variant={"secondary"} className="px-2 h-8 w-8 !bg-secondary/60 backdrop-blur hover:!bg-secondary rounded-full">
+                                        <Icons.share className="w-5 h-5" />
                                    </Button>
                               </ShareList>
                          </div>
                     </div>
-                    <div className="flex justify-between md:items-center w-full flex-col md:flex-row gap-2">
+               }
+               <div className="flex flex-col justify-center items-center lg:items-start bottom-0 gap-4 lg:gap-3 left-1/2 h-min max-w-5xl min-w-[280px] absolute overflow-hidden w-[92%] lg:w-[94%] -translate-x-1/2">
+                    <Avatar className="h-28 w-28 !border-background border-4">
+                         <AvatarImage src={user?.image!} />
+                         <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex lg:justify-between justify-center w-full gap-2">
+                         <div className="flex flex-col items-center lg:items-start">
+                              <div className="flex items-center gap-1.5"><h1 className="text-3xl lg:text-4xl font-extrabold line-clamp-1">{user.name || user.username}</h1>
+                                   {
+                                        user.verified && (
+                                             <TooltipProvider>
+                                                  <Tooltip>
+                                                       <TooltipTrigger><Icons.verified className="h-6 lg:h-7 w-6 lg:w-7 text-muted-foreground fill-verified" /></TooltipTrigger>
+                                                       <TooltipContent>Verified Author</TooltipContent>
+                                                  </Tooltip>
+                                             </TooltipProvider>
+                                        )
+                                   }
+                                   {
+                                        user.falsemember && (
+                                             <TooltipProvider>
+                                                  <Tooltip>
+                                                       <TooltipTrigger><Image src="/assets/falsemember.png" alt="False Member" width={28} height={28} className="h-6 lg:h-7 w-6 lg:w-7" /></TooltipTrigger>
+                                                       <TooltipContent>The False Staff</TooltipContent>
+                                                  </Tooltip>
+                                             </TooltipProvider>
+                                        )
+                                   }
+                              </div>
+                              <div className="items-center justify-center lg:justify-start flex gap-2 w-full">
+                                   <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-sm">
+                                        {formatNumberWithSuffix(followersCount)}{" "}
+                                        <span className="text-muted-foreground ml-2">Followers</span>
+                                   </div>
+                                   <div className="inline-flex items-center justify-center font-medium transition-colors h-8 rounded-md text-sm">
+                                        {formatNumberWithSuffix(user._count.posts + user._count.publicationsPosts)}{" "}
+                                        <span className="text-muted-foreground ml-2">Posts</span>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+                    <div className="flex justify-center lg:justify-between items-center w-full flex-col lg:flex-row gap-2">
                          <div className="flex gap-3 h-4 text-sm relative text-muted-foreground items-center">
                               {
                                    user.location && (
