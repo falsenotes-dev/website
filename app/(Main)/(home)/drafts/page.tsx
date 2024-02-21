@@ -63,6 +63,9 @@ export default async function DraftsPage() {
                     },
                },
           },
+          orderBy: {
+               createdAt: "desc",
+          },
      });
 
      const user = await db.user.findFirst({
