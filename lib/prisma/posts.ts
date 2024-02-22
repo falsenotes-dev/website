@@ -50,11 +50,6 @@ export const getPosts = async ({
             },
           },
           {
-            savedUsers: {
-              _count: "desc" as const,
-            },
-          },
-          {
             likes: {
               _count: "desc" as const,
             },
