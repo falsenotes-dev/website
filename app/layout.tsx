@@ -21,12 +21,12 @@ export const metadata: Metadata = {
   icons: { apple: '/apple-192x192.png', icon: '/favicon.ico', shortcut: '/favicon.ico' },
   verification: { google: 'A9rA7yXdPFGwGxzMtOJ1tXoD0d5NBfJX7nEWrU37iJg', me: '@me', yandex: '37a0482b63273551' },
   manifest: `${process.env.DOMAIN}/manifest.json`,
-  title: 'FalseNotes - Where Creativity Takes Flight',
-  description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
-  keywords: ['FalseNotes', 'False Notes', 'FalseNotes Blog', 'FalseNotes Blogging', 'FalseNotes Blogging Platform', 'FalseNotes Platform', 'FalseNotes Blogging Platform', 'FalseNotes Blogging Platform'],
+  title: 'FalseNotes - Explore the Creative Horizon',
+  description: 'FalseNotes is a dynamic platform for sharing insights, experiences, and knowledge with a vibrant community of creators. Join us to explore and engage with diverse content across various topics.',
+  keywords: ['FalseNotes', 'False Notes', 'FalseNotes Blog', 'Storytelling Platform', 'Diverse Content Hub', 'Creative Writing Community', 'Personal Narratives', 'Blogging Beyond Code', 'Content Variety', 'Story Sharing', 'Creative Expression', 'Community Stories', 'Versatile Blogging'],
   openGraph: {
-    title: 'FalseNotes - Where Creativity Takes Flight',
-    description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
+    title: 'FalseNotes - Explore the Creative Horizon',
+    description: 'FalseNotes is a dynamic platform for sharing insights, experiences, and knowledge with a vibrant community of creators. Join us to explore and engage with diverse content across various topics.',
     url: process.env.DOMAIN!,
     images: [
       {
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FalseNotes - Where Creativity Takes Flight',
-    description: '🚀 FalseNotes is a developer-focused blogging platform where individual developers can ignite discussions, share expertise, and craft their coding journeys.',
+    title: 'FalseNotes - Explore the Creative Horizon',
+    description: 'FalseNotes is a dynamic platform for sharing insights, experiences, and knowledge with a vibrant community of creators. Join us to explore and engage with diverse content across various topics.',
     images: [
       {
         url: '/og.png',

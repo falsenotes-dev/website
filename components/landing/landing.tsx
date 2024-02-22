@@ -78,23 +78,33 @@ export default function Landing({
     <>
       <main className="landing mx-auto w-full overflow-hidden mb-4 my-10 flex flex-col items-center content-center justify-start lg:px-6 px-2 xl:p-0">
         <div className="hero flex justify-between content-center items-center flex-col flex-[0_0_auto] rounded-3xl gap-11 h-min max-w-[1140px] min-w-[280px] overflow-hidden p-[74px] lg:px-6 px-2 pb-0 relative w-full">
-          <div className="flex place-content-center items-center flex-col flex-[0_0_auto] gap-3.5 h-min overflow-visible p-0 relative lg:w-[70%] w-11/12 z-10 perspective-1200">
+          <div className="flex place-content-center items-center flex-col flex-[0_0_auto] gap-3.5 h-min overflow-visible p-0 relative lg:w-[80%] w-11/12 z-10 perspective-1200">
             <div className="flex outline-0 flex-col justify-start shrink-0 transform-none flex-[0_0_auto] h-auto relative w-full">
-              <h1 className="text-3xl lg:text-5xl xl:text-6xl font-black text-center bg-clip-text text-transparent bg-gradient-to-b from-primary-foreground to-muted-foreground/75 bg-opacity-50">
+              <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold text-center text-primary-foreground">
                 <Balancer>
-                  Where Creativity Takes Flight: Unleash Your Ideas
+                  Explore the Creative Horizon
                 </Balancer>
               </h1>
             </div>
             <div className="flex outline-0 flex-col justify-start shrink-0 transform-none flex-[0_0_auto] h-12 relative w-full">
-              <p className="text-lg text-center bg-clip-text text-transparent bg-gradient-to-b from-primary-foreground to-muted-foreground/75 bg-opacity-50">
+              <p className="text-lg text-center text-primary-foreground">
                 <Balancer>
-                  Code, Create, Connect: Elevate Your Dev Journey with FalseNotes!
+                  Unleash Your Thoughts, Connect with Like Minds, and Share Your Unique Story
                 </Balancer>
               </p>
             </div>
+            <motion.div
+              className="flex items-center gap-2 md:gap-4"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
+              <Button className="shadow-lg rounded-full" size={'lg'} onClick={() => signIn()}>
+                Share Your Story
+              </Button>
+            </motion.div>
           </div>
-          <div className="relative justify-center hidden md:block flex-[0_0_auto] h-[220px] w-[960px] z-10 overflow-visible">
+          <div className="relative justify-center hidden md:block flex-[0_0_auto] h-[250px] w-[960px] z-10 overflow-visible">
             <div className="aspect-square flex-[0_0_auto] h-[96px] w-[96px] absolute left-[863px] top-10">
               <div className="contents">
                 <div className="h-full w-full opacity-100 rounded-full bg-secondary/5 overflow-visible relative">
