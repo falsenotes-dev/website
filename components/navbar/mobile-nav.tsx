@@ -119,7 +119,7 @@ export function MobileHeaderNavbar({ notification }: { notification: number }) {
                               transition={{ type: "spring", stiffness: 400, damping: 17 }}
                          >
                               <Button onClick={() => signIn()}>
-                                   Start Writing
+                                   Get Started
                               </Button>
                          </motion.div>
                     )}
