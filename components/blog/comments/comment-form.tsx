@@ -22,6 +22,7 @@ import LoginDialog from "@/components/login-dialog";
 import UserHoverCard from "@/components/user-hover-card";
 import { getSessionUser } from "@/components/get-session-user";
 import { ArrowUp } from "lucide-react";
+import { validate } from "@/lib/revalidate";
 
 export default function CommentForm(props: { post: any, session: any }) {
   const [commenting, setCommenting] = useState<boolean>(false)
@@ -66,7 +67,7 @@ export default function CommentForm(props: { post: any, session: any }) {
     await fetch(`/api/revalidate?path=${pathname}`, {
       method: "GET",
     }).then((res) => res.json());
-    router.refresh();
+    await validate(pathname);
   }
   return (
     <div className="my-4">
@@ -110,8 +111,8 @@ export default function CommentForm(props: { post: any, session: any }) {
                       ) : (
                         <LoginDialog className="w-full">
                           <FormControl>
-                              <Textarea placeholder="Write a comment..." className="w-full" readOnly />
-                            </FormControl>
+                            <Textarea placeholder="Write a comment..." className="w-full" readOnly />
+                          </FormControl>
                         </LoginDialog>
                       )
                     }

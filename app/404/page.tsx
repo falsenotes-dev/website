@@ -34,7 +34,7 @@ export default function NotFound() {
         <h2 className="font-bold text-5xl">404</h2>
         <p className="text-muted-foreground font-light text-center">
           <Balancer>
-            Sorry 😔 — we couldn&apos;t find what you were looking for. If you think this is a mistake, please <Link href={`mailto:supp@falsenotes.dev?subject=Error%20404:%20https://${process.env.NEXT_PUBLIC_ENV === "beta" ? 'beta.' : ''}falsenotes.dev${pathname}`} className={cn(buttonVariants({ variant: 'link' }), "text-muted-foreground font-light px-0 text-base")}>contact us</Link>.
+            Sorry 😔 — we couldn&apos;t find what you were looking for. If you think this is a mistake, please <Link href={`mailto:supp@falsenotes.dev?subject=Error%20404:%20https://${process.env.NEXT_PUBLIC_ENV === "beta" ? 'beta.' : ''}falsenotes.dev${pathname}`} className={cn(buttonVariants({ variant: 'link' }), "underline font-light px-0 text-base")}>contact us</Link>.
           </Balancer>
         </p>
         <Button size={"lg"} asChild>

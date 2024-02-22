@@ -189,21 +189,26 @@ export default async function Page({
       <Tabs user={user} />
       {
         posts.length > 0 ? (
-          <div
-            className="grid 
+          <>
+            <div
+              className="grid 
       grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            <div className="md:col-span-2 md:row-span-2">
-              <PostCard post={firstPost} author={firstPost.author} list={list} session={sessionUserName} isFirst isPinned={firstPost.pinned} />
+            >
+              <div className="md:col-span-2 md:row-span-2">
+                <PostCard post={firstPost} author={firstPost.author} list={list} session={sessionUserName} isFirst isPinned={firstPost.pinned} />
+              </div>
+              {restPosts.map((post: any) => {
+                return (
+                  <>
+                    <PostCard post={post} author={post.author} list={list} session={sessionUserName} isPinned={post.pinned} />
+                  </>
+                );
+              })}
             </div>
-            {restPosts.map((post: any) => {
-              return (
-                <>
-                  <PostCard post={post} author={post.author} list={list} session={sessionUserName} isPinned={post.pinned} />
-                </>
-              );
-            })}
-          </div>
+            <Button variant="outline" className="w-full md:w-max mt-10" size="lg" asChild>
+              <Link href={`/@${user.username}/posts`}>See all posts</Link>
+            </Button>
+          </>
         ) : (
           <EmptyPlaceholder>
             <EmptyPlaceholder.Icon name="post" />
@@ -216,9 +221,6 @@ export default async function Page({
           </EmptyPlaceholder>
         )
       }
-      <Button variant="outline" className="w-full md:w-max mt-10" size="lg" asChild>
-        <Link href={`/@${user.username}/posts`}>See all posts</Link>
-      </Button>
       <Separator className="my-10" />
       <SuggestedUsers users={whoToFollow} session={sessionUserName} />
     </>
