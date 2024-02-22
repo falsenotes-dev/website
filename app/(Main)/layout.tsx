@@ -9,7 +9,7 @@ import { getNotifications, getSearchHistory } from '@/lib/prisma/session';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'FalseNotes - Where Creativity Takes Flight',
+  title: 'FalseNotes - Explore the Creative Horizon',
 }
 
 export default async function MainLayout({
