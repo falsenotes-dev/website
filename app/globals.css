@@ -671,3 +671,40 @@
   background-size: cover;
   background-position: center;
 }
+
+.stack-stack {
+  display: flex;
+  flex-direction: var(--stack-direction, column);
+  align-items: var(--stack-align, stretch);
+  justify-content: var(--stack-justify, flex-start);
+  flex: var(--stack-flex, initial);
+  gap: var(--stack-gap, 0);
+}
+
+@media screen and (max-width: 1024px) {
+  .stack-stack {
+    @apply gap-4;
+  }
+
+}
+
+@media screen and (min-width: 1201px) {
+  .stack-stack {
+    --stack-direction: var(--xl-stack-direction, var(--lg-stack-direction, var(--md-stack-direction, var(--sm-stack-direction))));
+    --stack-align: var(--xl-stack-align, var(--lg-stack-align, var(--md-stack-align, var(--sm-stack-align))));
+    --stack-justify: var(--xl-stack-justify, var(--lg-stack-justify, var(--md-stack-justify, var(--sm-stack-justify))));
+    --stack-padding: var(--xl-stack-padding, var(--lg-stack-padding, var(--md-stack-padding, var(--sm-stack-padding))));
+    --stack-gap: var(--xl-stack-gap, var(--lg-stack-gap, var(--md-stack-gap, var(--sm-stack-gap))));
+  }
+}
+
+.hero_heading {
+  font-size: clamp(24px, 3.5vw, 40px);
+  margin: 0;
+  color: var(--primary-foreground);
+  text-align: center;
+  font-weight: 500;
+  line-height: 120%;
+  letter-spacing: clamp(-2.4px, calc(-1px - .1vw), -.96px);
+  text-wrap: pretty;
+}

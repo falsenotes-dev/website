@@ -38,6 +38,16 @@ export default async function Home() {
     getPosts({ limit: 6 })
   ]);
 
+  const latestUpdate = await db.post.findFirst({
+    where: {
+      authorId: "clpuubtq40000vtmjxi1ire73",
+      published: true
+    },
+    orderBy: {
+      publishedAt: "desc"
+    }
+  });
+
   //latest post of the day
   const { posts: popular } = popularPosts;
   const topData = await fetchUsers({ limit: 10 })
@@ -65,6 +75,7 @@ export default async function Home() {
         popular={popular}
         topUsers={topUsers}
         stats={stats}
+        latestUpdate={latestUpdate}
       />
       <SiteFooter />
     </>
