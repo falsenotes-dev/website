@@ -56,31 +56,44 @@ export default function MoreFromAuthor({ author: initialAuthor, post: initialPos
                <div className="max-w-[680px] lg:text-xl mx-auto">
                     <div className="author__details flex flex-col gap-y-4">
                          <div className="mx-2 md:mx-6">
-                              <div className="flex items-baseline mb-4">
-                                   <UserHoverCard user={author}>
-                                        <Link href={`/@${author?.username}`}>
-                                             <Avatar className="article__author-avatar border h-20 w-20">
-                                                  <AvatarImage src={author?.image} alt={author?.username} />
-                                                  <AvatarFallback>
-                                                       {author?.username.charAt(0)}
-                                                  </AvatarFallback>
-                                             </Avatar>
-                                        </Link>
-                                   </UserHoverCard>
-                                   {
-                                        publication && (
-                                             <UserHoverCard user={publication} className="-ml-4">
-                                                  <Link href={`/@${publication.username}`}>
-                                                       <Avatar className="article__author-avatar border-2 !border-background h-9 w-9">
-                                                            <AvatarImage src={publication.image} alt={publication.username} />
-                                                            <AvatarFallback>
-                                                                 {publication.username.charAt(0)}
-                                                            </AvatarFallback>
-                                                       </Avatar>
-                                                  </Link>
-                                             </UserHoverCard>
-                                        )
-                                   }
+                              <div className="flex justify-between items-end mb-4">
+                                   <div className="flex items-baseline">
+                                        <UserHoverCard user={author}>
+                                             <Link href={`/@${author?.username}`}>
+                                                  <Avatar className="article__author-avatar border h-20 w-20">
+                                                       <AvatarImage src={author?.image} alt={author?.username} />
+                                                       <AvatarFallback>
+                                                            {author?.username.charAt(0)}
+                                                       </AvatarFallback>
+                                                  </Avatar>
+                                             </Link>
+                                        </UserHoverCard>
+                                        {
+                                             publication && (
+                                                  <UserHoverCard user={publication} className="-ml-4">
+                                                       <Link href={`/@${publication.username}`}>
+                                                            <Avatar className="article__author-avatar border-2 !border-background h-9 w-9">
+                                                                 <AvatarImage src={publication.image} alt={publication.username} />
+                                                                 <AvatarFallback>
+                                                                      {publication.username.charAt(0)}
+                                                                 </AvatarFallback>
+                                                            </Avatar>
+                                                       </Link>
+                                                  </UserHoverCard>
+                                             )
+                                        }
+                                   </div>
+                                   <div className="flex md:hidden">
+                                        {sessionUser?.id !== author?.id && (
+                                             status === "authenticated" ? (
+                                                  <Button size={'lg'} onClick={() => handleFollow(author.id)} variant={isFollowing ? 'outline' : 'default'} disabled={isFollowingLoading}>{isFollowing ? "Following" : "Follow"}</Button>
+                                             ) : (
+                                                  <LoginDialog>
+                                                       <Button size={'lg'} >Follow</Button>
+                                                  </LoginDialog>
+                                             ))
+                                        }
+                                   </div>
                               </div>
                               <div className="flex justify-between">
                                    <div className="gap-y-2">
@@ -105,13 +118,13 @@ export default function MoreFromAuthor({ author: initialAuthor, post: initialPos
                                         </div>
                                         {author?.bio && (<div className="text-sm font-normal mt-4">{author?.bio}</div>)}
                                    </div>
-                                   <div>
+                                   <div className="hidden md:flex">
                                         {sessionUser?.id !== author?.id && (
                                              status === "authenticated" ? (
-                                                  <Button onClick={() => handleFollow(author.id)} variant={isFollowing ? 'outline' : 'default'} disabled={isFollowingLoading}>{isFollowing ? "Following" : "Follow"}</Button>
+                                                  <Button size={'lg'} onClick={() => handleFollow(author.id)} variant={isFollowing ? 'outline' : 'default'} disabled={isFollowingLoading}>{isFollowing ? "Following" : "Follow"}</Button>
                                              ) : (
                                                   <LoginDialog>
-                                                       <Button >Follow</Button>
+                                                       <Button size={'lg'} >Follow</Button>
                                                   </LoginDialog>
                                              ))
                                         }
