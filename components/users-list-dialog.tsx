@@ -41,7 +41,7 @@ export default function UserListsDialog({ children, className, trigger, title, d
                          <DialogTrigger asChild>
                               {trigger}
                          </DialogTrigger>
-                         <DialogContent className="md:w-1/2 h-1/2 pb-0">
+                         <DialogContent className="md:w-1/2 max-h-[50%] pb-0">
                               <DialogHeader>
                                    {title && <DialogTitle>{title}</DialogTitle>}
                                    {desc && <DialogDescription>{desc}</DialogDescription>}
