@@ -32,12 +32,12 @@ export default function NotFound() {
       <div className="flex flex-col items-center justify-center gap-6 z-10">
         <Icons.errorLogo className="-mt-[90px]" />
         <h2 className="font-bold text-5xl">404</h2>
-        <p className="text-muted-foreground font-light text-center">
+        <p className="text-muted-foreground font-light text-center max-w-md">
           <Balancer>
             Sorry 😔 — we couldn&apos;t find what you were looking for. If you think this is a mistake, please <Link href={`mailto:supp@falsenotes.dev?subject=Error%20404:%20https://${process.env.NEXT_PUBLIC_ENV === "beta" ? 'beta.' : ''}falsenotes.dev${pathname}`} className={cn(buttonVariants({ variant: 'link' }), "underline font-light px-0 text-base")}>contact us</Link>.
           </Balancer>
         </p>
-        <Button size={"lg"} asChild>
+        <Button size={"lg"} className="rounded-full" asChild>
           <Link href="/">
             Go back home
           </Link>
