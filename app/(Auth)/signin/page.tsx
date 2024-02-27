@@ -96,7 +96,7 @@ export default async function SigninPage({
                     <div className="rounded-full opacity-100 absolute overflow-visible inset-0">
                       <div className="absolute inset-0">
                         <Image
-                          src="/assets/TpLrCpid6UuGjOkmgtZL4.webp"
+                          src="/assets/5aGUyCW_PJw.jpg"
                           layout="fill"
                           objectFit="cover"
                           objectPosition="center"

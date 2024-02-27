@@ -67,7 +67,7 @@ export default function Header({ user, session, followers }: { user: any; sessio
      return (
           <div className="relative flex-[0_0_auto] h-[424px] max-w-[1140px] min-w-[280px] w-full overflow-visible">
                {
-                    <div className="rounded-3xl xl:bottom-[174px] bottom-[212px] lg:bottom-0 lg:h-[59%] flex-[0_0_auto] left-0 overflow-visible absolute top-0 w-full">
+                    <div className="rounded-3xl xl:bottom-[174px] bottom-[212px] bg-secondary lg:bottom-0 lg:h-[59%] flex-[0_0_auto] left-0 overflow-visible absolute top-0 w-full">
                          <div className="absolute inset-0">
                               {
                                    user.cover ? (
