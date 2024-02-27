@@ -11,6 +11,7 @@ import { getSettings } from '@/lib/prisma/session'
 import { GeistSans } from "geist/font";
 import { siteConfig } from '@/config/site'
 import Script from 'next/script'
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -87,6 +88,7 @@ export default async function Rootayout({
                 gtag('config', '${process.env.GOOGLE_ANALYTICS}');
               `}
             </Script>
+            <Analytics />
             <TailwindIndicator />
           </AuthProvider>
         </ThemeProviders>
