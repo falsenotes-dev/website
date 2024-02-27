@@ -50,7 +50,7 @@
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "@types/react-syntax-highlighter": "^15.5.9",
-    "@vercel/analytics": "^1.0.2",
+    "@vercel/analytics": "^1.2.2",
     "@vercel/blob": "^0.16.1",
     "@vercel/og": "^0.5.14",
     "autoprefixer": "10.4.15",
