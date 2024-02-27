@@ -70,7 +70,7 @@ export default function CommentCard({
   const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false);
   const [isLiked, setIsLiked] = React.useState<boolean>(false);
   React.useEffect(() => {
-    setIsLiked(comment?.likes?.some((like: any) => like.userId === session?.id));
+    setIsLiked(comment?.likes?.some((like: any) => like.authorId === session?.id));
   }, [comment, session]);
   const [isReplying, setIsReplying] = React.useState<boolean>(false);
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
