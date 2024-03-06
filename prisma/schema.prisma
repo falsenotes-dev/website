@@ -23,6 +23,7 @@ model User {
   githubprofile     String?
   location          String?
   verified          Boolean             @default(false)
+  verifiedAt        DateTime?           @map("verified_at")
   falsemember       Boolean             @default(false)
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
