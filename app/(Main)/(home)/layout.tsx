@@ -63,14 +63,14 @@ export default async function HomeLayout({
                <div className="md:container mx-auto md:mb-0 mb-20">
                     <main className="flex flex-col items-center justify-between feed xl:px-4">
                          <div className="md:flex lg:flex-nowrap flex-wrap justify-center w-full xl:gap-8 md:pt-8">
-                              <div className="w-full lg:w-2/3">
+                              <div className="w-full">
                                    {children}
                               </div>
-                              <div className="hidden xl:block xl:w-1/3 min-h-screen">
+                              {/* <div className="hidden xl:block xl:w-1/3 min-h-screen">
                                    <div className="sticky flex flex-col gap-4 top-[100px]">
                                         {sidebar}
                                    </div>
-                              </div>
+                              </div> */}
                          </div>
                     </main>
                </div>

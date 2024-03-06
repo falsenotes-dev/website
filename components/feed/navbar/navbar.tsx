@@ -30,7 +30,7 @@ export default function FeedTabs({ activeTab = 'foryou', children }: { activeTab
                          } className="py-3 rounded-lg" value="foryou">For You</TabsTrigger>
                          <TabsTrigger onClick={
                               async () => {
-                                   router.replace('/feed?tab=following')
+                                   router.replace('/following')
                               }
                          } className="py-3 rounded-lg" value="following">Following</TabsTrigger>
                     </TabsList>
@@ -39,7 +39,7 @@ export default function FeedTabs({ activeTab = 'foryou', children }: { activeTab
                <Button variant={'secondary'} onClick={
                     async () => {
                          if (tab == 'foryou') {
-                              router.replace('/feed?tab=following')
+                              router.replace('/following')
                          } else {
                               router.replace('/feed')
                          }

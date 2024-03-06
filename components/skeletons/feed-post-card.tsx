@@ -6,34 +6,39 @@ export default function PostCardSkeleton(
   { className, ...props }: React.ComponentPropsWithoutRef<typeof Card> & { className?: string; }
 ) {
   return (
-    <Card {...props} className={cn("feedArticleCard bg-background max-h-72 w-full my-4", className
-    )}>
-      <CardContent className="py-0 px-4">
-        <CardHeader className={cn("pt-4 pb-3 md:pt-6 px-0 gap-y-4")}>
-          <div className="flex items-center space-x-1">
-            <Skeleton className="h-6 w-6 mr-1 md:mr-1.5" />
-            <Skeleton className="w-32 h-3" />
-          </div>
-        </CardHeader>
-        <div className="flex justify-between">
-          <div className='w-full'>
-            <div>
-              <div className="pb-3 space-y-2">
-                <Skeleton className='w-full h-4' />
-                <Skeleton className='w-full h-4 md:hidden' />
-              </div>
-              <div className="space-y-2 hidden md:block">
-                <Skeleton className='w-full h-4' />
-                <Skeleton className='w-full h-4' />
-              </div>
-            </div>
-            <div className="py-8">
-              <div className="flex justify-between">
-                <Skeleton className='w-20 h-3' />
-              </div>
+    <Card {...props} className={cn('rounded-lg feedArticleCard bg-transparent', className)}>
+      <CardContent className="md:p-6 p-4 h-full">
+        <div className="flex flex-col grid-cols-12 gap-y-8 items-start h-full pb-6">
+          <div className="w-full">
+            <div className="w-full h-auto bg-muted !relative !pb-0 aspect-[3/2] rounded-lg" >
+              <Skeleton className="w-full h-full rounded-lg" />
             </div>
           </div>
-          <Skeleton className="h-14 md:h-28 aspect-[4/3] rounded-md md:aspect-square ml-6 md:ml-8" />
+          <div className="col-span-12 flex flex-col justify-between space-y-4 h-full w-full">
+            <div className="flex items-center gap-1.5">
+              <Skeleton className="w-5 h-5 rounded-full" />
+              <Skeleton className="w-40 h-5" />
+            </div>
+            <div className="flex">
+              <div className="flex-initial w-full">
+                <div>
+                  <div className="mb-6 space-y-2">
+                    <Skeleton className="w-full h-6" />
+                    <Skeleton className="w-full h-6" />
+                  </div>
+                  <div className="post-subtitle hidden md:block space-y-2">
+                    <Skeleton className="w-full h-5" />
+                    <Skeleton className="w-full h-5" />
+                    <Skeleton className="w-full h-5" />
+                    <Skeleton className="w-full h-5" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="">
+              <Skeleton className="w-24 h-5" />
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
