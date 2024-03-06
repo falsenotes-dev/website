@@ -73,7 +73,7 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }
   return safeFeed.length > 0 ? (
     <div className="feed__list mb-14">
 
-      <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 grid-flow-row gap-6 lg:gap-8 auto-rows-auto'>
+      <div className='grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 grid-flow-row gap-6 lg:gap-8 auto-rows-auto'>
         <div className="flex flex-col gap-8">
           {firstCol.map((post: any, index) => (
             <React.Fragment key={post.id}>
