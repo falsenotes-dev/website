@@ -123,6 +123,12 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }
           ))}
         </div>
       </div>
+      {
+        safeFeed.length > 0 && safeFeed.length % 10 === 0 && (
+          <div className="feed__list_loadmore !py-0 h-max" ref={ref}>
+          </div>
+        )
+      }
     </div>
   ) :
     (
