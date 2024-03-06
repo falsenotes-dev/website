@@ -152,18 +152,21 @@ export default function FeedPostCard(
             </div>
             <div className="">
               <div className="flex justify-between items-center w-full">
-                {
-                  props.post.tags?.length > 0 && (
-                    <Link href={`/tags/${props.post.tags[0].tag?.name}`} key={props.post.tags[0].tag?.id}>
-                      <TagBadge variant={"secondary"} className="flex">
-                        {
-                          props.post.tags[0].tag?.name.replace(/-/g, " ")
-                        }
-                      </TagBadge>
-                    </Link>
-                  )
-                }
                 <div className="flex items-center space-x-1.5 text-muted-foreground text-sm">
+                  {
+                    props.post.tags?.length > 0 && (
+                      <>
+                        <Link href={`/tags/${props.post.tags[0].tag?.name}`} key={props.post.tags[0].tag?.id}>
+                          <TagBadge variant={"secondary"} className="flex">
+                            {
+                              props.post.tags[0].tag?.name.replace(/-/g, " ")
+                            }
+                          </TagBadge>
+                        </Link>
+                        <span>·</span>
+                      </>
+                    )
+                  }
                   <span>{props.post.readingTime}</span>
                   <span>·</span>
                   <span>{dateFormat(props.post.publishedAt)}</span>
