@@ -7,7 +7,7 @@ export default function PostCardSkeleton(
 ) {
   return (
     <Card {...props} className={cn('rounded-lg feedArticleCard bg-transparent', className)}>
-      <CardContent className="md:p-6 p-4 h-full">
+      <CardContent className="md:p-6 p-4 h-full w-full">
         <div className="flex flex-col grid-cols-12 gap-y-8 items-start h-full pb-6">
           <div className="w-full">
             <div className="w-full h-auto bg-muted !relative !pb-0 aspect-[3/2] rounded-lg" >
