@@ -140,7 +140,14 @@ export async function getPostData(username: string, url: string, author: User) {
             },
           },
           savedUsers: true,
-          _count: { select: { savedUsers: true, likes: true, comments: true } },
+          _count: {
+            select: {
+              savedUsers: true,
+              likes: true,
+              comments: true,
+              lists: true,
+            },
+          },
         },
       });
 
@@ -195,7 +202,12 @@ export async function getPostData(username: string, url: string, author: User) {
             },
             savedUsers: true,
             _count: {
-              select: { savedUsers: true, likes: true, comments: true },
+              select: {
+                savedUsers: true,
+                likes: true,
+                comments: true,
+                lists: true,
+              },
             },
           },
         });

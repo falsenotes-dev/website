@@ -197,6 +197,7 @@ const baseQuery = {
       select: {
         likes: true,
         savedUsers: true,
+        lists: true,
         readedUsers: true,
         shares: true,
         comments: true,

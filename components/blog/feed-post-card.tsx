@@ -59,44 +59,25 @@ export default function FeedPostCard(
       );
     setIsSaved(checkIsSaved);
   }, [props.list?.lists, props.list?.bookmarks, props.post.id]);
+  console.log(props.post._count.savedUsers + props.list.lists)
   return (
     <Card
       {...props}
       className={cn(
-        "rounded-lg feedArticleCard bg-transparent md:mb-14",
+        "feedArticleCard hover:shadow-xl transition-all md:mb-14",
         props.className
       )}
     >
       <CardContent className="md:p-6 p-4 h-full">
-        <div className="flex flex-col grid-cols-12 gap-8 items-start h-full">
-          {props.post.cover && (<div className="w-full">
-            <Link href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`}>
-              <div className="w-full h-fit bg-muted rounded-md !relative !pb-0 aspect-[3/2] overflow-hidden">
-
-                <>
-                  <Image
-                    src={props.post.cover}
-                    fill
-                    alt={props.post.title}
-                    placeholder={`data:image/svg+xml;base64,${toBase64(
-                      shimmer(1920, 1080)
-                    )}`}
-                    className="object-cover max-w-full h-auto z-[1] rounded-md"
-                  />
-                  <Skeleton className="w-full h-full rounded-md" />
-                </>
-
-              </div>
-            </Link>
-          </div>)}
-          <div className="col-span-12 flex flex-col justify-between space-y-6 h-full w-full">
+        <div className="flex flex-col grid-cols-12 gap-4 items-start h-full">
+          <div className="flex justify-between w-full items-center">
             <div className="flex items-center space-x-1">
               <UserHoverCard user={props.post.author}>
                 <Link
                   href={`/@${props.post.author?.username}`}
                   className="flex items-center space-x-0.5"
                 >
-                  <Avatar className="h-5 w-5 mr-0.5 border">
+                  <Avatar className="h-8 w-8 mr-0.5 border">
                     <AvatarImage
                       src={props.post.author?.image}
                       alt={props.post.author?.username}
@@ -106,11 +87,11 @@ export default function FeedPostCard(
                         props.post.author?.username?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  <p className="text-sm font-normal leading-none">
+                  <p className="text-base font-normal leading-none">
                     {props.post.author?.name || props.post.author?.username}
                   </p>
                   {props.post.author?.verified && (
-                    <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
+                    <Icons.verified className="h-4 w-4 inline fill-verified align-middle" />
                   )}
                 </Link>
               </UserHoverCard>
@@ -130,19 +111,54 @@ export default function FeedPostCard(
                 )
               }
             </div>
+            <div className="flex gap-1 items-center">
+              <span className="text-muted-foreground text-sm">{dateFormat(props.post.publishedAt)}</span>
+              {/* <div className="flex items-center space-x-1 text-muted-foreground">
+                <PostMoreActions post={props.post} session={props.session}>
+                  <Button
+                    variant="ghost"
+                    size={"icon"}
+                    className="text-muted-foreground"
+                  >
+                    <Icons.moreHorizontal className="h-5 w-5" />
+                    <span className="sr-only">More</span>
+                  </Button>
+                </PostMoreActions>
+              </div> */}
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-lg md:text-xl font-bold line-clamp-3">
+              {props.post.title}
+            </h2>
+            {props.post.cover && (<div className="w-full">
+              <Link href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`}>
+                <>
+                  <Image
+                    src={props.post.cover}
+                    width={1920}
+                    height={1080}
+                    alt={props.post.title}
+                    placeholder={`data:image/svg+xml;base64,${toBase64(
+                      shimmer(1920, 1080)
+                    )}`}
+                    className="object-cover max-w-full h-auto z-[1] rounded-md hover:scale-100"
+                  />
+                  {/* <Skeleton className="w-full h-full rounded-md" /> */}
+                </>
+              </Link>
+            </div>)}
+          </div>
+          <div className="col-span-12 flex flex-col justify-between space-y-6 h-full w-full">
             <div className="flex">
               <div className="flex-initial w-full">
                 <Link
                   href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`}
                 >
                   <div className="flex flex-col gap-2">
-                    <div className="pb-2">
-                      <h2 className="text-base md:text-xl font-bold line-clamp-3">
-                        {props.post.title}
-                      </h2>
-                    </div>
+
                     <div className="post-subtitle hidden md:block">
-                      <p className="text-ellipsis text-base line-clamp-6 text-muted-foreground">
+                      <p className="text-ellipsis text-base leading-6">
                         {props.post.subtitle}
                       </p>
                     </div>
@@ -168,20 +184,18 @@ export default function FeedPostCard(
                     )
                   }
                   <span>{props.post.readingTime}</span>
-                  <span>·</span>
-                  <span>{dateFormat(props.post.publishedAt)}</span>
                 </div>
               </div>
             </div>
             <div className="">
-              <div className="flex justify-between items-center">
-                <div className="flex flex-1 items-center space-x-2.5">
-                  <div className="flex items-center space-x-1 text-muted-foreground">
+              <div className="flex justify-between items-center w-full">
+                <div className="flex items-center gap-6 mx-auto justify-between px-4">
+                  <div className="flex items-center space-x-1 flex-1 text-muted-foreground">
                     {props.session ? (
                       <Button
                         variant="ghost"
                         size={"icon"}
-                        className="h-8 w-8 text-muted-foreground"
+                        className="h-9 w-9 text-muted-foreground"
                         onClick={() => like(props.post.id)}
                         disabled={
                           props.session.id === props.post.author.id ||
@@ -200,7 +214,7 @@ export default function FeedPostCard(
                         <Button
                           variant="ghost"
                           size={"icon"}
-                          className="h-8 w-8 text-muted-foreground"
+                          className="h-9 w-9 text-muted-foreground"
                         >
                           <Icons.like className={`w-5 h-5`} />
                           <span className="sr-only">Like</span>
@@ -213,14 +227,14 @@ export default function FeedPostCard(
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center space-x-1 text-muted-foreground">
+                  <div className="flex items-center space-x-1 flex-1 text-muted-foreground">
                     <Link
                       href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}?commentsOpen=true`}
                     >
                       <Button
                         variant="ghost"
                         size={"icon"}
-                        className="h-8 w-8 text-muted-foreground"
+                        className="h-9 w-9 text-muted-foreground"
                         disabled={
                           props.post.allowComments == null
                             ? false
@@ -237,35 +251,32 @@ export default function FeedPostCard(
                       </span>
                     )}
                   </div>
-                </div>
-                <div className="flex items-center justify-around gap-2">
-                  {props.post.published &&
-                    (props.session?.id === props.post.authorId || props.session?.id === props.post.publicationId) && (
-                      <div className="flex items-center space-x-1">
-                        <PostAnalyticsDialog post={props.post} />
-                      </div>
-                    )}
-                  <div className="flex items-center space-x-1 text-muted-foreground">
+                  <div className="flex items-center space-x-1 flex-1 text-muted-foreground">
                     {props.session ? (
-                      <ListPopover
-                        lists={props.list.lists}
-                        session={props.session}
-                        postId={props.post.id}
-                        bookmarks={props.list.bookmarks}
-                      >
-                        <Button
-                          variant="ghost"
-                          size={"icon"}
-                          className="text-muted-foreground"
+                      <>
+                        <ListPopover
+                          lists={props.list.lists}
+                          session={props.session}
+                          postId={props.post.id}
+                          bookmarks={props.list.bookmarks}
                         >
-                          {isSaved ? (
-                            <Icons.bookmarkFill className="h-5 w-5" />
-                          ) : (
-                            <Icons.bookmark className="h-5 w-5" />
-                          )}
-                          <span className="sr-only">Save</span>
-                        </Button>
-                      </ListPopover>
+                          <Button
+                            variant="ghost"
+                            size={"icon"}
+                            className="text-muted-foreground"
+                          >
+                            {isSaved ? (
+                              <Icons.bookmarkFill className="h-5 w-5" />
+                            ) : (
+                              <Icons.bookmark className="h-5 w-5" />
+                            )}
+                            <span className="sr-only">Save</span>
+                          </Button>
+                        </ListPopover>
+                        <span className="text-sm">
+                          {formatNumberWithSuffix(props.post._count.savedUsers + props.post._count.lists)}
+                        </span>
+                      </>
                     ) : (
                       <LoginDialog>
                         <Button
@@ -278,18 +289,6 @@ export default function FeedPostCard(
                         </Button>
                       </LoginDialog>
                     )}
-                  </div>
-                  <div className="flex items-center space-x-1 text-muted-foreground">
-                    <PostMoreActions post={props.post} session={props.session}>
-                      <Button
-                        variant="ghost"
-                        size={"icon"}
-                        className="text-muted-foreground"
-                      >
-                        <Icons.moreHorizontal className="h-5 w-5" />
-                        <span className="sr-only">More</span>
-                      </Button>
-                    </PostMoreActions>
                   </div>
                 </div>
               </div>
