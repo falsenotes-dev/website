@@ -18,6 +18,12 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: `api.producthunt.com`,
+        port: "",
+        pathname: `/**`,
+      },
+      {
+        protocol: "https",
         hostname: `falsenotescontent.blob.core.windows.net`,
         port: "",
         pathname: `/**`,

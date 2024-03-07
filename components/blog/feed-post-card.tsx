@@ -59,7 +59,6 @@ export default function FeedPostCard(
       );
     setIsSaved(checkIsSaved);
   }, [props.list?.lists, props.list?.bookmarks, props.post.id]);
-  console.log(props.post._count.savedUsers + props.list.lists)
   return (
     <Card
       {...props}
@@ -142,7 +141,7 @@ export default function FeedPostCard(
                     placeholder={`data:image/svg+xml;base64,${toBase64(
                       shimmer(1920, 1080)
                     )}`}
-                    className="object-cover max-w-full h-auto z-[1] rounded-md hover:scale-100"
+                    className="object-cover max-w-full h-auto z-[1] rounded-md"
                   />
                   {/* <Skeleton className="w-full h-full rounded-md" /> */}
                 </>

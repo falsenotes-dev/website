@@ -14,6 +14,10 @@ export default function PostCardSkeleton(
               <Skeleton className="w-5 h-5 rounded-full" />
               <Skeleton className="w-40 h-5" />
             </div>
+            <div className="mb-6 space-y-2">
+              <Skeleton className="w-full h-6" />
+              <Skeleton className="w-full h-6" />
+            </div>
             <div className="w-full">
               <div className="w-full h-auto bg-muted !relative !pb-0 aspect-[3/2] rounded-lg" >
                 <Skeleton className="w-full h-full rounded-md" />
@@ -21,17 +25,12 @@ export default function PostCardSkeleton(
             </div>
             <div className="flex">
               <div className="flex-initial w-full">
-                <div>
-                  <div className="mb-6 space-y-2">
-                    <Skeleton className="w-full h-6" />
-                    <Skeleton className="w-full h-6" />
-                  </div>
-                  <div className="post-subtitle hidden md:block space-y-2">
-                    <Skeleton className="w-full h-5" />
-                    <Skeleton className="w-full h-5" />
-                    <Skeleton className="w-full h-5" />
-                    <Skeleton className="w-full h-5" />
-                  </div>
+                <div>                  <div className="post-subtitle hidden md:block space-y-2">
+                  <Skeleton className="w-full h-5" />
+                  <Skeleton className="w-full h-5" />
+                  <Skeleton className="w-full h-5" />
+                  <Skeleton className="w-full h-5" />
+                </div>
                 </div>
               </div>
             </div>
