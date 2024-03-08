@@ -4,6 +4,9 @@ import { getSessionUser } from '@/components/get-session-user';
 import FeedTabs from '@/components/feed/navbar/navbar';
 import { redirect } from 'next/navigation';
 import { getLists } from '@/lib/prisma/session';
+import { fetchUsers } from '@/components/feed/fetch-user';
+import { fetchTags } from '@/components/feed/get-tags';
+import { getPopularPostsOfTheMonth, getPopularPostsOfTheWeek } from '@/lib/prisma/posts';
 
 export default async function Feed({
   searchParams
@@ -22,12 +25,17 @@ export default async function Feed({
     return redirect('/')
   }
   const userLists = await getLists({ id: session?.id });
+  const topData = await fetchUsers({ id: session.id })
+  const topUsers = topData?.users;
+  const popularTags = await fetchTags();
+  const popularPostsOfTheWeek = await getPopularPostsOfTheWeek({ limit: 3 });
+  const { posts } = popularPostsOfTheWeek.posts.length < 3 ? await getPopularPostsOfTheMonth({ limit: 3 }) : popularPostsOfTheWeek;
 
   return (
     <>
       <FeedTabs activeTab={tab} />
       <div className="px-4">
-        <InfinitiveScrollFeed initialFeed={feed} tag={tab} session={session} list={userLists} />
+        <InfinitiveScrollFeed initialFeed={feed} tag={tab} session={session} list={userLists} popularTags={popularTags} topUsers={topUsers} trending={posts} />
       </div>
     </>
   )

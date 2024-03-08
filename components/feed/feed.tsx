@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer'
 import { Skeleton } from "../ui/skeleton";
 import FeedPostCard from "../blog/feed-post-card";
 import { fetchFeed } from './get-feed';
-import { Card, CardContent, CardHeader } from '../ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { cn } from '@/lib/utils';
 import { Separator } from '@radix-ui/react-context-menu';
 import { EmptyPlaceholder } from '../empty-placeholder';
@@ -14,8 +14,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import TagPostCard from '../tags/post-card';
 import useWindowDimensions from '../window-dimensions';
+import PopularPosts from './popular-posts';
+import FeaturedDev from './featured/featured-dev';
+import TagBadge from '../tags/tag';
+import { shuffle } from 'lodash';
 
-export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }: { initialFeed: any | undefined, tag: string | undefined, session: any, list: any }) {
+export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
+  topUsers, popularTags, trending: trendingPosts }: { initialFeed: any | undefined, tag: string | undefined, session: any, list: any, topUsers: any, popularTags: any, trending: any }) {
   const [feed, setFeed] = useState<Array<any>>(initialFeed)
   const [page, setPage] = useState<number>(0)
   const [ref, inView] = useInView()
@@ -62,9 +67,33 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }
   const [secondCol, setSecondCol] = useState<any[]>([])
   const [thirdCol, setThirdCol] = useState<any[]>([])
 
+  const posts = (<PopularPosts key="popularPosts" posts={trendingPosts} />);
+  const users = (<FeaturedDev data={topUsers} key="featuredDev" />);
+  const tags = (<Card key="popularTagsCard" className="feed__content_featured_card bg-background">
+    <CardHeader className="p-4">
+      <CardTitle className="feed__content_featured_card_title text-base">Popular tags</CardTitle>
+    </CardHeader>
+    <CardContent className="px-4">
+      <div className="w-full flex-wrap pb-4">
+        {popularTags?.map((tag: any) => (
+          <Link href={`/tags/${tag.name}`} key={tag.id}>
+            <TagBadge className="my-1 mr-1" variant={"secondary"}>{tag.name}</TagBadge>
+          </Link>
+        ))}
+      </div>
+      <Link href={`/tags`} className="text-xs flex items-center font-medium">
+        See more tags
+      </Link>
+    </CardContent>
+  </Card>)
+
+  const trending = [
+    posts,
+    tags,
+    users
+  ]
 
   useEffect(() => {
-    console.log(feed.length, cols);
     setFirstCol(feed.filter((_, index) => index % cols === 0))
     setSecondCol(feed.filter((_, index) => index % cols === 1))
     setThirdCol(feed.filter((_, index) => index % cols === 2))
@@ -75,7 +104,6 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }
   }, [firstCol, secondCol, thirdCol])
 
   function addEmptyPost() {
-    console.log(firstCol.length, secondCol.length, thirdCol.length)
     if (firstCol.length > secondCol.length) {
       for (let i = 0; i < firstCol.length - secondCol.length; i++) {
         setSecondCol(prev => [...prev, {}])
@@ -86,61 +114,40 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list }
         setThirdCol(prev => [...prev, {}])
       }
     }
-    console.log(firstCol.length, secondCol.length, thirdCol.length)
   }
+
+  const colsContent = [firstCol, secondCol, thirdCol].slice(0, cols)
+
+  const [trendingOrder, setTrendingOrder] = useState<number[]>(shuffle([0, 1, 2]))
 
   return safeFeed.length > 0 ? (
     <div className="feed__list mb-14 flex flex-col gap-6 lg:gap-8">
-
       <div className='grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 grid-flow-row gap-6 lg:gap-8 auto-rows-auto'>
-        <div className="flex-col gap-8 hidden md:flex">
-          {firstCol.map((post: any, index) => (
-            <React.Fragment key={post.id}>
-              <FeedPostCard
-                post={post}
-                session={session}
-                list={list}
-                className='md:mb-0'
-              />
-            </React.Fragment>
-          ))}
-        </div>
-        <div className="hidden md:flex flex-col gap-8">
-          {secondCol.map((post: any, index) => (
-            post.id ? (
-              <React.Fragment key={post.id}>
-                <FeedPostCard
-                  post={post}
-                  session={session}
-                  list={list}
-                  className='md:mb-0'
-                />
-              </React.Fragment>
-            ) : (
-              <div className="feed__list_loadmore !py-0 h-max" ref={ref} key={index}>
-                <PostCardSkeleton className="rounded-lg bg-backgreound w-full mt-0" />
-              </div>
-            )
-          ))}
-        </div>
-        <div className="flex-col gap-8 hidden xl:flex">
-          {thirdCol.map((post: any, index) => (
-            post.id ? (
-              <React.Fragment key={post.id}>
-                <FeedPostCard
-                  post={post}
-                  session={session}
-                  list={list}
-                  className='md:mb-0'
-                />
-              </React.Fragment>
-            ) : (
-              <div className="feed__list_loadmore !py-0 h-max" ref={ref} key={index}>
-                <PostCardSkeleton className="rounded-lg bg-backgreound w-full mt-0" />
-              </div>
-            )
-          ))}
-        </div>
+        {
+          colsContent.map((col, index) => (
+            <div className="flex-col gap-8 hidden md:flex" key={index}>
+              {col.map((post: any, pIndex) => (
+                <React.Fragment key={post.id || `placeholder-${pIndex}`}>
+                  {trendingOrder[index] == pIndex && trending[trendingOrder.indexOf(index)] || null}
+                  {post.id ? (
+                    <FeedPostCard
+                      post={post}
+                      session={session}
+                      list={list}
+                      className='md:mb-0'
+                    />
+                  ) : (
+                    <div className="feed__list_loadmore !py-0 h-max" ref={ref}>
+                      <PostCardSkeleton className="rounded-lg bg-backgreound w-full mt-0" />
+                    </div>
+                  )}
+
+                </React.Fragment>
+              )
+              )}
+            </div>
+          ))
+        }
         <div className="md:hidden flex flex-col gap-8" >{
           feed.map((post: any, index) => (
 

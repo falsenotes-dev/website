@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import Link from "next/link";
 import { formatNumberWithSuffix } from "../format-numbers";
 import { Skeleton } from "../ui/skeleton";
@@ -9,6 +9,8 @@ import { Check } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Icons } from "../icon";
 import { getPopularPostsOfTheMonth, getPopularPostsOfTheWeek, getPosts } from "@/lib/prisma/posts";
+import { buttonVariants } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 const formatDate = (dateString: string | number | Date) => {
   const date = new Date(dateString)
@@ -30,9 +32,7 @@ const formatDate = (dateString: string | number | Date) => {
   return formattedDate
 }
 
-export default async function PopularPosts() {
-  const popularPostsOfTheWeek = await getPopularPostsOfTheWeek({ limit: 3 });
-  const { posts } = popularPostsOfTheWeek.posts.length < 3 ? await getPopularPostsOfTheMonth({ limit: 3 }) : popularPostsOfTheWeek;
+export default function PopularPosts({ posts }: { posts: any[] }) {
   let content = null;
 
   posts ? content = (
@@ -41,7 +41,7 @@ export default async function PopularPosts() {
         <CardHeader className="p-4">
           <CardTitle className="feed__content_featured_card_title text-base">Trending Now</CardTitle>
         </CardHeader>
-        <CardContent className="px-4 pb-4">
+        <CardContent className="px-4 pb-0">
           <ol className="flex flex-col items-start justify-between space-y-4">
             {posts.map(
               (item: any, index: number) => (
@@ -74,6 +74,11 @@ export default async function PopularPosts() {
                 </li>
               ))}
           </ol>
+          <CardFooter className="flex items-center justify-center pt-4 px-0">
+            <Link href={`/explore/posts`} className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}>
+              See more
+            </Link>
+          </CardFooter>
         </CardContent>
       </Card>
     )
