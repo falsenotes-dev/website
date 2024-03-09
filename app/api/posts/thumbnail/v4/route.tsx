@@ -48,7 +48,7 @@ export async function GET(req: Request) {
                                    <img
                                         src={cover || ""}
                                         alt=""
-                                        tw="object-cover object-center w-full h-full opacity-75"
+                                        tw="w-full h-full opacity-75"
                                         style={{ objectFit: "cover", objectPosition: "center" }}
                                    />
                               </div>
@@ -57,7 +57,7 @@ export async function GET(req: Request) {
                          <div tw="flex flex-col justify-between mt-6 w-2/3 h-full pr-10 absolute left-14 p-6 pb-0">
                               <div tw="flex flex-col">
                                    <h1
-                                        tw="line-clamp-3 text-white"
+                                        tw="text-white"
                                         style={{
                                              overflow: "hidden",
                                              textOverflow: "ellipsis",
@@ -95,7 +95,7 @@ export async function GET(req: Request) {
                                                        </svg>
                                                   )}
                                              </div>
-                                             <div tw="text-sm text-mute-foreground">
+                                             <div tw="text-sm">
                                                   {readingTime + " · " + formatDate(new Date())}
                                              </div>
                                         </div>
