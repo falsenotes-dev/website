@@ -5,6 +5,7 @@ import db from "@/lib/db";
 import Post from "@/components/blog/post";
 import { cookies } from "next/headers";
 import { getLists } from "@/lib/prisma/session";
+import { getPostData } from "@/lib/fetchers";
 
 export default async function PostView({
   params,
@@ -28,113 +29,8 @@ export default async function PostView({
     },
   });
   if (!author) return notFound();
-  let post = await db.post.findFirst({
-    where: {
-      url: params.url,
-      OR: [
-        {
-          authorId: author?.id,
-        },
-        {
-          publicationId: author?.id,
-        },
-      ],
-    },
-    include: {
-      comments: {
-        where: { parentId: null },
-        include: {
-          replies: {
-            include: {
-              _count: { select: { replies: true, likes: true } },
-            },
-          },
-          _count: { select: { replies: true, likes: true } },
-          likes: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-      likes: true,
 
-      readedUsers: true,
-      author: {
-        include: {
-          _count: {
-            select: { posts: true, Followers: true, Followings: true },
-          },
-          Followers: true,
-        },
-      },
-      tags: {
-        include: {
-          tag: true,
-        },
-      },
-      publication: {
-        include: {
-          Followers: true,
-          Followings: true,
-        },
-      },
-      savedUsers: true,
-      _count: { select: { savedUsers: true, likes: true, comments: true } },
-    },
-  });
-
-  //if post has not publicationId or publicationId is equal to authorId
-  if (post?.publicationId && decodedUsername.substring(1) === post?.author?.username) {
-    return notFound();
-  }
-
-  if (post?.publicationId === null) {
-    post = await await db.post.findFirst({
-      where: {
-        url: params.url,
-        authorId: author?.id,
-      },
-      include: {
-        comments: {
-          where: { parentId: null },
-          include: {
-            replies: {
-              include: {
-                _count: { select: { replies: true, likes: true } },
-              },
-            },
-            _count: { select: { replies: true, likes: true } },
-            likes: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        likes: true,
-
-        readedUsers: true,
-        author: {
-          include: {
-            _count: { select: { posts: true, Followers: true, Followings: true } },
-            Followers: true,
-          },
-        },
-        tags: {
-          include: {
-            tag: true,
-          },
-        },
-        publication: {
-          include: {
-            Followers: true,
-            Followings: true,
-          },
-        },
-        savedUsers: true,
-        _count: { select: { savedUsers: true, likes: true, comments: true } },
-      },
-    });
-  }
+  const post = await getPostData(decodedUsername, params.url, author);
 
   if (!post) return notFound();
 

@@ -27,6 +27,7 @@ export async function getSessionUser() {
         email: true,
         image: true,
         username: true,
+        verified: true,
         publications: {
           include: {
             publication: true,

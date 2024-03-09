@@ -2,6 +2,7 @@
 import { getSessionUser } from "@/components/get-session-user";
 import db from "../db";
 import { getFollowings } from "./session";
+import { User } from "@prisma/client";
 
 const getLikes = async ({ id }: { id: string | undefined }) => {
   const likes = await db.like.findMany({
@@ -16,7 +17,7 @@ const getLikes = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 3,
   });
 
   return { likes: likes.map((like) => like.post.id) };
@@ -35,7 +36,7 @@ const getBookmarks = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 3,
   });
 
   return { bookmarks: bookmarks.map((bookmark) => bookmark.post.id) };
@@ -54,7 +55,7 @@ const getHistory = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 3,
   });
 
   return { history: history.map((history) => history.post.id) };
@@ -74,7 +75,7 @@ const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 3,
   });
 
   return { history: historyAuthor.map((history) => history.post.id) };
@@ -90,6 +91,7 @@ const getFollowingTags = async ({ id }: { id: string | undefined }) => {
             select: {
               postId: true,
             },
+            take: 3,
           },
         },
       },
@@ -125,6 +127,7 @@ const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
             orderBy: {
               createdAt: "desc",
             },
+            take: 3,
           },
         },
       },
@@ -151,6 +154,7 @@ const getTags = async ({ id }: { id: string | undefined }) => {
             orderBy: {
               createdAt: "desc",
             },
+            take: 3,
           },
         },
       },
@@ -197,6 +201,7 @@ const baseQuery = {
       select: {
         likes: true,
         savedUsers: true,
+        lists: true,
         readedUsers: true,
         shares: true,
         comments: true,
@@ -224,19 +229,17 @@ export const getForYou = async ({
   limit?: number | undefined;
 }) => {
   const user = await getSessionUser();
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
   const { id } = user;
 
-  //get user's interests
+  // Get interests (likes, bookmarks, history, tags, followings, followingTags) in parallel
   const [
-    { likes: userLikes },
-    { bookmarks: userBookmarks },
-    { history: userHistory },
-    { postTags: userTags },
-    { followings: userFollowings },
-    { followingTags: userFollowingTags },
+    userLikes,
+    userBookmarks,
+    userHistory,
+    userTags,
+    userFollowings,
+    userFollowingTags,
   ] = await Promise.all([
     getLikes({ id }),
     getBookmarks({ id }),
@@ -247,69 +250,54 @@ export const getForYou = async ({
   ]);
 
   const interests = [
-    ...userLikes,
-    ...userBookmarks,
-    ...userHistory,
-    ...userTags,
-    ...userFollowings,
-    ...userFollowingTags,
+    ...userLikes.likes,
+    ...userBookmarks.bookmarks,
+    ...userHistory.history,
+    ...userTags.postTags,
+    ...userFollowings.followings,
+    ...userFollowingTags.followingTags,
   ];
-  // rewmove duplicates
-  const uniqueInterests = interests.filter(
-    (interest, index) => interests.indexOf(interest) === index
-  );
 
-  // Fetch the tags of the posts in parallel
-  const tags = await db.postTag.findMany({
-    where: {
-      postId: {
-        in: uniqueInterests,
-      },
-    },
-    select: {
-      tagId: true,
-    },
+  // Remove duplicates and fetch posts in one go
+  const uniqueInterests = [...new Set(interests)];
+  const posts = await fetchPostsByInterests({
+    interests: uniqueInterests,
+    userId: id,
   });
-
-  // Count the occurrences of each tag
-  const tagCounts = tags.reduce((counts, tag) => {
-    counts[tag.tagId] = (counts[tag.tagId] || 0) + 1;
-    return counts;
-  }, {} as Record<string, number>);
-
-  // Sort the tags by their count in descending order
-  const sortedTagIds = Object.entries(tagCounts)
-    .sort((a, b) => b[1] - a[1])
-    .map(([tagId]) => tagId);
-
-  const { history: historyAuthor } = await getHistoryAuthorPost({ id });
-
-  const postsByTags = await db.post.findMany({
-    where: { tags: { some: { tagId: { in: sortedTagIds } } } },
-    select: { id: true },
-  });
-
-  const postsByHistory = await db.post.findMany({
-    where: { id: { in: historyAuthor } },
-    select: { id: true },
-  });
-
-  const posts = [...postsByTags, ...postsByHistory];
-  // remove duplicates
-  const uniquePosts = posts.filter(
-    (post, index) => posts.findIndex((p) => p.id === post.id) === index
-  );
 
   return fetchFeed({
-    where: {
-      id: { in: uniquePosts.map((post) => post.id) },
-      published: true,
-      OR: [{ authorId: { not: id } }, { publicationId: { not: id } }],
-    },
+    where: { id: { in: posts }, published: true },
     ...baseQuery,
     take: Number(limit),
     skip: page * Number(limit),
   });
+};
+
+const fetchPostsByInterests = async ({
+  interests,
+  userId,
+}: {
+  interests: any[];
+  userId: User["id"];
+}) => {
+  // Combine queries to fetch posts by tags and history
+  const [postsByTags, postsByHistory] = await Promise.all([
+    db.post.findMany({
+      where: { tags: { some: { tagId: { in: interests } } } },
+      select: { id: true },
+    }),
+    db.post.findMany({
+      where: {
+        OR: [{ authorId: { not: userId } }, { publicationId: { not: userId } }],
+        id: { in: interests },
+      },
+      select: { id: true },
+    }),
+  ]);
+
+  return [
+    ...new Set([...postsByTags, ...postsByHistory].map((post) => post.id)),
+  ];
 };
 
 const fetchFeed = async (query: any) => {
@@ -362,20 +350,5 @@ export const getFeed = async ({
         },
       });
     }
-    const postTags = await db.postTag.findMany({
-      select: { postId: true },
-      where: { tag: { name: { equals: tab } }, post: { published: true } },
-    });
-    const postIds = postTags.map((postTag) => postTag.postId);
-    return fetchFeed({
-      ...baseQuery,
-      take: Number(limit),
-      skip: page * Number(limit),
-      where: {
-        id: { in: postIds },
-        published: true,
-        OR: [{ authorId: { not: id } }, { publicationId: { not: id } }],
-      },
-    });
   }
 };

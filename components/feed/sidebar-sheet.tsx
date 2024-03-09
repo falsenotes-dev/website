@@ -20,7 +20,7 @@ export default function SidebarSheet({ children, ...props }: { children: React.R
           </motion.div>
         </Button>
       </SheetTrigger>
-      <SheetContent className="hidden md:flex xl:hidden w-full max-w-xs flex-col gap-4">{children}</SheetContent>
+      <SheetContent className="hidden md:flex xl:hidden w-full max-w-xs flex-col gap-4 overflow-y-scroll">{children}</SheetContent>
     </Sheet>
   )
 }

@@ -190,7 +190,7 @@ export default function PostAnalyticsDialog({ post, className, ...props }: { pos
                                         </div>
                                         <div className="flex flex-col items-center gap-2 flex-1">
                                              <Icons.bookmark className="h-5 w-5 text-sm text-muted-foreground">Saves</Icons.bookmark>
-                                             <span className="text-2xl font-bold">{formatNumberWithSuffix(post._count.savedUsers)}</span>
+                                             <span className="text-2xl font-bold">{formatNumberWithSuffix(post._count.savedUsers + post._count.lists)}</span>
 
                                         </div>
                                         <div className="flex flex-col items-center gap-2 flex-1">

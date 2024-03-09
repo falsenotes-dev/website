@@ -12,6 +12,7 @@ import ShareList from "./share";
 import LoginDialog from "../login-dialog";
 import { useEffect, useState } from "react";
 import { validate } from "@/lib/revalidate";
+import { VerificationBadgeDialog } from "./verification-badge-dialog";
 
 export default function Header({ user, session, followers }: { user: any; session: any; followers: any; }) {
      const [isFollowing, setIsFollowing] = useState<boolean | null>(
@@ -67,7 +68,7 @@ export default function Header({ user, session, followers }: { user: any; sessio
      return (
           <div className="relative flex-[0_0_auto] h-[424px] max-w-[1140px] min-w-[280px] w-full overflow-visible">
                {
-                    <div className="rounded-3xl xl:bottom-[174px] bottom-[212px] bg-secondary lg:bottom-0 lg:h-[59%] flex-[0_0_auto] left-0 overflow-visible absolute top-0 w-full">
+                    <div className="rounded-3xl xl:bottom-[174px] bottom-[212px] bg-secondary≈ lg:bottom-0 lg:h-[59%] flex-[0_0_auto] left-0 overflow-visible absolute top-0 w-full">
                          <div className="absolute inset-0">
                               {
                                    user.cover ? (
@@ -145,12 +146,9 @@ export default function Header({ user, session, followers }: { user: any; sessio
                               <div className="flex items-center gap-1.5"><h1 className="text-3xl lg:text-4xl font-extrabold line-clamp-1">{user.name || user.username}</h1>
                                    {
                                         user.verified && (
-                                             <TooltipProvider>
-                                                  <Tooltip>
-                                                       <TooltipTrigger><Icons.verified className="h-6 lg:h-7 w-6 lg:w-7 text-muted-foreground fill-verified" /></TooltipTrigger>
-                                                       <TooltipContent>Verified Author</TooltipContent>
-                                                  </Tooltip>
-                                             </TooltipProvider>
+                                             <VerificationBadgeDialog user={user} session={session} trigger={
+                                                  <Icons.verified className="h-6 lg:h-7 w-6 lg:w-7 text-muted-foreground fill-verified" />
+                                             } />
                                         )
                                    }
                                    {

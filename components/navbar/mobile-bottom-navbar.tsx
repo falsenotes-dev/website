@@ -28,7 +28,7 @@ export function MobileBottomNavbar({ session }: { session: any }) {
                               >
                                    <div className="flex items-center">
                                         <Icons.home
-                                             className={`w-6 h-6 ${pathname == "/feed" ? "text-primary" : ""
+                                             className={`w-6 h-6 ${pathname == "/feed" || pathname == "/following" ? "text-primary" : ""
                                                   }`}
                                         />
                                         <span className="text-sm font-normal text-inherit sr-only">

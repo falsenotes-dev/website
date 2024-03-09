@@ -43,7 +43,7 @@ export async function GET(req: Request) {
           return new ImageResponse(
                (
                     <div tw="flex h-full w-full">
-                         <img src={cover || ''} alt="" tw="object-cover object-center w-full h-full"
+                         <img src={cover || ''} alt="" tw="w-full h-full"
                               style={{ objectFit: "cover", objectPosition: "center" }} />
                     </div>
                ),
