@@ -287,7 +287,10 @@ const fetchPostsByInterests = async ({
       select: { id: true },
     }),
     db.post.findMany({
-      where: { authorId: userId, id: { in: interests } },
+      where: {
+        OR: [{ authorId: { not: userId } }, { publicationId: { not: userId } }],
+        id: { in: interests },
+      },
       select: { id: true },
     }),
   ]);
