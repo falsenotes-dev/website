@@ -87,19 +87,79 @@ export async function getListsForSite() {
 }
 
 export async function getPostData(username: string, url: string, author: User) {
-  return await unstable_cache(
-    async () => {
-      let post = await db.post.findFirst({
+  return await unstable_cache(async () => {
+    let post = await db.post.findFirst({
+      where: {
+        url: url,
+        OR: [
+          {
+            authorId: author?.id,
+          },
+          {
+            publicationId: author?.id,
+          },
+        ],
+      },
+      include: {
+        comments: {
+          where: { parentId: null },
+          include: {
+            replies: {
+              include: {
+                _count: { select: { replies: true, likes: true } },
+              },
+            },
+            _count: { select: { replies: true, likes: true } },
+            likes: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        likes: true,
+
+        readedUsers: true,
+        author: {
+          include: {
+            _count: {
+              select: { posts: true, Followers: true, Followings: true },
+            },
+            Followers: true,
+          },
+        },
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+        publication: {
+          include: {
+            Followers: true,
+            Followings: true,
+          },
+        },
+        savedUsers: true,
+        _count: {
+          select: {
+            savedUsers: true,
+            likes: true,
+            comments: true,
+            lists: true,
+          },
+        },
+      },
+    });
+
+    //if post has not publicationId or publicationId is equal to authorId
+    if (post?.publicationId && username === post?.author?.username) {
+      return null;
+    }
+
+    if (post?.publicationId === null) {
+      post = await await db.post.findFirst({
         where: {
           url: url,
-          OR: [
-            {
-              authorId: author?.id,
-            },
-            {
-              publicationId: author?.id,
-            },
-          ],
+          authorId: author?.id,
         },
         include: {
           comments: {
@@ -150,79 +210,12 @@ export async function getPostData(username: string, url: string, author: User) {
           },
         },
       });
-
-      //if post has not publicationId or publicationId is equal to authorId
-      if (post?.publicationId && username === post?.author?.username) {
-        return null;
-      }
-
-      if (post?.publicationId === null) {
-        post = await await db.post.findFirst({
-          where: {
-            url: url,
-            authorId: author?.id,
-          },
-          include: {
-            comments: {
-              where: { parentId: null },
-              include: {
-                replies: {
-                  include: {
-                    _count: { select: { replies: true, likes: true } },
-                  },
-                },
-                _count: { select: { replies: true, likes: true } },
-                likes: true,
-              },
-              orderBy: {
-                createdAt: "desc",
-              },
-            },
-            likes: true,
-
-            readedUsers: true,
-            author: {
-              include: {
-                _count: {
-                  select: { posts: true, Followers: true, Followings: true },
-                },
-                Followers: true,
-              },
-            },
-            tags: {
-              include: {
-                tag: true,
-              },
-            },
-            publication: {
-              include: {
-                Followers: true,
-                Followings: true,
-              },
-            },
-            savedUsers: true,
-            _count: {
-              select: {
-                savedUsers: true,
-                likes: true,
-                comments: true,
-                lists: true,
-              },
-            },
-          },
-        });
-      }
-
-      if (!post) return null;
-
-      return {
-        ...post,
-      };
-    },
-    [`${username}-${url}`],
-    {
-      revalidate: 900, // 15 minutes
-      tags: [`${username}-${url}`],
     }
-  )();
+
+    if (!post) return null;
+
+    return {
+      ...post,
+    };
+  }, [`${username}-${url}`])();
 }

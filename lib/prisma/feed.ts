@@ -16,7 +16,7 @@ const getLikes = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 3,
   });
 
   return { likes: likes.map((like) => like.post.id) };
@@ -35,7 +35,7 @@ const getBookmarks = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 3,
   });
 
   return { bookmarks: bookmarks.map((bookmark) => bookmark.post.id) };
@@ -54,7 +54,7 @@ const getHistory = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 3,
   });
 
   return { history: history.map((history) => history.post.id) };
@@ -74,7 +74,7 @@ const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 10,
+    take: 3,
   });
 
   return { history: historyAuthor.map((history) => history.post.id) };
@@ -90,6 +90,7 @@ const getFollowingTags = async ({ id }: { id: string | undefined }) => {
             select: {
               postId: true,
             },
+            take: 3,
           },
         },
       },
@@ -125,6 +126,7 @@ const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
             orderBy: {
               createdAt: "desc",
             },
+            take: 3,
           },
         },
       },
@@ -151,6 +153,7 @@ const getTags = async ({ id }: { id: string | undefined }) => {
             orderBy: {
               createdAt: "desc",
             },
+            take: 3,
           },
         },
       },
@@ -363,20 +366,5 @@ export const getFeed = async ({
         },
       });
     }
-    const postTags = await db.postTag.findMany({
-      select: { postId: true },
-      where: { tag: { name: { equals: tab } }, post: { published: true } },
-    });
-    const postIds = postTags.map((postTag) => postTag.postId);
-    return fetchFeed({
-      ...baseQuery,
-      take: Number(limit),
-      skip: page * Number(limit),
-      where: {
-        id: { in: postIds },
-        published: true,
-        OR: [{ authorId: { not: id } }, { publicationId: { not: id } }],
-      },
-    });
   }
 };
