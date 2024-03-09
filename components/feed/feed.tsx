@@ -4,12 +4,12 @@ import { useInView } from 'react-intersection-observer'
 import { Skeleton } from "../ui/skeleton";
 import FeedPostCard from "../blog/feed-post-card";
 import { fetchFeed } from './get-feed';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { cn } from '@/lib/utils';
 import { Separator } from '@radix-ui/react-context-menu';
 import { EmptyPlaceholder } from '../empty-placeholder';
 import PostCardSkeleton from '@/components/skeletons/feed-post-card';
-import { Button } from '../ui/button';
+import { Button, buttonVariants } from '../ui/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import TagPostCard from '../tags/post-card';
@@ -18,6 +18,8 @@ import PopularPosts from './popular-posts';
 import FeaturedDev from './featured/featured-dev';
 import TagBadge from '../tags/tag';
 import { shuffle } from 'lodash';
+import { Badge } from '../ui/badge';
+import { Icons } from '../icon';
 
 export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
   topUsers, popularTags, trending: trendingPosts }: { initialFeed: any | undefined, tag: string | undefined, session: any, list: any, topUsers: any, popularTags: any, trending: any }) {
@@ -71,19 +73,22 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
   const users = (<FeaturedDev data={topUsers} key="featuredDev" />);
   const tags = (<Card key="popularTagsCard" className="feed__content_featured_card bg-background">
     <CardHeader className="p-4">
-      <CardTitle className="feed__content_featured_card_title text-base">Popular tags</CardTitle>
+      <CardTitle className="feed__content_featured_card_title text-lg text-center">Popular tags</CardTitle>
     </CardHeader>
-    <CardContent className="px-4">
-      <div className="w-full flex-wrap pb-4">
+    <CardContent className="px-4 pb-0">
+      <div className="w-full flex-col flex gap-3">
         {popularTags?.map((tag: any) => (
-          <Link href={`/tags/${tag.name}`} key={tag.id}>
-            <TagBadge className="my-1 mr-1" variant={"secondary"}>{tag.name}</TagBadge>
+          <Link href={`/tags/${tag.name}`} className='inline-flex gap-1.5 items-center' key={tag.id}>
+            <Badge className='h-8 w-8 px-2 rounded-sm' variant='secondary'><Icons.hash className='h-3 w-3' /></Badge>
+            <span>{tag.name}</span>
           </Link>
         ))}
       </div>
-      <Link href={`/tags`} className="text-xs flex items-center font-medium">
-        See more tags
-      </Link>
+      <CardFooter className="flex items-center justify-center pt-4 px-0">
+        <Link href={`/tags`} className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}>
+          See more
+        </Link>
+      </CardFooter>
     </CardContent>
   </Card>)
 

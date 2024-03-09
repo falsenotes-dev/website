@@ -27,8 +27,8 @@ export default async function HomeLayout({
      const topData = await fetchUsers({ id: session.id })
      const topUsers = topData?.users;
      const popularTags = await fetchTags();
-     const popularPostsOfTheWeek = await getPopularPostsOfTheWeek({ limit: 5 });
-     const { posts } = popularPostsOfTheWeek.posts.length < 5 ? await getPopularPostsOfTheMonth({ limit: 5 }) : popularPostsOfTheWeek;
+     const popularPostsOfTheWeek = await getPopularPostsOfTheWeek({ limit: 3 });
+     const { posts } = popularPostsOfTheWeek.posts.length < 3 ? await getPopularPostsOfTheMonth({ limit: 3 }) : popularPostsOfTheWeek;
 
      const sidebar = (
           <>
@@ -38,7 +38,7 @@ export default async function HomeLayout({
                     popularTags.length !== 0 && (
                          <Card className="feed__content_featured_card bg-background">
                               <CardHeader className="p-4">
-                                   <CardTitle className="feed__content_featured_card_title text-base">Popular tags</CardTitle>
+                                   <CardTitle className="feed__content_featured_card_title text-lg text-center">Popular tags</CardTitle>
                               </CardHeader>
                               <CardContent className="px-4">
                                    <div className="w-2/3 md:w-1/4 lg:w-full flex-wrap pb-4">

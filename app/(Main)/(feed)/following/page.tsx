@@ -24,11 +24,11 @@ export default async function Feed({
     return redirect('/')
   }
   const userLists = await getLists({ id: session?.id });
-  const topData = await fetchUsers({ id: session.id })
+  const topData = await fetchUsers({ id: session.id, limit: 5 })
   const topUsers = topData?.users;
   const popularTags = await fetchTags();
-  const popularPostsOfTheWeek = await getPopularPostsOfTheWeek({ limit: 3 });
-  const { posts } = popularPostsOfTheWeek.posts.length < 3 ? await getPopularPostsOfTheMonth({ limit: 3 }) : popularPostsOfTheWeek;
+  const popularPostsOfTheWeek = await getPopularPostsOfTheWeek({ limit: 5 });
+  const { posts } = popularPostsOfTheWeek.posts.length < 5 ? await getPopularPostsOfTheMonth({ limit: 5 }) : popularPostsOfTheWeek;
 
   return (
     <>

@@ -88,10 +88,10 @@ export default function FeaturedDev(
     featuredDevs.length ? content = (
       <Card className={cn("feed__content_featured_card bg-background", props.className)} {...props}>
         <CardHeader className="p-4">
-          <CardTitle className="feed__content_featured_card_title text-base">Who to follow</CardTitle>
+          <CardTitle className="feed__content_featured_card_title text-lg text-center">Who to follow</CardTitle>
         </CardHeader>
         <CardContent className="px-4">
-          <div className="feed__content_featured_card_content flex flex-col items-start justify-between space-y-4">
+          <div className="feed__content_featured_card_content flex flex-col items-start justify-between gap-4">
             {featuredDevs?.map(
               (item: any, index: number) => (
                 <Suspense fallback={<div className="flex items-center">
@@ -101,35 +101,40 @@ export default function FeaturedDev(
                     <Skeleton className="h-4 w-36" />
                   </div>
                 </div>} key={item.id}>
-                  <div className="flex gap-4 w-full items-center justify-between" key={item.id}>
-                    <div className="space-y-3">
-                      <UserHoverCard user={item} >
-                        <Link href={`/@${item.username}`} className="flex items-center">
-                          <Avatar className="mr-1.5 md:mr-2 flex items-center justify-center border bg-muted h-8 w-8">
-                            <AvatarImage src={item.image} alt={item.username} />
-                            <AvatarFallback>{item.name?.charAt(0) || item.username?.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="text-sm font-medium leading-none line-clamp-1 flex items-center">{item.name || item.username} {item?.verified && (
-                              <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
-                            )}</p>
-                          </div>
-                        </Link>
-                      </UserHoverCard>
+                  <div className="flex flex-col gap-2 w-full">
+                    <div className="flex gap-2 w-full items-center justify-between" key={item.id}>
+                      <div className="space-y-3">
+                        <UserHoverCard user={item} >
+                          <Link href={`/@${item.username}`} className="flex items-center">
+                            <Avatar className="mr-1.5 md:mr-2 flex items-center justify-center border bg-muted h-8 w-8">
+                              <AvatarImage src={item.image} alt={item.username} />
+                              <AvatarFallback>{item.name?.charAt(0) || item.username?.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="text-sm font-medium leading-none line-clamp-1 flex items-center">{item.name || item.username} {item?.verified && (
+                                <Icons.verified className="h-3 w-3 mx-0.5 inline fill-verified align-middle" />
+                              )}</p>
+                            </div>
+                          </Link>
+                        </UserHoverCard>
+                      </div>
+                      <Button variant={isFollowing[index] ? "secondary" : "outline"} className="flex-shrink-0 h-8 text-sm" onClick={() => {
+                        handleFollow(item?.id, index);
+                      }}
+                        disabled={isFollowingLoading[index]}
+                        size={'icon'}
+                      >
+                        {isFollowingLoading[index] ? (
+                          <><Icons.spinner className="h-4 w-4 animate-spin" /></>
+                        ) : (
+                          <>{isFollowing[index] ? <><Check className="h-4 w-4" /></> : <><Plus className="h-4 w-4" /></>}</>
+                        )
+                        }
+                      </Button>
                     </div>
-                    <Button variant={isFollowing[index] ? "secondary" : "outline"} className="flex-shrink-0 h-8 text-sm" onClick={() => {
-                      handleFollow(item?.id, index);
-                    }}
-                      disabled={isFollowingLoading[index]}
-                      size={'icon'}
-                    >
-                      {isFollowingLoading[index] ? (
-                        <><Icons.spinner className="h-4 w-4 animate-spin" /></>
-                      ) : (
-                        <>{isFollowing[index] ? <><Check className="h-4 w-4" /></> : <><Plus className="h-4 w-4" /></>}</>
-                      )
-                      }
-                    </Button>
+                    {item.bio && (
+                      <p className="text-sm text-muted-foreground line-clamp-2">{item.bio}</p>
+                    )}
                   </div>
                 </Suspense>
               ))}

@@ -39,7 +39,7 @@ export default function PopularPosts({ posts }: { posts: any[] }) {
     posts.length !== 0 && (
       <Card className="feed__content_featured_card bg-background">
         <CardHeader className="p-4">
-          <CardTitle className="feed__content_featured_card_title text-base">Trending Now</CardTitle>
+          <CardTitle className="feed__content_featured_card_title text-lg text-center">Trending Now</CardTitle>
         </CardHeader>
         <CardContent className="px-4 pb-0">
           <ol className="flex flex-col items-start justify-between space-y-4">
@@ -48,7 +48,7 @@ export default function PopularPosts({ posts }: { posts: any[] }) {
                 <li key={item.id} className="text-sm space-y-2.5">
 
                   <div className="flex items-center">
-                    <Link href={`/@${item.author.username}`} className="text-xs flex items-center font-medium">
+                    <Link href={`/@${item.author.username}`} className="text-xs font-medium flex items-center">
                       <Avatar className="h-5 w-5 mr-1 md:mr-1.5 border">
                         <AvatarImage src={item.author?.image} alt={item.author?.username} />
                         <AvatarFallback>{item.author?.name?.charAt(0) || item.author?.username?.charAt(0)}</AvatarFallback>
@@ -58,9 +58,9 @@ export default function PopularPosts({ posts }: { posts: any[] }) {
                       )}
                     </Link>
                     {item.publication && (
-                      <Link href={`/@${item.publication.username}`} className="text-xs flex items-center font-medium">
+                      <Link href={`/@${item.publication.username}`} className="text-xs font-medium flex items-center">
                         <p>
-                          <span className="text-xs text-muted-foreground">in</span>
+                          <span className="text-xs font-medium text-muted-foreground">in</span>
                           <span>{' ' + item.publication.name || item.publication.username}</span>
                         </p>
                       </Link>
@@ -68,7 +68,7 @@ export default function PopularPosts({ posts }: { posts: any[] }) {
                   </div>
 
 
-                  <Link href={`/@${item.author.username}/${item.url}`} className="text-base font-bold line-clamp-2 overflow-hidden leading-tight">
+                  <Link href={`/@${item.author.username}/${item.url}`} className="text-base font-semibold line-clamp-2 overflow-hidden leading-tight">
                     {item.title}
                   </Link>
                 </li>

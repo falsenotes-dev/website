@@ -59,6 +59,9 @@ export default function FeedPostCard(
       );
     setIsSaved(checkIsSaved);
   }, [props.list?.lists, props.list?.bookmarks, props.post.id]);
+
+  const [isSubtitlesOpen, setIsSubtitlesOpen] = React.useState(false);
+
   return (
     <Card
       {...props}
@@ -70,13 +73,13 @@ export default function FeedPostCard(
       <CardContent className="md:p-6 p-4 h-full">
         <div className="flex flex-col grid-cols-12 gap-4 items-start h-full">
           <div className="flex justify-between w-full items-center">
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center gap-1">
               <UserHoverCard user={props.post.author}>
                 <Link
                   href={`/@${props.post.author?.username}`}
                   className="flex items-center space-x-0.5"
                 >
-                  <Avatar className="h-8 w-8 mr-0.5 border">
+                  <Avatar className="h-9 w-9 mr-0.5 border">
                     <AvatarImage
                       src={props.post.author?.image}
                       alt={props.post.author?.username}
@@ -86,29 +89,38 @@ export default function FeedPostCard(
                         props.post.author?.username?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  <p className="text-base font-normal leading-none">
-                    {props.post.author?.name || props.post.author?.username}
-                  </p>
-                  {props.post.author?.verified && (
-                    <Icons.verified className="h-4 w-4 inline fill-verified align-middle" />
-                  )}
                 </Link>
               </UserHoverCard>
-              {
-                props.post.publication && (
-                  <Link href={`/@${props.post.publication?.username}`}>
-                    <div className="flex items-center space-x-0.5">
-                      <span className="text-sm font-normal leading-none text-muted-foreground">
-                        in
-                      </span>
-                      <p className="text-sm font-normal leading-none">
-                        {props.post.publication?.name ||
-                          props.post.publication?.username}
-                      </p>
-                    </div>
+              <div className="flex flex-col gap-0.5">
+                <UserHoverCard user={props.post.author}>
+                  <Link
+                    href={`/@${props.post.author?.username}`}
+                    className="flex items-center space-x-0.5"
+                  >
+                    <p className="text-sm font-normal leading-none">
+                      {props.post.author?.name || props.post.author?.username}
+                    </p>
+                    {props.post.author?.verified && (
+                      <Icons.verified className="h-4 w-4 inline fill-verified align-middle" />
+                    )}
                   </Link>
-                )
-              }
+                </UserHoverCard>
+                {
+                  props.post.publication && (
+                    <Link href={`/@${props.post.publication?.username}`}>
+                      <div className="flex items-center space-x-0.5">
+                        <span className="text-sm font-normal leading-none text-muted-foreground">
+                          in
+                        </span>
+                        <p className="text-sm font-normal leading-none">
+                          {props.post.publication?.name ||
+                            props.post.publication?.username}
+                        </p>
+                      </div>
+                    </Link>
+                  )
+                }
+              </div>
             </div>
             <div className="flex gap-1 items-center">
               <span className="text-muted-foreground text-sm">{dateFormat(props.post.publishedAt)}</span>
@@ -151,18 +163,30 @@ export default function FeedPostCard(
           <div className="col-span-12 flex flex-col justify-between space-y-6 h-full w-full">
             <div className="flex">
               <div className="flex-initial w-full">
-                <Link
-                  href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`}
-                >
-                  <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2">
 
-                    <div className="post-subtitle hidden md:block">
-                      <p className="text-ellipsis text-base leading-6">
-                        {props.post.subtitle}
-                      </p>
-                    </div>
+                  <div className="inline m-0">
+                    <span className={`text-ellipsis inline text-base ${isSubtitlesOpen ? "line-clamp-none" : "line-clamp-3"}`}>
+                      {
+                        isSubtitlesOpen ? props.post.subtitle : props.post.subtitle.length > 150 ? props.post.subtitle.substring(0, 150) + "..." : props.post.subtitle
+                      }
+                    </span>
+                    {
+                      props.post.subtitle.length > 150 && (
+                        <span>
+                          <Button
+                            variant="link"
+                            className="text-muted-foreground text-base inline font-normal px-1 pr-0 h-fit"
+                            size={"sm"}
+                            onClick={() => setIsSubtitlesOpen(!isSubtitlesOpen)}
+                          >
+                            {isSubtitlesOpen ? "hide" : "more"}
+                          </Button>
+                        </span>
+                      )
+                    }
                   </div>
-                </Link>
+                </div>
               </div>
             </div>
             <div className="">
@@ -172,7 +196,7 @@ export default function FeedPostCard(
                     props.post.tags?.length > 0 && (
                       <>
                         <Link href={`/tags/${props.post.tags[0].tag?.name}`} key={props.post.tags[0].tag?.id}>
-                          <TagBadge variant={"secondary"} className="flex">
+                          <TagBadge variant={"secondary"} className="flex font-medium">
                             {
                               props.post.tags[0].tag?.name.replace(/-/g, " ")
                             }
