@@ -153,17 +153,18 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
             </div>
           ))
         }
-        <div className="md:hidden flex flex-col gap-8" >{
+        <div className="md:hidden flex flex-col gap-4" >{
           feed.map((post: any, index) => (
-
-            <FeedPostCard
-              post={post}
-              session={session}
-              list={list}
-              className='md:mb-0'
-              key={post.id}
-            />
-
+            <React.Fragment key={post.id || `placeholder-${index}`}>
+              {trendingOrder[index] == index && trending[trendingOrder.indexOf(index)] || null}
+              < FeedPostCard
+                post={post}
+                session={session}
+                list={list}
+                className='md:mb-0'
+                key={post.id}
+              />
+            </React.Fragment>
           ))
         }
         </div>
