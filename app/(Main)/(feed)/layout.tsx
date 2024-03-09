@@ -3,8 +3,10 @@ import { getSessionUser } from "@/components/get-session-user"
 import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar"
 import { Metadata } from "next"
 
-export const metadata: Metadata = {
-     title: 'Home - FalseNotes',
+export async function getMetadata(): Promise<Metadata> {
+     return {
+          title: "Home - FalseNotes",
+     }
 }
 
 export default async function FeedLayout({
