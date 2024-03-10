@@ -1,7 +1,6 @@
 "use server";
 import { getSessionUser } from "@/components/get-session-user";
 import db from "../db";
-import { getFollowings } from "./session";
 import { User } from "@prisma/client";
 
 const getLikes = async ({ id }: { id: string | undefined }) => {
@@ -17,29 +16,10 @@ const getLikes = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 3,
+    take: 1,
   });
 
   return { likes: likes.map((like) => like.post.id) };
-};
-
-const getBookmarks = async ({ id }: { id: string | undefined }) => {
-  const bookmarks = await db.bookmark.findMany({
-    where: { userId: id },
-    select: {
-      post: {
-        select: {
-          id: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 3,
-  });
-
-  return { bookmarks: bookmarks.map((bookmark) => bookmark.post.id) };
 };
 
 const getHistory = async ({ id }: { id: string | undefined }) => {
@@ -59,26 +39,6 @@ const getHistory = async ({ id }: { id: string | undefined }) => {
   });
 
   return { history: history.map((history) => history.post.id) };
-};
-
-const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
-  const historyAuthor = await db.readingHistory.findMany({
-    where: { userId: id, erased: false },
-    select: {
-      post: {
-        select: {
-          authorId: true,
-          id: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 3,
-  });
-
-  return { history: historyAuthor.map((history) => history.post.id) };
 };
 
 const getFollowingTags = async ({ id }: { id: string | undefined }) => {
@@ -101,42 +61,6 @@ const getFollowingTags = async ({ id }: { id: string | undefined }) => {
   return {
     followingTags: followingTags.flatMap((followingTag) =>
       followingTag.tag.posts.map((post) => post.postId)
-    ),
-  };
-};
-
-const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
-  const { followings: sessionFollowingsArray } = await getFollowings({ id });
-  const sessionFollowings = sessionFollowingsArray?.followings?.map(
-    (following: any) => following.following
-  );
-
-  const followings = await db.tagFollow.findMany({
-    where: {
-      followerId: {
-        in: sessionFollowings?.map((following: any) => following.id),
-      },
-    },
-    select: {
-      tag: {
-        select: {
-          posts: {
-            select: {
-              postId: true,
-            },
-            orderBy: {
-              createdAt: "desc",
-            },
-            take: 3,
-          },
-        },
-      },
-    },
-  });
-
-  return {
-    followings: followings.flatMap((following) =>
-      following.tag.posts.map((post) => post.postId)
     ),
   };
 };
@@ -233,28 +157,18 @@ export const getForYou = async ({
   const { id } = user;
 
   // Get interests (likes, bookmarks, history, tags, followings, followingTags) in parallel
-  const [
-    userLikes,
-    userBookmarks,
-    userHistory,
-    userTags,
-    userFollowings,
-    userFollowingTags,
-  ] = await Promise.all([
-    getLikes({ id }),
-    getBookmarks({ id }),
-    getHistory({ id }),
-    getTags({ id }),
-    getFollowingsUsers({ id }),
-    getFollowingTags({ id }),
-  ]);
+  const [userLikes, userHistory, userTags, userFollowingTags] =
+    await Promise.all([
+      getLikes({ id }),
+      getHistory({ id }),
+      getTags({ id }),
+      getFollowingTags({ id }),
+    ]);
 
   const interests = [
     ...userLikes.likes,
-    ...userBookmarks.bookmarks,
     ...userHistory.history,
     ...userTags.postTags,
-    ...userFollowings.followings,
     ...userFollowingTags.followingTags,
   ];
 
