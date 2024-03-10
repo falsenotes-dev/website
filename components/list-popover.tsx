@@ -14,6 +14,7 @@ import { add } from "lodash";
 import { addPostToList } from "@/lib/prisma/list";
 import { toast } from "sonner";
 import useWindowDimensions from "./window-dimensions";
+import { Drawer, DrawerContent, DrawerTrigger } from "./ui/drawer";
 
 export default function ListPopover({
   lists,
@@ -48,12 +49,94 @@ export default function ListPopover({
     else setIsDesktop(false);
   }, [width]);
 
-  return (
-    <>
-      <Popover {...props}>
-        <PopoverTrigger asChild>{props.children}</PopoverTrigger>
-        <PopoverContent align={isDesktop ? 'center' : 'end'}>
-          <div className="flex flex-col gap-4">
+  if (isDesktop) {
+    return (
+      <>
+        <Popover {...props}>
+          <PopoverTrigger asChild>{props.children}</PopoverTrigger>
+          <PopoverContent align={isDesktop ? "center" : "end"}>
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between">
+                <div className="flex items-center space-x-2 w-full">
+                  <Checkbox
+                    id="read-later"
+                    checked={isSavedInBookmarks}
+                    onCheckedChange={async () => {
+                      setIsSavedInBookmarks(!isSavedInBookmarks);
+                      const res = await fetch(`/api/post/${postId}/save`, {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ postId }),
+                      });
+                      await validate(pathname);
+                      if (!res.ok) setIsSavedInBookmarks(!isSavedInBookmarks);
+                    }}
+                  />
+                  <Label
+                    htmlFor="read-later"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Read Later
+                  </Label>
+                </div>
+                <Icons.lock className="h-4 w-4 text-muted-foreground" />
+              </div>
+              {lists &&
+                lists.map((list: any) => (
+                  <div className="flex justify-between" key={list.id}>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id={list.slug}
+                        checked={list.posts?.some(
+                          (post: any) => post.postId === postId
+                        )}
+                        onCheckedChange={async () => {
+                          const res = await addPostToList({
+                            listId: list.id,
+                            postId,
+                          });
+                          await validate(pathname);
+                          if (!res.success) toast.error(res.message);
+                        }}
+                      />
+                      <Label
+                        htmlFor={list.slug}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {list.name}
+                      </Label>
+                    </div>
+                    {list.visibility === "private" && (
+                      <Icons.lock className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </div>
+                ))}
+              <Separator />
+              <Button
+                variant={"link"}
+                className="py-0 h-fit hover:no-underline"
+                onClick={() => setCreateList(true)}
+              >
+                Create a new list
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
+        <ListCreateDialog
+          open={createList}
+          onOpenChange={setCreateList}
+          postId={postId}
+        />
+      </>
+    );
+  } else {
+    return <>
+      <Drawer {...props}>
+        <DrawerTrigger asChild>{props.children}</DrawerTrigger>
+        <DrawerContent className="p-6 pt-0">
+          <div className="flex flex-col gap-6 mt-6">
             <div className="flex justify-between">
               <div className="flex items-center space-x-2 w-full">
                 <Checkbox
@@ -85,13 +168,20 @@ export default function ListPopover({
               lists.map((list: any) => (
                 <div className="flex justify-between" key={list.id}>
                   <div className="flex items-center space-x-2">
-                    <Checkbox id={list.slug} checked={list.posts?.some((post: any) => post.postId === postId)} onCheckedChange={
-                      async () => {
-                        const res = await addPostToList({ listId: list.id, postId });
+                    <Checkbox
+                      id={list.slug}
+                      checked={list.posts?.some(
+                        (post: any) => post.postId === postId
+                      )}
+                      onCheckedChange={async () => {
+                        const res = await addPostToList({
+                          listId: list.id,
+                          postId,
+                        });
                         await validate(pathname);
                         if (!res.success) toast.error(res.message);
-                      }
-                    } />
+                      }}
+                    />
                     <Label
                       htmlFor={list.slug}
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -105,11 +195,21 @@ export default function ListPopover({
                 </div>
               ))}
             <Separator />
-            <Button variant={"link"} className="py-0 h-fit hover:no-underline" onClick={() => setCreateList(true)}>Create a new list</Button>
+            <Button
+              variant={"link"}
+              className="py-0 h-fit hover:no-underline"
+              onClick={() => setCreateList(true)}
+            >
+              Create a new list
+            </Button>
           </div>
-        </PopoverContent>
-      </Popover>
-      <ListCreateDialog open={createList} onOpenChange={setCreateList} postId={postId} />
-    </>
-  );
+        </DrawerContent>
+      </Drawer>
+      <ListCreateDialog
+        open={createList}
+        onOpenChange={setCreateList}
+        postId={postId}
+      />
+    </>;
+  }
 }
