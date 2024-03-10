@@ -3,9 +3,10 @@ import { getSessionUser } from "@/components/get-session-user"
 import { MobileBottomNavbar } from "@/components/navbar/mobile-bottom-navbar"
 import { Metadata } from "next"
 
-export async function getMetadata(): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
      return {
           title: "Home - FalseNotes",
+          description: "The best place to share your thoughts",
      }
 }
 

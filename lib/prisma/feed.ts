@@ -2,6 +2,7 @@
 import { getSessionUser } from "@/components/get-session-user";
 import db from "../db";
 import { User } from "@prisma/client";
+import { getFollowings } from "./session";
 
 const getLikes = async ({ id }: { id: string | undefined }) => {
   const likes = await db.like.findMany({
@@ -16,58 +17,27 @@ const getLikes = async ({ id }: { id: string | undefined }) => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 1,
+    take: 3,
   });
 
   return { likes: likes.map((like) => like.post.id) };
 };
 
-const getHistory = async ({ id }: { id: string | undefined }) => {
-  const history = await db.readingHistory.findMany({
-    where: { userId: id, erased: false },
-    select: {
-      post: {
-        select: {
-          id: true,
-        },
+const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
+  const { followings: sessionFollowingsArray } = await getFollowings({
+    id,
+    limit: 3,
+  });
+  const sessionFollowings = sessionFollowingsArray?.followings?.map(
+    (following: any) => following.following
+  );
+
+  const followings = await db.tagFollow.findMany({
+    where: {
+      followerId: {
+        in: sessionFollowings?.map((following: any) => following.id),
       },
     },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 3,
-  });
-
-  return { history: history.map((history) => history.post.id) };
-};
-
-const getFollowingTags = async ({ id }: { id: string | undefined }) => {
-  const followingTags = await db.tagFollow.findMany({
-    where: { followerId: id },
-    select: {
-      tag: {
-        select: {
-          posts: {
-            select: {
-              postId: true,
-            },
-            take: 3,
-          },
-        },
-      },
-    },
-  });
-
-  return {
-    followingTags: followingTags.flatMap((followingTag) =>
-      followingTag.tag.posts.map((post) => post.postId)
-    ),
-  };
-};
-
-const getTags = async ({ id }: { id: string | undefined }) => {
-  const tags = await db.tagFollow.findMany({
-    where: { followerId: id },
     select: {
       tag: {
         select: {
@@ -86,8 +56,91 @@ const getTags = async ({ id }: { id: string | undefined }) => {
   });
 
   return {
-    postTags: tags.flatMap((tag) => tag.tag.posts.map((post) => post.postId)),
+    followings: followings.flatMap((following) =>
+      following.tag.posts.map((post) => post.postId)
+    ),
   };
+};
+
+const getHistory = async ({ id }: { id: string | undefined }) => {
+  const history = await db.readingHistory.findMany({
+    where: { userId: id, erased: false },
+    select: {
+      post: {
+        select: {
+          id: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 5,
+  });
+
+  return { history: history.map((history) => history.post.id) };
+};
+
+const getFollowingTags = async ({ id }: { id: string | undefined }) => {
+  const followingTags = await db.tagFollow.findMany({
+    where: { followerId: id },
+    select: {
+      tag: {
+        select: {
+          posts: {
+            select: {
+              postId: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return {
+    followingTags: followingTags.flatMap((followingTag) =>
+      followingTag.tag.posts.map((post) => post.postId)
+    ),
+  };
+};
+
+const getBookmarks = async ({ id }: { id: string | undefined }) => {
+  const bookmarks = await db.bookmark.findMany({
+    where: { userId: id },
+    select: {
+      post: {
+        select: {
+          id: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 3,
+  });
+
+  return { bookmarks: bookmarks.map((bookmark) => bookmark.post.id) };
+};
+
+const getHistoryAuthorPost = async ({ id }: { id: string | undefined }) => {
+  const historyAuthor = await db.readingHistory.findMany({
+    where: { userId: id, erased: false },
+    select: {
+      post: {
+        select: {
+          authorId: true,
+          id: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 3,
+  });
+
+  return { history: historyAuthor.map((history) => history.post.id) };
 };
 
 const baseQuery = {
@@ -157,19 +210,29 @@ export const getForYou = async ({
   const { id } = user;
 
   // Get interests (likes, bookmarks, history, tags, followings, followingTags) in parallel
-  const [userLikes, userHistory, userTags, userFollowingTags] =
-    await Promise.all([
-      getLikes({ id }),
-      getHistory({ id }),
-      getTags({ id }),
-      getFollowingTags({ id }),
-    ]);
+  const [
+    userLikes,
+    userHistory,
+    userBookmarks,
+    userHistoryAuthor,
+    userFollowingTags,
+    userFollowings,
+  ] = await Promise.all([
+    getLikes({ id }),
+    getHistory({ id }),
+    getBookmarks({ id }),
+    getHistoryAuthorPost({ id }),
+    getFollowingTags({ id }),
+    getFollowingsUsers({ id }),
+  ]);
 
   const interests = [
     ...userLikes.likes,
     ...userHistory.history,
-    ...userTags.postTags,
+    ...userBookmarks.bookmarks,
+    ...userHistoryAuthor.history,
     ...userFollowingTags.followingTags,
+    ...userFollowings.followings,
   ];
 
   // Remove duplicates and fetch posts in one go
@@ -241,28 +304,26 @@ export const getFeed = async ({
     return await getForYou({ page });
   }
 
-  if (tab) {
-    if (tab == "following") {
-      const following = await db.follow.findMany({
-        select: { followingId: true },
-        where: { followerId: id },
-      });
-      const followingIds = following.map((user) => user.followingId);
-      return fetchFeed({
-        ...baseQuery,
-        take: Number(limit),
-        skip: page * Number(limit),
-        where: { authorId: { in: followingIds }, published: true },
-        select: {
-          ...baseQuery.select,
-          author: {
-            include: {
-              Followers: true,
-              Followings: true,
-            },
+  if (tab == "following") {
+    const following = await db.follow.findMany({
+      select: { followingId: true },
+      where: { followerId: id },
+    });
+    const followingIds = following.map((user) => user.followingId);
+    return fetchFeed({
+      ...baseQuery,
+      take: Number(limit),
+      skip: page * Number(limit),
+      where: { authorId: { in: followingIds }, published: true },
+      select: {
+        ...baseQuery.select,
+        author: {
+          include: {
+            Followers: true,
+            Followings: true,
           },
         },
-      });
-    }
+      },
+    });
   }
 };
