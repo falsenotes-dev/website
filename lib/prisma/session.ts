@@ -50,7 +50,13 @@ export const getFollowingTags = async ({ id }: { id: string | undefined }) => {
   };
 };
 
-export const getFollowings = async ({ id }: { id: string | undefined }) => {
+export const getFollowings = async ({
+  id,
+  limit,
+}: {
+  id: string | undefined;
+  limit?: number | undefined;
+}) => {
   if (!id) {
     return { followings: [] };
   }
@@ -64,6 +70,10 @@ export const getFollowings = async ({ id }: { id: string | undefined }) => {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
+    ...(limit && { take: limit }),
   });
 
   return { followings: JSON.parse(JSON.stringify(followings || [])) };
