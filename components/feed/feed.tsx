@@ -34,7 +34,6 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
   }, [initialFeed])
 
   async function loadMoreFeed() {
-    console.log('loading more feed')
     const next = page + 1
     const result = await fetchFeed({ page: next, tab: tag, limit: 10 })
     if (result?.length) {
@@ -44,7 +43,6 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
   }
 
   useEffect(() => {
-    console.log('inView', inView);
     if (inView || mainInView) {
       loadMoreFeed()
     }
