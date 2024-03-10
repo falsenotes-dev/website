@@ -43,7 +43,10 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
   }
 
   useEffect(() => {
-    if (inView || mainInView) {
+    if (inView) {
+      loadMoreFeed()
+    }
+    if (mainInView) {
       loadMoreFeed()
     }
   }, [inView, mainInView])
