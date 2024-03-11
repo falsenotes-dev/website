@@ -23,45 +23,6 @@ const getLikes = async ({ id }: { id: string | undefined }) => {
   return { likes: likes.map((like) => like.post.id) };
 };
 
-const getFollowingsUsers = async ({ id }: { id: string | undefined }) => {
-  const { followings: sessionFollowingsArray } = await getFollowings({
-    id,
-    limit: 3,
-  });
-  const sessionFollowings = sessionFollowingsArray?.followings?.map(
-    (following: any) => following.following
-  );
-
-  const followings = await db.tagFollow.findMany({
-    where: {
-      followerId: {
-        in: sessionFollowings?.map((following: any) => following.id),
-      },
-    },
-    select: {
-      tag: {
-        select: {
-          posts: {
-            select: {
-              postId: true,
-            },
-            orderBy: {
-              createdAt: "desc",
-            },
-            take: 3,
-          },
-        },
-      },
-    },
-  });
-
-  return {
-    followings: followings.flatMap((following) =>
-      following.tag.posts.map((post) => post.postId)
-    ),
-  };
-};
-
 const getHistory = async ({ id }: { id: string | undefined }) => {
   const history = await db.readingHistory.findMany({
     where: { userId: id, erased: false },
@@ -216,14 +177,12 @@ export const getForYou = async ({
     userBookmarks,
     userHistoryAuthor,
     userFollowingTags,
-    userFollowings,
   ] = await Promise.all([
     getLikes({ id }),
     getHistory({ id }),
     getBookmarks({ id }),
     getHistoryAuthorPost({ id }),
     getFollowingTags({ id }),
-    getFollowingsUsers({ id }),
   ]);
 
   const interests = [
@@ -232,7 +191,6 @@ export const getForYou = async ({
     ...userBookmarks.bookmarks,
     ...userHistoryAuthor.history,
     ...userFollowingTags.followingTags,
-    ...userFollowings.followings,
   ];
 
   // Remove duplicates and fetch posts in one go
