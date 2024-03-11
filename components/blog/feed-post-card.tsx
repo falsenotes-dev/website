@@ -172,7 +172,7 @@ export default function FeedPostCard(
                       }
                     </span>
                     {
-                      props.post.subtitle.length > 150 && (
+                      props.post.subtitle?.length > 150 && (
                         <span>
                           <Button
                             variant="link"
