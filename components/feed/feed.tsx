@@ -20,6 +20,7 @@ import TagBadge from '../tags/tag';
 import { shuffle } from 'lodash';
 import { Badge } from '../ui/badge';
 import { Icons } from '../icon';
+import useWindowSize from '@/lib/hooks/use-windows-size';
 
 export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
   topUsers, popularTags, trending: trendingPosts }: { initialFeed: any | undefined, tag: string | undefined, session: any, list: any, topUsers: any, popularTags: any, trending: any }) {
@@ -54,16 +55,16 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
   const safeFeed = feed || [];
 
   const [cols, setCols] = useState<number>(3)
-  const { width } = useWindowDimensions()
+  const { isMobile, isDesktop, isTablet } = useWindowSize();
 
   useEffect(() => {
-    if (width && width <= 1024) {
+    if (isTablet) {
       setCols(2)
     }
-    if (width && width < 640) {
+    if (isMobile) {
       setCols(0)
     }
-  }, [width])
+  }, [isMobile, isDesktop, isTablet])
 
 
   const [firstCol, setFirstCol] = useState<any[]>([])
@@ -122,13 +123,13 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
     }
   }
 
-  const colsContent = [firstCol, secondCol, thirdCol].slice(0, cols)
+  const colsContent = isTablet ? [firstCol, secondCol] : [firstCol, secondCol, thirdCol]
 
   const [trendingOrder, setTrendingOrder] = useState<number[]>(shuffle([0, 1, 2]))
 
   return safeFeed.length > 0 ? (
-    <div className="feed__list mb-14 flex flex-col gap-6 lg:gap-8">
-      <div className='grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 grid-flow-row gap-6 lg:gap-8 auto-rows-auto'>
+    <div className="feed__list mb-14 flex flex-col gap-6 md:gap-8">
+      <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 grid-flow-row gap-6 md:gap-8 auto-rows-auto'>
         {
           colsContent.map((col, index) => (
             <div className="flex-col gap-8 hidden md:flex" key={index}>
