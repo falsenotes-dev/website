@@ -6,8 +6,9 @@ import UserHoverCard from "../user-hover-card"
 import { Hash } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { EmptyPlaceholder } from "../empty-placeholder"
+import UserHorizontalCard from "../user-horizontal-card"
 
-export default function ExploreComponent({ users, posts, tags, lists, search, className }: {
+export default function ExploreComponent({ users, posts, tags, lists, session, search, className }: {
      users: any, posts: any, tags: any, lists: any, session: any, search: any, className?: string
 }) {
      return (
@@ -68,31 +69,8 @@ export default function ExploreComponent({ users, posts, tags, lists, search, cl
                                    {users?.map(
                                         (item: any, index: number) => (
                                              <div className="flex gap-4 w-full items-center justify-between" key={item.id}>
-                                                  <div className="space-y-3">
-                                                       <UserHoverCard user={item} >
-                                                            <Link href={`/@${item.username}`} className="flex items-center">
-                                                                 <Avatar className="mr-1.5 md:mr-2 flex items-center border justify-center bg-muted h-8 w-8">
-                                                                      <AvatarImage src={item.image} alt={item.username} />
-                                                                      <AvatarFallback>{item.name?.charAt(0) || item.username?.charAt(0)}</AvatarFallback>
-                                                                 </Avatar>
-                                                                 {
-                                                                      !item.name ? (
-                                                                           <div>
-                                                                                <p className="text-sm font-medium leading-none">{item.username} {item?.verified && (
-                                                                                     <Icons.verified className="h-3 w-3 mx-1 inline fill-verified align-middle" />
-                                                                                )}</p>
-                                                                           </div>
-                                                                      ) : (
-                                                                           <div>
-                                                                                <p className="text-sm font-medium leading-none">{item.name} {item?.verified && (
-                                                                                     <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
-                                                                                )}</p>
-                                                                                <p className="text-sm text-muted-foreground">{item.username}</p>
-                                                                           </div>
-                                                                      )
-                                                                 }
-                                                            </Link>
-                                                       </UserHoverCard>
+                                                  <div className="space-y-3 w-full">
+                                                       <UserHorizontalCard user={item} session={session} />
                                                   </div>
                                              </div>
                                         ))}
