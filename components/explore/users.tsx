@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Separator } from '@radix-ui/react-context-menu';
 import { Button } from '../ui/button';
 import { EmptyPlaceholder } from '../empty-placeholder';
-import UserHorizontalCard from '../user-vertical-card';
+import UserHorizontalCard from '../user-horizontal-card';
 import UserHoverCard from '../user-hover-card';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -40,40 +40,13 @@ export default function Users({ users: initialUser, search, session }: { users: 
 
      return users.length > 0 ? (
           <div className="feed__list md:w-[600px] w-full">
-               <Card>
-                    <CardHeader className="">
-                         <CardTitle className="feed__content_featured_card_title text-base">Users</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
+               <Card className='border-none shadow-none'>
+                    <CardContent className="space-y-4 pt-6">
                          {users?.map(
                               (item: any, index: number) => (
                                    <div className="flex gap-4 w-full items-center justify-between" key={item.id}>
-                                        <div className="space-y-3">
-                                             <UserHoverCard user={item} >
-                                                  <Link href={`/@${item.username}`} className="flex items-center">
-                                                       <Avatar className="mr-1.5 md:mr-2 flex items-center border justify-center bg-muted h-8 w-8">
-                                                            <AvatarImage src={item.image} alt={item.username} />
-                                                            <AvatarFallback>{item.name?.charAt(0) || item.username?.charAt(0)}</AvatarFallback>
-                                                       </Avatar>
-                                                       {
-                                                            !item.name ? (
-                                                                 <div>
-                                                                      <p className="text-sm font-medium leading-none">{item.username} {item?.verified && (
-                                                                           <Icons.verified className="h-3 w-3 mx-1 inline fill-verified align-middle" />
-                                                                      )}</p>
-                                                                 </div>
-                                                            ) : (
-                                                                 <div>
-                                                                      <p className="text-sm font-medium leading-none">{item.name} {item?.verified && (
-                                                                           <Icons.verified className="h-3 w-3 inline fill-verified align-middle" />
-                                                                      )}</p>
-                                                                      <p className="text-sm text-muted-foreground">{item.username}</p>
-                                                                 </div>
-                                                            )
-                                                       }
-                                                  </Link>
-                                             </UserHoverCard>
-                                             {item.bio && ( <p className="text-sm text-muted-foreground">{item.bio}</p> )}
+                                        <div className="space-y-3 w-full">
+                                             <UserHorizontalCard className='w-full' user={item} session={session} />
                                         </div>
                                    </div>
                               ))}
