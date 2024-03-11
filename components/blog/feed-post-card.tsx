@@ -168,7 +168,7 @@ export default function FeedPostCard(
                   <div className="inline m-0">
                     <span className={`text-ellipsis inline text-base ${isSubtitlesOpen ? "line-clamp-none" : "line-clamp-3"}`}>
                       {
-                        isSubtitlesOpen ? props.post.subtitle : props.post.subtitle.length > 150 ? props.post.subtitle.substring(0, 150) + "..." : props.post.subtitle
+                        isSubtitlesOpen ? props.post.subtitle : props.post.subtitle?.length > 150 ? props.post.subtitle.substring(0, 150) + "..." : props.post.subtitle
                       }
                     </span>
                     {

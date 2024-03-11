@@ -11,7 +11,7 @@ export default function ExploreComponent({ users, posts, tags, lists, search, cl
      users: any, posts: any, tags: any, lists: any, session: any, search: any, className?: string
 }) {
      return (
-          <div className={cn("w-full mb-10 space-y-4", className)}>
+          <div className={cn("max-w-7xl min-w-[280px]w-full mb-10 space-y-4", className)}>
                {posts.length > 0 && (
                     <Card>
                          <CardHeader className="">
