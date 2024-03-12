@@ -121,7 +121,7 @@ export default function ExploreComponent({ users, posts, tags, lists, session, s
                               <div className="flex flex-col divide-y">
                                    {lists?.map((list: any, index: number) => (
                                         <div className="flex items-center justify-between py-4" key={list.id}>
-                                             <Link href={`/@${list.author.username}/${list.slug}`} className="w-full">
+                                             <Link href={`/@${list.author.username}/list/${list.slug}`} className="w-full">
                                                   <div className="flex items-center">
                                                        <div className="space-y-1">
                                                             <p className="text-base line-clamp-1"><Icons.list className="h-5 w-5 mr-1.5 inline" />{list.name}</p>
