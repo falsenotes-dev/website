@@ -170,7 +170,7 @@ export const getForYou = async ({
   if (!user) return null;
   const { id } = user;
 
-  // Get interests (likes, bookmarks, history, tags, followings, followingTags) in parallel
+  // Parallelize database queries
   const [
     userLikes,
     userHistory,
@@ -193,7 +193,6 @@ export const getForYou = async ({
     ...userFollowingTags.followingTags,
   ];
 
-  // Remove duplicates and fetch posts in one go
   const uniqueInterests = [...new Set(interests)];
   const posts = await fetchPostsByInterests({
     interests: uniqueInterests,
