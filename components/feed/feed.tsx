@@ -44,9 +44,6 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
   }
 
   useEffect(() => {
-    if (inView) {
-      loadMoreFeed()
-    }
     if (mainInView) {
       loadMoreFeed()
     }
@@ -144,7 +141,7 @@ export default function InfinitiveScrollFeed({ initialFeed, tag, session, list,
                       className='md:mb-0'
                     />
                   ) : (
-                    <div className="feed__list_loadmore !py-0 h-max" ref={ref}>
+                    <div className="feed__list_loadmore !py-0 h-max">
                       <PostCardSkeleton className="rounded-lg bg-backgreound w-full mt-0" />
                     </div>
                   )}
