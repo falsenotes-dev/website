@@ -37,11 +37,11 @@ function Navbar({
 }: {
   notifications: any;
   session: any;
-  searchHistory: UserSearchHistory[];
+  searchHistory: UserSearchHistory[] | undefined;
 }) {
   const { status } = useSession();
   const router = useRouter();
-  const [history, setHistory] = useState<UserSearchHistory[]>([]);
+  const [history, setHistory] = useState<UserSearchHistory[] | undefined>([]);
   useEffect(() => {
     setHistory(searchHistory);
   }, [searchHistory]);
