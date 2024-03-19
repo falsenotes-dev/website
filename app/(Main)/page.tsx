@@ -14,11 +14,12 @@ export default async function Home() {
   const userFollowingsTags = await fetchFollowingTags({ id: session?.id })
 
   if (session) {
-    if (userFollowingsTags.length === 0) {
-      redirect('/get-started')
-    } else if (userFollowingsTags.length > 0) {
-      redirect('/feed')
-    }
+    // if (userFollowingsTags.length === 0) {
+    //   redirect('/get-started')
+    // } else if (userFollowingsTags.length > 0) {
+    //   redirect('/feed')
+    // }
+    redirect('/feed')
   }
 
   // Use Promise.all to run both fetch operations in parallel
