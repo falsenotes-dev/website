@@ -19,7 +19,7 @@ export default async function Feed({
   const feed = await fetchFeed({ page: 0, tab, limit: 10 });
   if (session) {
     if (feed.length === 0) {
-      redirect('/get-started')
+      // redirect('/get-started')
     }
   } else {
     return redirect('/')
