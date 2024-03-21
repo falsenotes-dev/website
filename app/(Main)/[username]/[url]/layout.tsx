@@ -101,11 +101,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description:
           post.seoDescription ? post.seoDescription : (post.subtitle || markdownToText(post.content?.slice(0, 100) || "")),
         url: new URL(
-          `${process.env.DOMAIN}/@${post.author.username}/${post.url}`
+          `https://${process.env.NEXT_PUBLIC_ENV === "beta" ? 'beta.' : ''}${process.env.DOMAIN}/@${post.author.username}/${post.url}`
         ),
         images: [
           {
-            url: `${process.env.DOMAIN}/api/posts/${post.author.username}/opengraph-image${(post.ogVersion && post.ogVersion !== 'old') ? `/v${post.ogVersion}` : ``
+            url: `https://${process.env.NEXT_PUBLIC_ENV === "beta" ? 'beta.' : ''}${process.env.DOMAIN}/api/posts/${post.author.username}/opengraph-image${(post.ogVersion && post.ogVersion !== 'old') ? `/v${post.ogVersion}` : ``
               }?url=${post.url}`,
             width: 1200,
             height: 630,
