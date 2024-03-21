@@ -101,11 +101,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description:
           post.seoDescription ? post.seoDescription : (post.subtitle || markdownToText(post.content?.slice(0, 100) || "")),
         url: new URL(
-          `https://${process.env.NEXT_PUBLIC_ENV === "beta" ? 'beta.' : ''}${process.env.DOMAIN}/@${post.author.username}/${post.url}`
+          `${process.env.DOMAIN}/@${post.author.username}/${post.url}`
         ),
         images: [
           {
-            url: `https://${process.env.NEXT_PUBLIC_ENV === "beta" ? 'beta.' : ''}${process.env.DOMAIN}/api/posts/${post.author.username}/opengraph-image${(post.ogVersion && post.ogVersion !== 'old') ? `/v${post.ogVersion}` : ``
+            url: `${process.env.DOMAIN}/api/posts/${post.author.username}/opengraph-image${(post.ogVersion && post.ogVersion !== 'old') ? `/v${post.ogVersion}` : ``
               }?url=${post.url}`,
             width: 1200,
             height: 630,
@@ -247,13 +247,15 @@ export default async function PostLayout({ children, params }: Props) {
     }) : Promise.resolve(null),
   ]);
 
-  const authorPosts = [...author?.posts || [], ...author?.publicationsPosts || []];
+  const authorPosts = [...author?.posts ?? [], ...author?.publicationsPosts ?? []];
 
   authorPosts.sort((a: any, b: any) => {
     return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
   });
 
-  authorPosts.length = 4;
+  if (authorPosts.length > 4) {
+    authorPosts.length = 4;
+  }
 
   const relatedPosts = await db.post.findMany({
     where: {

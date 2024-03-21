@@ -49,7 +49,7 @@ export default async function PostView({
 
   if (!hasViewed) {
     await fetch(
-      `https://${process.env.NEXT_PUBLIC_ENV === "beta" ? 'beta.' : ''}${process.env.DOMAIN}/api/posts/${author?.username}/views/?url=${post.url}`,
+      `${process.env.DOMAIN}/api/posts/${author?.username}/views/?url=${post.url}`,
       {
         method: "POST",
       }

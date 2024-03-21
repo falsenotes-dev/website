@@ -18,6 +18,7 @@ export default function MoreFromAuthor({ author: initialAuthor, post: initialPos
 
      const [author, setAuthor] = useState(initialAuthor);
      const [post, setPost] = useState(initialPost);
+     console.log(post)
      useEffect(() => {
           setPost(initialPost);
      }, [initialPost])
