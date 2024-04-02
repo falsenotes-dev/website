@@ -49,7 +49,7 @@ export default async function Feed({
       <FeedTabs activeTab={tab} />
       <div className="px-4">
         {feed.length === 0 ? (
-          <div className="w-full min-w-[500px] flex flex-col gap-6">
+          <div className="max-w-7xl min-w-[280px] w-full flex flex-col gap-6">
             <FeaturedDev data={topUsers} key="featuredDev" className="w-full" />
             {
               popularTags?.length > 0 && (
