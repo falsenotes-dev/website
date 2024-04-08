@@ -133,13 +133,13 @@ export default function MoreFromAuthor({ author: initialAuthor, post: initialPos
                          </div>
                     </div>
                     {
-                         post?.length !== 0 && (
+                         post?.length > 0 && (
                               <>
                                    <Separator className="my-10" />
                                    <div className="text-base font-medium mb-8 mx-2 md:mx-6">More From {author?.name || author?.username}</div>
                                    <div className="grid md:grid-cols-2 gap-4">
                                         {
-                                             post?.map((p: any) => (
+                                             post.map((p: any) => (
                                                   <TagPostCard key={p.id} post={p} session={sessionUser} list={list} />
                                              ))
                                         }

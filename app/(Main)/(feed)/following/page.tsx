@@ -1,12 +1,22 @@
-import { fetchFeed } from '@/components/feed/get-feed';
-import InfinitiveScrollFeed from '@/components/feed/feed';
-import { getSessionUser } from '@/components/get-session-user';
-import FeedTabs from '@/components/feed/navbar/navbar';
-import { redirect } from 'next/navigation';
-import { getLists } from '@/lib/prisma/session';
-import { fetchUsers } from '@/components/feed/fetch-user';
-import { fetchTags } from '@/components/feed/get-tags';
-import { getPopularPostsOfTheMonth, getPopularPostsOfTheWeek } from '@/lib/prisma/posts';
+import { fetchFeed } from "@/components/feed/get-feed";
+import InfinitiveScrollFeed from "@/components/feed/feed";
+import { getSessionUser } from "@/components/get-session-user";
+import FeedTabs from "@/components/feed/navbar/navbar";
+import { redirect } from "next/navigation";
+import { getLists } from "@/lib/prisma/session";
+import { fetchUsers } from "@/components/feed/fetch-user";
+import { fetchTags } from "@/components/feed/get-tags";
+import {
+  getPopularPostsOfTheMonth,
+  getPopularPostsOfTheWeek,
+} from "@/lib/prisma/posts";
+import FeaturedDev from "@/components/feed/featured/featured-dev";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Icons } from "@/components/icon";
 
 export default async function Feed({
   searchParams
@@ -18,7 +28,7 @@ export default async function Feed({
   const feed = await fetchFeed({ page: 0, tab: 'following', limit: 10 });
   if (session) {
     if (feed.length === 0) {
-      redirect('/get-started')
+      // redirect('/get-started')
     }
   } else {
     return redirect('/')
@@ -34,9 +44,46 @@ export default async function Feed({
     <>
       <FeedTabs activeTab={'following'} />
       <div className="px-4">
-        <InfinitiveScrollFeed initialFeed={feed} tag={'following'} session={session} list={userLists}
-          popularTags={popularTags} topUsers={topUsers} trending={posts} />
+        {feed.length === 0 ? (
+          <div className="max-w-7xl min-w-[280px] w-full flex flex-col gap-6">
+            <FeaturedDev data={topUsers} key="featuredDev" className="w-full" />
+            {
+              popularTags?.length > 0 && (
+                <Card key="popularTagsCard" className="feed__content_featured_card bg-background">
+                  <CardHeader className="p-4">
+                    <CardTitle className="feed__content_featured_card_title text-lg text-center">Popular tags</CardTitle>
+                  </CardHeader>
+                  <CardContent className="px-4 pb-0">
+                    <div className="w-full flex-col flex gap-3">
+                      {popularTags?.map((tag: any) => (
+                        <Link href={`/tags/${tag.name}`} className='inline-flex gap-1.5 items-center' key={tag.id}>
+                          <Badge className='h-8 w-8 px-2 rounded-sm' variant='secondary'><Icons.hash className='h-3 w-3' /></Badge>
+                          <span>{tag.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                    <CardFooter className="flex items-center justify-center pt-4 px-0">
+                      <Link href={`/tags`} className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}>
+                        See more
+                      </Link>
+                    </CardFooter>
+                  </CardContent>
+                </Card>
+              )
+            }
+          </div>
+        ) : (
+          <InfinitiveScrollFeed
+            initialFeed={feed}
+            tag={'following'}
+            session={session}
+            list={userLists}
+            popularTags={popularTags}
+            topUsers={topUsers}
+            trending={posts}
+          />
+        )}
       </div>
     </>
-  )
+  );
 }

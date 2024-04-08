@@ -247,13 +247,15 @@ export default async function PostLayout({ children, params }: Props) {
     }) : Promise.resolve(null),
   ]);
 
-  const authorPosts = [...author?.posts || [], ...author?.publicationsPosts || []];
+  const authorPosts = [...author?.posts ?? [], ...author?.publicationsPosts ?? []];
 
   authorPosts.sort((a: any, b: any) => {
     return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
   });
 
-  authorPosts.length = 4;
+  if (authorPosts.length > 4) {
+    authorPosts.length = 4;
+  }
 
   const relatedPosts = await db.post.findMany({
     where: {

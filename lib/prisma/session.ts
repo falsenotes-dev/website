@@ -375,6 +375,6 @@ export const getSearchHistory = async ({
     },
   });
   return {
-    searchHistory: JSON.parse(JSON.stringify(searchHistory?.searchHistory)),
+    searchHistory: searchHistory?.searchHistory,
   };
 };

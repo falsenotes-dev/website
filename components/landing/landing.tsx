@@ -68,23 +68,27 @@ export default function Landing({
   return (
     <>
       <main className="landing mx-auto w-full overflow-hidden mb-4 my-10 flex flex-col items-center content-center justify-start lg:px-6 px-2 xl:p-0">
-        <div className="flex content-center justify-center items-center flex-[0_0_auto] rounded-3xl gap-3 mb-4 h-min max-w-[1140px] min-w-[280px] overflow-hidden relative w-full mx-auto">
-          <Badge className="h-6 text-xs font-normal text-destructive px-2.5 bg-destructive/20 hover:bg-destructive/20 border-none">New</Badge>
-          <p className="text-muted-foreground font-normal line-clamp-1">{latestUpdate.title}</p>
-          <Button
-            variant={"secondary"}
-            size={'sm'}
-            onClick={
-              () => {
-                router.push(`/@falsenotes/${latestUpdate.url}`);
-              }
-            }
-            className="h-8 w-8 md:w-auto md:px-4 md:py-2 p-2 rounded-full"
-          >
-            <span className="hidden md:block">Read More</span>
-            <ChevronRight className="h-4 w-4 md:ml-1" />
-          </Button>
-        </div>
+        {
+          latestUpdate && (
+            <div className="flex content-center justify-center items-center flex-[0_0_auto] rounded-3xl gap-3 mb-4 h-min max-w-[1140px] min-w-[280px] overflow-hidden relative w-full mx-auto">
+              <Badge className="h-6 text-xs font-normal text-destructive px-2.5 bg-destructive/20 hover:bg-destructive/20 border-none">New</Badge>
+              <p className="text-muted-foreground font-normal line-clamp-1">{latestUpdate.title}</p>
+              <Button
+                variant={"secondary"}
+                size={'sm'}
+                onClick={
+                  () => {
+                    router.push(`/@falsenotes/${latestUpdate.url}`);
+                  }
+                }
+                className="h-8 w-8 md:w-auto md:px-4 md:py-2 p-2 rounded-full"
+              >
+                <span className="hidden md:block">Read More</span>
+                <ChevronRight className="h-4 w-4 md:ml-1" />
+              </Button>
+            </div>
+          )
+        }
         <div className="hero flex justify-between content-center items-center flex-col flex-[0_0_auto] rounded-3xl gap-11 h-min max-w-[1140px] min-w-[280px] overflow-hidden p-[74px] lg:px-6 px-2 pb-0 relative w-full">
           <div className="flex place-content-center items-center flex-col flex-[0_0_auto] gap-3.5 h-min overflow-visible p-0 relative lg:w-[80%] w-11/12 z-10 perspective-1200">
             <div className="stack-stack hero-text-stack" style={{ "--stack-flex": "initial", "--stack-direction": "column", "--stack-align": "center", "--stack-justify": "center", "--stack-padding": "0px", "--sm-stack-gap": "24px", "--md-stack-gap": "32px", "--lg-stack-gap": "32px", "--xl-stack-gap": "32px" } as React.CSSProperties}>

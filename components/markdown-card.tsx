@@ -18,7 +18,7 @@ export default function MarkdownCard({ code, className }: { code: string, classN
                                         </figure>
                                    ) : (
                                         <figure className="blog_image_wrap">
-                                             <img {...props} className="!relative w-full hover:scale-105" alt={props.alt} />
+                                             <img {...props} className="!relative w-full" alt={props.alt} />
                                         </figure>
                                    )
                               }

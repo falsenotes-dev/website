@@ -201,5 +201,11 @@ export const fetchUsers = async ({
 
   filteredUsers.length > limit && filteredUsers.splice(limit);
 
-  return { users: JSON.parse(JSON.stringify(id ? filteredUsers : topUsers)) };
+  return {
+    users: JSON.parse(
+      JSON.stringify(
+        id ? (filteredUsers.length == 0 ? topUsers : filteredUsers) : topUsers
+      )
+    ),
+  };
 };
