@@ -410,7 +410,7 @@ export default function Landing({
                           <Link
                             href={`/@${post.publicationId === null
                               ? post.author.username
-                              : post.publication.username
+                              : post.publication?.username
                               }/${post.url}`}
                           >
                             <CardContent className="p-0 gap-2 flex flex-col">
