@@ -139,9 +139,12 @@ export default function FeedPostCard(
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg md:text-xl font-bold line-clamp-3">
+<Link href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`}>
+                <h2 className="text-lg md:text-xl font-bold line-clamp-3">
               {props.post.title}
             </h2>
+              </Link>
+            
             {props.post.cover && (<div className="w-full">
               <Link href={`/@${!props.post.publication ? props.post.author.username : props.post.publication.username}/${props.post.url}`}>
                 <>
