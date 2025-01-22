@@ -492,7 +492,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
       )}&readingTime=${readingTime(form.getValues("content")).text}&authorid=${props.user?.username
       }`
     );
-    console.log(socialPreview)
+    console.log(new URL(socialPreview))
   }, [form, props.user?.username]);
 
   const [firstImage, setFirstImage] = useState<string>("");
@@ -822,7 +822,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                 <div
                                         className="object-cover rounded-md w-full h-full bg-cover bg-center"
                                         style={{
-                                          backgroundImage: `url(${new URL(socialPreview)})`,
+                                          backgroundImage: `url('${new URL(socialPreview)}')`,
                                         }}
                                       />
                                 <Button
