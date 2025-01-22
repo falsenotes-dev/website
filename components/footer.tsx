@@ -58,7 +58,7 @@ export function SiteFooter({ className, size }: React.HTMLAttributes<HTMLElement
                     </div>
                     <div className="flex gap-x-4 gap-y-1 !text-inherit items-center">
                          <div className="statuswidget">
-                              <StatusWidget slug="falsenotes" />
+                              <StatusWidget slug="fnotes" />
                          </div>
                          <ModeToggle />
                     </div>
