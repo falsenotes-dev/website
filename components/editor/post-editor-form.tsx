@@ -832,7 +832,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
                                   onClick={() => {
                                     setSocialPreview(
-                                      `/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
+                                      `https://fn.thebkht.com/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
                                       }?title=${form.getValues(
                                         "title"
                                       )}&subtitle=${form.getValues(
