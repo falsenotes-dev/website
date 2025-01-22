@@ -492,6 +492,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
       )}&readingTime=${readingTime(form.getValues("content")).text}&authorid=${props.user?.username
       }`
     );
+    console.log(socialPreview)
   }, [form, props.user?.username]);
 
   const [firstImage, setFirstImage] = useState<string>("");
