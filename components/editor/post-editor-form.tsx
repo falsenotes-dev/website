@@ -818,14 +818,15 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                 ratio={1200 / 630}
                                 className="bg-muted rounded-md relative"
                               >
-                                <Image
-                                  src={socialPreview}
-                                  className="rounded-md"
-                                  alt="Thumbnail"
-                                  height={630}
-                                  width={1200}
-                                  objectFit="cover"
-                                />
+                                <div
+                                        className="object-cover rounded-md w-full h-full bg-cover bg-center"
+                                        style={{
+                                          backgroundImage: `url(${(URL.createObjectURL(
+                                              socialPreview
+                                            ) as string)
+                                            })`,
+                                        }}
+                                      />
                                 <Button
                                   variant="secondary"
                                   size={"icon"}
