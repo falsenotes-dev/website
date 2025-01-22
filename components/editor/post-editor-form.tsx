@@ -821,7 +821,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                 <div
                                         className="object-cover rounded-md w-full h-full bg-cover bg-center"
                                         style={{
-                                          backgroundImage: `url(${(socialPreview as string)})`,
+                                          backgroundImage: `url(${socialPreview})`,
                                         }}
                                       />
                                 <Button
