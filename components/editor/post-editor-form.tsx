@@ -473,7 +473,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
   }
 
   const [socialPreview, setSocialPreview] = useState<string>(
-    `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
+    `https://fn.thebkht.com/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
     }?title=${form.getValues(
       "title"
     )}&subtitle=${form.getValues("subtitle")}&cover=${form.getValues(
@@ -484,7 +484,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
 
   useEffect(() => {
     setSocialPreview(
-      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
+      `https://fn.thebkht.com/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
       }?title=${form.getValues(
         "title"
       )}&subtitle=${form.getValues("subtitle")}&cover=${form.getValues(
@@ -581,7 +581,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                         <FormItem>
                           <FormLabel>URL-friendly Link</FormLabel>
                           <FormDescription>
-                            {`falsenotes.dev/@${props.user?.username}/`}
+                            {`fm.thebkht.com/@${props.user?.username}/`}
                           </FormDescription>
                           <FormControl>
                             <div className="flex justify-end flex-col">
@@ -774,7 +774,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                           </FormDescription>
                           <Select onValueChange={(e) => {
                             setSocialPreview(
-                              `https://falsenotes.dev/api/posts/thumbnail${e !== "old" ? `/v${e}` : ""
+                              `https://fn.thebkht.com/api/posts/thumbnail${e !== "old" ? `/v${e}` : ""
                               }?title=${form.getValues(
                                 "title"
                               )}&subtitle=${form.getValues(
@@ -832,7 +832,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
                                   onClick={() => {
                                     setSocialPreview(
-                                      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
+                                      `/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
                                       }?title=${form.getValues(
                                         "title"
                                       )}&subtitle=${form.getValues(
@@ -1145,7 +1145,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                         <FormItem>
                           <FormLabel>URL-friendly Link</FormLabel>
                           <FormDescription>
-                            {`falsenotes.dev/@${props.user?.username}/`}
+                            {`fn.thebkht.com/@${props.user?.username}/`}
                           </FormDescription>
                           <FormControl>
                             <div className="flex justify-end flex-col">
@@ -1338,7 +1338,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                           </FormDescription>
                           <Select onValueChange={(e) => {
                             setSocialPreview(
-                              `https://falsenotes.dev/api/posts/thumbnail${e !== "old" ? `/v${e}` : ""
+                              `https://fn.thebkht.com/api/posts/thumbnail${e !== "old" ? `/v${e}` : ""
                               }?title=${form.getValues(
                                 "title"
                               )}&subtitle=${form.getValues(
@@ -1396,7 +1396,7 @@ export function PostEditorForm(props: { post: any; user: any }) {
                                   className="absolute top-2 right-2 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 hover:bg-secondary"
                                   onClick={() => {
                                     setSocialPreview(
-                                      `https://falsenotes.dev/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
+                                      `https://fn.thebkht.com/api/posts/thumbnail${form.getValues("ogVersion") !== "old" ? `/v${form.getValues("ogVersion")}` : ""
                                       }?title=${form.getValues(
                                         "title"
                                       )}&subtitle=${form.getValues(
