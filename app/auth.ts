@@ -1,15 +1,12 @@
 import db from "@/lib/db";
 import type { NextAuthOptions as NextAuthConfig } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
 import Twitter from "next-auth/providers/twitter";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { equal } from "assert";
 
 export const config = {
-  // https://next-auth.js.org/configuration/providers/oauth
-  //adapter: PrismaAdapter(db as any),
   session: {
     strategy: "jwt",
   },
@@ -372,60 +369,63 @@ export const config = {
       }
       return true; // Continue sign-in process
     },
-    async jwt({ token, user, account }) {
-  // On initial sign-in, user object is available
-  if (user) {
-    token.id = user.id;
-    token.email = user.email;
-    token.name = user.name;
-    token.picture = user.image;
-    return token;
-  }
+    async jwt({ token, user }): Promise<JWT> {
+      // On initial sign-in, user object is available
+      if (user) {
+        token.id = user.id as string;
+        token.email = user.email;
+        token.name = user.name;
+        token.picture = user.image;
+        return token;
+      }
 
-  // On subsequent calls, fetch from DB using the token ID
-  if (token.id) {
-    const dbUser = await db.user.findUnique({
-      where: {
-        id: token.id,
-      },
-    });
+      // On subsequent calls, fetch from DB using the token ID
+      if (token.id && typeof token.id === "string") {
+        const dbUser = await db.user.findUnique({
+          where: {
+            id: token.id,
+          },
+        });
 
-    if (dbUser) {
-      return {
-        id: dbUser.id,
-        name: dbUser.name,
-        username: dbUser.username,
-        email: dbUser.email,
-        picture: dbUser.image,
-      };
-    }
-  }
+        if (dbUser) {
+          return {
+            id: dbUser.id,
+            name: dbUser.name,
+            email: dbUser.email,
+            picture: dbUser.image,
+          };
+        }
+      }
 
-  return token;
-},
+      return token;
+    },
     async session({ token, session }) {
-     if (token) {
-       session.user = {
-         id: token.id as string,
-         name: token.name as string,
-         email: token.email as string,
-         image: token.picture as string,
-         username: token.username as string,
-       };
-     }
-     return session;
-   },
+      if (token && typeof token.id === "string") {
+        session.user = {
+          id: token.id,
+          name: token.name as string,
+          email: token.email as string,
+          image: token.picture as string,
+          username: token.username as string,
+        };
+      }
+      return session;
+    },
   },
 } satisfies NextAuthConfig;
 
-// We recommend doing your own environment variable validation
 declare global {
   namespace NodeJS {
     export interface ProcessEnv {
       NEXTAUTH_SECRET: string;
-
       GITHUB_CLIENT_ID: string;
       GITHUB_CLIENT_SECRET: string;
+      GOOGLE_CLIENT_ID: string;
+      GOOGLE_CLIENT_SECRET: string;
+      FACEBOOK_CLIENT_ID: string;
+      FACEBOOK_CLIENT_SECRET: string;
+      TWITTER_CLIENT_ID: string;
+      TWITTER_CLIENT_SECRET: string;
     }
   }
 }
