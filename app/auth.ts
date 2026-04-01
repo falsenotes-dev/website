@@ -370,16 +370,15 @@ export const config = {
       return true; // Continue sign-in process
     },
     async jwt({ token, user }): Promise<JWT> {
-      // On initial sign-in, user object is available
       if (user) {
         token.id = user.id as string;
         token.email = user.email;
         token.name = user.name;
         token.picture = user.image;
+        token.username = user.username;
         return token;
       }
 
-      // On subsequent calls, fetch from DB using the token ID
       if (token.id && typeof token.id === "string") {
         const dbUser = await db.user.findUnique({
           where: {
@@ -393,20 +392,22 @@ export const config = {
             name: dbUser.name,
             email: dbUser.email,
             picture: dbUser.image,
+            username: dbUser.username,
           };
         }
       }
 
       return token;
     },
-    async session({ token, session }) {
+
+    async session({ token, session }): Promise<Session> {
       if (token && typeof token.id === "string") {
         session.user = {
           id: token.id,
-          name: token.name as string,
-          email: token.email as string,
-          image: token.picture as string,
-          username: token.username as string,
+          name: token.name ?? null,
+          email: token.email ?? null,
+          image: token.picture ?? null,
+          username: token.username,
         };
       }
       return session;
