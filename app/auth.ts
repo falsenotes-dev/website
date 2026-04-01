@@ -372,26 +372,25 @@ export const config = {
       }
       return true; // Continue sign-in process
     },
-    async jwt({ token, user }) {
-      const dbUser = await db.user.findFirst({
-        where: {
-          OR: [
-            { id: token?.id ?? "" },
-            { email: token?.email ?? "" },
-            { githubId: token?.id ?? "" },
-            { googleId: token?.id ?? "" },
-            { twitterId: token?.id ?? "" },
-          ],
-        },
-      });
+    async jwt({ token, user, account }) {
+  // On initial sign-in, user object is available
+  if (user) {
+    token.id = user.id;
+    token.email = user.email;
+    token.name = user.name;
+    token.picture = user.image;
+    return token;
+  }
 
-      if (!dbUser) {
-        if (user) {
-          token.id = user?.id;
-        }
-        return token;
-      }
+  // On subsequent calls, fetch from DB using the token ID
+  if (token.id) {
+    const dbUser = await db.user.findUnique({
+      where: {
+        id: token.id,
+      },
+    });
 
+    if (dbUser) {
       return {
         id: dbUser.id,
         name: dbUser.name,
@@ -399,25 +398,23 @@ export const config = {
         email: dbUser.email,
         picture: dbUser.image,
       };
-    },
-    async session({ token, session }) {
-      if (token) {
-        session.user = session.user ?? {};
-        session.user.name = token.name as string;
-        session.user.email = token.email as string;
-        session.user.image = token.picture as string;
-      }
+    }
+  }
 
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          name: token.name,
-          username: token.username,
-        },
-      };
-    },
+  return token;
+},
+    async session({ token, session }) {
+     if (token) {
+       session.user = {
+         id: token.id as string,
+         name: token.name as string,
+         email: token.email as string,
+         image: token.picture as string,
+         username: token.username as string,
+       };
+     }
+     return session;
+   },
   },
 } satisfies NextAuthConfig;
 
